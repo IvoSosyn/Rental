@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition > 
+            <p:layout>
+                <p:layoutUnit position="west" size="100">
+                    <p:graphicImage  value="/images/logotyp_obecny_bar.jpg" alt="Znak Krnova" width="80"/>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <h:form id="FormMenu" >
+                        <p:menubar >
+                            <p:submenu label="Nemovitosti" icon="fa fa-road">
+                                <p:column>
+                                    <p:submenu label="Evidence">
+                                        <p:menuitem value="Nemovitostí" url="/faces/rentals/rentals.xhtml" icon="fa fa-user"  title="Evidence nemovitostí"/>
+                                    </p:submenu>
+                                </p:column>
+                            </p:submenu>               
+                            <p:submenu label="Ekonomika" icon="fa fa-money"></p:submenu>               
+                            <p:submenu label="Správce" icon="fa fa-list-ol" rendered="true"  >
+                                <p:column>
+                                    <p:submenu label="Parametry" >
+                                        <p:menuitem value="Uživatelské" title="Parametry pacovního porstředí uživatele." />
+                                        <p:menuitem value="Globální" title="Globální parametry aplikace." />
+                                    </p:submenu>
+                                    <p:submenu label="Číselníky" >
+                                        <p:menuitem value="Uživatelé" url="/faces/spravce/osoby.xhtml" title="Číselník uživatelů" />
+                                        <p:menuitem value="Šablony" url="/faces/spravce/zdroje.xhtml" title="Číselník zdrojů" />
+                                    </p:submenu>
+                                    <p:submenu label="Data" >
+                                        <p:menuitem value="Export" url="/faces/spravce/export.xhtml" title="Export veškerých dat" />
+                                        <p:submenu label="Import"  >
+                                            <p:menuitem value="Havlíček" url="/faces/spravce/havlicek.xhtml" title="Import dat z DOS dBase programu" />
+                                        </p:submenu>
+                                    </p:submenu>
+                                </p:column>
+                            </p:submenu>               
+                        </p:menubar>
+                    </h:form>
+
+                </p:layoutUnit>
+            </p:layout>
+        </ui:composition>	
+    </h:body>
+</html>
+

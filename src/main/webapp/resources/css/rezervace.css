@@ -1,0 +1,49 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2.2.2018, 13:33:30
+    Author     : sosyn
+*/
+
+div.rezervace {
+  position: relative;
+  z-index: 1;
+  color: black;
+  /* font-size: 135%; */
+  font-weight: 700;
+  text-decoration: none;
+  padding: .25em .5em;
+}
+div.rezervace::after {
+  content: "info"; 
+  position: absolute;
+  z-index: -1;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  width: calc(100% + 6*(1em*90/135) - 2px*2*2); 
+  text-align: right;
+  color: #fff;
+ /*  font-size: 90%; */
+  padding: .25em .5em;
+  border-radius: 5px;
+  border: 2px solid #c61e40;
+  -webkit-transform: skewX(-10deg);
+  transform: skewX(-10deg);
+  background: linear-gradient(#d4536d, #c61e40) no-repeat 100% 0;
+  background-size: calc(6*(1em*90/135) + .5em) 100%;
+  box-shadow: inset calc(-6*(1em*90/135) - .5em) 0 rgba(255,255,255,0);
+  transition: .3s;
+}
+/*
+
+div.rezervace:hover::after {
+  box-shadow: inset calc(-6*(1em*90/135) - .5em) 0 rgba(255,255,255,.2);
+}
+div.rezervace:active::after {
+  background-image: linear-gradient(#c61e40, #d4536d);
+}
+*/
