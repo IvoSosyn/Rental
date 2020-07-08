@@ -1,3 +1,4 @@
+2. Hlavní menu - vyladit
 1. Pokus o hlavní menu
 
 # Rental

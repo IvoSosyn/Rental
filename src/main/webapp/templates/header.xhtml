@@ -7,41 +7,56 @@
     <h:body>
         <ui:composition > 
             <p:layout>
-                <p:layoutUnit position="west" size="100">
-                    <p:graphicImage  value="/images/logotyp_obecny_bar.jpg" alt="Znak Krnova" width="80"/>
+                <p:layoutUnit position="west" size="90" style="align-content: center">
+                    <p:graphicImage  value="/images/grand-properties-rental-property-and-management.png" alt="Pronájmy" width="80"/>
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
                     <h:form id="FormMenu" >
                         <p:menubar >
                             <p:submenu label="Nemovitosti" icon="fa fa-road">
-                                <p:column>
-                                    <p:submenu label="Evidence">
-                                        <p:menuitem value="Nemovitostí" url="/faces/rentals/rentals.xhtml" icon="fa fa-user"  title="Evidence nemovitostí"/>
-                                    </p:submenu>
-                                </p:column>
+                                <p:submenu label="Evidence">
+                                    <p:menuitem value="Nemovitostí" url="/faces/rentals/rentals.xhtml" icon="fa fa-user"  title="Evidence nemovitostí"/>
+                                </p:submenu>
                             </p:submenu>               
-                            <p:submenu label="Ekonomika" icon="fa fa-money"></p:submenu>               
+                            <p:submenu label="Ekonomika" icon="fa fa-money">
+                                <p:menuitem value="Vyúčtování" title="Vyůčtování." />
+                            </p:submenu>               
                             <p:submenu label="Správce" icon="fa fa-list-ol" rendered="true"  >
-                                <p:column>
-                                    <p:submenu label="Parametry" >
-                                        <p:menuitem value="Uživatelské" title="Parametry pacovního porstředí uživatele." />
-                                        <p:menuitem value="Globální" title="Globální parametry aplikace." />
+                                <p:submenu label="Parametry" >
+                                    <p:menuitem value="Uživatelské" title="Parametry pacovního porstředí uživatele." />
+                                    <p:menuitem value="Globální" title="Globální parametry aplikace." />
+                                </p:submenu>
+                                <p:submenu label="Číselníky" >
+                                    <p:menuitem value="Uživatelé" url="/faces/spravce/osoby.xhtml" title="Číselník uživatelů" />
+                                    <p:menuitem value="Šablony" url="/faces/spravce/zdroje.xhtml" title="Číselník zdrojů" />
+                                </p:submenu>
+                                <p:submenu label="Data" >
+                                    <p:menuitem value="Export" url="/faces/spravce/export.xhtml" title="Export veškerých dat" />
+                                    <p:submenu label="Import"  >
+                                        <p:menuitem value="Havlíček" url="/faces/spravce/havlicek.xhtml" title="Import dat z DOS dBase programu" />
                                     </p:submenu>
-                                    <p:submenu label="Číselníky" >
-                                        <p:menuitem value="Uživatelé" url="/faces/spravce/osoby.xhtml" title="Číselník uživatelů" />
-                                        <p:menuitem value="Šablony" url="/faces/spravce/zdroje.xhtml" title="Číselník zdrojů" />
-                                    </p:submenu>
-                                    <p:submenu label="Data" >
-                                        <p:menuitem value="Export" url="/faces/spravce/export.xhtml" title="Export veškerých dat" />
-                                        <p:submenu label="Import"  >
-                                            <p:menuitem value="Havlíček" url="/faces/spravce/havlicek.xhtml" title="Import dat z DOS dBase programu" />
-                                        </p:submenu>
-                                    </p:submenu>
-                                </p:column>
+                                </p:submenu>
                             </p:submenu>               
                         </p:menubar>
                     </h:form>
-
+                </p:layoutUnit>
+                <p:layoutUnit position="east" size="90" style="align-content: center">
+                    <h:form>                       
+                        <p:commandButton id="dynaButton" value="Nápověda" type="button" icon="pi pi-home" style="align-self: center"/>
+                        <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+                            <p:submenu label="Nemovitosti">
+                                <p:menuitem value="Evidence" icon="pi pi-refresh"/>
+                            </p:submenu>
+                            <p:submenu label="Ekonomika">
+                                <p:menuitem value="Vyůčtování" icon="pi pi-times"/>
+                            </p:submenu>
+                            <p:submenu label="Správce">
+                                <p:menuitem value="Parametry" icon="pi pi-home"/>
+                                <p:menuitem value="Číselnníky" icon="pi pi-star"/>
+                                <p:menuitem value="Data" icon="pi pi-star"/>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
                 </p:layoutUnit>
             </p:layout>
         </ui:composition>	
