@@ -1,3 +1,4 @@
+3. Zahájeny práce na stromu šablon
 2. Hlavní menu - vyladit
 1. Pokus o hlavní menu
 
