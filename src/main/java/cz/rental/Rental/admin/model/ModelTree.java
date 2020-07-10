@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.rental.Rental.spravce.template;
+package cz.rental.Rental.admin.model;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -15,9 +15,9 @@ import org.primefaces.model.TreeNode;
  *
  * @author sosyn
  */
-@Named("treeAdmin")
+@Named("modelTree")
 @Stateless
-public class TreeAdmin {
+public class ModelTree {
 
     private TreeNode root=null;
     private TreeNode selectedNode=null;
