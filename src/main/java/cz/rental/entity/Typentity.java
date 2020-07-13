@@ -26,7 +26,7 @@ import org.eclipse.persistence.annotations.Converter;
  * @author ivo
  */
 @Entity
-@Table(catalog = "najem", schema = "public")
+@Table(catalog = "najem", schema="public")
 @NamedQueries({
     @NamedQuery(name = "Typentity.findAll", query = "SELECT t FROM Typentity t"),
     @NamedQuery(name = "Typentity.findByAttrsystem", query = "SELECT t FROM Typentity t WHERE t.attrsystem = :attrsystem"),

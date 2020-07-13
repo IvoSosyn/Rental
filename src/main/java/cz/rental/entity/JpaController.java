@@ -17,7 +17,7 @@ import javax.persistence.EntityManager;
 public class JpaController implements Serializable {
 
     public EntityManager getEntityManager() {
-        return EntityManagerFactoryNajem.getEntityManager();
+        return ManagerFactory.getManager();
     }
 
     /**

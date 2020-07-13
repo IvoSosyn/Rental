@@ -5,9 +5,15 @@
  */
 package cz.rental.admin.model;
 
+import cz.rental.aplikace.Aplikace;
+import cz.rental.entity.Typentity;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -19,34 +25,46 @@ import org.primefaces.model.TreeNode;
 @Stateless
 public class ModelTree {
 
-    private TreeNode root=null;
-    private TreeNode selectedNode=null;
+    private TreeNode root = null;
+    private TreeNode selectedNode = null;
+
+    @PersistenceContext(unitName = "PostgreSQLNajem")
+    private EntityManager em;
+    Query query = null;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        setRoot(getTreeNodes());
+        getTreeNodes();
     }
 
-    private TreeNode getTreeNodes() {
-        TreeNode root = new DefaultTreeNode("Root", null);
+    private void getTreeNodes() {
+        root = new DefaultTreeNode("Root", null);
+        this.query = em.createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL");
+        List<Typentity> list = query.getResultList();
+        if (!list.isEmpty()) {
+            for (Typentity typEntity : list) {
+                addNode(root, typEntity);
+            }
+        } else {
+        }
+        this.em.close();
+    }
 
-        TreeNode node0 = new DefaultTreeNode("Node 0", root);
-        TreeNode node1 = new DefaultTreeNode("Node 1", root);
-
-        TreeNode node00 = new DefaultTreeNode("Node 0.0", node0);
-        TreeNode node01 = new DefaultTreeNode("Node 0.1", node0);
-
-        TreeNode node10 = new DefaultTreeNode("Node 1.0", node1);
-
-        node1.getChildren().add(new DefaultTreeNode("Node 1.1"));
-        node00.getChildren().add(new DefaultTreeNode("Node 0.0.0"));
-        node00.getChildren().add(new DefaultTreeNode("Node 0.0.1"));
-        node01.getChildren().add(new DefaultTreeNode("Node 0.1.0"));
-        node10.getChildren().add(new DefaultTreeNode("Node 1.0.0"));
-        root.getChildren().add(new DefaultTreeNode("Node 2"));
-        return root;
+    private void addNode(TreeNode parent, Typentity typEntityParent) {
+        // Zmenim obsah cyklickeho dotazu
+        this.query = this.em.createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)");
+        this.query.setParameter("idParent", typEntityParent.getId());
+        query.setParameter("PlatiOD", Aplikace.getPlatiOd());
+        query.setParameter("PlatiDO", Aplikace.getPlatiDo());
+        List list = this.query.getResultList();
+        if (!list.isEmpty()) {
+            for (Object typEntity : list) {
+                TreeNode top = new DefaultTreeNode(typEntity, parent);
+                addNode(top, (Typentity) typEntity);
+            }
+        }
     }
 
     /**
