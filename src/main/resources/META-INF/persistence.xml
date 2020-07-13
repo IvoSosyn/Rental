@@ -2,7 +2,7 @@
 <persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
   <!-- Define Persistence Unit -->
   <persistence-unit name="PostgreSQLNajem" transaction-type="JTA">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>java:/PostgreSQLNajem</jta-data-source>
     <class>cz.rental.admin.entity.Attrtext</class>
     <class>cz.rental.admin.entity.Entita</class>
@@ -11,13 +11,12 @@
     <class>cz.rental.admin.entity.Typentity</class>
     <class>cz.rental.admin.entity.Attrdate</class>
     <class>cz.rental.admin.entity.Attribute</class>
-    <class>entity.Typentity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!--    <shared-cache-mode>NONE</shared-cache-mode> -->
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
     <properties>
       <!--      <property name="eclipselink.cache.shared.default" value="false"/> -->
-      <property name="hibernate.generate_statistics" value="true"/>
+      <!--      <property name="hibernate.generate_statistics" value="true"/> -->
     </properties>
   </persistence-unit>
 </persistence>
