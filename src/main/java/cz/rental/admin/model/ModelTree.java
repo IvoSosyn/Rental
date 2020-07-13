@@ -41,7 +41,8 @@ public class ModelTree {
 
     private void getTreeNodes() {
         root = new DefaultTreeNode("Root", null);
-        this.query = em.createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL");
+//        this.query = em.createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL");
+        this.query = em.createNativeQuery("SELECT ID, ATTRSYSTEM, EDITOR, IDPARENT, PLATIDO, PLATIOD, POPIS, TIMEINSERT, TIMEMODIFY, TYPENTITY, USERMODIFY FROM najem.public.typentity WHERE (IDPARENT IS NULL)");
         List<Typentity> list = query.getResultList();
         if (!list.isEmpty()) {
             for (Typentity typEntity : list) {
