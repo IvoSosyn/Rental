@@ -5,16 +5,16 @@
  */
 package cz.rental.admin.model;
 
-import cz.rental.aplikace.Aplikace;
-import cz.rental.entity.Typentity;
-import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.event.NodeCollapseEvent;
+import org.primefaces.event.NodeExpandEvent;
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.model.TreeNode;
 
 /**
@@ -28,44 +28,51 @@ public class ModelTree {
     private TreeNode root = null;
     private TreeNode selectedNode = null;
 
-    @PersistenceContext(unitName = "PostgreSQLNajem")
-    private EntityManager em;
-    Query query = null;
+    @EJB
+    cz.rental.entity.TypentityController DBcontroller;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        getTreeNodes();
+        setRoot(DBcontroller.fillTreeNodes());
     }
 
-    private void getTreeNodes() {
-        root = new DefaultTreeNode("Root", null);
-        this.query = em.createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL");
-        List<Typentity> list = query.getResultList();
-        if (!list.isEmpty()) {
-            for (Typentity typEntity : list) {
-                addNode(root, typEntity);
-            }
-        } else {
-        }
-        // WildFly si dela magement spojeni sam - vzhodi chybu
-        // this.em.close();
+    public void onNodeExpand(NodeExpandEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Expanded", event.getTreeNode().toString());
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    private void addNode(TreeNode parent, Typentity typEntityParent) {
-        // Zmenim obsah cyklickeho dotazu
-        this.query = this.em.createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)");
-        this.query.setParameter("idParent", typEntityParent.getId());
-        query.setParameter("PlatiOD", Aplikace.getPlatiOd());
-        query.setParameter("PlatiDO", Aplikace.getPlatiDo());
-        List list = this.query.getResultList();
-        if (!list.isEmpty()) {
-            for (Object typEntity : list) {
-                TreeNode top = new DefaultTreeNode(typEntity, parent);
-                addNode(top, (Typentity) typEntity);
-            }
+    public void onNodeCollapse(NodeCollapseEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Collapsed", event.getTreeNode().toString());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void onNodeSelect(NodeSelectEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", event.getTreeNode().toString());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void onNodeUnselect(NodeUnselectEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Unselected", event.getTreeNode().toString());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void displaySelectedSingle() {
+        System.out.println("VIEW-Selected");
+        if (selectedNode != null) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "VIEW-Selected", selectedNode.getData().toString());
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
+    }
+
+    public void deleteNode() {
+        System.out.println("deleteNode");
+        selectedNode.getChildren().clear();
+        selectedNode.getParent().getChildren().remove(selectedNode);
+        selectedNode.setParent(null);
+
+        selectedNode = null;
     }
 
     /**
@@ -95,4 +102,5 @@ public class ModelTree {
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
     }
+
 }
