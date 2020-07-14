@@ -165,7 +165,6 @@
                 <datasource jndi-name="java:/PostgreSQLNajem" pool-name="PostgreSQLNajem">
                     <connection-url>jdbc:postgresql://localhost:5432/najem</connection-url>
                     <driver-class>org.postgresql.Driver</driver-class>
-                    <datasource-class>org.postgresql.ds.PGSimpleDataSource</datasource-class>
                     <driver>postgresql</driver>
                     <security>
                         <user-name>postgres</user-name>
