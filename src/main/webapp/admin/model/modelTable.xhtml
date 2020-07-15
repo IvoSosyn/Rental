@@ -11,21 +11,46 @@
     <h:body>
         <ui:composition>	
             <h:form id="formModelTable">
-                <p:dataTable var="attribute" value="#{modelTable.attributes}">
+                <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+                <p:dataTable var="attribute" value="#{modelTable.attributes}" 
+                             selection="#{modelTable.selectedAttrs}" rowKey="#{attribute.id}" style="margin-bottom:0"  
+                             resizableColumns="true" resizeMode="expand"  >
                     <f:facet name="header">
-                        Seznam položek k danému uzlu #{modelTable.typentity.popis}
+                        #{modelTable.typentity.popis} - položky 
                     </f:facet>
-
+                    <p:ajax event="rowSelect" listener="#{modelTable.onRowSelect}" update=":formModelTable:msgs" />
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     <p:column headerText="Pořadí">
                         <h:outputText value="#{attribute.poradi}" />
+                    </p:column>                    
+                    <p:column headerText="Název">
+                        <h:outputText value="#{attribute.attrname}" />
                     </p:column>
-                    
-                    <p:column headerText="Pořadí">
+                    <p:column headerText="Popis">
                         <h:outputText value="#{attribute.popis}" />
                     </p:column>
+                    <p:column headerText="Typ">
+                        <h:outputText value="#{attribute.attrtype}" />
+                    </p:column>
+                    <p:column headerText="Velikost">
+                        <h:outputText value="#{attribute.attrsize}" />
+                    </p:column>
+                    <p:column headerText="des.míst">
+                        <h:outputText value="#{attribute.attrdecimal}" />
+                    </p:column>
+
+                    <p:column headerText="Plati Od">
+                        <h:outputText value="#{attribute.platiod}" />
+                    </p:column>
+                    <p:column headerText="Plati Do">
+                        <h:outputText value="#{attribute.platido}" />
+                    </p:column>
+                    <p:column headerText="Systém">
+                        <h:selectBooleanCheckbox value="#{attribute.attrsystem}" disabled="true" />
+                    </p:column>                    
 
                     <f:facet name="footer">
-                        In total there are #{fn:length(modelTable.attributes)} attributes.
+                        Celkem je definováno #{fn:length(modelTable.attributes)} položek.
                     </f:facet>
                 </p:dataTable>
             </h:form>

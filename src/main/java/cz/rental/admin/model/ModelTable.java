@@ -14,13 +14,14 @@ import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.primefaces.event.NodeCollapseEvent;
-import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  * Trida je back-end tabulky "Attribute" pro zadany "Typetnity"
+ *
  * @author sosyn
  */
 @Named("modelTable")
@@ -29,6 +30,8 @@ public class ModelTable {
 
     private Typentity typentity = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
+    private ArrayList<Attribute> selectedAttrs = null;
+    Attribute selectedAttr = null;
 
     @EJB
     cz.rental.entity.AttributeController controller;
@@ -40,7 +43,8 @@ public class ModelTable {
     }
 
     /**
-     * Metoda nacte pro zadany "typentity" pole "attribute" a ulozi do pole 
+     * Metoda nacte pro zadany "typentity" pole "attribute" a ulozi do pole
+     *
      * @param typentity
      */
     public void getAttributeForTypentity(Typentity typentity) {
@@ -48,26 +52,22 @@ public class ModelTable {
         setAttributes(controller.getAttributeForTypentity(this.getTypentity()));
     }
 
-    public void onNodeExpand(NodeExpandEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Expanded", event.getTreeNode().toString());
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
-    public void onNodeCollapse(NodeCollapseEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Collapsed", event.getTreeNode().toString());
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
     public void onNodeSelect(NodeSelectEvent event) {
-        System.out.println(" "+event.toString());
-        getAttributeForTypentity((Typentity) event.getTreeNode().getData() );
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected Node", event.getTreeNode().toString());
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        getAttributeForTypentity((Typentity) event.getTreeNode().getData());
     }
 
     public void onNodeUnselect(NodeUnselectEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Unselected", event.getTreeNode().toString());
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        getAttributeForTypentity(null);
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        this.selectedAttr = (Attribute) event.getObject();
+        FacesMessage msg = new FacesMessage("Attribute selected", event.getObject().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselectSelect(UnselectEvent event) {
+        this.selectedAttr = null;
     }
 
     public void displaySelectedSingle() {
@@ -104,6 +104,20 @@ public class ModelTable {
      */
     public void setAttributes(ArrayList<Attribute> attributes) {
         this.attributes = attributes;
+    }
+
+    /**
+     * @return the selectedAttrs
+     */
+    public ArrayList<Attribute> getSelectedAttrs() {
+        return selectedAttrs;
+    }
+
+    /**
+     * @param selectedAttrs the selectedAttrs to set
+     */
+    public void setSelectedAttrs(ArrayList<Attribute> selectedAttrs) {
+        this.selectedAttrs = selectedAttrs;
     }
 
 }

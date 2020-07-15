@@ -12,12 +12,12 @@
                 <p:growl id="messages" showDetail="true" />                
                 <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
                         selection="#{modelTree.selectedNode}">
-                    <p:ajax event="expand" update=":formModelTree:messages" listener="#{modelTree.onNodeExpand}" />
-                    <p:ajax event="collapse" update=":formModelTree:messages" listener="#{modelTree.onNodeCollapse}" />
-                    <p:ajax event="select" update=":formModelTree:messages, :formModelTable" listener="#{modelTable.onNodeSelect}" >
+                    <p:ajax event="select" update=":formModelTable" listener="#{modelTable.onNodeSelect}" >
                         <f:attribute name="treeNode" value="#{treeNode}" />
                     </p:ajax>
-                    <p:ajax event="unselect" update=":formModelTree:messages" listener="#{modelTree.onNodeUnselect}" />
+                    <p:ajax event="unselect" update=":formModelTable" listener="#{modelTable.onNodeUnselect}" >
+                        <f:attribute name="treeNode" value="#{treeNode}" />
+                    </p:ajax>
                     <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
                         <h:outputText value="#{treeNode}"/>
                     </p:treeNode>
