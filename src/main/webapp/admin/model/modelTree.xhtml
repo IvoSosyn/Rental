@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:body>
         <ui:composition>	
@@ -13,7 +14,9 @@
                         selection="#{modelTree.selectedNode}">
                     <p:ajax event="expand" update=":formModelTree:messages" listener="#{modelTree.onNodeExpand}" />
                     <p:ajax event="collapse" update=":formModelTree:messages" listener="#{modelTree.onNodeCollapse}" />
-                    <p:ajax event="select" update=":formModelTree:messages" listener="#{modelTree.onNodeSelect}" />
+                    <p:ajax event="select" update=":formModelTree:messages, :formModelTable" listener="#{modelTable.onNodeSelect}" >
+                        <f:attribute name="treeNode" value="#{treeNode}" />
+                    </p:ajax>
                     <p:ajax event="unselect" update=":formModelTree:messages" listener="#{modelTree.onNodeUnselect}" />
                     <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
                         <h:outputText value="#{treeNode}"/>
@@ -31,7 +34,7 @@
                         <h:outputText value="#{treeNode}" />
                     </p:treeNode>
                 </p:tree>
-                
+
                 <p:contextMenu for="modelTree">
                     <p:menuitem value="View" update="messages" action="#{modelTree.displaySelectedSingle}" icon="pi pi-search" />
                     <p:menuitem value="Delete" update="modelTree" action="#{modelTree.deleteNode}" icon="pi pi-times"/>

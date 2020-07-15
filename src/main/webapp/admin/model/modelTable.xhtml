@@ -3,28 +3,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      >
 
     <h:body>
         <ui:composition>	
-            <h:form>
-                <p:tree value="#{modelTree.root}" var="treeNode">
-                    <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
-                        <h:outputText value="#{treeNode}"/>
-                    </p:treeNode>
+            <h:form id="formModelTable">
+                <p:dataTable var="attribute" value="#{modelTable.attributes}">
+                    <f:facet name="header">
+                        Seznam položek k danému uzlu #{modelTable.typentity.popis}
+                    </f:facet>
 
-                    <p:treeNode type="document" icon="pi pi-file">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
+                    <p:column headerText="Pořadí">
+                        <h:outputText value="#{attribute.poradi}" />
+                    </p:column>
+                    
+                    <p:column headerText="Pořadí">
+                        <h:outputText value="#{attribute.popis}" />
+                    </p:column>
 
-                    <p:treeNode type="picture" icon="pi pi-image">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
-
-                    <p:treeNode type="mp3" icon="pi pi-video">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
-                </p:tree>
+                    <f:facet name="footer">
+                        In total there are #{fn:length(modelTable.attributes)} attributes.
+                    </f:facet>
+                </p:dataTable>
             </h:form>
         </ui:composition>
     </h:body>

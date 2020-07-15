@@ -5,6 +5,9 @@
  */
 package cz.rental.admin.model;
 
+import cz.rental.entity.Attribute;
+import cz.rental.entity.Typentity;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,27 +18,34 @@ import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
-import org.primefaces.model.TreeNode;
 
 /**
- *
+ * Trida je back-end tabulky "Attribute" pro zadany "Typetnity"
  * @author sosyn
  */
-@Named("modelTree")
+@Named("modelTable")
 @Stateless
-public class ModelTree {
+public class ModelTable {
 
-    private TreeNode root = null;
-    private TreeNode selectedNode = null;
+    private Typentity typentity = null;
+    private ArrayList<Attribute> attributes = new ArrayList<>();
 
     @EJB
-    cz.rental.entity.TypentityController controller;
+    cz.rental.entity.AttributeController controller;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        setRoot(controller.fillTreeNodes());
+    }
+
+    /**
+     * Metoda nacte pro zadany "typentity" pole "attribute" a ulozi do pole 
+     * @param typentity
+     */
+    public void getAttributeForTypentity(Typentity typentity) {
+        this.setTypentity(typentity);
+        setAttributes(controller.getAttributeForTypentity(this.getTypentity()));
     }
 
     public void onNodeExpand(NodeExpandEvent event) {
@@ -50,8 +60,9 @@ public class ModelTree {
 
     public void onNodeSelect(NodeSelectEvent event) {
         System.out.println(" "+event.toString());
-//        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", event.getTreeNode().toString());
-//        FacesContext.getCurrentInstance().addMessage(null, message);
+        getAttributeForTypentity((Typentity) event.getTreeNode().getData() );
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected Node", event.getTreeNode().toString());
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void onNodeUnselect(NodeUnselectEvent event) {
@@ -61,47 +72,38 @@ public class ModelTree {
 
     public void displaySelectedSingle() {
         System.out.println("VIEW-Selected");
-        if (selectedNode != null) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "VIEW-Selected", selectedNode.getData().toString());
+        if (true) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "VIEW-Selected", "Test");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
     }
 
-    public void deleteNode() {
-        System.out.println("deleteNode");
-        selectedNode.getChildren().clear();
-        selectedNode.getParent().getChildren().remove(selectedNode);
-        selectedNode.setParent(null);
-
-        selectedNode = null;
+    /**
+     * @return the typentity
+     */
+    public Typentity getTypentity() {
+        return typentity;
     }
 
     /**
-     * @return the root
+     * @param typentity the typentity to set
      */
-    public TreeNode getRoot() {
-        return root;
+    public void setTypentity(Typentity typentity) {
+        this.typentity = typentity;
     }
 
     /**
-     * @param root the root to set
+     * @return the attributes
      */
-    public void setRoot(TreeNode root) {
-        this.root = root;
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
     }
 
     /**
-     * @return the selectedNode
+     * @param attributes the attributes to set
      */
-    public TreeNode getSelectedNode() {
-        return selectedNode;
-    }
-
-    /**
-     * @param selectedNode the selectedNode to set
-     */
-    public void setSelectedNode(TreeNode selectedNode) {
-        this.selectedNode = selectedNode;
+    public void setAttributes(ArrayList<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
 }
