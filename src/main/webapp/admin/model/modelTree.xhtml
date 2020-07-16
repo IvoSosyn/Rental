@@ -10,31 +10,37 @@
         <ui:composition>	
             <h:form id="formModelTree">
                 <p:growl id="messages" showDetail="true" />                
-                <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
-                        selection="#{modelTree.selectedNode}">
-                    <p:ajax event="select" update=":formModelTable" listener="#{modelTable.onNodeSelect}" >
-                        <f:attribute name="treeNode" value="#{treeNode}" />
-                    </p:ajax>
-                    <p:ajax event="unselect" update=":formModelTable" listener="#{modelTable.onNodeUnselect}" >
-                        <f:attribute name="treeNode" value="#{treeNode}" />
-                    </p:ajax>
-                    <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
-                        <h:outputText value="#{treeNode}"/>
-                    </p:treeNode>
+                <p:panelGrid columns="1">
+                    <f:facet name="header">
+                        Entita (Objekt evidence)
+                    </f:facet>
 
-                    <p:treeNode type="document" icon="pi pi-file">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
+                    <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
+                            selection="#{modelTree.selectedNode}">
+                        <p:ajax event="select" update=":formModelTable :formModelDetail" listener="#{modelTable.onNodeSelect}" >
+                            <f:attribute name="treeNode" value="#{treeNode}" />
+                        </p:ajax>
+                        <p:ajax event="unselect" update=":formModelTable :formModelDetail" listener="#{modelTable.onNodeUnselect}" >
+                            <f:attribute name="treeNode" value="#{treeNode}" />
+                        </p:ajax>
 
-                    <p:treeNode type="picture" icon="pi pi-image">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
+                        <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
+                            <h:outputText value="#{treeNode}"/>
+                        </p:treeNode>
 
-                    <p:treeNode type="mp3" icon="pi pi-video">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
-                </p:tree>
+                        <p:treeNode type="document" icon="pi pi-file">
+                            <h:outputText value="#{treeNode}" />
+                        </p:treeNode>
 
+                        <p:treeNode type="picture" icon="pi pi-image">
+                            <h:outputText value="#{treeNode}" />
+                        </p:treeNode>
+
+                        <p:treeNode type="mp3" icon="pi pi-video">
+                            <h:outputText value="#{treeNode}" />
+                        </p:treeNode>
+                    </p:tree>
+                </p:panelGrid>
                 <p:contextMenu for="modelTree">
                     <p:menuitem value="View" update="messages" action="#{modelTree.displaySelectedSingle}" icon="pi pi-search" />
                     <p:menuitem value="Delete" update="modelTree" action="#{modelTree.deleteNode}" icon="pi pi-times"/>

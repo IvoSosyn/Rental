@@ -11,13 +11,9 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 
 /**
  * Trida je back-end tabulky "Attribute" pro zadany "Typetnity"
@@ -35,6 +31,8 @@ public class ModelTable {
 
     @EJB
     cz.rental.entity.AttributeController controller;
+    @EJB
+    ModelDetail modelDetail;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -50,6 +48,9 @@ public class ModelTable {
     public void getAttributeForTypentity(Typentity typentity) {
         this.setTypentity(typentity);
         setAttributes(controller.getAttributeForTypentity(this.getTypentity()));
+        // Inicialisovat detail
+        this.selectedAttr = null;
+        modelDetail.setAttribute(this.selectedAttr);
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -58,24 +59,6 @@ public class ModelTable {
 
     public void onNodeUnselect(NodeUnselectEvent event) {
         getAttributeForTypentity(null);
-    }
-
-    public void onRowSelect(SelectEvent event) {
-        this.selectedAttr = (Attribute) event.getObject();
-        FacesMessage msg = new FacesMessage("Attribute selected", event.getObject().toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onRowUnselectSelect(UnselectEvent event) {
-        this.selectedAttr = null;
-    }
-
-    public void displaySelectedSingle() {
-        System.out.println("VIEW-Selected");
-        if (true) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "VIEW-Selected", "Test");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
     }
 
     /**

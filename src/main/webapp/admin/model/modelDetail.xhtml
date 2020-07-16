@@ -3,28 +3,64 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
     <h:body>
         <ui:composition>	
-            <h:form>
-                <p:tree value="#{modelTree.root}" var="treeNode">
-                    <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
-                        <h:outputText value="#{treeNode}"/>
-                    </p:treeNode>
+            <h:form  id="formModelDetail">
+                <p:panelGrid columns="2">
+                    <f:facet name="header">
+                        Detail
+                    </f:facet>
 
-                    <p:treeNode type="document" icon="pi pi-file">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
+                    <h:outputText value="Pořadí:" />
+                    <p:inputNumber value="#{modelDetail.attribute.poradi}" />
 
-                    <p:treeNode type="picture" icon="pi pi-image">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
+                    <h:outputText value="Název:" />
+                    <p:inputText value="#{modelDetail.attribute.attrname}" />
 
-                    <p:treeNode type="mp3" icon="pi pi-video">
-                        <h:outputText value="#{treeNode}" />
-                    </p:treeNode>
-                </p:tree>
+                    <h:outputText value="Popis:" />
+                    <p:inputText value="#{modelDetail.attribute.popis}" />
+
+                    <h:outputText value="Typ pole:" />
+                    <p:selectOneMenu id="attrtype" value="#{modelDetail.attribute.attrtype}" style="width:125px">
+                        <f:selectItem itemLabel="Číslo S desetinnýmy místy" itemValue="N" />
+                        <f:selectItem itemLabel="Číslo BEZ desetinných míst" itemValue="I" />
+                        <f:selectItem itemLabel="Datum" itemValue="D" />
+                        <f:selectItem itemLabel="Logicky Ano/Ne" itemValue="L" />
+                        <f:selectItem itemLabel="Odkaz na číselník" itemValue="T" />
+                    </p:selectOneMenu>
+
+                    <h:outputText value="Počet znaků:" />
+                    <p:spinner value="#{modelDetail.attribute.attrsize}"  min="1" max="1000" decimalPlaces="0" />
+
+                    <h:outputText value="Počet desetinných míst:" />
+                    <p:spinner value="#{modelDetail.attribute.attrdecimal}"   min="0" max="2" decimalPlaces="0" />
+
+                    <h:outputText value="Parser:" />
+                    <p:inputTextarea value="#{modelDetail.attribute.attrparser}" />
+
+                    <h:outputText value="Maska:" />
+                    <p:inputText value="#{modelDetail.attribute.attrmask}" />
+
+                    <h:outputText value="Script:" />
+                    <p:inputTextarea value="#{modelDetail.attribute.script}" />
+
+                    <h:outputText value="Číselník:" />
+                    <p:inputTextarea value="#{modelDetail.attribute.tables}" />
+
+                    <h:outputText value="Platí Od:" />
+                    <p:datePicker value="#{modelDetail.attribute.platiod}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" />
+
+                    <h:outputText value="Do:" />
+                    <p:datePicker value="#{modelDetail.attribute.platido}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" />
+
+                    <h:outputText value="Systém:" />
+                    <h:selectBooleanCheckbox value="#{modelDetail.attribute.attrsystem}" disabled="true" />
+
+
+                </p:panelGrid>
             </h:form>
         </ui:composition>
     </h:body>

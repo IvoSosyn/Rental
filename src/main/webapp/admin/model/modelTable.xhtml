@@ -18,7 +18,13 @@
                     <f:facet name="header">
                         #{modelTable.typentity.popis} - položky 
                     </f:facet>
-                    <p:ajax event="rowSelect" listener="#{modelTable.onRowSelect}" update=":formModelTable:msgs" />
+                    <p:ajax event="rowSelect" listener="#{modelDetail.onRowSelect}" update=":formModelDetail" >
+                        <f:attribute name="treeNode" value="#{attribute}" />
+                    </p:ajax>
+                    <p:ajax event="rowUnselect" listener="#{modelDetail.onRowUnselectSelect}" update=":formModelDetail" >
+                        <f:attribute name="treeNode" value="#{attribute}" />
+                    </p:ajax>
+
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     <p:column headerText="Pořadí">
                         <h:outputText value="#{attribute.poradi}" />
@@ -38,7 +44,6 @@
                     <p:column headerText="des.míst">
                         <h:outputText value="#{attribute.attrdecimal}" />
                     </p:column>
-
                     <p:column headerText="Plati Od">
                         <h:outputText value="#{attribute.platiod}" />
                     </p:column>
