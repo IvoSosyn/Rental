@@ -17,6 +17,9 @@
 
                     <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
                             selection="#{modelTree.selectedNode}">
+                        <p:ajax event="select" update=":formModelTree:gridDetail" listener="#{modelTree.onNodeSelect}" >
+                            <f:attribute name="treeNode" value="#{treeNode}" />
+                        </p:ajax>
                         <p:ajax event="select" update=":formModelTable :formModelDetail" listener="#{modelTable.onNodeSelect}" >
                             <f:attribute name="treeNode" value="#{treeNode}" />
                         </p:ajax>
@@ -45,6 +48,24 @@
                     <p:menuitem value="View" update="messages" action="#{modelTree.displaySelectedSingle}" icon="pi pi-search" />
                     <p:menuitem value="Delete" update="modelTree" action="#{modelTree.deleteNode}" icon="pi pi-times"/>
                 </p:contextMenu>
+
+                <p:panelGrid id="gridDetail" columns="2">
+                    <f:facet name="header">
+                        Detail entity
+                    </f:facet>
+                    <h:outputText value="Zkratka:"  />
+                    <p:inputText value="#{modelTree.typentity.typentity}" > </p:inputText>
+                    <h:outputText value="Popis:"  />
+                    <p:inputText value="#{modelTree.typentity.popis}" > </p:inputText>
+                    <h:outputText value="Platí Od:" />
+                    <p:datePicker value="#{modelTree.typentity.platiod}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" />
+                    <h:outputText value="Do:" />
+                    <p:datePicker value="#{modelTree.typentity.platido}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" />
+                    <h:outputText value="Systém:" />
+                    <h:selectBooleanCheckbox value="#{modelTree.typentity.attrsystem}" disabled="true" />
+                </p:panelGrid>
+
+
             </h:form>
         </ui:composition>
     </h:body>

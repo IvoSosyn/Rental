@@ -5,16 +5,14 @@
  */
 package cz.rental.admin.model;
 
+import cz.rental.entity.Typentity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.primefaces.event.NodeCollapseEvent;
-import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.model.TreeNode;
 
 /**
@@ -27,6 +25,7 @@ public class ModelTree {
 
     private TreeNode root = null;
     private TreeNode selectedNode = null;
+    private Typentity typentity=null;
 
     @EJB
     cz.rental.entity.TypentityController controller;
@@ -37,7 +36,10 @@ public class ModelTree {
     public void init() {
         setRoot(controller.fillTreeNodes());
     }
-
+    public void onNodeSelect(NodeSelectEvent event) {
+        setTypentity((Typentity) event.getTreeNode().getData());
+        System.out.println("typentity.getTypentity(): "+typentity.getTypentity());
+    }
     public void displaySelectedSingle() {
         System.out.println("VIEW-Selected");
         if (selectedNode != null) {
@@ -81,6 +83,20 @@ public class ModelTree {
      */
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
+    }
+
+    /**
+     * @return the typentity
+     */
+    public Typentity getTypentity() {
+        return typentity;
+    }
+
+    /**
+     * @param typentity the typentity to set
+     */
+    public void setTypentity(Typentity typentity) {
+        this.typentity = typentity;
     }
 
 }
