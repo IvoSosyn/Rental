@@ -13,6 +13,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 /**
@@ -25,7 +26,7 @@ public class ModelTree {
 
     private TreeNode root = null;
     private TreeNode selectedNode = null;
-    private Typentity typentity=null;
+    private Typentity typentity = null;
 
     @EJB
     cz.rental.entity.TypentityController controller;
@@ -36,10 +37,12 @@ public class ModelTree {
     public void init() {
         setRoot(controller.fillTreeNodes());
     }
+
     public void onNodeSelect(NodeSelectEvent event) {
         setTypentity((Typentity) event.getTreeNode().getData());
-        System.out.println("typentity.getTypentity(): "+typentity.getTypentity());
+        System.out.println("typentity.getTypentity(): " + typentity.getTypentity());
     }
+
     public void displaySelectedSingle() {
         System.out.println("VIEW-Selected");
         if (selectedNode != null) {
@@ -55,6 +58,22 @@ public class ModelTree {
         selectedNode.setParent(null);
 
         selectedNode = null;
+    }
+
+    public void addTypentity() {
+        TreeNode parent = selectedNode;
+        if (parent == null) {
+            return;
+        }
+        this.typentity = new Typentity();
+        this.selectedNode = new DefaultTreeNode(this.typentity, parent);
+        parent.setExpanded(true);
+        this.selectedNode.setExpanded(true);
+    }
+
+    public void valueChange(javax.faces.event.AjaxBehaviorEvent e) {
+        System.out.println(" "+FacesContext.getCurrentInstance());
+        System.out.println(" ValueChangeEvent e"+e.getComponent());
     }
 
     /**
