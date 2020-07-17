@@ -67,7 +67,7 @@ public class ModelTree {
         }
         this.typentity = new Typentity();
         this.selectedNode = new DefaultTreeNode(this.typentity, parent);
-        parent.setExpanded(true);
+        // parent.setExpanded(true);
         this.selectedNode.setExpanded(true);
     }
 
