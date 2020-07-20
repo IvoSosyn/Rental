@@ -11,7 +11,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -27,6 +29,8 @@ public class ModelTree {
     private TreeNode root = null;
     private TreeNode selectedNode = null;
     private Typentity typentity = null;
+
+    int poradi = 0;
 
     @EJB
     cz.rental.entity.TypentityController controller;
@@ -66,16 +70,58 @@ public class ModelTree {
             return;
         }
         this.typentity = new Typentity();
-        this.selectedNode = new DefaultTreeNode(this.typentity, parent);
-        // parent.setExpanded(true);
-        this.selectedNode.setExpanded(true);
+        this.typentity.setTypentity("Add " + (poradi++));
+        TreeNode trn = new DefaultTreeNode(this.typentity);
+        trn.setSelected(true);
+        this.setSelectedNode(trn);
+        parent.getChildren().add(this.selectedNode);
+        parent.setSelected(false);
+        parent.setExpanded(true);
+        while (parent.getParent() != null) {
+            parent = parent.getParent();
+            parent.setSelected(false);
+            parent.setExpanded(true);
+        }
+
+    }
+
+    public void valueChange() {
+        System.out.println(" get 'fieldName' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldName"));
+        System.out.println(" get 'fieldValue' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldValue"));
+        System.out.println(" get 'typEntity' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity"));
+    }
+
+    public void valueChange(String e) {
+        System.out.println(" " + e);
+        System.out.println(" get 'fieldName' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldName"));
+        System.out.println(" get 'fieldValue' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldValue"));
+        System.out.println(" get 'typEntity' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity"));
+    }
+
+    public void valueChange(ValueChangeEvent e) {
+        System.out.println(" " + e);
+        System.out.println(" get 'fieldName' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldName"));
+        System.out.println(" get 'fieldValue' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldValue"));
+        System.out.println(" get 'typEntity' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity"));
+
     }
 
     public void valueChange(javax.faces.event.AjaxBehaviorEvent e) {
-        System.out.println(" "+FacesContext.getCurrentInstance());
-        System.out.println(" ValueChangeEvent e"+e.getComponent());
+        System.out.println(" ((InputText)e.getSource()).getValue() " + ((InputText) e.getSource()).getLocalValue());
+        System.out.println(" ValueChangeEvent e.getComponent() " + e.getComponent());
+        System.out.println(" ValueChangeEvent e.getSource() " + e.getSource());
+        System.out.println(" get 'fieldName' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldName"));
+        System.out.println(" get 'fieldValue' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldValue"));
+        System.out.println(" get 'typEntity' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity"));
+
     }
 
+    /*
+                                    <!--
+                                <p:ajax process="idTypentity" event="valueChange" listener="#{modelTree.valueChange(modelTree.typentity.typentity)}" />
+                                <p:ajax   process="idTypentity" event="valueChange" listener="#{modelTree.valueChange}" />
+                                -->
+     */
     /**
      * @return the root
      */
