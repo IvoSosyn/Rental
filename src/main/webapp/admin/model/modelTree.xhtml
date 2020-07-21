@@ -13,7 +13,7 @@
     <h:body>
         <ui:composition>	
             <div class="ui-g">
-                <div class="ui-g-6">
+                <div class="ui-g-7">
                     <h:form id="formModelTree">
                         <p:growl id="messages" showDetail="true" />                
                         <p:panelGrid columns="1">
@@ -53,12 +53,17 @@
                             <p:menuitem value="View" update="messages" action="#{modelTree.displaySelectedSingle}" icon="pi pi-search" />
                             <p:menuitem value="Delete" update="modelTree" action="#{modelTree.deleteNode}" icon="pi pi-times"/>
                         </p:contextMenu>
-
                     </h:form>
                 </div>
+                <div class="ui-g-1">
+                    <h:form id="formModelTreeDetailButtons">
+                        <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" icon="fa fa-plus" partialSubmit="true" title="Nová entita (uzel)" />
+                        <p:commandButton id="delTypentity" value="Smaž" process="@this" partialSubmit="true" icon="fa fa-ban" title="Smazání entity (uzlu)"  style="color: #c61e40;" disabled="#{modelTree.typentity.attrsystem}" />                        
+                    </h:form>
+                </div>  
             </div>
             <div class="ui-g">
-                <div class="ui-g-5">
+                <div class="ui-g-8">
                     <h:form id="formModelTreeDetail">
                         <p:panelGrid id="gridDetail" columns="2">
                             <f:facet name="header">
@@ -66,13 +71,18 @@
                             </f:facet>
                             <h:outputText value="Zkratka:"  />
                             <p:inputText id="idTypentity" value="#{modelTree.typentity.typentity}" disabled="#{modelTree.typentity eq null}" >
-                                                                <p:ajax process="idTypentity" event="valueChange" listener="#{modelTree.valueChange(modelTree.typentity.typentity)}" />
+                                <p:ajax process="idTypentity" event="valueChange" listener="#{modelTree.valueChange(modelTree.typentity.typentity)}" />
                                 <f:param name="fieldName" value="modelTree.typentity.typentity" />
                                 <f:param name="fieldValue" value="#{modelTree.typentity.typentity}" />
-                                <f:param name="typEntity" value="#{modelTree.typentity}" />
+                                <f:param name="typEntity.id" value="#{modelTree.typentity.id}" />
                             </p:inputText>
                             <h:outputText value="Popis:"  />
-                            <p:inputText value="#{modelTree.typentity.popis}"  disabled="#{modelTree.typentity eq null}" > </p:inputText>
+                            <p:inputText id="idPopis" value="#{modelTree.typentity.popis}"  disabled="#{modelTree.typentity eq null}"  > 
+                                <p:ajax process="idPopis" event="valueChange" listener="#{modelTree.valueChange(modelTree.typentity.popis)}" />
+                                <f:param name="fieldName" value="modelTree.typentity.popis" />
+                                <f:param name="fieldValue" value="#{modelTree.typentity.popis}" />
+                                <f:param name="typEntity.id" value="#{modelTree.typentity.id}" />
+                            </p:inputText>
                             <h:outputText value="Platí Od:" />
                             <p:datePicker value="#{modelTree.typentity.platiod}"  disabled="#{modelTree.typentity eq null}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" />
                             <h:outputText value="Do:" />
@@ -82,12 +92,6 @@
                         </p:panelGrid>
                     </h:form>
                 </div>
-                <div class="ui-g-1">
-                    <h:form id="formModelTreeDetailButtons">
-                        <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" icon="fa fa-plus" title="Nová entita (uzel)" />
-                        <p:commandButton id="delTypentity" value="Smaž" process="@this" icon="fa fa-ban" title="Smazání entity (uzlu)"  style="color: #c61e40;" disabled="#{modelTree.typentity.attrsystem}" />                        
-                    </h:form>
-                </div>                    
             </div>
         </ui:composition>
     </h:body>
