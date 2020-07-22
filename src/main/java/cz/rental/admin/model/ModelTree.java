@@ -6,6 +6,8 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Typentity;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,6 +17,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -44,7 +47,7 @@ public class ModelTree {
 
     public void onNodeSelect(NodeSelectEvent event) {
         setTypentity((Typentity) event.getTreeNode().getData());
-        System.out.println("typentity.getTypentity(): " + typentity.getTypentity());
+        System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
     }
 
     public void displaySelectedSingle() {
@@ -57,6 +60,9 @@ public class ModelTree {
 
     public void deleteNode() {
         System.out.println("deleteNode");
+        if (selectedNode == null) {
+            return;
+        }
         selectedNode.getChildren().clear();
         selectedNode.getParent().getChildren().remove(selectedNode);
         selectedNode.setParent(null);
@@ -69,20 +75,29 @@ public class ModelTree {
         if (parent == null) {
             return;
         }
-        this.typentity = new Typentity();
-        this.typentity.setTypentity("Add " + (poradi++));
-        TreeNode trn = new DefaultTreeNode(this.typentity);
-        trn.setSelected(true);
-        this.setSelectedNode(trn);
-        parent.getChildren().add(this.selectedNode);
-        parent.setSelected(false);
-        parent.setExpanded(true);
-        while (parent.getParent() != null) {
-            parent = parent.getParent();
+        try {
+            this.typentity = new Typentity();
+            this.typentity.setIdparent(((Typentity) parent.getData()).getId());
+            this.typentity.setTypentity("Add " + (poradi++));
+            this.typentity.setPopis("Nový evidenční uzel " + poradi);
+            // Ulozit do DB
+            controller.create(this.typentity);
+            TreeNode trn = new DefaultTreeNode(this.typentity);
+            trn.setSelected(true);
+            this.setSelectedNode(trn);
+            parent.getChildren().add(this.selectedNode);
             parent.setSelected(false);
             parent.setExpanded(true);
+            while (parent.getParent() != null) {
+                parent = parent.getParent();
+                parent.setSelected(false);
+                parent.setExpanded(true);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Záznam NEpřidán !", "Přidání záznamu bylo NEúspěšné ! Postup opakujte později.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
-
     }
 
     public void valueChange() {
@@ -96,6 +111,15 @@ public class ModelTree {
         System.out.println(" get 'fieldName' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldName"));
         System.out.println(" get 'fieldValue' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldValue"));
         System.out.println(" get 'typEntity.id' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity.id"));
+        try {
+            // Ulozit do DB
+            controller.edit(this.typentity);
+        } catch (Exception ex) {
+            Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Záznam NEuložen !", "Uložení změny záznamu " + e + " bylo NEúspěšné ! Postup opakujte později.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
     }
 
     public void valueChange(ValueChangeEvent e) {
@@ -114,6 +138,29 @@ public class ModelTree {
         System.out.println(" get 'fieldValue' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldValue"));
         System.out.println(" get 'typEntity' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity"));
 
+    }
+
+    /**
+     * TO-DO: Zavesit na prava uzivatele
+     *
+     * @return typentity je editovatelny
+     */
+    public boolean isEditable() {
+        return (this.typentity != null && this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem());
+
+    }
+
+    public void onDragDrop(TreeDragDropEvent event) throws Exception {
+        TreeNode dragNode = event.getDragNode();
+        TreeNode dropNode = event.getDropNode();
+        int dropIndex = event.getDropIndex();
+        Typentity drag = (Typentity) event.getDragNode().getData();
+        Typentity drop = (Typentity) event.getDropNode().getData();
+        drop.setIdparent(drag.getId());
+        // Ulozit do DB
+        controller.edit(drop);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dragged " + dragNode.getData(), "Dropped on " + dropNode.getData() + " at " + dropIndex);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     /*

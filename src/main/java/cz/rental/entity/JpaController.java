@@ -9,16 +9,20 @@ import entity.exceptions.NonexistentEntityException;
 import entity.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
  * @author ivo
  */
 public class JpaController implements Serializable {
-
-    public EntityManager getEntityManager() {
-        return ManagerFactory.getManager();
-    }
+    
+    @PersistenceContext(unitName = "PostgreSQLNajem")
+    private EntityManager em;
+    private Query query = null;
+    
+    
 
     /**
      * Metoda vytvori novy zaznam do DB
@@ -28,21 +32,16 @@ public class JpaController implements Serializable {
      * @throws Exception obecna vyjimka z transakce
      */
     public void create(EntitySuperClassNajem entita) throws PreexistingEntityException, Exception {
-        EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(entita);
-            em.getTransaction().commit();
+            getEm().getTransaction().begin();
+            getEm().persist(entita);
+            getEm().getTransaction().commit();
         } catch (Exception ex) {
             if (findEntita(entita) != null) {
                 throw new PreexistingEntityException("Entita " + entita + " již existuje v databázi.", ex);
             }
             throw ex;
         } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
         }
     }
 
@@ -54,12 +53,10 @@ public class JpaController implements Serializable {
      * @throws Exception obecna vyjimka z transakce
      */
     public void edit(EntitySuperClassNajem entita) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            entita = em.merge(entita);
-            em.getTransaction().commit();
+        try {            
+            getEm().getTransaction().begin();
+            entita = getEm().merge(entita);
+            getEm().getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -69,9 +66,6 @@ public class JpaController implements Serializable {
             }
             throw ex;
         } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
         }
     }
 
@@ -82,20 +76,15 @@ public class JpaController implements Serializable {
      * @throws NonexistentEntityException vyjimka, pokud entita ke smazani neexistuje
      */
     public void destroy(EntitySuperClassNajem entita) throws NonexistentEntityException {
-        EntityManager em = null;
         try {
             if (findEntita(entita) == null) {
                 throw new NonexistentEntityException("Entita " + entita + " NEexistuje v databázi.");
             } else {
-                em = getEntityManager();
-                em.getTransaction().begin();
-                em.remove(em.merge(entita));
-                em.getTransaction().commit();
+                getEm().getTransaction().begin();
+                getEm().remove(getEm().merge(entita));
+                getEm().getTransaction().commit();
             }
         } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
         }
     }
 
@@ -106,13 +95,37 @@ public class JpaController implements Serializable {
      * @return instance EntitySuperClassNajem nebo null pokud entita neexistuje
      */
     public EntitySuperClassNajem findEntita(EntitySuperClassNajem entita) {
-        EntityManager em = getEntityManager();
         try {
-            return (EntitySuperClassNajem) em.find((Class) entita.getClass(), entita.getId());
+            return (EntitySuperClassNajem) getEm().find((Class) entita.getClass(), entita.getId());
         } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
         }
+    }
+
+    /**
+     * @return the em
+     */
+    public EntityManager getEm() {
+        return em;
+    }
+
+    /**
+     * @param em the em to set
+     */
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
+    /**
+     * @return the query
+     */
+    public Query getQuery() {
+        return query;
+    }
+
+    /**
+     * @param query the query to set
+     */
+    public void setQuery(Query query) {
+        this.query = query;
     }
 }

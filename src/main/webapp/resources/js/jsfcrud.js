@@ -30,5 +30,7 @@ PrimeFaces.locales ['cs_CZ'] = {
     month: 'Měsíc',
     week: 'Týden',
     day: 'Den',
-    allDayText: 'Celý den'
+    allDayText: 'Celý den',
+    today: 'Dnes',
+    clear: 'Vymazat'
 };

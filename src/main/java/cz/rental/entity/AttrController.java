@@ -22,7 +22,7 @@ import javax.persistence.Query;
 public class AttrController {
 
     JpaController jpaController = new JpaController();
-    private EntityManager em = jpaController.getEntityManager();
+    private EntityManager em = jpaController.getEm();
     Query query = null;
 
     public AttrController() {
@@ -33,7 +33,7 @@ public class AttrController {
      */
     public EntityManager getEm() {
         if (!em.isOpen()) {
-            this.setEm(jpaController.getEntityManager());
+            this.setEm(jpaController.getEm());
         }
         return em;
     }
