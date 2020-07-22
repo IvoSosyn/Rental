@@ -12,38 +12,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 /**
  *
  * @author sosyn
  */
-public class AttrController {
+public class AttrController extends JpaController {
 
-    JpaController jpaController = new JpaController();
-    private EntityManager em = jpaController.getEm();
     Query query = null;
 
     public AttrController() {
     }
 
-    /**
-     * @return the em
-     */
-    public EntityManager getEm() {
-        if (!em.isOpen()) {
-            this.setEm(jpaController.getEm());
-        }
-        return em;
-    }
-
-    /**
-     * @param em the em to set
-     */
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
 
     /**
      * Metoda vrati ArrayList s hodnotami Attr{text|date|numeric} pro zadany
@@ -170,8 +151,8 @@ public class AttrController {
                     }
                 }
                 try {
-                    jpaController.edit(entSuperClass);
-                    attribute = (Attribute) jpaController.findEntita(attribute);
+                    this.edit(entSuperClass);
+                    attribute = (Attribute) this.findEntita(attribute);
                 } catch (Exception ex) {
                     // Osetrit, co kdyz se to neulozi
                     Logger.getLogger(AttrController.class
@@ -188,7 +169,7 @@ public class AttrController {
                 entSuperClass.setPlatido(cal.getTime());
                 try {
                     // Pokus o ulozeni ukonceneho zaznamu do databaze
-                    jpaController.edit(entSuperClass);
+                    this.edit(entSuperClass);
                 } catch (Exception ex) {
                     Logger.getLogger(AttrController.class
                             .getName()).log(Level.SEVERE, null, ex);
@@ -241,8 +222,8 @@ public class AttrController {
         entSuperClass.setPlatiod(aAttrValue.isEmpty() ? null : Aplikace.getZmenaOd());
         entSuperClass.setPlatido(aAttrValue.isEmpty() ? null : datumZmenyDo);
         try {
-            jpaController.create(entSuperClass);
-            attribute = (Attribute) jpaController.findEntita(attribute);
+            this.create(entSuperClass);
+            attribute = (Attribute) this.findEntita(attribute);
         } catch (Exception ex) {
             // Osetrit, co kdyz se to neulozi
             Logger.getLogger(AttrController.class

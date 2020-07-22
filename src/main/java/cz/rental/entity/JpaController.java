@@ -8,6 +8,8 @@ package cz.rental.entity;
 import entity.exceptions.NonexistentEntityException;
 import entity.exceptions.PreexistingEntityException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -17,12 +19,11 @@ import javax.persistence.Query;
  * @author ivo
  */
 public class JpaController implements Serializable {
-    
+
     @PersistenceContext(unitName = "PostgreSQLNajem")
     private EntityManager em;
+
     private Query query = null;
-    
-    
 
     /**
      * Metoda vytvori novy zaznam do DB
@@ -33,9 +34,7 @@ public class JpaController implements Serializable {
      */
     public void create(EntitySuperClassNajem entita) throws PreexistingEntityException, Exception {
         try {
-            getEm().getTransaction().begin();
             getEm().persist(entita);
-            getEm().getTransaction().commit();
         } catch (Exception ex) {
             if (findEntita(entita) != null) {
                 throw new PreexistingEntityException("Entita " + entita + " již existuje v databázi.", ex);
@@ -53,10 +52,8 @@ public class JpaController implements Serializable {
      * @throws Exception obecna vyjimka z transakce
      */
     public void edit(EntitySuperClassNajem entita) throws NonexistentEntityException, Exception {
-        try {            
-            getEm().getTransaction().begin();
+        try {
             entita = getEm().merge(entita);
-            getEm().getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -73,16 +70,19 @@ public class JpaController implements Serializable {
      * Metoda smaze zaznam z DB
      *
      * @param entita dedicove EntitySuperClassNajem (skoro vsechny tabulky)
-     * @throws NonexistentEntityException vyjimka, pokud entita ke smazani neexistuje
+     * @throws NonexistentEntityException vyjimka, pokud entita ke smazani
+     * neexistuje
      */
-    public void destroy(EntitySuperClassNajem entita) throws NonexistentEntityException {
+    public void destroy(EntitySuperClassNajem entita) throws NonexistentEntityException, Exception {
         try {
             if (findEntita(entita) == null) {
                 throw new NonexistentEntityException("Entita " + entita + " NEexistuje v databázi.");
             } else {
-                getEm().getTransaction().begin();
-                getEm().remove(getEm().merge(entita));
-                getEm().getTransaction().commit();
+                try {
+                    getEm().remove(getEm().merge(entita));
+                } catch (Exception ex) {
+                    Logger.getLogger(JpaController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         } finally {
         }

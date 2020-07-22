@@ -1,3 +1,5 @@
+Transakce - tansakce je typu CONTAINER - řídí je WildFly, takže nelze použít lokální uživatelské transakce (BEAN)  trn.begin(), trn.commit(), trn.rollback()
+=========     WildFly sám vyhodí exception, pokud se transakce nepovede.  
 
 WildFly - nutné změny
 =======

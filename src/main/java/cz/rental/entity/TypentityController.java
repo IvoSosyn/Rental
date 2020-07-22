@@ -8,6 +8,13 @@ package cz.rental.entity;
 import cz.rental.aplikace.Aplikace;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import static javax.ejb.TransactionManagementType.CONTAINER;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -15,8 +22,16 @@ import org.primefaces.model.TreeNode;
  *
  * @author sosyn
  */
+
 @Stateless
+@TransactionManagement(CONTAINER)
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class TypentityController extends JpaController {
+
+    @PersistenceContext(unitName = "PostgreSQLNajem")
+    private EntityManager em;
+    private Query query = null;
+
 
     public TreeNode fillTreeNodes() {
         TreeNode root = new DefaultTreeNode("Root", null);

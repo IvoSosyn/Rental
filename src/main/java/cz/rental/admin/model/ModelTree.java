@@ -80,6 +80,8 @@ public class ModelTree {
             this.typentity.setIdparent(((Typentity) parent.getData()).getId());
             this.typentity.setTypentity("Add " + (poradi++));
             this.typentity.setPopis("Nový evidenční uzel " + poradi);
+            this.typentity.setEditor('F');
+            this.typentity.setAttrsystem(false);
             // Ulozit do DB
             controller.create(this.typentity);
             TreeNode trn = new DefaultTreeNode(this.typentity);
