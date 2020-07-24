@@ -40,7 +40,7 @@
                                 </p:treeNode>
                             </p:tree>
                         </p:panelGrid>
-                        <p:contextMenu for="modelTree">
+                        <p:contextMenu for="modelTree" >
                             <p:menuitem value="Přidej"  action="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-plus"   title="Přidej novou entitu (uzel)" />
                             <p:menuitem value="Smaž"    action="#{modelTree.deleteNode}"   update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-ban"  disabled="#{!modelTree.editable}"  title="Smaž entitu (uzel)" />
                             <p:separator /> 
