@@ -43,7 +43,8 @@
                         <p:contextMenu for="modelTree">
                             <p:menuitem value="Přidej"  action="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-plus"   title="Přidej novou entitu (uzel)" />
                             <p:menuitem value="Smaž"    action="#{modelTree.deleteNode}"   update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-ban"  disabled="#{!modelTree.editable}"  title="Smaž entitu (uzel)" />
-                            <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti" />
+                            <p:separator /> 
+                            <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
                             <p:menuitem value="Vlož"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
                         </p:contextMenu>
                     </h:form>
