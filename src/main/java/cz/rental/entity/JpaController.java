@@ -45,10 +45,10 @@ public class JpaController implements Serializable {
     }
 
     /**
-     * Metoda zapise zmeny do DB
+     * Metoda zapise zmeny do DB, parametr entita musi jiz v DB existovat
      *
      * @param entita dedicove EntitySuperClassNajem (skoro vsechny tabulky)
-     * @throws PreexistingEntityException vyjimka, pokud entita jiz existuje
+     * @throws PreexistingEntityException vyjimka, pokud entita jeste NEexistuje v DB
      * @throws Exception obecna vyjimka z transakce
      */
     public void edit(EntitySuperClassNajem entita) throws NonexistentEntityException, Exception {

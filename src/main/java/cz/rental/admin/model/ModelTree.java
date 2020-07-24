@@ -6,6 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Typentity;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,6 +32,7 @@ public class ModelTree {
 
     private TreeNode root = null;
     private TreeNode selectedNode = null;
+    private TreeNode copyNode = null;
     private Typentity typentity = null;
 
     int poradi = 0;
@@ -158,9 +160,15 @@ public class ModelTree {
         int dropIndex = event.getDropIndex();
         Typentity drag = (Typentity) event.getDragNode().getData();
         Typentity drop = (Typentity) event.getDropNode().getData();
-        drop.setIdparent(drag.getId());
-        // Ulozit do DB
-        controller.edit(drop);
+        if (event.isDroppedNodeCopy()) {
+            this.copyNode = dragNode;
+            pasteNode(dragNode, drop.getId());
+        } else {
+            drag.setIdparent(drop.getId());
+            // Ulozit do DB
+            controller.edit(drag);
+        }
+
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dragged " + dragNode.getData(), "Dropped on " + dropNode.getData() + " at " + dropIndex);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -171,6 +179,32 @@ public class ModelTree {
                                 <p:ajax   process="idTypentity" event="valueChange" listener="#{modelTree.valueChange}" />
                                 -->
      */
+    public void copyNodeFrom() {
+        if (selectedNode == null) {
+            return;
+        }
+        this.copyNode=this.selectedNode;
+    }
+
+    public void pasteNodeTo() {
+        if (selectedNode == null) {
+            return;
+        }
+        if (copyNode == null) {
+            return;
+        }
+    }
+
+    // 
+    private void pasteNode(TreeNode node, UUID parentID) throws Exception {
+        ((Typentity) node.getData()).setId(UUID.randomUUID());
+        ((Typentity) node.getData()).setIdparent(parentID);
+        controller.edit((Typentity) node.getData());
+        for (TreeNode treeNode : node.getChildren()) {
+            pasteNode(treeNode, ((Typentity) node.getData()).getId());
+        }
+    }
+
     /**
      * @return the root
      */
@@ -211,6 +245,20 @@ public class ModelTree {
      */
     public void setTypentity(Typentity typentity) {
         this.typentity = typentity;
+    }
+
+    /**
+     * @return the pasteNode
+     */
+    public TreeNode getCopyNode() {
+        return copyNode;
+    }
+
+    /**
+     * @param copyNode the pasteNode to set
+     */
+    public void setCopyNode(TreeNode copyNode) {
+        this.copyNode = copyNode;
     }
 
 }
