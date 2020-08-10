@@ -193,6 +193,7 @@ public class ModelTree {
         if (copyNode == null) {
             return;
         }
+        // TO-DO - naklonovat Node a Attributes do novych objektů
     }
 
     // 

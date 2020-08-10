@@ -26,10 +26,7 @@
                                 <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail :formModelTree:messages" >
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
-                                <p:ajax event="select" update=":formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity" listener="#{modelTree.onNodeSelect}" >
-                                    <f:attribute name="treeNode" value="#{treeNode}" />
-                                </p:ajax>
-                                <p:ajax event="select" update=":formModelTable :formModelDetail" listener="#{modelTable.onNodeSelect}" >
+                                <p:ajax event="select" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity" listener="#{modelTree.onNodeSelect}" >
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
                                 <p:ajax event="unselect" update=":formModelTable :formModelDetail" listener="#{modelTable.onNodeUnselect}" >
@@ -40,11 +37,11 @@
                                 </p:treeNode>
                             </p:tree>
                         </p:panelGrid>
-                        <p:contextMenu for="modelTree" >
+                        <p:contextMenu id="modelTreeMenu" for="modelTree" >
                             <p:menuitem value="Přidej"  action="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-plus"   title="Přidej novou entitu (uzel)" />
                             <p:menuitem value="Smaž"    action="#{modelTree.deleteNode}"   update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-ban"  disabled="#{!modelTree.editable}"  title="Smaž entitu (uzel)" />
                             <p:separator /> 
-                            <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
+                            <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
                             <p:menuitem value="Vlož"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
                         </p:contextMenu>
                     </h:form>
