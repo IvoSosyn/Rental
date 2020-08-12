@@ -70,6 +70,7 @@ public class ModelTree {
         selectedNode.setParent(null);
 
         selectedNode = null;
+        setTypentity(null);
     }
 
     public void addTypentity() {
@@ -162,7 +163,7 @@ public class ModelTree {
         Typentity drop = (Typentity) event.getDropNode().getData();
         if (event.isDroppedNodeCopy()) {
             this.copyNode = dragNode;
-            pasteNode(dragNode, drop.getId());
+            pasteNode(dragNode, dropNode);
         } else {
             drag.setIdparent(drop.getId());
             // Ulozit do DB
@@ -183,7 +184,7 @@ public class ModelTree {
         if (selectedNode == null) {
             return;
         }
-        this.copyNode=this.selectedNode;
+        this.copyNode = this.selectedNode;
     }
 
     public void pasteNodeTo() {
@@ -196,14 +197,29 @@ public class ModelTree {
         // TO-DO - naklonovat Node a Attributes do novych objektů
     }
 
-    // 
-    private void pasteNode(TreeNode node, UUID parentID) throws Exception {
-        ((Typentity) node.getData()).setId(UUID.randomUUID());
-        ((Typentity) node.getData()).setIdparent(parentID);
-        controller.edit((Typentity) node.getData());
-        for (TreeNode treeNode : node.getChildren()) {
-            pasteNode(treeNode, ((Typentity) node.getData()).getId());
+    // Klonuje do nove Typentity a TreeNode hodnoty z materskeho node
+        // TO-DO - dodelat cyklus a naklonovat atributy
+    
+    private TreeNode pasteNode(TreeNode node, TreeNode nodeParent) throws Exception {
+        Typentity typEntityNew = new Typentity();
+        typEntityNew.setIdparent(((Typentity) nodeParent.getData()).getId());
+        typEntityNew.setAttrsystem(((Typentity) node.getData()).getAttrsystem());
+        typEntityNew.setEditor(((Typentity) node.getData()).getEditor());
+        typEntityNew.setPlatiod(((Typentity) node.getData()).getPlatiod());
+        typEntityNew.setPlatido(((Typentity) node.getData()).getPlatido());
+        typEntityNew.setPopis(((Typentity) node.getData()).getPopis());
+        typEntityNew.setTypentity(((Typentity) node.getData()).getTypentity());
+        typEntityNew.setTypentity(((Typentity) node.getData()).getTypentity());
+        typEntityNew.setNewEntity(true);
+        controller.edit(typEntityNew);
+
+        TreeNode treeNodeNew = new DefaultTreeNode(typEntityNew);
+
+        for (TreeNode treeNodeChild : node.getChildren()) {
+            treeNodeNew.getChildren().add(pasteNode(treeNodeChild, treeNodeNew));
         }
+        nodeParent.getChildren().add(treeNodeNew);
+        return treeNodeNew;
     }
 
     /**
