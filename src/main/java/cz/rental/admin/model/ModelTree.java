@@ -164,6 +164,7 @@ public class ModelTree {
         if (event.isDroppedNodeCopy()) {
             this.copyNode = dragNode;
             pasteNode(dragNode, dropNode);
+            setRoot(controller.fillTreeNodes());
         } else {
             drag.setIdparent(drop.getId());
             // Ulozit do DB
@@ -194,31 +195,32 @@ public class ModelTree {
         if (copyNode == null) {
             return;
         }
-        // TO-DO - naklonovat Node a Attributes do novych objektů
+        // Naklonovat TreeNode ze zasobniku do vybraneho TreeNode
+        try {
+            pasteNode(copyNode, selectedNode);
+            setRoot(controller.fillTreeNodes());
+        } catch (Exception ex) {
+            Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Klonuje do nove Typentity a TreeNode hodnoty z materskeho node
-        // TO-DO - dodelat cyklus a naklonovat atributy
-    
+    // TO-DO - dodelat cyklus a naklonovat atributy
     private TreeNode pasteNode(TreeNode node, TreeNode nodeParent) throws Exception {
-        Typentity typEntityNew = new Typentity();
+        Typentity typEntityNew = controller.cloneTypentity((Typentity) node.getData());
         typEntityNew.setIdparent(((Typentity) nodeParent.getData()).getId());
-        typEntityNew.setAttrsystem(((Typentity) node.getData()).getAttrsystem());
-        typEntityNew.setEditor(((Typentity) node.getData()).getEditor());
-        typEntityNew.setPlatiod(((Typentity) node.getData()).getPlatiod());
-        typEntityNew.setPlatido(((Typentity) node.getData()).getPlatido());
-        typEntityNew.setPopis(((Typentity) node.getData()).getPopis());
-        typEntityNew.setTypentity(((Typentity) node.getData()).getTypentity());
-        typEntityNew.setTypentity(((Typentity) node.getData()).getTypentity());
-        typEntityNew.setNewEntity(true);
-        controller.edit(typEntityNew);
-
+        controller.create(typEntityNew);
+        
+        
         TreeNode treeNodeNew = new DefaultTreeNode(typEntityNew);
+        treeNodeNew.setParent(nodeParent);
 
         for (TreeNode treeNodeChild : node.getChildren()) {
             treeNodeNew.getChildren().add(pasteNode(treeNodeChild, treeNodeNew));
         }
+        
         nodeParent.getChildren().add(treeNodeNew);
+        
         return treeNodeNew;
     }
 

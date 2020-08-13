@@ -7,6 +7,7 @@ package cz.rental.entity;
 
 import cz.rental.aplikace.Aplikace;
 import java.util.List;
+import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -22,7 +23,6 @@ import org.primefaces.model.TreeNode;
  *
  * @author sosyn
  */
-
 @Stateless
 @TransactionManagement(CONTAINER)
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -31,7 +31,6 @@ public class TypentityController extends JpaController {
     @PersistenceContext(unitName = "PostgreSQLNajem")
     private EntityManager em;
     private Query query = null;
-
 
     public TreeNode fillTreeNodes() {
         TreeNode root = new DefaultTreeNode("Root", null);
@@ -61,5 +60,12 @@ public class TypentityController extends JpaController {
                 addNode(top, (Typentity) typEntity);
             }
         }
+    }
+
+    public Typentity cloneTypentity(Typentity typentity) throws CloneNotSupportedException {
+        Typentity typentityNew = (Typentity) typentity.clone();
+        typentityNew.setId(UUID.randomUUID());
+        typentityNew.setNewEntity(true);
+        return typentityNew;
     }
 }

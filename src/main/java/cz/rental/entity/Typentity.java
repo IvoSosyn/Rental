@@ -26,7 +26,7 @@ import org.eclipse.persistence.annotations.Converter;
  * @author ivo
  */
 @Entity
-@Table(catalog = "najem", schema="public")
+@Table(catalog = "najem", schema = "public")
 @NamedQueries({
     @NamedQuery(name = "Typentity.findAll", query = "SELECT t FROM Typentity t"),
     @NamedQuery(name = "Typentity.findByAttrsystem", query = "SELECT t FROM Typentity t WHERE t.attrsystem = :attrsystem"),
@@ -37,7 +37,7 @@ import org.eclipse.persistence.annotations.Converter;
     @NamedQuery(name = "Typentity.findByTimeinsert", query = "SELECT t FROM Typentity t WHERE t.timeinsert = :timeinsert"),
     @NamedQuery(name = "Typentity.findByTimemodify", query = "SELECT t FROM Typentity t WHERE t.timemodify = :timemodify"),
     @NamedQuery(name = "Typentity.findByUsermodify", query = "SELECT t FROM Typentity t WHERE t.usermodify = :usermodify")})
-public class Typentity extends EntitySuperClassNajem implements Serializable {
+public class Typentity extends EntitySuperClassNajem implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
 
@@ -93,6 +93,11 @@ public class Typentity extends EntitySuperClassNajem implements Serializable {
     @Override
     public String toString() {
         return typentity + "-" + this.getPopis();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     /**

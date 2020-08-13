@@ -40,7 +40,7 @@ import org.eclipse.persistence.annotations.Converter;
     @NamedQuery(name = "Attribute.findByTimeinsert", query = "SELECT a FROM Attribute a WHERE a.timeinsert = :timeinsert"),
     @NamedQuery(name = "Attribute.findByTimemodify", query = "SELECT a FROM Attribute a WHERE a.timemodify = :timemodify"),
     @NamedQuery(name = "Attribute.findByUsermodify", query = "SELECT a FROM Attribute a WHERE a.usermodify = :usermodify")})
-public class Attribute extends EntitySuperClassNajem implements Serializable {
+public class Attribute extends EntitySuperClassNajem implements Serializable, Cloneable {
 
     @Basic(optional = false)
     @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
@@ -186,6 +186,11 @@ public class Attribute extends EntitySuperClassNajem implements Serializable {
     @Override
     public String toString() {
         return "entity.Attribute[ id=" + this.getId() + " ]";
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     /**
