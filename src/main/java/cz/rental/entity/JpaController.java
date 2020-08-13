@@ -35,6 +35,7 @@ public class JpaController implements Serializable {
     public void create(EntitySuperClassNajem entita) throws PreexistingEntityException, Exception {
         try {
             getEm().persist(entita);
+            getEm().flush();
         } catch (Exception ex) {
             if (findEntita(entita) != null) {
                 throw new PreexistingEntityException("Entita " + entita + " již existuje v databázi.", ex);
@@ -54,6 +55,7 @@ public class JpaController implements Serializable {
     public void edit(EntitySuperClassNajem entita) throws NonexistentEntityException, Exception {
         try {
             entita = getEm().merge(entita);
+            getEm().flush();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -80,6 +82,7 @@ public class JpaController implements Serializable {
             } else {
                 try {
                     getEm().remove(getEm().merge(entita));
+                    getEm().flush();
                 } catch (Exception ex) {
                     Logger.getLogger(JpaController.class.getName()).log(Level.SEVERE, null, ex);
                 }
