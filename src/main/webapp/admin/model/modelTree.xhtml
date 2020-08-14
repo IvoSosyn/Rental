@@ -23,13 +23,13 @@
                             </f:facet>
                             <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
                                     selection="#{modelTree.selectedNode}" draggable="true" droppable="true" dropCopyNode="true" >
-                                <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail :formModelTree:messages" >
+                                <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity :formModelTree:messages" >
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
-                                <p:ajax event="select" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity" listener="#{modelTree.onNodeSelect}" >
+                                <p:ajax event="select"  listener="#{modelTree.onNodeSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity :formModelTree:messages">
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
-                                <p:ajax event="unselect" update=":formModelTable :formModelDetail" listener="#{modelTable.onNodeUnselect}" >
+                                <p:ajax event="unselect" listener="#{modelTable.onNodeUnselect}"  update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity :formModelTree:messages">
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
                                 <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">

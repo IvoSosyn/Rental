@@ -6,7 +6,6 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Typentity;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -89,15 +88,10 @@ public class ModelTree {
             controller.create(this.typentity);
             TreeNode trn = new DefaultTreeNode(this.typentity);
             trn.setSelected(true);
+            trn.setParent(parent);
+            parent.getChildren().add(trn);
             this.setSelectedNode(trn);
-            parent.getChildren().add(this.selectedNode);
-            parent.setSelected(false);
-            parent.setExpanded(true);
-            while (parent.getParent() != null) {
-                parent = parent.getParent();
-                parent.setSelected(false);
-                parent.setExpanded(true);
-            }
+            openAllParent(trn);
         } catch (Exception ex) {
             Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Záznam NEpřidán !", "Přidání záznamu bylo NEúspěšné ! Postup opakujte později.");
@@ -155,22 +149,29 @@ public class ModelTree {
 
     }
 
+    /**
+     * Premisteni nebo kopie TreeNode cestou Drag&Drop
+     *
+     * @param event - udalost, nesouci objekty DragAndDrop
+     * @throws Exception
+     */
     public void onDragDrop(TreeDragDropEvent event) throws Exception {
         TreeNode dragNode = event.getDragNode();
         TreeNode dropNode = event.getDropNode();
         int dropIndex = event.getDropIndex();
         Typentity drag = (Typentity) event.getDragNode().getData();
         Typentity drop = (Typentity) event.getDropNode().getData();
+        this.copyNode = dragNode;
         if (event.isDroppedNodeCopy()) {
-            this.copyNode = dragNode;
-            pasteNode(dragNode, dropNode);
-            setRoot(controller.fillTreeNodes());
+            this.setSelectedNode(pasteNode(dragNode, dropNode, dropIndex));
         } else {
             drag.setIdparent(drop.getId());
             // Ulozit do DB
             controller.edit(drag);
+            this.setSelectedNode(dragNode);
         }
-
+        this.getSelectedNode().setSelected(true);
+        openAllParent(this.getSelectedNode());
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dragged " + dragNode.getData(), "Dropped on " + dropNode.getData() + " at " + dropIndex);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -197,31 +198,44 @@ public class ModelTree {
         }
         // Naklonovat TreeNode ze zasobniku do vybraneho TreeNode
         try {
-            pasteNode(copyNode, selectedNode);
-            setRoot(controller.fillTreeNodes());
+            this.setSelectedNode(pasteNode(copyNode, selectedNode, -1));
+            openAllParent(this.getSelectedNode());
+
         } catch (Exception ex) {
             Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    // Klonuje do nove Typentity a TreeNode hodnoty z materskeho node
-    // TO-DO - dodelat cyklus a naklonovat atributy
-    private TreeNode pasteNode(TreeNode node, TreeNode nodeParent) throws Exception {
+    /**
+     * Klonuje do nove Typentity a TreeNode hodnoty z materskeho node a pripoji
+     * je k nodeParent TO-DO: Dodelat kopie atriribute
+     */
+    private TreeNode pasteNode(TreeNode node, TreeNode nodeParent, int parentIndex) throws Exception {
         Typentity typEntityNew = controller.cloneTypentity((Typentity) node.getData());
         typEntityNew.setIdparent(((Typentity) nodeParent.getData()).getId());
         controller.create(typEntityNew);
-        
-        
+
         TreeNode treeNodeNew = new DefaultTreeNode(typEntityNew);
         treeNodeNew.setParent(nodeParent);
 
         for (TreeNode treeNodeChild : node.getChildren()) {
-            treeNodeNew.getChildren().add(pasteNode(treeNodeChild, treeNodeNew));
+            treeNodeNew.getChildren().add(pasteNode(treeNodeChild, treeNodeNew, -1));
         }
-        
-        nodeParent.getChildren().add(treeNodeNew);
-        
+        if (parentIndex < 0) {
+            nodeParent.getChildren().add(treeNodeNew);
+        } else {
+            nodeParent.getChildren().set(parentIndex, treeNodeNew);
+        }
+
         return treeNodeNew;
+    }
+
+    private void openAllParent(TreeNode parent) {
+        while (parent.getParent() != null) {
+            parent = parent.getParent();
+            parent.setSelected(false);
+            parent.setExpanded(true);
+        }
     }
 
     /**
