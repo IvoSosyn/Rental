@@ -38,6 +38,8 @@ public class ModelTree {
 
     @EJB
     cz.rental.entity.TypentityController controller;
+    @EJB
+    cz.rental.admin.model.ModelTable modelTable;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -48,7 +50,8 @@ public class ModelTree {
 
     public void onNodeSelect(NodeSelectEvent event) {
         setTypentity((Typentity) event.getTreeNode().getData());
-        System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
+        modelTable.getAttributeForTypentity(this.getTypentity());
+        // System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
     }
 
     public void displaySelectedSingle() {
