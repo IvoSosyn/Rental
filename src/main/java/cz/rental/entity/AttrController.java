@@ -276,6 +276,7 @@ public class AttrController extends JpaController {
                 attrNew.setId(UUID.randomUUID());
                 attrNew.setIdtypentity(typEntityNew.getId());
                 this.create(attrNew);
+                
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(AttrController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {

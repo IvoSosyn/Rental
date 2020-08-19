@@ -226,6 +226,7 @@ public class ModelTree {
         Typentity typEntityNew = controller.cloneTypentity((Typentity) node.getData());
         typEntityNew.setIdparent(((Typentity) nodeParent.getData()).getId());
         controller.create(typEntityNew);
+        typEntityNew.setNewEntity(false);
         attrController.cloneAttribute((Typentity) node.getData(), typEntityNew);
 
         TreeNode treeNodeNew = new DefaultTreeNode(typEntityNew);
