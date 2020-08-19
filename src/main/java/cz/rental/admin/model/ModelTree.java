@@ -39,6 +39,8 @@ public class ModelTree {
     @EJB
     cz.rental.entity.TypentityController controller;
     @EJB
+    cz.rental.entity.AttrController attrController;
+    @EJB
     cz.rental.admin.model.ModelTable modelTable;
 
     // Add business logic below. (Right-click in editor and choose
@@ -62,6 +64,10 @@ public class ModelTree {
         }
     }
 
+    /**
+     * Vymaze <CODE>selectedNode</CODE> z DB a z NodeTree
+     * TO-DO: provest DB vymaz vsech potomku a attribute
+     */
     public void deleteNode() {
         System.out.println("deleteNode");
         if (selectedNode == null) {
@@ -83,8 +89,8 @@ public class ModelTree {
         try {
             this.typentity = new Typentity();
             this.typentity.setIdparent(((Typentity) parent.getData()).getId());
-            this.typentity.setTypentity("Add " + (poradi++));
-            this.typentity.setPopis("Nový evidenční uzel " + poradi);
+            this.typentity.setTypentity("Add " + poradi);
+            this.typentity.setPopis("Nový evidenční uzel " + (poradi++));
             this.typentity.setEditor('F');
             this.typentity.setAttrsystem(false);
             // Ulozit do DB
@@ -166,6 +172,7 @@ public class ModelTree {
         Typentity drop = (Typentity) event.getDropNode().getData();
         this.copyNode = dragNode;
         if (event.isDroppedNodeCopy()) {
+            dragNode.setSelected(false);
             this.setSelectedNode(pasteNode(dragNode, dropNode, dropIndex));
         } else {
             drag.setIdparent(drop.getId());
@@ -201,6 +208,7 @@ public class ModelTree {
         }
         // Naklonovat TreeNode ze zasobniku do vybraneho TreeNode
         try {
+            selectedNode.setSelected(false);
             this.setSelectedNode(pasteNode(copyNode, selectedNode, -1));
             openAllParent(this.getSelectedNode());
 
@@ -210,13 +218,15 @@ public class ModelTree {
     }
 
     /**
-     * Klonuje do nove Typentity a TreeNode hodnoty z materskeho node a pripoji
-     * je k nodeParent TO-DO: Dodelat kopie atriribute
+     * Klonuje do nove Typentity a TreeNode hodnoty z materskeho
+     * <CODE>node</CODE> a pripoji je k <CODE>nodeParent</CODE> TO-DO: Dodelat
+     * kopie atriribute
      */
     private TreeNode pasteNode(TreeNode node, TreeNode nodeParent, int parentIndex) throws Exception {
         Typentity typEntityNew = controller.cloneTypentity((Typentity) node.getData());
         typEntityNew.setIdparent(((Typentity) nodeParent.getData()).getId());
         controller.create(typEntityNew);
+        attrController.cloneAttribute((Typentity) node.getData(), typEntityNew);
 
         TreeNode treeNodeNew = new DefaultTreeNode(typEntityNew);
         treeNodeNew.setParent(nodeParent);

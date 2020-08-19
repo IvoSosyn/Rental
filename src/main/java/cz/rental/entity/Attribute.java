@@ -29,31 +29,20 @@ import org.eclipse.persistence.annotations.Converter;
 @Table(catalog = "najem", schema = "public")
 @NamedQueries({
     @NamedQuery(name = "Attribute.findAll", query = "SELECT a FROM Attribute a"),
-    @NamedQuery(name = "Attribute.findByAttrtype", query = "SELECT a FROM Attribute a WHERE a.attrtype = :attrtype"),
-    @NamedQuery(name = "Attribute.findByAttrsize", query = "SELECT a FROM Attribute a WHERE a.attrsize = :attrsize"),
-    @NamedQuery(name = "Attribute.findByAttrdecimal", query = "SELECT a FROM Attribute a WHERE a.attrdecimal = :attrdecimal"),
-    @NamedQuery(name = "Attribute.findByAttrsystem", query = "SELECT a FROM Attribute a WHERE a.attrsystem = :attrsystem"),
-    @NamedQuery(name = "Attribute.findByPoradi", query = "SELECT a FROM Attribute a WHERE a.poradi = :poradi"),
-    @NamedQuery(name = "Attribute.findByPlatiod", query = "SELECT a FROM Attribute a WHERE a.platiod = :platiod"),
-    @NamedQuery(name = "Attribute.findByPlatido", query = "SELECT a FROM Attribute a WHERE a.platido = :platido"),
-    @NamedQuery(name = "Attribute.findByPopis", query = "SELECT a FROM Attribute a WHERE a.popis = :popis"),
-    @NamedQuery(name = "Attribute.findByTimeinsert", query = "SELECT a FROM Attribute a WHERE a.timeinsert = :timeinsert"),
-    @NamedQuery(name = "Attribute.findByTimemodify", query = "SELECT a FROM Attribute a WHERE a.timemodify = :timemodify"),
-    @NamedQuery(name = "Attribute.findByUsermodify", query = "SELECT a FROM Attribute a WHERE a.usermodify = :usermodify")})
+    @NamedQuery(name = "Attribute.findByIdTypEntity", query = "SELECT a FROM Attribute a WHERE a.idtypentity = :idTypEntity"),
+})
 public class Attribute extends EntitySuperClassNajem implements Serializable, Cloneable {
 
     @Basic(optional = false)
     @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
     @Convert("uuidConverter")
-    @NotNull
-    @Column(nullable = false, columnDefinition = "UUID")
+    @Column(nullable =true, columnDefinition = "UUID")
     private UUID idtypentity;
 
     @Basic(optional = false)
     @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
     @Convert("uuidConverter")
-    @NotNull
-    @Column(nullable = false, columnDefinition = "UUID")
+    @Column(nullable = true, columnDefinition = "UUID")
     private UUID identita;
 
     @Basic(optional = true)

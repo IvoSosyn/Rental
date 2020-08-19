@@ -10,21 +10,29 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.persistence.Query;
 
 /**
  *
  * @author sosyn
  */
+@Stateless
+@TransactionManagement(CONTAINER)
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AttrController extends JpaController {
 
     Query query = null;
 
     public AttrController() {
     }
-
 
     /**
      * Metoda vrati ArrayList s hodnotami Attr{text|date|numeric} pro zadany
@@ -250,5 +258,29 @@ public class AttrController extends JpaController {
             }
         }
         return entSuperClass;
+    }
+
+    /**
+     *  Metoda naklonuje DB zaznamy Attribute z puvodni typEntity do nove typEntityNew
+     * @param typEntity
+     * @param typEntityNew
+     */
+    public void cloneAttribute(Typentity typEntity, Typentity typEntityNew) {
+        Attribute attrNew;
+        this.query = getEm().createNamedQuery("Attribute.findByIdTypEntity", Attribute.class);
+        this.query.setParameter("idTypEntity", typEntity.getId());
+        List<Attribute> attrs = this.query.getResultList();
+        for (Attribute attr : attrs) {
+            try {
+                attrNew = (Attribute) attr.clone();
+                attrNew.setId(UUID.randomUUID());
+                attrNew.setIdtypentity(typEntityNew.getId());
+                this.create(attrNew);
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(AttrController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(AttrController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }
