@@ -261,7 +261,9 @@ public class AttrController extends JpaController {
     }
 
     /**
-     *  Metoda naklonuje DB zaznamy Attribute z puvodni typEntity do nove typEntityNew
+     * Metoda naklonuje DB zaznamy Attribute z puvodni typEntity do nove
+     * typEntityNew
+     *
      * @param typEntity
      * @param typEntityNew
      */
@@ -276,12 +278,23 @@ public class AttrController extends JpaController {
                 attrNew.setId(UUID.randomUUID());
                 attrNew.setIdtypentity(typEntityNew.getId());
                 this.create(attrNew);
-                
+
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(AttrController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
                 Logger.getLogger(AttrController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    /**
+     * Metoda vymaze z databaze vsechny Attribute, ktere maji <CODE>Attribute.idtypentity=:idTypEntity</CODE>
+     * @param idTypEntity - ID Typentity, jehoz Attribute se maji smazat
+     */
+    public void deleteAllTypentityId(UUID idTypEntity) {
+        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity");
+        this.query.setParameter("idTypEntity", idTypEntity);
+        int deleted = this.query.executeUpdate();
+        //System.out.println(" Delete from Attribute "+deleted);
     }
 }

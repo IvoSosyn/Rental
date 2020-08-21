@@ -52,7 +52,7 @@ public class ModelTree {
 
     public void onNodeSelect(NodeSelectEvent event) {
         setTypentity((Typentity) event.getTreeNode().getData());
-        modelTable.getAttributeForTypentity(this.getTypentity());
+        modelTable.loadAttributeForTypentity(this.getTypentity());
         // System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
     }
 
@@ -65,20 +65,36 @@ public class ModelTree {
     }
 
     /**
-     * Vymaze <CODE>selectedNode</CODE> z DB a z NodeTree
-     * TO-DO: provest DB vymaz vsech potomku a attribute
+     * Vymaze <CODE>selectedNode</CODE> z DB a z TreeNode
+     * + vymaz vsech potomku a jejich Typentity (ulozeno v TreeNode.getData() ) a Attribute
+     * + vymaz Attribute prislusneho Typentity z tohoto a podrizenych node
      */
     public void deleteNode() {
         System.out.println("deleteNode");
         if (selectedNode == null) {
             return;
         }
-        selectedNode.getChildren().clear();
+        // Smaze Typentity a Attribute z DB
+        this.deleteFromDb(selectedNode);
         selectedNode.getParent().getChildren().remove(selectedNode);
-        selectedNode.setParent(null);
-
         selectedNode = null;
         setTypentity(null);
+    }
+
+    /**
+     * Smaze Typentity a Attribute z DB
+     */
+    private void deleteFromDb(TreeNode selectedNode) {
+        try {
+            Typentity typEntityDel = (Typentity) selectedNode.getData();
+            this.attrController.deleteAllTypentityId(typEntityDel.getId());
+            this.controller.destroy(typEntityDel);
+            for (TreeNode treeNode : selectedNode.getChildren()) {
+                deleteFromDb(treeNode);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void addTypentity() {

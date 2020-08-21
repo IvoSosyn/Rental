@@ -39,7 +39,9 @@
                         </p:panelGrid>
                         <p:contextMenu id="modelTreeMenu" for="modelTree" >
                             <p:menuitem value="Přidej"  action="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-plus"   title="Přidej novou entitu (uzel)" />
-                            <p:menuitem value="Smaž"    action="#{modelTree.deleteNode}"   update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-ban"  disabled="#{!modelTree.editable}"  title="Smaž entitu (uzel)" />
+                            <p:menuitem value="Smaž"    action="#{modelTree.deleteNode}"   update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-ban"  disabled="#{!modelTree.editable}"  title="Smaž entitu (uzel)" >
+                                <p:confirm header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
+                            </p:menuitem>
                             <p:separator /> 
                             <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
                             <p:menuitem value="Vlož"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
@@ -49,7 +51,13 @@
                 <div class="ui-g-1">
                     <h:form id="formModelTreeDetailButtons">
                         <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" partialSubmit="true" title="Přidej novou entitu (uzel)"  icon="fa fa-plus" />
-                        <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTree.editable}" icon="fa fa-ban" title="Smazání entity (uzlu)"  />                        
+                        <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTree.editable}" icon="fa fa-ban" title="Smazání entity (uzlu)"  >
+                            <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>                        
+                        <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                            <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                        </p:confirmDialog>  
                     </h:form>
                 </div>  
             </div>

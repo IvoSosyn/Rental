@@ -27,7 +27,7 @@ public class AttributeController {
     public ArrayList<Attribute> getAttributeForTypentity(Typentity typentity) {
         this.typentity = typentity;
         if (this.typentity==null) {
-            return new ArrayList<Attribute>();
+            return new ArrayList<>();
         }
         this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntity AND a.identita IS NULL ORDER BY a.poradi");
         this.query.setParameter("idTypEntity", this.typentity.getId());

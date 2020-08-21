@@ -24,6 +24,8 @@ import org.primefaces.event.NodeUnselectEvent;
 @Stateless
 public class ModelTable {
 
+    static final int COUNT_ATTRIBUTE_NEW = 5;
+
     private Typentity typentity = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<Attribute> selectedAttrs = null;
@@ -45,20 +47,29 @@ public class ModelTable {
      *
      * @param typentity
      */
-    public void getAttributeForTypentity(Typentity typentity) {
+    public void loadAttributeForTypentity(Typentity typentity) {
         this.setTypentity(typentity);
         setAttributes(controller.getAttributeForTypentity(this.getTypentity()));
+        int poradi = ModelTable.COUNT_ATTRIBUTE_NEW + (this.getAttributes().isEmpty() ? 0 : this.getAttributes().get(this.getAttributes().size() - 1).getPoradi());
+
+        // Vzdy pridat jednu prazdnou vetu
+        Attribute attrNew = new Attribute();
+        attrNew.setIdtypentity(typentity.getId());
+        attrNew.setPoradi(poradi);
+        attrNew.setNewEntity(true);
+        this.getAttributes().add(attrNew);
+
         // Inicialisovat detail
         this.selectedAttr = null;
         modelDetail.setAttribute(this.selectedAttr);
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        getAttributeForTypentity((Typentity) event.getTreeNode().getData());
+        loadAttributeForTypentity((Typentity) event.getTreeNode().getData());
     }
 
     public void onNodeUnselect(NodeUnselectEvent event) {
-        getAttributeForTypentity(null);
+        loadAttributeForTypentity(null);
     }
 
     /**
