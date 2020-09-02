@@ -71,7 +71,15 @@ public class ModelTable {
     public void onNodeUnselect(NodeUnselectEvent event) {
         loadAttributeForTypentity(null);
     }
+    public void addAttr() {
+    }
+    public void deleteAttr() {
+    }
+    public boolean isEditable() {
+        return ((this.selectedAttr!=null && !this.selectedAttr.getAttrsystem()) || (this.selectedAttrs!=null && this.selectedAttrs.size()>0));
+    }
 
+    
     /**
      * @return the typentity
      */

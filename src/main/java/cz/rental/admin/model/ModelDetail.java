@@ -6,7 +6,6 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Attribute;
-import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -21,7 +20,7 @@ import org.primefaces.event.UnselectEvent;
  */
 @Named("modelDetail")
 @Stateless
-public class ModelDetail {
+public class ModelDetail{
 
     private Attribute attribute = null;
 

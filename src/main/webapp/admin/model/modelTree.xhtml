@@ -23,19 +23,29 @@
                             </f:facet>
                             <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
                                     selection="#{modelTree.selectedNode}" draggable="true" droppable="true" dropCopyNode="true" >
-                                <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity :formModelTree:messages" >
+                                <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:messages" >
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
-                                <p:ajax event="select"  listener="#{modelTree.onNodeSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity :formModelTree:messages">
+                                <p:ajax event="select"  listener="#{modelTree.onNodeSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:messages">
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
-                                <p:ajax event="unselect" listener="#{modelTable.onNodeUnselect}"  update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTreeDetailButtons:addTypentity :formModelTreeDetailButtons:delTypentity :formModelTree:messages">
+                                <p:ajax event="unselect" listener="#{modelTable.onNodeUnselect}"  update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:messages">
                                     <f:attribute name="treeNode" value="#{treeNode}" />
                                 </p:ajax>
                                 <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
                                     <h:outputText value="#{treeNode}"/>
                                 </p:treeNode>
                             </p:tree>
+                            <f:facet name="footer">
+                                <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" partialSubmit="true" title="Přidej novou entitu (uzel)"  icon="fa fa-plus" />
+                                <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTree.editable}" icon="fa fa-ban" title="Smazání entity (uzlu)"  >
+                                    <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>                        
+                                <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                                    <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                                </p:confirmDialog>  
+                            </f:facet>
                         </p:panelGrid>
                         <p:contextMenu id="modelTreeMenu" for="modelTree" >
                             <p:menuitem value="Přidej"  action="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-plus"   title="Přidej novou entitu (uzel)" />
@@ -48,18 +58,6 @@
                         </p:contextMenu>
                     </h:form>
                 </div>
-                <div class="ui-g-1">
-                    <h:form id="formModelTreeDetailButtons">
-                        <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" partialSubmit="true" title="Přidej novou entitu (uzel)"  icon="fa fa-plus" />
-                        <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTree.editable}" icon="fa fa-ban" title="Smazání entity (uzlu)"  >
-                            <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
-                        </p:commandButton>                        
-                        <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                            <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-                        </p:confirmDialog>  
-                    </h:form>
-                </div>  
             </div>
             <div class="ui-g">
                 <div class="ui-g-8">
@@ -88,6 +86,9 @@
                             <p:datePicker value="#{modelTree.typentity.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{modelTree.typentity eq null}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" />
                             <h:outputText value="Systém:" />
                             <h:selectBooleanCheckbox value="#{modelTree.typentity.attrsystem}" disabled="true" />
+                            <f:facet name="footer">
+                                                        <p:commandButton id="saveButton" value="Ulož" icon="fa fa-save" />
+                            </f:facet>
                         </p:panelGrid>
                     </h:form>
                 </div>

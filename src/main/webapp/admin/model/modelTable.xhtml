@@ -12,16 +12,16 @@
         <ui:composition>	
             <h:form id="formModelTable">
                 <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
-                <p:dataTable var="attribute" value="#{modelTable.attributes}" 
+                <p:dataTable id="tableModelTable" var="attribute" value="#{modelTable.attributes}" 
                              selection="#{modelTable.selectedAttrs}" rowKey="#{attribute.id}" style="margin-bottom:0"  
                              resizableColumns="true" resizeMode="expand"  >
                     <f:facet name="header">
                         #{modelTable.typentity.popis} - položky 
                     </f:facet>
-                    <p:ajax event="rowSelect" listener="#{modelDetail.onRowSelect}" update=":formModelDetail" >
+                    <p:ajax event="rowSelect" listener="#{modelDetail.onRowSelect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr" >
                         <f:attribute name="treeNode" value="#{attribute}" />
                     </p:ajax>
-                    <p:ajax event="rowUnselect" listener="#{modelDetail.onRowUnselectSelect}" update=":formModelDetail" >
+                    <p:ajax event="rowUnselect" listener="#{modelDetail.onRowUnselectSelect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr" >
                         <f:attribute name="treeNode" value="#{attribute}" />
                     </p:ajax>
 
@@ -55,7 +55,14 @@
                     </p:column>                    
 
                     <f:facet name="footer">
-                        Celkem je definováno #{fn:length(modelTable.attributes)} položek.
+                        <p:commandButton id="addAttr" value="Přidej" process="@this" actionListener="#{modelTable.addAttr}" update=":formModelTable :formModelDetail" partialSubmit="true" title="Přidej nový atribut entity (uzlu)"  icon="fa fa-plus" />
+                        <p:commandButton id="delAttr" value="Smaž" process="@this" actionListener="#{modelTable.deleteAttr}"  update=":formModelTable :formModelDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTable.editable}" icon="fa fa-ban" title="Smazání atributu entity (uzlu)" >
+                            <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>                        
+                        <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                            <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                        </p:confirmDialog>  
                     </f:facet>
                 </p:dataTable>
             </h:form>

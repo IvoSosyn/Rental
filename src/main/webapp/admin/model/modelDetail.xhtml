@@ -9,21 +9,26 @@
     <h:body>
         <ui:composition>	
             <h:form  id="formModelDetail">
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="3">
                     <f:facet name="header">
                         Detail položky
                     </f:facet>
 
-                    <h:outputText value="Pořadí:" />
-                    <p:inputNumber value="#{modelDetail.attribute.poradi}" />
+                    <p:outputLabel value="Pořadí:" for="poradi" />
+                    <p:inputNumber id="poradi" value="#{modelDetail.attribute.poradi}" required="true" requiredMessage="Položka je povinná, minimálně 0" >
+                        <f:validator validatorId = "modelDetailValidator" />
+                    </p:inputNumber>
+                    <p:message  for="poradi"  />
 
-                    <h:outputText value="Název:" />
-                    <p:inputText value="#{modelDetail.attribute.attrname}" />
+                    <p:outputLabel value="Název:" for="attrname" />
+                    <p:inputText id="attrname" value="#{modelDetail.attribute.attrname}" />
+                    <p:message  for="attrname"  />
 
-                    <h:outputText value="Popis:" />
-                    <p:inputText value="#{modelDetail.attribute.popis}" />
+                    <p:outputLabel value="Popis:" for="popis" />
+                    <p:inputText id="popis" value="#{modelDetail.attribute.popis}" />
+                    <p:message  for="popis"  />
 
-                    <h:outputText value="Typ pole:" />
+                    <p:outputLabel value="Typ pole:" for="attrtype" />
                     <p:selectOneMenu id="attrtype" value="#{modelDetail.attribute.attrtype}" style="width:125px">
                         <f:selectItem itemLabel="Číslo S desetinnýmy místy" itemValue="N" />
                         <f:selectItem itemLabel="Číslo BEZ desetinných míst" itemValue="I" />
@@ -31,33 +36,47 @@
                         <f:selectItem itemLabel="Logicky Ano/Ne" itemValue="L" />
                         <f:selectItem itemLabel="Odkaz na číselník" itemValue="T" />
                     </p:selectOneMenu>
+                    <p:message for="attrtype" />
 
-                    <h:outputText value="Počet znaků:" />
-                    <p:spinner value="#{modelDetail.attribute.attrsize}"  min="1" max="1000" decimalPlaces="0" />
+                    <p:outputLabel value="Počet znaků:" for="attrsize" />
+                    <p:spinner id="attrsize"  value="#{modelDetail.attribute.attrsize}"  min="1" max="1000" decimalPlaces="0" />
+                    <p:message for="attrsize" />
 
-                    <h:outputText value="Počet desetinných míst:" />
-                    <p:spinner value="#{modelDetail.attribute.attrdecimal}"   min="0" max="2" decimalPlaces="0" />
+                    <p:outputLabel value="Počet desetinných míst:" for="attrdecimal" />
+                    <p:spinner id="attrdecimal" value="#{modelDetail.attribute.attrdecimal}"   min="0" max="2" decimalPlaces="0" />
+                    <p:message for="attrdecimal" />
 
-                    <h:outputText value="Parser:" />
-                    <p:inputTextarea value="#{modelDetail.attribute.attrparser}" />
+                    <p:outputLabel value="Parser:" for="attrparser" />
+                    <p:inputTextarea id="attrparser" value="#{modelDetail.attribute.attrparser}" />
+                    <p:message for="attrparser" />
 
-                    <h:outputText value="Maska:" />
-                    <p:inputText value="#{modelDetail.attribute.attrmask}" />
+                    <p:outputLabel value="Maska:" for="attrmask" />
+                    <p:inputText id="attrmask" value="#{modelDetail.attribute.attrmask}" />
+                    <p:message for="attrmask" />
 
-                    <h:outputText value="Script:" />
-                    <p:inputTextarea value="#{modelDetail.attribute.script}" />
+                    <p:outputLabel value="Script:" for="script" />
+                    <p:inputTextarea id="script" value="#{modelDetail.attribute.script}" />
+                    <p:message for="script" />
 
-                    <h:outputText value="Číselník:" />
-                    <p:inputTextarea value="#{modelDetail.attribute.tables}" />
+                    <p:outputLabel value="Číselník:" for="tables" />
+                    <p:inputTextarea  id="tables" value="#{modelDetail.attribute.tables}" />
+                    <p:message for="tables" />
 
-                    <h:outputText value="Platí Od:" />
-                    <p:datePicker value="#{modelDetail.attribute.platiod}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" />
+                    <p:outputLabel value="Platí Od:" for="platiod" />
+                    <p:datePicker id="platiod" value="#{modelDetail.attribute.platiod}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" />
+                    <p:message for="platiod" />
 
-                    <h:outputText value="Do:" />
-                    <p:datePicker value="#{modelDetail.attribute.platido}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" />
+                    <p:outputLabel value="Do:" for="platido" />
+                    <p:datePicker id="platido" value="#{modelDetail.attribute.platido}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" />
+                    <p:message for="platido" />
 
-                    <h:outputText value="Systém:" />
-                    <h:selectBooleanCheckbox value="#{modelDetail.attribute.attrsystem}" disabled="true" />
+                    <p:outputLabel value="Systém:" for="attrsystem" />
+                    <p:selectBooleanCheckbox id="attrsystem" value="#{modelDetail.attribute.attrsystem}" disabled="true" />
+                    <p:message for="attrsystem" />
+
+                    <f:facet name="footer">                        
+                        <p:commandButton id="saveButton" value="Ulož" icon="fa fa-save" />
+                    </f:facet>
 
                 </p:panelGrid>
             </h:form>
