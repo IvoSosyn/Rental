@@ -32,9 +32,13 @@ public class ModelDetailValidator implements Validator {
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        FacesMessage msg = new FacesMessage("Validation failed", "Invalid"+component);
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-        FacesContext.getCurrentInstance().addMessage("poradi", msg);
-        throw new ValidatorException(msg);
+
+        if (component.getClientId().contains("formModelDetail:attrname") && value.toString().contains("test") ) {
+            FacesMessage msg = new FacesMessage("Validation failed", "Položka nesmí mít hodnotu 'test'" );
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("attrname", msg);            
+            throw new ValidatorException(msg);
+        }
+
     }
 }

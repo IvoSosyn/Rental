@@ -16,13 +16,16 @@
 
                     <p:outputLabel value="Pořadí:" for="poradi" />
                     <p:inputNumber id="poradi" value="#{modelDetail.attribute.poradi}" required="true" requiredMessage="Položka je povinná, minimálně 0" >
-                        <f:validator validatorId = "modelDetailValidator" />
+                        <f:validator validatorId = "modelDetailValidator" for="poradi" />
                     </p:inputNumber>
                     <p:message  for="poradi"  />
 
                     <p:outputLabel value="Název:" for="attrname" />
-                    <p:inputText id="attrname" value="#{modelDetail.attribute.attrname}" />
-                    <p:message  for="attrname"  />
+                    <p:inputText id="attrname" value="#{modelDetail.attribute.attrname}" required="true"  requiredMessage="Položka je povinná, název položky." >
+                        <f:validator validatorId = "modelDetailValidator" for="attrname" />
+                         <p:ajax update="attrnameMsg" event="blur" />
+                    </p:inputText>
+                    <p:message  id="attrnameMsg" for="attrname"  style="color:red" display="text"  />
 
                     <p:outputLabel value="Popis:" for="popis" />
                     <p:inputText id="popis" value="#{modelDetail.attribute.popis}" />
@@ -75,7 +78,7 @@
                     <p:message for="attrsystem" />
 
                     <f:facet name="footer">                        
-                        <p:commandButton id="saveButton" value="Ulož" icon="fa fa-save" />
+                        <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelDetail.saveAttribute}" icon="fa fa-save" />
                     </f:facet>
 
                 </p:panelGrid>

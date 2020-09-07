@@ -41,7 +41,10 @@ public class ModelDetail{
     public void onRowUnselectSelect(UnselectEvent event) {
         setAttribute(null);
     }
-
+    
+    public void saveAttribute() {
+        System.out.println("saveAttribute");
+    }
     /**
      * @return the attribute
      */
