@@ -20,7 +20,7 @@ import org.primefaces.event.UnselectEvent;
  */
 @Named("modelDetail")
 @Stateless
-public class ModelDetail{
+public class ModelDetail {
 
     private Attribute attribute = null;
 
@@ -41,10 +41,15 @@ public class ModelDetail{
     public void onRowUnselectSelect(UnselectEvent event) {
         setAttribute(null);
     }
-    
+
+    public Boolean isEditabel() {
+        return (this.attribute instanceof Attribute);
+    }
+
     public void saveAttribute() {
         System.out.println("saveAttribute");
     }
+
     /**
      * @return the attribute
      */

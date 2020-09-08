@@ -32,13 +32,39 @@ public class ModelDetailValidator implements Validator {
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+        FacesMessage msg = null;
+        if (component == null) {
+        } else if (component.getClientId().contains("poradi")) {
+            if (value == null || (Integer) value < 3) {
+                msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
+            }
+        } else if (component.getClientId().contains("attrname")) {
+            if (value == null || value.toString().trim().length() < 3) {
+                msg = new FacesMessage("Validation failed", "Položka nesmí být kratší než 3 znaky.");
+            }
+            if (value.toString().contains("test")) {
+                msg = new FacesMessage("Validation failed", "Položka nesmí mít hodnotu 'test'.");
+            }
 
-        if (component.getClientId().contains("formModelDetail:attrname") && value.toString().contains("test") ) {
-            FacesMessage msg = new FacesMessage("Validation failed", "Položka nesmí mít hodnotu 'test'" );
+        } else if (component.getClientId().contains("popis")) {
+        } else if (component.getClientId().contains("attrtype")) {
+            System.out.println(" attrtype=" + value);
+        } else if (component.getClientId().contains("attrsize")) {
+            System.out.println(" attrsize=" + value);
+        } else if (component.getClientId().contains("attrdecimal")) {
+            System.out.println(" attrdecimal=" + value);
+        } else if (component.getClientId().contains("attrparser")) {
+        } else if (component.getClientId().contains("attrmask")) {
+        } else if (component.getClientId().contains("script")) {
+        } else if (component.getClientId().contains("tables")) {
+        } else if (component.getClientId().contains("platiod")) {
+        } else if (component.getClientId().contains("platido")) {
+        }
+        // Vyhodit chybu, pokud je testovana polozka chybna
+        if (msg != null) {
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage("attrname", msg);            
+            FacesContext.getCurrentInstance().addMessage(component.getClientId(), msg);
             throw new ValidatorException(msg);
         }
-
     }
 }
