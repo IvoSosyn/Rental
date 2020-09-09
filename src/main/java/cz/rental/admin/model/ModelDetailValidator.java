@@ -35,7 +35,7 @@ public class ModelDetailValidator implements Validator {
         FacesMessage msg = null;
         if (component == null) {
         } else if (component.getClientId().contains("poradi")) {
-            if (value == null || (Integer) value < 3) {
+            if (value == null || (Integer) value < 1) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
             }
         } else if (component.getClientId().contains("attrname")) {
@@ -45,14 +45,17 @@ public class ModelDetailValidator implements Validator {
             if (value.toString().contains("test")) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí mít hodnotu 'test'.");
             }
-
         } else if (component.getClientId().contains("popis")) {
         } else if (component.getClientId().contains("attrtype")) {
             System.out.println(" attrtype=" + value);
         } else if (component.getClientId().contains("attrsize")) {
-            System.out.println(" attrsize=" + value);
+            if (value == null || ((java.math.BigInteger) value).doubleValue() < 1) {
+                msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
+            }
         } else if (component.getClientId().contains("attrdecimal")) {
-            System.out.println(" attrdecimal=" + value);
+            if (value == null || ((java.math.BigInteger) value).doubleValue() < 0) {
+                msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 0.");
+            }
         } else if (component.getClientId().contains("attrparser")) {
         } else if (component.getClientId().contains("attrmask")) {
         } else if (component.getClientId().contains("script")) {
