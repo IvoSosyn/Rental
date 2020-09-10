@@ -14,16 +14,12 @@
                 <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
                 <p:dataTable id="tableModelTable" var="attribute" value="#{modelTable.attributes}" 
                              selection="#{modelTable.selectedAttrs}" rowKey="#{attribute.id}" style="margin-bottom:0"  
-                             resizableColumns="true" resizeMode="expand"  >
+                             resizableColumns="true" resizeMode="expand" >
                     <f:facet name="header">
                         #{modelTable.typentity.popis} - položky 
                     </f:facet>
-                    <p:ajax event="rowSelect" listener="#{modelDetail.onRowSelect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr" >
-                        <f:attribute name="treeNode" value="#{attribute}" />
-                    </p:ajax>
-                    <p:ajax event="rowUnselect" listener="#{modelDetail.onRowUnselectSelect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr" >
-                        <f:attribute name="treeNode" value="#{attribute}" />
-                    </p:ajax>
+                    <p:ajax event="rowSelect" listener="#{modelDetail.onRowSelect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr" />
+                    <p:ajax event="rowUnselect" listener="#{modelDetail.onRowUnselectSelect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr" />
 
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     <p:column headerText="Pořadí">

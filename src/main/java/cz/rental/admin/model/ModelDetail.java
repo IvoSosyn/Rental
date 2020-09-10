@@ -13,11 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.FacesValidator;
-import javax.faces.validator.Validator;
-import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import javax.naming.InitialContext;
 import org.primefaces.event.SelectEvent;
@@ -30,7 +26,7 @@ import org.primefaces.event.UnselectEvent;
  */
 @Stateless
 @Named("modelDetail")
-public class ModelDetail implements Validator {
+public class ModelDetail {
 
     private Attribute attribute = null;
 
@@ -44,8 +40,9 @@ public class ModelDetail implements Validator {
     }
 
     public void onRowSelect(SelectEvent event) {
+        Attribute attrLocal=(Attribute) event.getObject();
+        System.out.println(" ModelDetail.onRowSelect  attrLocal.getPopis()="+attrLocal.getPopis());
         setAttribute((Attribute) event.getObject());
-
     }
 
     public void onRowUnselectSelect(UnselectEvent event) {
@@ -84,7 +81,7 @@ public class ModelDetail implements Validator {
             }
             this.attribute = (Attribute) this.controller.findEntita(this.attribute);
             ModelTable modelTable = (ModelTable) InitialContext.doLookup("java:module/ModelTable");
-            modelTable.loadAttributeForTypentity(modelTable.getTypentity());
+            modelTable.loadAttributeForTypentity(modelTable.getTypentity(),this.attribute);
         } catch (Exception ex) {
             Logger.getLogger(ModelDetail.class.getName()).log(Level.SEVERE, null, ex);
             FacesMessage msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se uložit položku do databáze, zkuste později. ");
@@ -108,50 +105,4 @@ public class ModelDetail implements Validator {
         this.attribute = attribute;
     }
 
-    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        FacesMessage msg = null;
-
-        this.attribute = this.getAttribute();
-        if (msg != null) {
-            System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
-        } else if (component == null) {
-            System.out.println(" Neznámá komponenta: ");
-            msg = new FacesMessage("System failed", "Systémová chyba, neznámá komponenta. ");
-        } else if (component.getClientId().contains("poradi")) {
-            if (value == null || (Integer) value < 1) {
-                msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
-            }
-        } else if (component.getClientId().contains("attrname")) {
-            if (value == null || value.toString().trim().length() < 2) {
-                msg = new FacesMessage("Validation failed", "Položka nesmí být kratší než 2 znaky.");
-            } else if (value.toString().contains("test")) {
-                msg = new FacesMessage("Validation failed", "Položka nesmí mít hodnotu 'test'.");
-            } else if (this.isValueUsed("a", "a.attrname='" + ((String) value).trim() + "'")) {
-                msg = new FacesMessage("Validation failed", "Položka je již použita, musí být jedinečná.");
-            }
-        } else if (component.getClientId().contains("popis")) {
-        } else if (component.getClientId().contains("attrtype")) {
-            System.out.println(" attrtype=" + value);
-        } else if (component.getClientId().contains("attrsize")) {
-            if (value == null || ((java.math.BigInteger) value).doubleValue() < 1) {
-                msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
-            }
-        } else if (component.getClientId().contains("attrdecimal")) {
-            if (value == null || ((java.math.BigInteger) value).doubleValue() < 0) {
-                msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 0.");
-            }
-        } else if (component.getClientId().contains("attrparser")) {
-        } else if (component.getClientId().contains("attrmask")) {
-        } else if (component.getClientId().contains("script")) {
-        } else if (component.getClientId().contains("tables")) {
-        } else if (component.getClientId().contains("platiod")) {
-        } else if (component.getClientId().contains("platido")) {
-        }
-        // Vyhodit chybu, pokud je testovana polozka chybna
-        if (msg != null) {
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(component == null ? null : component.getClientId(), msg);
-            throw new ValidatorException(msg);
-        }
-    }
 }

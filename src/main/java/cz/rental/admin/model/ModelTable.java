@@ -47,7 +47,7 @@ public class ModelTable {
      *
      * @param typentity
      */
-    public void loadAttributeForTypentity(Typentity typentity) {
+    public void loadAttributeForTypentity(Typentity typentity, Attribute selAttr) {
         this.setTypentity(typentity);
         setAttributes(controller.getAttributeForTypentity(this.getTypentity()));
         int poradi = ModelTable.COUNT_ATTRIBUTE_NEW + (this.getAttributes().isEmpty() ? 0 : this.getAttributes().get(this.getAttributes().size() - 1).getPoradi());
@@ -60,23 +60,23 @@ public class ModelTable {
         this.getAttributes().add(attrNew);
 
         // Inicialisovat detail
-        this.selectedAttr = null;
+        this.selectedAttr = selAttr;
         modelDetail.setAttribute(this.selectedAttr);
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        loadAttributeForTypentity((Typentity) event.getTreeNode().getData());
+        loadAttributeForTypentity((Typentity) event.getTreeNode().getData(),null);
     }
 
     public void onNodeUnselect(NodeUnselectEvent event) {
-        loadAttributeForTypentity(null);
+        loadAttributeForTypentity(null,null);
     }
     public void addAttr() {
     }
     public void deleteAttr() {
     }
     public boolean isEditable() {
-        return ((this.selectedAttr!=null && !this.selectedAttr.getAttrsystem()) || (this.selectedAttrs!=null && this.selectedAttrs.size()>0));
+        return ( (this.selectedAttrs!=null && !this.selectedAttrs.isEmpty()) || (this.selectedAttr!=null && this.selectedAttr.getAttrsystem()!=null && !this.selectedAttr.getAttrsystem()) );
     }
 
     

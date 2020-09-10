@@ -20,8 +20,7 @@ import javax.naming.NamingException;
  *
  * @author sosyn
  */
-@FacesValidator("_modelDetailValidator")
-
+@FacesValidator("modelDetailValidator")
 public class ModelDetailValidator implements Validator {
 
 //    @EJB
