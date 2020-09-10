@@ -40,12 +40,26 @@ public class ModelDetail {
     }
 
     public void onRowSelect(SelectEvent event) {
-        Attribute attrLocal=(Attribute) event.getObject();
-        System.out.println(" ModelDetail.onRowSelect  attrLocal.getPopis()="+attrLocal.getPopis());
-        setAttribute((Attribute) event.getObject());
+        Attribute attrLocal=(Attribute) event.getObject();        
+//        System.out.println(" ModelDetail.onRowSelect  attrLocal.getId()="+attrLocal.getId());
+//        System.out.println(" ModelDetail.onRowSelect  attrLocal.getPoaradi()="+attrLocal.getPoradi());
+//        System.out.println(" ModelDetail.onRowSelect  attrLocal.getAttrname()="+attrLocal.getAttrname());
+//        System.out.println(" ModelDetail.onRowSelect  attrLocal.getPopis()="+attrLocal.getPopis());
+//        try {
+//            Object obj=InitialContext.doLookup("java:module/ModelDetailValidator");
+//            cz.rental.admin.model.ModelDetailValidator mdv = (cz.rental.admin.model.ModelDetailValidator) obj ;
+//            mdv.setAttribute(attrLocal);
+//            System.out.println("ModelDetail.onRowSelect mdv.getAttribute().getId()=" + mdv.getAttribute().getId());
+//            System.out.println("ModelDetail.onRowSelect mdv.getAttribute().getPoradi()=" + mdv.getAttribute().getPoradi());
+//            System.out.println("ModelDetail.onRowSelect mdv.getAttribute().getAttrname()=" + mdv.getAttribute().getAttrname());
+//            System.out.println("ModelDetail.onRowSelect mdv.getAttribute().getPopis()=" + mdv.getAttribute().getPopis());
+//        } catch (NamingException ex) {
+//        }
+        setAttribute(attrLocal);
     }
 
-    public void onRowUnselectSelect(UnselectEvent event) {
+    public void onRowUnselect(UnselectEvent event) {
+        System.out.println("ModelDetail.onRowUnselect  event.getObject()="+event.getObject());
         setAttribute(null);
     }
 
@@ -79,9 +93,9 @@ public class ModelDetail {
             } else {
                 this.controller.edit(this.attribute);
             }
-            this.attribute = (Attribute) this.controller.findEntita(this.attribute);
             ModelTable modelTable = (ModelTable) InitialContext.doLookup("java:module/ModelTable");
-            modelTable.loadAttributeForTypentity(modelTable.getTypentity(),this.attribute);
+            modelTable.loadAttributesForTypentity(modelTable.getTypentity());
+            this.attribute = (Attribute) this.controller.findEntita(this.attribute);
         } catch (Exception ex) {
             Logger.getLogger(ModelDetail.class.getName()).log(Level.SEVERE, null, ex);
             FacesMessage msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se uložit položku do databáze, zkuste později. ");

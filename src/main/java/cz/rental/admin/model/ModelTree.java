@@ -52,7 +52,7 @@ public class ModelTree {
 
     public void onNodeSelect(NodeSelectEvent event) {
         setTypentity((Typentity) event.getTreeNode().getData());
-        modelTable.loadAttributeForTypentity(this.getTypentity(),null);
+        modelTable.loadAttributesForTypentity(this.getTypentity());
         // System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
     }
 

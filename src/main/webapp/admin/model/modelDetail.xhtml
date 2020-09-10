@@ -14,6 +14,12 @@
                         Detail položky
                     </f:facet>
 
+                    <p:outputLabel value="ID:" for="@next" />
+                    <p:inputText id="idID" value="#{modelDetail.attribute.id}" disabled="true"  >
+                        <p:ajax update="idMsg" event="blur" />
+                    </p:inputText>
+                    <p:message id="idMsg" for="@previous" />
+                    
                     <p:outputLabel value="Pořadí:" for="poradi" />
                     <p:inputNumber id="poradi" value="#{modelDetail.attribute.poradi}" placeholder="1 a více" required="true" minValue="1" requiredMessage="Povinná hodnota, minimálně 1" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="poradiMsg" event="blur" />
@@ -98,7 +104,7 @@
                     <p:message id="systemMsg" for="attrsystem"/>
 
                     <f:facet name="footer">                        
-                        <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelDetail.saveAttribute}" update="@form :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isEditable()}" />
+                        <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelDetail.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isEditable()}" />
                     </f:facet>
 
                 </p:panelGrid>

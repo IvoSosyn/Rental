@@ -6,7 +6,9 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Attribute;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -20,12 +22,13 @@ import javax.naming.NamingException;
  *
  * @author sosyn
  */
+@Stateless
 @FacesValidator("modelDetailValidator")
-public class ModelDetailValidator implements Validator {
+public class ModelDetailValidator implements Validator, Serializable {
 
-//    @EJB
+    // @EJB
     ModelDetail modelDetail;
-    Attribute attribute;
+    private Attribute attribute;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -39,11 +42,15 @@ public class ModelDetailValidator implements Validator {
 
         try {
             modelDetail = (ModelDetail) InitialContext.doLookup("java:module/ModelDetail");
+            this.setAttribute(modelDetail.getAttribute());
+            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getId()=" + modelDetail.getAttribute().getId());
+            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPoradi()=" + modelDetail.getAttribute().getPoradi());
+            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getAttrname()=" + modelDetail.getAttribute().getAttrname());
+            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPopis()=" + modelDetail.getAttribute().getPopis());
         } catch (NamingException ex) {
             msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se najít modul 'ModelDetail'. ");
         }
-
-        this.attribute = modelDetail.getAttribute();
+        
         if (msg != null) {
             System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
         } else if (component == null) {
@@ -63,7 +70,6 @@ public class ModelDetailValidator implements Validator {
             }
         } else if (component.getClientId().contains("popis")) {
         } else if (component.getClientId().contains("attrtype")) {
-            System.out.println(" attrtype=" + value);
         } else if (component.getClientId().contains("attrsize")) {
             if (value == null || ((java.math.BigInteger) value).doubleValue() < 1) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
@@ -85,5 +91,19 @@ public class ModelDetailValidator implements Validator {
             FacesContext.getCurrentInstance().addMessage(component == null ? null : component.getClientId(), msg);
             throw new ValidatorException(msg);
         }
+    }
+
+    /**
+     * @return the attribute
+     */
+    public Attribute getAttribute() {
+        return attribute;
+    }
+
+    /**
+     * @param attribute the attribute to set
+     */
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
     }
 }

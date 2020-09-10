@@ -47,7 +47,7 @@ public class ModelTable {
      *
      * @param typentity
      */
-    public void loadAttributeForTypentity(Typentity typentity, Attribute selAttr) {
+    public void loadAttributesForTypentity(Typentity typentity) {
         this.setTypentity(typentity);
         setAttributes(controller.getAttributeForTypentity(this.getTypentity()));
         int poradi = ModelTable.COUNT_ATTRIBUTE_NEW + (this.getAttributes().isEmpty() ? 0 : this.getAttributes().get(this.getAttributes().size() - 1).getPoradi());
@@ -58,18 +58,14 @@ public class ModelTable {
         attrNew.setPoradi(poradi);
         attrNew.setNewEntity(true);
         this.getAttributes().add(attrNew);
-
-        // Inicialisovat detail
-        this.selectedAttr = selAttr;
-        modelDetail.setAttribute(this.selectedAttr);
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        loadAttributeForTypentity((Typentity) event.getTreeNode().getData(),null);
+        loadAttributesForTypentity((Typentity) event.getTreeNode().getData());
     }
 
     public void onNodeUnselect(NodeUnselectEvent event) {
-        loadAttributeForTypentity(null,null);
+        loadAttributesForTypentity(null);
     }
     public void addAttr() {
     }
