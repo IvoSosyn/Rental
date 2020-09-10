@@ -6,8 +6,6 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Attribute;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -22,7 +20,7 @@ import javax.naming.NamingException;
  *
  * @author sosyn
  */
-@FacesValidator("modelDetailValidator")
+@FacesValidator("_modelDetailValidator")
 
 public class ModelDetailValidator implements Validator {
 
