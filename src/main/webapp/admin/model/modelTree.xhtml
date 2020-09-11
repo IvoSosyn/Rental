@@ -59,34 +59,45 @@
                 </div>
             </div>
             <div class="ui-g">
-                <div class="ui-g-8">
+                <div >
                     <h:form id="formModelTreeDetail">
-                        <p:panelGrid id="gridDetail" columns="2">
+                        <p:panelGrid id="gridDetail" columns="3">
                             <f:facet name="header">
                                 Detail entity #{modelTree.typentity.newEntity?"NOVÁ":""}
                             </f:facet>
-                            <h:outputText value="Zkratka:"  />
+
+                            <p:outputLabel value="Zkratka:" for="@next" />
                             <p:inputText id="idTypentity" value="#{modelTree.typentity.typentity}" disabled="#{modelTree.typentity eq null}" >
                                 <p:ajax process="idTypentity" event="valueChange" listener="#{modelTree.valueChange(modelTree.typentity.typentity)}" />
                                 <f:param name="fieldName" value="modelTree.typentity.typentity" />
                                 <f:param name="fieldValue" value="#{modelTree.typentity.typentity}" />
                                 <f:param name="typEntity.id" value="#{modelTree.typentity.id}" />
                             </p:inputText>
-                            <h:outputText value="Popis:"  />
+                            <p:message for="@previous"/>
+
+                            <p:outputLabel value="Popis:"  for="@next"  />
                             <p:inputText id="idPopis" value="#{modelTree.typentity.popis}"  disabled="#{modelTree.typentity eq null}"  > 
                                 <p:ajax process="idPopis" event="valueChange" listener="#{modelTree.valueChange(modelTree.typentity.popis)}" />
                                 <f:param name="fieldName" value="modelTree.typentity.popis" />
                                 <f:param name="fieldValue" value="#{modelTree.typentity.popis}" />
                                 <f:param name="typEntity.id" value="#{modelTree.typentity.id}" />
                             </p:inputText>
-                            <h:outputText value="Platí Od:" />
+                            <p:message for="@previous"/>
+                            
+                            <p:outputLabel value="Platí Od:"  for="@next" />
                             <p:datePicker value="#{modelTree.typentity.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{modelTree.typentity eq null}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí"  />
-                            <h:outputText value="Do:" />
+                            <p:message for="@previous"/>
+
+                            <p:outputLabel value="Do:"  for="@next" />
                             <p:datePicker value="#{modelTree.typentity.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{modelTree.typentity eq null}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" />
-                            <h:outputText value="Systém:" />
+                            <p:message for="@previous"/>
+
+                            <p:outputLabel value="Systém:"  for="@next" />
                             <h:selectBooleanCheckbox value="#{modelTree.typentity.attrsystem}" disabled="true" />
+                            <p:message for="@previous"/>
+
                             <f:facet name="footer">
-                                <p:commandButton id="saveButton" value="Ulož" icon="fa fa-save" />
+                                <p:commandButton id="saveButton" value="Ulož" ajax="true" icon="fa fa-save" update=":formModelTreeDetail :formModelTree" />
                             </f:facet>
                         </p:panelGrid>
                     </h:form>
