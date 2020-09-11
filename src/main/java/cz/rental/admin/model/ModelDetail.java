@@ -6,13 +6,16 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Attribute;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.naming.InitialContext;
@@ -29,6 +32,8 @@ import org.primefaces.event.UnselectEvent;
 public class ModelDetail {
 
     private Attribute attribute = null;
+    ArrayList<Character> editabelAttrsize;
+    ArrayList<Character> editabelAttrdecimal;
 
     @EJB
     cz.rental.entity.AttributeController controller;
@@ -37,10 +42,16 @@ public class ModelDetail {
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
+        editabelAttrsize = new ArrayList<>();
+        editabelAttrsize.add('C');
+        editabelAttrsize.add('N');
+        editabelAttrsize.add('I');
+        editabelAttrdecimal = new ArrayList<>();
+        editabelAttrdecimal.add('N');
     }
 
     public void onRowSelect(SelectEvent event) {
-        Attribute attrLocal=(Attribute) event.getObject();        
+        Attribute attrLocal = (Attribute) event.getObject();
 //        System.out.println(" ModelDetail.onRowSelect  attrLocal.getId()="+attrLocal.getId());
 //        System.out.println(" ModelDetail.onRowSelect  attrLocal.getPoaradi()="+attrLocal.getPoradi());
 //        System.out.println(" ModelDetail.onRowSelect  attrLocal.getAttrname()="+attrLocal.getAttrname());
@@ -59,12 +70,46 @@ public class ModelDetail {
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        System.out.println("ModelDetail.onRowUnselect  event.getObject()="+event.getObject());
+        System.out.println("ModelDetail.onRowUnselect  event.getObject()=" + event.getObject());
         setAttribute(null);
     }
 
     public Boolean isEditable() {
-        return (this.attribute instanceof Attribute);
+        boolean isEditable = true;
+        UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
+        if (!(this.attribute instanceof Attribute)) {
+            isEditable = false;
+        } else if (this.attribute.getAttrsystem()!=null && this.attribute.getAttrsystem()) {
+            // TO-DO: Dopracovat v navaznosti na prava uzivatele - hodnoty systemovych Attribute muze smenit pouze ADMIN
+            isEditable = false;
+        } else if (uic.getId().equals("attrsize")) {
+            // isEditable=this.attribute.getAttrtype().compareTo('N')==0 || this.attribute.getAttrtype().compareTo('C')==0;
+            isEditable = this.editabelAttrsize.contains(this.attribute.getAttrtype());
+        } else if (uic.getId().equals("attrdecimal")) {
+            isEditable = this.editabelAttrdecimal.contains(this.attribute.getAttrtype());
+        }else if (uic.getId().equals("attrsystem")) {
+            // TO-DO: Dopracovat v navaznosti na prava uzivatele - hodnotu muze smenit pouze ADMIN
+            isEditable = false;
+        }
+
+        return isEditable;
+    }
+
+    public void attrtypeChange() {
+        if (!(this.attribute instanceof Attribute)) {
+
+        } else if (this.attribute.getAttrtype().compareTo('D') == 0) {
+            this.attribute.setAttrsize(BigInteger.valueOf(10));
+            this.attribute.setAttrdecimal(BigInteger.valueOf(0));
+        } else if (this.attribute.getAttrtype().compareTo('L') == 0) {
+            this.attribute.setAttrsize(BigInteger.valueOf(1));
+            this.attribute.setAttrdecimal(BigInteger.valueOf(0));
+        } else if (this.attribute.getAttrtype().compareTo('T') == 0) {
+            this.attribute.setAttrsize(BigInteger.valueOf(16));
+            this.attribute.setAttrdecimal(BigInteger.valueOf(0));
+        } else if (this.attribute.getAttrtype().compareTo('I') == 0) {
+            this.attribute.setAttrdecimal(BigInteger.valueOf(0));
+        }
     }
 
     public boolean isValueUsed(String alias, String whereCondition) {

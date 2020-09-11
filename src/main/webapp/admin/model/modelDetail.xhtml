@@ -46,6 +46,7 @@
                         <f:selectItem itemLabel="Datum" itemValue="D" />
                         <f:selectItem itemLabel="Logicky Ano/Ne" itemValue="L" />
                         <f:selectItem itemLabel="Odkaz na číselník" itemValue="T" />
+                        <p:ajax event="valueChange" listener="#{modelDetail.attrtypeChange}" update="attrtypeMsg attrsize attrdecimal"  />
                     </p:selectOneMenu>
                     <p:message id="attrtypeMsg" for="attrtype"/>
 
