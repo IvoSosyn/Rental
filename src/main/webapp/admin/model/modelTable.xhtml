@@ -21,9 +21,11 @@
                     <p:ajax event="rowUnselect" listener="#{modelDetail.onRowUnselect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr" />
 
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+<!--
                     <p:column headerText="ID">
                         <h:outputText value="#{attribute.id}" />
                     </p:column>                    
+-->
                     <p:column headerText="Pořadí">
                         <h:outputText value="#{attribute.poradi}" />
                     </p:column>                    

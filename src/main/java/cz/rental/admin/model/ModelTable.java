@@ -7,6 +7,7 @@ package cz.rental.admin.model;
 
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -56,6 +57,9 @@ public class ModelTable {
         Attribute attrNew = new Attribute();
         attrNew.setIdtypentity(typentity.getId());
         attrNew.setPoradi(poradi);
+        attrNew.setAttrtype('C');
+        attrNew.setAttrsize(BigInteger.valueOf(50));
+        attrNew.setAttrdecimal(BigInteger.valueOf(0));
         attrNew.setNewEntity(true);
         this.getAttributes().add(attrNew);
     }
@@ -74,7 +78,6 @@ public class ModelTable {
     public boolean isEditable() {
         return ( (this.selectedAttrs!=null && !this.selectedAttrs.isEmpty()) || (this.selectedAttr!=null && this.selectedAttr.getAttrsystem()!=null && !this.selectedAttr.getAttrsystem()) );
     }
-
     
     /**
      * @return the typentity

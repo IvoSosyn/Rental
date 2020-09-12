@@ -12,13 +12,7 @@
                     <f:facet name="header">
                         Detail položky
                     </f:facet>
-
-                    <p:outputLabel value="ID:" for="@next" />
-                    <p:inputText id="idID" value="#{modelDetail.attribute.id}" disabled="true"  >
-                        <p:ajax update="idMsg" event="blur" />
-                    </p:inputText>
-                    <p:message id="idMsg" for="@previous" />
-                    
+       
                     <p:outputLabel value="Pořadí:" for="poradi" />
                     <p:inputNumber id="poradi" value="#{modelDetail.attribute.poradi}" placeholder="1 a více" required="true" minValue="1" requiredMessage="Povinná hodnota, minimálně 1" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="poradiMsg" event="blur" />
@@ -38,7 +32,7 @@
                     <p:message  id="popisMsg" for="popis" />
 
                     <p:outputLabel value="Typ pole:" for="attrtype" />
-                    <p:selectOneMenu id="attrtype" value="#{modelDetail.attribute.attrtype}" style="width:125px"  validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
+                    <p:selectOneMenu id="attrtype" value="#{modelDetail.attribute.attrtype}" required="true" style="width:125px"  validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
                         <f:selectItem itemLabel="Text" itemValue="C" />
                         <f:selectItem itemLabel="Číslo S desetinnýmy místy" itemValue="N" />
                         <f:selectItem itemLabel="Číslo BEZ desetinných míst" itemValue="I" />
@@ -50,7 +44,7 @@
                     <p:message id="attrtypeMsg" for="attrtype"/>
 
                     <p:outputLabel value="Počet znaků:" for="attrsize" />
-                    <p:spinner id="attrsize"  value="#{modelDetail.attribute.attrsize}"  placeholder="1 ... 1000" min="1" max="1000" decimalPlaces="0" requiredMessage="Povinná hodnota, hodnota položky 1 ... 1000 ." validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
+                    <p:spinner id="attrsize"  value="#{modelDetail.attribute.attrsize}" required="true" placeholder="1 ... 1000" min="1" max="1000" decimalPlaces="0" requiredMessage="Povinná hodnota, hodnota položky 1 ... 1000 ." validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="attrsizeMsg" event="blur" />
                     </p:spinner>
                     <p:message id="attrsizeMsg" for="attrsize"/>
@@ -86,13 +80,13 @@
                     <p:message id="tablesMsg" for="tables"/>
 
                     <p:outputLabel value="Platí Od:" for="platiod" />
-                    <p:datePicker id="platiod" value="#{modelDetail.attribute.platiod}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
+                    <p:datePicker id="platiod" value="#{modelDetail.attribute.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="platiodMsg platido" event="blur" />
                     </p:datePicker>
                     <p:message id="platiodMsg" for="platiod"/>
 
                     <p:outputLabel value="Do:" for="platido" />
-                    <p:datePicker id="platido" value="#{modelDetail.attribute.platido}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}" >
+                    <p:datePicker id="platido" value="#{modelDetail.attribute.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}" >
                         <p:ajax update="platidoMsg" event="blur" />
                     </p:datePicker> 
                     <p:message id="platidoMsg" for="platido"/>

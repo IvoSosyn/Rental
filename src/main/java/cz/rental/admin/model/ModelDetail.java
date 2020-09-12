@@ -8,7 +8,6 @@ package cz.rental.admin.model;
 import cz.rental.entity.Attribute;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;

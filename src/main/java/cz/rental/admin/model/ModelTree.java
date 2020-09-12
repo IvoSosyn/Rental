@@ -51,7 +51,7 @@ public class ModelTree {
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        setTypentity((Typentity) event.getTreeNode().getData());
+        this.typentity = (Typentity) event.getTreeNode().getData();
         modelTable.loadAttributesForTypentity(this.getTypentity());
         // System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
     }
@@ -65,9 +65,9 @@ public class ModelTree {
     }
 
     /**
-     * Vymaze <CODE>selectedNode</CODE> z DB a z TreeNode
-     * + vymaz vsech potomku a jejich Typentity (ulozeno v TreeNode.getData() ) a Attribute
-     * + vymaz Attribute prislusneho Typentity z tohoto a podrizenych node
+     * Vymaze <CODE>selectedNode</CODE> z DB a z TreeNode + vymaz vsech potomku
+     * a jejich Typentity (ulozeno v TreeNode.getData() ) a Attribute + vymaz
+     * Attribute prislusneho Typentity z tohoto a podrizenych node
      */
     public void deleteNode() {
         System.out.println("deleteNode");
@@ -98,30 +98,43 @@ public class ModelTree {
     }
 
     public void addTypentity() {
-        TreeNode parent = selectedNode;
-        if (parent == null) {
+        this.typentity = new Typentity();
+        this.typentity.setIdparent(((Typentity) this.selectedNode.getData()).getId());
+        this.typentity.setTypentity("Add " + poradi);
+        this.typentity.setPopis("Nový evidenční uzel " + (poradi++));
+        this.typentity.setEditor('F');
+        this.typentity.setAttrsystem(false);
+        this.typentity.setNewEntity(true);
+        modelTable.loadAttributesForTypentity(this.typentity);
+        openAllParent(this.selectedNode);
+    }
+
+    public void saveTypentity() {
+        if (!(this.typentity instanceof Typentity)) {
             return;
         }
         try {
-            this.typentity = new Typentity();
-            this.typentity.setIdparent(((Typentity) parent.getData()).getId());
-            this.typentity.setTypentity("Add " + poradi);
-            this.typentity.setPopis("Nový evidenční uzel " + (poradi++));
-            this.typentity.setEditor('F');
-            this.typentity.setAttrsystem(false);
-            // Ulozit do DB
-            controller.create(this.typentity);
-            TreeNode trn = new DefaultTreeNode(this.typentity);
-            trn.setSelected(true);
-            trn.setParent(parent);
-            parent.getChildren().add(trn);
-            this.setSelectedNode(trn);
-            openAllParent(trn);
+            if (this.typentity.isNewEntity()) {
+                // Ulozit do DB
+                controller.create(this.typentity);
+                this.typentity = (Typentity) controller.findEntita(this.typentity);
+                this.typentity.setNewEntity(false);
+                TreeNode trn = new DefaultTreeNode(this.typentity);
+                trn.setSelected(true);
+                trn.setParent(this.selectedNode);
+                this.selectedNode.getChildren().add(trn);
+                this.setSelectedNode(trn);
+                modelTable.loadAttributesForTypentity(this.getTypentity());
+            } else {
+                controller.edit(this.typentity);
+            }
+            openAllParent(this.selectedNode);
         } catch (Exception ex) {
             Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Záznam NEpřidán !", "Přidání záznamu bylo NEúspěšné ! Postup opakujte později.");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Záznam NEuložen !", "Uložení záznamu bylo NEúspěšné ! Postup opakujte později.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
+
     }
 
     public void valueChange() {

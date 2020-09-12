@@ -67,5 +67,5 @@ public class TypentityController extends JpaController {
         typentityNew.setId(UUID.randomUUID());
         typentityNew.setNewEntity(true);
         return typentityNew;
-    }
+    }    
 }
