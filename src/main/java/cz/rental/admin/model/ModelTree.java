@@ -281,6 +281,10 @@ public class ModelTree {
         }
     }
 
+    public String getCopyNodeName() {
+        return this.copyNode==null || this.copyNode.getData()==null || ((Typentity)this.copyNode.getData())==null || ((Typentity)this.copyNode.getData()).getTypentity()==null?"":((Typentity)this.copyNode.getData()).getTypentity();
+    }
+
     /**
      * @return the root
      */

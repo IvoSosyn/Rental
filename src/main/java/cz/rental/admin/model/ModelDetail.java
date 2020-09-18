@@ -17,7 +17,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.naming.InitialContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -78,7 +77,7 @@ public class ModelDetail {
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         if (!(this.attribute instanceof Attribute)) {
             isEditable = false;
-        } else if (this.attribute.getAttrsystem()!=null && this.attribute.getAttrsystem()) {
+        } else if (this.attribute.getAttrsystem() != null && this.attribute.getAttrsystem()) {
             // TO-DO: Dopracovat v navaznosti na prava uzivatele - hodnoty systemovych Attribute muze smenit pouze ADMIN
             isEditable = false;
         } else if (uic.getId().equals("attrsize")) {
@@ -86,7 +85,7 @@ public class ModelDetail {
             isEditable = this.editabelAttrsize.contains(this.attribute.getAttrtype());
         } else if (uic.getId().equals("attrdecimal")) {
             isEditable = this.editabelAttrdecimal.contains(this.attribute.getAttrtype());
-        }else if (uic.getId().equals("attrsystem")) {
+        } else if (uic.getId().equals("attrsystem")) {
             // TO-DO: Dopracovat v navaznosti na prava uzivatele - hodnotu muze smenit pouze ADMIN
             isEditable = false;
         }
@@ -127,33 +126,10 @@ public class ModelDetail {
     }
 
     /**
-     * Metoda ulozi aktualni Attrtibute do DB
-     *
-     */
-    public void saveAttribute() {
-        try {
-            if (this.attribute.isNewEntity()) {
-                this.controller.create(this.attribute);
-            } else {
-                this.controller.edit(this.attribute);
-            }
-            ModelTable modelTable = (ModelTable) InitialContext.doLookup("java:module/ModelTable");
-            modelTable.loadAttributesForTypentity(modelTable.getTypentity());
-            this.attribute = (Attribute) this.controller.findEntita(this.attribute);
-        } catch (Exception ex) {
-            Logger.getLogger(ModelDetail.class.getName()).log(Level.SEVERE, null, ex);
-            FacesMessage msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se uložit položku do databáze, zkuste později. ");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-
-    }
-
-    /**
      * @return the attribute
      */
     public Attribute getAttribute() {
-        return attribute;
+        return this.attribute;
     }
 
     /**

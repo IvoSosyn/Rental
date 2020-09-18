@@ -98,7 +98,7 @@
                     <p:message id="systemMsg" for="attrsystem"/>
 
                     <f:facet name="footer">                        
-                        <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelDetail.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isEditable()}" />
+                        <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelTable.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isEditable()}" />
                     </f:facet>
 
                 </p:panelGrid>

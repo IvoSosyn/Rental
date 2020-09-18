@@ -36,6 +36,10 @@ public class JpaController implements Serializable {
         try {
             getEm().persist(entita);
             getEm().flush();
+            if (!getEm().isJoinedToTransaction()) {
+                getEm().joinTransaction();
+            }
+
         } catch (Exception ex) {
             if (findEntita(entita) != null) {
                 throw new PreexistingEntityException("Entita " + entita + " již existuje v databázi.", ex);
@@ -49,13 +53,17 @@ public class JpaController implements Serializable {
      * Metoda zapise zmeny do DB, parametr entita musi jiz v DB existovat
      *
      * @param entita dedicove EntitySuperClassNajem (skoro vsechny tabulky)
-     * @throws PreexistingEntityException vyjimka, pokud entita jeste NEexistuje v DB
+     * @throws PreexistingEntityException vyjimka, pokud entita jeste NEexistuje
+     * v DB
      * @throws Exception obecna vyjimka z transakce
      */
     public void edit(EntitySuperClassNajem entita) throws NonexistentEntityException, Exception {
         try {
             entita = getEm().merge(entita);
             getEm().flush();
+            if (!getEm().isJoinedToTransaction()) {
+                getEm().joinTransaction();
+            }
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -83,6 +91,9 @@ public class JpaController implements Serializable {
                 try {
                     getEm().remove(getEm().merge(entita));
                     getEm().flush();
+                    if (!getEm().isJoinedToTransaction()) {
+                        getEm().joinTransaction();
+                    }
                 } catch (Exception ex) {
                     Logger.getLogger(JpaController.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -22,10 +22,10 @@
                         </f:facet>
                         <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
                                 selection="#{modelTree.selectedNode}" draggable="true" droppable="true" dropCopyNode="true" >
-                            <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:messages" >
+                            <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:messages" >
                                 <f:attribute name="treeNode" value="#{treeNode}" />
                             </p:ajax>
-                            <p:ajax event="select"  listener="#{modelTree.onNodeSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:messages">
+                            <p:ajax event="select"  listener="#{modelTree.onNodeSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:messages">
                                 <f:attribute name="treeNode" value="#{treeNode}" />
                             </p:ajax>
                             <p:ajax event="unselect" listener="#{modelTable.onNodeUnselect}"  update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:messages">
@@ -36,14 +36,26 @@
                             </p:treeNode>
                         </p:tree>
                         <f:facet name="footer">
-                            <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" partialSubmit="true" title="Přidej novou entitu (uzel)"  icon="fa fa-plus" />
-                            <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTree.editable}" icon="fa fa-ban" title="Smazání entity (uzlu)"  >
-                                <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
-                            </p:commandButton>                        
-                            <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
-                                <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                                <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-                            </p:confirmDialog>  
+                            <div  class="ui-g">
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" partialSubmit="true" title="Přidej novou entitu (uzel)"  icon="fa fa-plus" />                                   
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTree.editable}" icon="fa fa-ban" title="Smazání entity (uzlu)"  >
+                                        <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
+                                        <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
+                                            <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                                            <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                                        </p:confirmDialog>  
+                                    </p:commandButton>                        
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton id="copyTypentity" value="Kopíruj" actionListener="#{modelTree.copyNodeFrom}" update=":formModelTree:pasteTypentity :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton id="pasteTypentity" value="Vlož(#{modelTree.copyNodeName})"    actionListener="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />                                    
+                                </div>
+                            </div>
                         </f:facet>
                     </p:panelGrid>
                     <p:contextMenu id="modelTreeMenu" for="modelTree" >
@@ -52,8 +64,8 @@
                             <p:confirm header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
                         </p:menuitem>
                         <p:separator /> 
-                        <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
-                        <p:menuitem value="Vlož"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
+                        <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail :formModelTree:modelTreeMenu :formModelTree:pasteTypentity"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
+                        <p:menuitem value="Vlož(#{modelTree.copyNodeName})"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
                     </p:contextMenu>
                 </h:form>
             </div>

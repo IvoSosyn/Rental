@@ -18,7 +18,7 @@ import javax.persistence.Query;
  * @author sosyn
  */
 @Stateless
-public class AttributeController  extends JpaController {
+public class AttributeController extends JpaController {
 
     @PersistenceContext(unitName = "PostgreSQLNajem")
     private EntityManager em;
@@ -54,4 +54,45 @@ public class AttributeController  extends JpaController {
         return new ArrayList<>(list);
     }
 
+    public void pasteAttrs(ArrayList<Attribute> copyAttrs, UUID id) throws Exception {
+        pasteAttrs(copyAttrs, id, false);
+    }
+
+    /**
+     * Metoda nakopiruje pole Attribute <code>copyAttrs</code> do DB s novym
+     * <code>id</code> "idtypentity"
+     *
+     * @param copyAttrs pole Attribute k ulozeni do DB POZOR, musi se
+     * vygenerovat nove Attiribute.id
+     * @param id nove "Attribute.idtypentity"
+     * @param duplicities jsou povoleny duplicity Ano|Ne
+     * @throws Exception
+     */
+    public void pasteAttrs(ArrayList<Attribute> copyAttrs, UUID id, boolean duplicities) throws Exception {
+        for (Attribute copyAttr : copyAttrs) {
+            // Kontrola na duplicitu idtypentity,nazev
+            if (!duplicities) {
+                this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.attrname= :attrname AND a.idtypentity= :idTypEntity AND a.identita IS NULL");
+                this.query.setParameter("idTypEntity", id);
+                this.query.setParameter("attrname", copyAttr.getAttrname());
+                List<Attribute> list = query.getResultList();
+                if (list != null && !list.isEmpty()) {
+                    continue;
+                }
+            }
+            copyAttr.setId(UUID.randomUUID());
+            copyAttr.setIdtypentity(id);
+            copyAttr.setIdentita(null);
+            // Novou polozku Attribute ulozit do DB
+            this.create(copyAttr);
+        }
+    }
+
+    public void deleteAttrs(ArrayList<Attribute> selectedAttrs) throws Exception {
+        for (Attribute selectedAttr : selectedAttrs) {
+            if (!selectedAttr.isNewEntity()) {
+                this.destroy(selectedAttr);
+            }
+        }
+    }
 }
