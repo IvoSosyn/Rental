@@ -22,10 +22,11 @@ import javax.naming.NamingException;
  *
  * @author sosyn
  */
-@Stateless
 @FacesValidator("modelDetailValidator")
+@Stateless
 public class ModelDetailValidator implements Validator, Serializable {
 
+    static final long serialVersionUID = 42L;
     // @EJB
     ModelDetail modelDetail;
     private Attribute attribute;
@@ -47,10 +48,12 @@ public class ModelDetailValidator implements Validator, Serializable {
             System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPoradi()=" + modelDetail.getAttribute().getPoradi());
             System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getAttrname()=" + modelDetail.getAttribute().getAttrname());
             System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPopis()=" + modelDetail.getAttribute().getPopis());
+            System.out.println("*ModelDetailValidator.validate                                  value=" + value);
+            
         } catch (NamingException ex) {
             msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se najít modul 'ModelDetail'. ");
         }
-        
+
         if (msg != null) {
             System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
         } else if (component == null) {

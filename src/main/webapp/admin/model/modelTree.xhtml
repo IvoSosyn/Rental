@@ -22,13 +22,14 @@
                         </f:facet>
                         <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
                                 selection="#{modelTree.selectedNode}" draggable="true" droppable="true" dropCopyNode="true" >
-                            <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:messages" >
+                            <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" 
+                                    update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:editReports :formModelTree:messages" >
                                 <f:attribute name="treeNode" value="#{treeNode}" />
                             </p:ajax>
-                            <p:ajax event="select"  listener="#{modelTree.onNodeSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:messages">
+                            <p:ajax event="select"  listener="#{modelTree.onNodeSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:editReports :formModelTree:messages">
                                 <f:attribute name="treeNode" value="#{treeNode}" />
                             </p:ajax>
-                            <p:ajax event="unselect" listener="#{modelTable.onNodeUnselect}"  update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:messages">
+                            <p:ajax event="unselect" listener="#{modelTable.onNodeUnselect}"  update=":formModelTable :formModelDetail :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:editReports :formModelTree:messages">
                                 <f:attribute name="treeNode" value="#{treeNode}" />
                             </p:ajax>
                             <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
@@ -38,10 +39,10 @@
                         <f:facet name="footer">
                             <div  class="ui-g">
                                 <div class="ui-g-12 ui-md-6 ui-lg-3">
-                                    <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" partialSubmit="true" title="Přidej novou entitu (uzel)"  icon="fa fa-plus" />                                   
+                                    <p:commandButton id="addTypentity" value="Přidej" process="@this" actionListener="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail:gridDetail" partialSubmit="true" disabled="#{!modelTree.appendable}" title="Přidej novou entitu (uzel)"  icon="fa fa-plus" />                                   
                                 </div>
                                 <div class="ui-g-12 ui-md-6 ui-lg-3">
-                                    <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTree.editable}" icon="fa fa-ban" title="Smazání entity (uzlu)"  >
+                                    <p:commandButton id="delTypentity" value="Smaž" process="@this" actionListener="#{modelTree.deleteNode}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  partialSubmit="true" disabled="#{!modelTree.removable}" title="Smazání entity (uzlu)"  icon="fa fa-ban" style="color: #c61e40;" >
                                         <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
                                         <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
                                             <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
@@ -50,22 +51,25 @@
                                     </p:commandButton>                        
                                 </div>
                                 <div class="ui-g-12 ui-md-6 ui-lg-3">
-                                    <p:commandButton id="copyTypentity" value="Kopíruj" actionListener="#{modelTree.copyNodeFrom}" update=":formModelTree:pasteTypentity :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
+                                    <p:commandButton id="copyTypentity" value="Kopíruj" actionListener="#{modelTree.copyNodeFrom}" update=":formModelTree:pasteTypentity :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null  or !modelTree.appendable}"  title="Zkopíruj entitu (uzel) do paměti"/>
                                 </div>
                                 <div class="ui-g-12 ui-md-6 ui-lg-3">
-                                    <p:commandButton id="pasteTypentity" value="Vlož(#{modelTree.copyNodeName})"    actionListener="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />                                    
+                                    <p:commandButton id="pasteTypentity" value="Vlož(#{modelTree.copyNodeName})"  actionListener="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.copyNode eq null or !modelTree.appendable}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />                                    
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton id="editReports" value="Sestavy"  actionListener="#{modelTree.editReports}"  update=":formModelTree:messages" icon="fa fa-stack-overflow" disabled="#{!modelTree.editable}"  title="Vloží seznam použitelných sestav k vybrané entitě (uzlu)." />                                    
                                 </div>
                             </div>
                         </f:facet>
                     </p:panelGrid>
                     <p:contextMenu id="modelTreeMenu" for="modelTree" >
-                        <p:menuitem value="Přidej"  action="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail :formModelTable :formModelDetail"  icon="fa fa-plus"   title="Přidej novou entitu (uzel)" />
-                        <p:menuitem value="Smaž"    action="#{modelTree.deleteNode}"   update=":formModelTree:modelTree :formModelTreeDetail :formModelTable :formModelDetail "  icon="fa fa-ban"  disabled="#{!modelTree.editable}"  title="Smaž entitu (uzel)" >
+                        <p:menuitem value="Přidej"  action="#{modelTree.addTypentity}" update=":formModelTree:modelTree :formModelTreeDetail :formModelTable :formModelDetail"  icon="fa fa-plus"  disabled="#{!modelTree.appendable}"     title="Přidej novou entitu (uzel)" />
+                        <p:menuitem value="Smaž"    action="#{modelTree.deleteNode}"   update=":formModelTree:modelTree :formModelTreeDetail :formModelTable :formModelDetail "  icon="fa fa-ban"  disabled="#{!modelTree.removable}"  title="Smaž entitu (uzel)" >
                             <p:confirm header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
                         </p:menuitem>
                         <p:separator /> 
-                        <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail :formModelTree:modelTreeMenu :formModelTree:pasteTypentity"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null }"  title="Zkopíruj entitu (uzel) do paměti"/>
-                        <p:menuitem value="Vlož(#{modelTree.copyNodeName})"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.selectedNode eq null or modelTree.copyNode eq null}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
+                        <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail :formModelTree:modelTreeMenu :formModelTree:pasteTypentity"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null or !modelTree.appendable }"  title="Zkopíruj entitu (uzel) do paměti"/>
+                        <p:menuitem value="Vlož(#{modelTree.copyNodeName})"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.copyNode eq null or !modelTree.appendable}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
                     </p:contextMenu>
                 </h:form>
             </div>
@@ -79,37 +83,37 @@
                         </f:facet>
 
                         <p:outputLabel value="Zkratka:" for="@next" />
-                        <p:inputText id="idTypentity" value="#{modelTree.typentity.typentity}" disabled="#{modelTree.typentity eq null}" >
+                        <p:inputText id="idTypentity" value="#{modelTree.typentity.typentity}" disabled="#{!modelTree.editable}" >
                             <p:ajax update="idTypentityMsg" event="blur" />
                         </p:inputText>
                         <p:message id="idTypentityMsg" for="@previous"/>
 
                         <p:outputLabel value="Popis:"  for="@next"  />
-                        <p:inputText id="idPopis" value="#{modelTree.typentity.popis}"  disabled="#{modelTree.typentity eq null}"  > 
+                        <p:inputText id="idPopis" value="#{modelTree.typentity.popis}" disabled="#{!modelTree.editable}"  > 
                             <p:ajax update="idPopisMsg" event="blur" />
                         </p:inputText>
                         <p:message id="idPopisMsg" for="@previous"/>
 
                         <p:outputLabel value="Platí Od:"  for="@next" />
-                        <p:datePicker id="platiOd" value="#{modelTree.typentity.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{modelTree.typentity eq null}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí"  >
+                        <p:datePicker id="platiOd" value="#{modelTree.typentity.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{!modelTree.editable}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí"  >
                             <p:ajax update="platiOdMsg" event="blur" />
                         </p:datePicker>
                         <p:message id="platiOdMsg" for="@previous"/>
 
                         <p:outputLabel value="Do:"  for="@next" />
-                        <p:datePicker id="platiDo" value="#{modelTree.typentity.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{modelTree.typentity eq null}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" >
+                        <p:datePicker id="platiDo" value="#{modelTree.typentity.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{!modelTree.editable}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" >
                             <p:ajax update="platiDoMsg" event="blur" />
                         </p:datePicker>
                         <p:message id="platiDoMsg" for="@previous"/>
 
                         <p:outputLabel value="Systém:"  for="@next" />
-                        <h:selectBooleanCheckbox id="system" value="#{modelTree.typentity.attrsystem}" disabled="true" >
+                        <h:selectBooleanCheckbox id="system" value="#{modelTree.typentity.attrsystem}"  disabled="#{!modelTree.editable or !user.getParam('SUPERVISOR',false)}" >
                             <p:ajax update="systemMsg" event="blur" />
                         </h:selectBooleanCheckbox>
                         <p:message id="systemMsg" for="@previous"/>
 
                         <f:facet name="footer">
-                            <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelTree.saveTypentity}" icon="fa fa-save" update=":formModelTreeDetail :formModelTree :formModelTable :formModelDetail " />
+                            <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelTree.saveTypentity}" update=":formModelTreeDetail :formModelTree :formModelTable :formModelDetail " disabled="#{!modelTree.editable}"  icon="fa fa-save"/>
                         </f:facet>
                     </p:panelGrid>
                 </h:form>

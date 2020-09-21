@@ -6,16 +6,15 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Attribute;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -25,9 +24,11 @@ import org.primefaces.event.UnselectEvent;
  *
  * @author sosyn
  */
-@Stateless
 @Named("modelDetail")
-public class ModelDetail {
+@Stateless
+public class ModelDetail implements Serializable {
+
+    static final long serialVersionUID = 42L;
 
     private Attribute attribute = null;
     ArrayList<Character> editabelAttrsize;
@@ -35,6 +36,8 @@ public class ModelDetail {
 
     @EJB
     cz.rental.entity.AttributeController controller;
+    @Inject
+    cz.rental.aplikace.User user;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -46,6 +49,7 @@ public class ModelDetail {
         editabelAttrsize.add('I');
         editabelAttrdecimal = new ArrayList<>();
         editabelAttrdecimal.add('N');
+        System.out.println(" Model.detail.init()");
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -73,21 +77,24 @@ public class ModelDetail {
     }
 
     public Boolean isEditable() {
-        boolean isEditable = true;
+        boolean isEditable = user.getParam("SUPERVISOR", false) || user.getParam("EditAttribute", false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         if (!(this.attribute instanceof Attribute)) {
             isEditable = false;
-        } else if (this.attribute.getAttrsystem() != null && this.attribute.getAttrsystem()) {
-            // TO-DO: Dopracovat v navaznosti na prava uzivatele - hodnoty systemovych Attribute muze smenit pouze ADMIN
-            isEditable = false;
-        } else if (uic.getId().equals("attrsize")) {
+        }
+        if (isEditable && uic.getId().equals("attrsize")) {
             // isEditable=this.attribute.getAttrtype().compareTo('N')==0 || this.attribute.getAttrtype().compareTo('C')==0;
             isEditable = this.editabelAttrsize.contains(this.attribute.getAttrtype());
-        } else if (uic.getId().equals("attrdecimal")) {
+        }
+        if (isEditable && uic.getId().equals("attrdecimal")) {
             isEditable = this.editabelAttrdecimal.contains(this.attribute.getAttrtype());
-        } else if (uic.getId().equals("attrsystem")) {
-            // TO-DO: Dopracovat v navaznosti na prava uzivatele - hodnotu muze smenit pouze ADMIN
-            isEditable = false;
+        }
+        if (isEditable && uic.getId().equals("attrsystem")) {
+            isEditable = user.getParam("SUPERVISOR", false);
+        }
+        // Systemove polozky muze editovat pouze SUPERVISOR
+        if (isEditable && this.attribute.getAttrsystem() != null && this.attribute.getAttrsystem()) {
+            isEditable = user.getParam("SUPERVISOR", false);
         }
 
         return isEditable;

@@ -5,10 +5,13 @@
  */
 package cz.rental.admin.model;
 
+import cz.rental.aplikace.Aplikace;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -17,6 +20,7 @@ import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
@@ -28,7 +32,9 @@ import org.primefaces.event.NodeUnselectEvent;
  */
 @Named("modelTable")
 @Stateless
-public class ModelTable {
+public class ModelTable implements Serializable {
+
+    static final long serialVersionUID = 42L;
 
     static final int COUNT_ATTRIBUTE_NEW = 5;
 
@@ -42,6 +48,8 @@ public class ModelTable {
     cz.rental.entity.AttributeController controller;
     @EJB
     ModelDetail modelDetail;
+    @Inject
+    cz.rental.aplikace.User user;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -68,7 +76,7 @@ public class ModelTable {
         newAttr.setAttrdecimal(BigInteger.valueOf(0));
         newAttr.setNewEntity(true);
         this.getAttributes().add(newAttr);
-//        selectedAttrs = new ArrayList<>();
+        selectedAttrs = new ArrayList<>();
 //        modelDetail.setAttribute(this.selectedAttr);
     }
 
@@ -167,34 +175,6 @@ public class ModelTable {
     }
 
     /**
-     * Je konkretni polozka Attribute editovatelna ?
-     *
-     * @return ano|ne
-     */
-    public boolean isEditable() {
-        return ((this.selectedAttrs != null && !this.selectedAttrs.isEmpty()) || (this.selectedAttr != null && this.selectedAttr.getAttrsystem() != null && !this.selectedAttr.getAttrsystem()));
-    }
-
-    /**
-     * Je vybrana v tabulce Attribute alespon 1 polozka ?
-     *
-     * @return Ano = alespon 1 | Ne = 0 nebo null
-     */
-    public boolean isSelectedAttr() {
-        return ((this.selectedAttrs != null && !this.selectedAttrs.isEmpty()));
-    }
-
-    /**
-     * Je vybrana v pameti alespon 1 polozka Attribute, kterou lze vlozit do DB
-     * ?
-     *
-     * @return Ano = alespon 1 | Ne = 0 nebo null
-     */
-    public boolean isCopyAttr() {
-        return ((this.getCopyAttrs() != null && !this.copyAttrs.isEmpty()));
-    }
-
-    /**
      * Metoda ulozi aktualni Attrtibute do DB
      *
      */
@@ -218,6 +198,48 @@ public class ModelTable {
         loadAttributesForTypentity(this.typentity);
         selectedAttrs = new ArrayList<>();
         selectedAttrs.add(this.selectedAttr);
+    }
+
+    /**
+     * Metoda testuje, zda-li ma uzivatel prava pridavat zaznam
+     *
+     * @return uzivatel muze pridavat zaznamy
+     */
+    public boolean isAppendable() {
+        boolean isAppendable = user.getParam("SUPERVISOR", false) || user.getParam("AddAttribute", false);
+        return (isAppendable);
+    }
+
+    /**
+     * Metoda testuje, zda-li jsou polozky v zasobniku a uzivatel ma pravo
+     * vkladat
+     *
+     * @return V zasobniku jsou polozky k vlozeni a yaroven uzivatel ma pravo
+     * vkladat True|False
+     */
+    public boolean isPasteable() {
+        boolean isPasteable = (this.copyAttrs != null && !this.copyAttrs.isEmpty());
+        if (isPasteable) {
+            isPasteable = user.getParam("SUPERVISOR", false) || user.getParam("AddAttribute", false);
+        }
+        return (isPasteable);
+    }
+
+    /**
+     * Metoda testuje, zda-li jsou zaznamy smazatelne a uzivatel ma pravo mazat
+     *
+     * @return pole Attribute je smazatelne
+     */
+    public boolean isRemovable() {
+        boolean isRemoveable = (this.selectedAttrs != null && !this.selectedAttrs.isEmpty());
+        if (isRemoveable) {
+            isRemoveable = user.getParam("SUPERVISOR", false) || user.getParam("DelAttribute", false);
+        }
+        return (isRemoveable);
+    }
+
+    public String convertData(Date datum) {
+        return Aplikace.getSimpleDateFormat().format(datum);
     }
 
     /**

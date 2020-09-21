@@ -6,6 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Typentity;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.NodeSelectEvent;
@@ -27,7 +29,9 @@ import org.primefaces.model.TreeNode;
  */
 @Named("modelTree")
 @Stateless
-public class ModelTree {
+public class ModelTree implements Serializable {
+
+    static final long serialVersionUID = 42L;
 
     private TreeNode root = null;
     private TreeNode selectedNode = null;
@@ -42,6 +46,8 @@ public class ModelTree {
     cz.rental.entity.AttrController attrController;
     @EJB
     cz.rental.admin.model.ModelTable modelTable;
+    @Inject
+    cz.rental.aplikace.User user;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -51,18 +57,12 @@ public class ModelTree {
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
+
         this.typentity = (Typentity) event.getTreeNode().getData();
         modelTable.loadAttributesForTypentity(this.getTypentity());
         // System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
     }
 
-    public void displaySelectedSingle() {
-        System.out.println("VIEW-Selected");
-        if (selectedNode != null) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "VIEW-Selected", selectedNode.getData().toString());
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-    }
 
     /**
      * Vymaze <CODE>selectedNode</CODE> z DB a z TreeNode + vymaz vsech potomku
@@ -178,13 +178,46 @@ public class ModelTree {
     }
 
     /**
-     * TO-DO: Zavesit na prava uzivatele
+     * Metoda testuje, zda-li ma uzivatel prava pridavat zaznam
      *
-     * @return typentity je editovatelny
+     * @return uzivatel muze pridavat zaznamy
+     */
+    public boolean isAppendable() {
+        boolean isAppendable = user.getParam("SUPERVISOR", false) || user.getParam("AddTypentity", false);
+        return (isAppendable);
+    }
+
+    /**
+     * Metoda testuje, zda-li je zaznam editovatelny a uzivatel ma pravo
+     * editovat zaznam
+     *
+     * @return Typentity je editovatelny
      */
     public boolean isEditable() {
-        return (this.typentity != null && this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem());
+        boolean isEditable = (this.typentity != null);
+        if (isEditable) {
+            isEditable = user.getParam("SUPERVISOR", false);
+            if (!isEditable) {
+                isEditable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam("EditTypentity", false);
+            }
+        }
+        return (isEditable);
+    }
 
+    /**
+     * Metoda testuje, zda-li je zaznam smazatelny a uzivatel ma pravo mazat
+     *
+     * @return Typentity je smazatelny
+     */
+    public boolean isRemovable() {
+        boolean isRemoveable = (this.typentity != null);
+        if (isRemoveable) {
+            isRemoveable = user.getParam("SUPERVISOR", false);
+            if (!isRemoveable) {
+                isRemoveable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam("DelTypentity", false);
+            }
+        }
+        return (isRemoveable);
     }
 
     /**
@@ -282,7 +315,15 @@ public class ModelTree {
     }
 
     public String getCopyNodeName() {
-        return this.copyNode==null || this.copyNode.getData()==null || ((Typentity)this.copyNode.getData())==null || ((Typentity)this.copyNode.getData()).getTypentity()==null?"":((Typentity)this.copyNode.getData()).getTypentity();
+        return this.copyNode == null || this.copyNode.getData() == null || ((Typentity) this.copyNode.getData()) == null || ((Typentity) this.copyNode.getData()).getTypentity() == null ? "" : ((Typentity) this.copyNode.getData()).getTypentity();
+    }
+
+    /**
+     * Metoda vyvola dialog pro prideleni sestav k danemu Typentity
+     */
+    public void editReports() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sestavy-Reports ... TO-DO", "Editace seznamu přidělených sestav ještě není hotova .. TO-DO");
+        FacesContext.getCurrentInstance().addMessage(null, message);;
     }
 
     /**

@@ -92,7 +92,7 @@
                     <p:message id="platidoMsg" for="platido"/>
 
                     <p:outputLabel value="Systém:" for="attrsystem" />
-                    <p:selectBooleanCheckbox id="attrsystem" value="#{modelDetail.attribute.attrsystem}" validator="modelDetailValidator" disabled="true" >
+                    <p:selectBooleanCheckbox id="attrsystem" value="#{modelDetail.attribute.attrsystem}" validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}" >
                         <p:ajax update="systemMsg" event="blur" />
                     </p:selectBooleanCheckbox>
                     <p:message id="systemMsg" for="attrsystem"/>

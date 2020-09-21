@@ -50,10 +50,14 @@
                     <h:outputText value="#{attribute.attrdecimal}" />
                 </p:column>
                 <p:column headerText="Plati Od">
-                    <h:outputText value="#{attribute.platiod}" />
+                    <h:outputText value="#{attribute.platiod}" >
+                        <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+                    </h:outputText>    
                 </p:column>
                 <p:column headerText="Plati Do">
-                    <h:outputText value="#{attribute.platido}" />
+                    <h:outputText value="#{attribute.platido}" >
+                        <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="Systém">
                     <h:selectBooleanCheckbox value="#{attribute.attrsystem}" disabled="true" />
@@ -62,11 +66,11 @@
                 <f:facet id="footerTableModelTable" name="footer">
                     <div  class="ui-g">
                         <div class="ui-g-12 ui-md-6 ui-lg-3">
-                            <p:commandButton id="addAttr" value="Přidej" process="@this" actionListener="#{modelTable.addAttr}" update=":formModelTable :formModelDetail" partialSubmit="true" title="Přidání nové položky."  icon="fa fa-plus" />
+                            <p:commandButton id="addAttr" value="Přidej" process="@this" actionListener="#{modelTable.addAttr}" update=":formModelTable :formModelDetail" partialSubmit="true" disabled="#{!modelTable.appendable}" title="Přidání nové položky."  icon="fa fa-plus" />
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-3">
-                            <p:commandButton id="delAttr" value="Smaž(#{modelTable.selectedAttrs.size()})" process="@this" actionListener="#{modelTable.deleteAttr}"  update=":formModelTable :formModelDetail"  partialSubmit="true" style="color: #c61e40;" disabled="#{!modelTable.editable}" icon="fa fa-ban" title="Smazání vybraných položek (řádků)." >
-                                <p:confirm  header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
+                            <p:commandButton id="delAttr" value="Smaž(#{modelTable.selectedAttrs.size()})" process="@this" actionListener="#{modelTable.deleteAttr}" update=":formModelTable :formModelDetail" partialSubmit="true" disabled="#{!modelTable.removable}" title="Smazání vybraných položek (řádků)."  icon="fa fa-ban"  style="color: #c61e40;"  >
+                                <p:confirm  header="Potvrzení akce" message="Opravdu chcete vybrané záznamy (#{modelTable.selectedAttrs.size()}) smazat ?" icon="pi pi-exclamation-triangle" />
                                 <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                                     <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
@@ -74,22 +78,22 @@
                             </p:commandButton>                        
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-3">
-                            <p:commandButton id="copyAttr" value="Kopírovat(#{modelTable.selectedAttrs.size()})" process="@this" actionListener="#{modelTable.copyAttrFrom}" update=":formModelTable :formModelDetail" partialSubmit="true"  disabled="#{!modelTable.selectedAttr}"  title="Kopie označených záznamů do paměti."  icon="fa fa-copy" />
+                            <p:commandButton id="copyAttr" value="Kopírovat(#{modelTable.selectedAttrs.size()})" process="@this" actionListener="#{modelTable.copyAttrFrom}" update=":formModelTable :formModelDetail" partialSubmit="true"  disabled="#{!modelTable.appendable}"  title="Kopie označených záznamů do paměti."  icon="fa fa-copy" />
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-3">
-                            <p:commandButton id="pasteAttr" value="Vložit(#{modelTable.copyAttrs.size()})" process="@this" actionListener="#{modelTable.pasteAttrTo}" update=":formModelTable :formModelDetail" partialSubmit="true"  disabled="#{!modelTable.copyAttr}" title="Vložení záznamů z paměti."  icon="fa fa-paste" />
+                            <p:commandButton id="pasteAttr" value="Vložit(#{modelTable.copyAttrs.size()})" process="@this" actionListener="#{modelTable.pasteAttrTo()}" update=":formModelTable :formModelDetail" partialSubmit="true"  disabled="#{!modelTable.pasteable}" title="Vložení záznamů z paměti."  icon="fa fa-paste" />
                         </div>
                     </div>
                 </f:facet>
             </p:dataTable>
             <p:contextMenu id="modelTableMenu" for="tableModelTable" >
-                <p:menuitem value="Přidej"  action="#{modelTable.addAttr}" update=":formModelTable :formModelDetail"  icon="fa fa-plus"   title="Přidání nové položky." />
-                <p:menuitem value="Smaž(#{modelTable.selectedAttrs.size()})"    action="#{modelTable.deleteAttr}"   update=":formModelTable :formModelDetail "  icon="fa fa-ban"  disabled="#{!modelTree.editable}"  title="Smazání vybraných položek (řádků)." >
-                    <p:confirm header="Potvrzení akce" message="Opravdu chcete záznam smazat ?" icon="pi pi-exclamation-triangle" />
+                <p:menuitem value="Přidej"  action="#{modelTable.addAttr}" update=":formModelTable :formModelDetail"  icon="fa fa-plus" disabled="#{!modelTree.appendable}"  title="Přidání nové položky." />
+                <p:menuitem value="Smaž(#{modelTable.selectedAttrs.size()})"    action="#{modelTable.deleteAttr}"   update=":formModelTable :formModelDetail "  icon="fa fa-ban" disabled="#{!modelTree.removable}" title="Smazání vybraných položek (řádků)." >
+                    <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznamy (#{modelTable.selectedAttrs.size()}) smazat ?" icon="pi pi-exclamation-triangle" />
                 </p:menuitem>
                 <p:separator /> 
-                <p:menuitem value="Kopírovat(#{modelTable.selectedAttrs.size()})" action="#{modelTable.copyAttrFrom}"   update=":formModelTable :formModelDetail"  icon="fa fa-copy"  disabled="#{!modelTable.selectedAttr}" title="Kopie označených záznamů do paměti."/>
-                <p:menuitem value="Vlož(#{modelTable.copyAttrs.size()})"  action="#{modelTable.pasteAttrTo}" update=":formModelTable :formModelDetail"  icon="fa fa-paste" disabled="#{!modelTable.copyAttr}" title="Vložení záznamů z paměti." />
+                <p:menuitem value="Kopírovat(#{modelTable.selectedAttrs.size()})" action="#{modelTable.copyAttrFrom}"   update=":formModelTable :formModelDetail"  icon="fa fa-copy"  disabled="#{!modelTable.appendable}" title="Kopie označených záznamů do paměti."/>
+                <p:menuitem value="Vlož(#{modelTable.copyAttrs.size()})"  action="#{modelTable.pasteAttrTo}" update=":formModelTable :formModelDetail"  icon="fa fa-paste" disabled="#{!modelTable.pasteable}" title="Vložení záznamů z paměti." />
             </p:contextMenu>
         </h:form>
     </ui:composition>
