@@ -50,7 +50,7 @@ public class ModelDetail implements Serializable {
         editabelAttrsize.add('I');
         editabelAttrdecimal = new ArrayList<>();
         editabelAttrdecimal.add('N');
-        System.out.println(" Model.detail.init()");
+        System.out.println(" ModelDetail.init()");
     }
 
     public void onRowSelect(SelectEvent event) {

@@ -17,8 +17,14 @@
                 <h:form id="formModelTree">
                     <p:growl id="messages" showDetail="true" />                
                     <p:panelGrid columns="1">
-                        <f:facet name="header">
-                            Entita (Objekt evidence)
+                        <f:facet name="header">                            
+                            <p:outputLabel for="@next" value="Modely(šablony) : " />
+                            <p:selectOneMenu id="selectOneMenuModels" value="#{modelTree.typentityRoot}" converter="typentityConvertet" effect="fade">
+                                <p:ajax event="itemSelect" listener="#{modelTree.onModelSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTree :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:editReports :formModelTree:messages" >
+                                    <f:attribute name="model" value="#{model}" />
+                                </p:ajax>                                    
+                                <f:selectItems value="#{modelTree.models}" var="model" itemLabel="#{model.popis}" itemValue="#{model}" />                                
+                            </p:selectOneMenu>
                         </f:facet>
                         <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
                                 selection="#{modelTree.selectedNode}" draggable="true" droppable="true" dropCopyNode="true" >

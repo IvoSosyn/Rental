@@ -17,3 +17,12 @@ DB PostgreSQL
 ============
 Datumové položky jsou uloženy s TimeZone, pak se musí u každého JSF "f:convertDateTime" nastavit parametr timeZone="Europe/Prague":
     <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+
+PrimeFaces
+==========
+   Je nutní založit faces-config.xml a do něj vložit     
+    <application>
+        <action-listener>
+        <navigation-handler>
+        </view-handler>
+        jinak nefunguje(nezobrazí se)  PrimeFaces.current().dialog().openDynamic(...);

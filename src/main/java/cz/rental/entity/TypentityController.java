@@ -6,6 +6,7 @@
 package cz.rental.entity;
 
 import cz.rental.aplikace.Aplikace;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
@@ -32,13 +33,32 @@ public class TypentityController extends JpaController {
     private EntityManager em;
     private Query query = null;
 
-    public TreeNode fillTreeNodes() {
+    /**
+     *  Najde vsechny potomky katalogu tj. vsechny modely(sablony)
+     * @return
+     */
+    public ArrayList<Typentity> getModelTypEntity() {
+        Typentity modelTypentity;
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.typentity='MODELS'"));
+        ArrayList<Typentity> list = new ArrayList(this.getQuery().getResultList());
+        if (!list.isEmpty()) {
+            modelTypentity = list.get(0);
+            this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent=:idParent "));
+            this.getQuery().setParameter("idParent", modelTypentity.getId());
+            list = new ArrayList(this.getQuery().getResultList());
+        }
+        return list;
+    }
+
+    public TreeNode fillTreeNodes(Typentity typEntityRoot) {
         TreeNode root = new DefaultTreeNode("Root", null);
-        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL"));
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent"));
+        this.getQuery().setParameter("idParent", typEntityRoot.getId());
         List<Typentity> list = this.getQuery().getResultList();
         if (!list.isEmpty()) {
             for (Typentity typEntity : list) {
-                addNode(root, typEntity);
+                TreeNode top = new DefaultTreeNode(typEntity, root);
+                addNode(top, typEntity);
             }
         } else {
         }
@@ -67,5 +87,6 @@ public class TypentityController extends JpaController {
         typentityNew.setId(UUID.randomUUID());
         typentityNew.setNewEntity(true);
         return typentityNew;
-    }    
+    }
+
 }

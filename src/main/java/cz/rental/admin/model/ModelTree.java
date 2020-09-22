@@ -8,6 +8,7 @@ package cz.rental.admin.model;
 import cz.rental.aplikace.User;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -34,10 +36,13 @@ public class ModelTree implements Serializable {
 
     static final long serialVersionUID = 42L;
 
+    // ID z katalogu modelu(sablon)
+    private Typentity typentityRoot = null;
+    private ArrayList<Typentity> models = null;
+    private Typentity typentity = null;
     private TreeNode root = null;
     private TreeNode selectedNode = null;
     private TreeNode copyNode = null;
-    private Typentity typentity = null;
 
     int poradi = 0;
 
@@ -54,11 +59,33 @@ public class ModelTree implements Serializable {
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        setRoot(controller.fillTreeNodes());
+        setModels(controller.getModelTypEntity());
+        fillTreeNodes();
+
+    }
+
+    /**
+     * Metoda je volana pri udalosti "select" v SelectOneMenu komponente
+     * TO-DO: zalozeni nove sablony-modelu doresit
+     * @param event
+     */
+    public void onModelSelect(SelectEvent event) {
+        this.typentityRoot = (Typentity) event.getObject();
+        fillTreeNodes();
+    }
+
+    public void fillTreeNodes() {
+        if (this.typentityRoot == null) {
+            models = controller.getModelTypEntity();
+            if (!models.isEmpty()) {
+                // TO-DO: dodelat vyber nastaveneho modelu podle naposledy vybraneho nebo jakou ma uzivatel firmu
+                this.typentityRoot = models.get(0);
+            }
+        }
+        setRoot(controller.fillTreeNodes(this.typentityRoot));
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-
         this.typentity = (Typentity) event.getTreeNode().getData();
         modelTable.loadAttributesForTypentity(this.getTypentity());
         // System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
@@ -384,5 +411,33 @@ public class ModelTree implements Serializable {
      */
     public void setCopyNode(TreeNode copyNode) {
         this.copyNode = copyNode;
+    }
+
+    /**
+     * @return the typentityRoot
+     */
+    public Typentity getTypentityRoot() {
+        return typentityRoot;
+    }
+
+    /**
+     * @param typentityRoot the typentityRoot to set
+     */
+    public void setTypentityRoot(Typentity typentityRoot) {
+        this.typentityRoot = typentityRoot;
+    }
+
+    /**
+     * @return the models
+     */
+    public ArrayList<Typentity> getModels() {
+        return models;
+    }
+
+    /**
+     * @param models the models to set
+     */
+    public void setModels(ArrayList<Typentity> models) {
+        this.models = models;
     }
 }
