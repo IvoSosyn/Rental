@@ -5,6 +5,7 @@
  */
 package cz.rental.admin.model;
 
+import cz.rental.aplikace.User;
 import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -77,7 +78,7 @@ public class ModelDetail implements Serializable {
     }
 
     public Boolean isEditable() {
-        boolean isEditable = user.getParam("SUPERVISOR", false) || user.getParam("EditAttribute", false);
+        boolean isEditable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         if (!(this.attribute instanceof Attribute)) {
             isEditable = false;
@@ -90,11 +91,11 @@ public class ModelDetail implements Serializable {
             isEditable = this.editabelAttrdecimal.contains(this.attribute.getAttrtype());
         }
         if (isEditable && uic.getId().equals("attrsystem")) {
-            isEditable = user.getParam("SUPERVISOR", false);
+            isEditable = user.getParam(User.SUPERVISOR, false);
         }
         // Systemove polozky muze editovat pouze SUPERVISOR
         if (isEditable && this.attribute.getAttrsystem() != null && this.attribute.getAttrsystem()) {
-            isEditable = user.getParam("SUPERVISOR", false);
+            isEditable = user.getParam(User.SUPERVISOR, false);
         }
 
         return isEditable;
@@ -145,5 +146,4 @@ public class ModelDetail implements Serializable {
     public void setAttribute(Attribute attribute) {
         this.attribute = attribute;
     }
-
 }

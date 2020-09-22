@@ -6,6 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.aplikace.Aplikace;
+import cz.rental.aplikace.User;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
@@ -74,6 +75,7 @@ public class ModelTable implements Serializable {
         newAttr.setAttrtype('C');
         newAttr.setAttrsize(BigInteger.valueOf(50));
         newAttr.setAttrdecimal(BigInteger.valueOf(0));
+        newAttr.setAttrsystem(false);
         newAttr.setNewEntity(true);
         this.getAttributes().add(newAttr);
         selectedAttrs = new ArrayList<>();
@@ -206,7 +208,7 @@ public class ModelTable implements Serializable {
      * @return uzivatel muze pridavat zaznamy
      */
     public boolean isAppendable() {
-        boolean isAppendable = user.getParam("SUPERVISOR", false) || user.getParam("AddAttribute", false);
+        boolean isAppendable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
         return (isAppendable);
     }
 
@@ -220,7 +222,7 @@ public class ModelTable implements Serializable {
     public boolean isPasteable() {
         boolean isPasteable = (this.copyAttrs != null && !this.copyAttrs.isEmpty());
         if (isPasteable) {
-            isPasteable = user.getParam("SUPERVISOR", false) || user.getParam("AddAttribute", false);
+            isPasteable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
         }
         return (isPasteable);
     }
@@ -233,7 +235,7 @@ public class ModelTable implements Serializable {
     public boolean isRemovable() {
         boolean isRemoveable = (this.selectedAttrs != null && !this.selectedAttrs.isEmpty());
         if (isRemoveable) {
-            isRemoveable = user.getParam("SUPERVISOR", false) || user.getParam("DelAttribute", false);
+            isRemoveable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
         }
         return (isRemoveable);
     }

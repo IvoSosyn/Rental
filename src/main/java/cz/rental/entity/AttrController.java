@@ -6,6 +6,7 @@
 package cz.rental.entity;
 
 import cz.rental.aplikace.Aplikace;
+import cz.rental.aplikace.User;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,6 +19,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
+import javax.inject.Inject;
 import javax.persistence.Query;
 
 /**
@@ -29,6 +31,9 @@ import javax.persistence.Query;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AttrController extends JpaController {
 
+    @Inject    
+    User user;
+    
     Query query = null;
 
     public AttrController() {
@@ -277,6 +282,7 @@ public class AttrController extends JpaController {
                 attrNew = (Attribute) attr.clone();
                 attrNew.setId(UUID.randomUUID());
                 attrNew.setIdtypentity(typEntityNew.getId());
+                attrNew.setAttrsystem(false);
                 this.create(attrNew);
 
             } catch (CloneNotSupportedException ex) {
@@ -292,7 +298,7 @@ public class AttrController extends JpaController {
      * @param idTypEntity - ID Typentity, jehoz Attribute se maji smazat
      */
     public void deleteAllTypentityId(UUID idTypEntity) {
-        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity");
+        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity"+(user.getParam(User.SUPERVISOR, false)?"":" AND NOT a.attrsystem"));
         this.query.setParameter("idTypEntity", idTypEntity);
         int deleted = this.query.executeUpdate();
         //System.out.println(" Delete from Attribute "+deleted);

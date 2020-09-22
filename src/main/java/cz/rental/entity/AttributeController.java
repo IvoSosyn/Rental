@@ -5,10 +5,12 @@
  */
 package cz.rental.entity;
 
+import cz.rental.aplikace.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -24,6 +26,9 @@ public class AttributeController extends JpaController {
     private EntityManager em;
     private Query query = null;
     private Typentity typentity = null;
+
+    @Inject
+    User user;
 
     public ArrayList<Attribute> getAttributeForTypentity(Typentity typentity) {
         this.typentity = typentity;
@@ -83,6 +88,7 @@ public class AttributeController extends JpaController {
             copyAttr.setId(UUID.randomUUID());
             copyAttr.setIdtypentity(id);
             copyAttr.setIdentita(null);
+            copyAttr.setAttrsystem(false);
             // Novou polozku Attribute ulozit do DB
             this.create(copyAttr);
         }
@@ -90,7 +96,7 @@ public class AttributeController extends JpaController {
 
     public void deleteAttrs(ArrayList<Attribute> selectedAttrs) throws Exception {
         for (Attribute selectedAttr : selectedAttrs) {
-            if (!selectedAttr.isNewEntity()) {
+            if (!selectedAttr.isNewEntity() && (user.getParam(User.SUPERVISOR, false) ? true : selectedAttr.getAttrsystem() != null && !selectedAttr.getAttrsystem())) {
                 this.destroy(selectedAttr);
             }
         }

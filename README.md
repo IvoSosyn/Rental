@@ -1,3 +1,7 @@
+# Rental #
+==========
+Webová aplikace k evideci a výpočtu nájemného.
+
 Transakce - tansakce je typu CONTAINER - řídí je WildFly, takže nelze použít lokální uživatelské transakce (BEAN)  trn.begin(), trn.commit(), trn.rollback()
 =========     WildFly sám vyhodí exception, pokud se transakce nepovede.  
 
@@ -9,6 +13,7 @@ WildFly - nutné změny
 - v konfiguraci "standalone.xml" zrušen řádek s poolem <datasource-class>org.postgresql.ds.PGSimpleDataSource</datasource-class> 
 - POZOR nelze uzavírat EntityManager.close() - to si vyhrazuje WildFly persistent manager
 
-# Rental
-Webová aplikace k evideci a výpočtu nájemného.
-
+DB PostgreSQL
+============
+Datumové položky jsou uloženy s TimeZone, pak se musí u každého JSF "f:convertDateTime" nastavit parametr timeZone="Europe/Prague":
+    <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />

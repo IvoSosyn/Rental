@@ -5,6 +5,7 @@
  */
 package cz.rental.admin.model;
 
+import cz.rental.aplikace.User;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -63,7 +64,6 @@ public class ModelTree implements Serializable {
         // System.out.println(" onNodeSelect(NodeSelectEvent event): typentity.getTypentity(): " + typentity.getTypentity());
     }
 
-
     /**
      * Vymaze <CODE>selectedNode</CODE> z DB a z TreeNode + vymaz vsech potomku
      * a jejich Typentity (ulozeno v TreeNode.getData() ) a Attribute + vymaz
@@ -87,6 +87,9 @@ public class ModelTree implements Serializable {
     private void deleteFromDb(TreeNode selectedNode) {
         try {
             Typentity typEntityDel = (Typentity) selectedNode.getData();
+            if (typEntityDel.getAttrsystem() != null && typEntityDel.getAttrsystem() && !user.getParam(User.SUPERVISOR, false)) {
+                return;
+            }
             this.attrController.deleteAllTypentityId(typEntityDel.getId());
             this.controller.destroy(typEntityDel);
             for (TreeNode treeNode : selectedNode.getChildren()) {
@@ -183,7 +186,7 @@ public class ModelTree implements Serializable {
      * @return uzivatel muze pridavat zaznamy
      */
     public boolean isAppendable() {
-        boolean isAppendable = user.getParam("SUPERVISOR", false) || user.getParam("AddTypentity", false);
+        boolean isAppendable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
         return (isAppendable);
     }
 
@@ -196,9 +199,9 @@ public class ModelTree implements Serializable {
     public boolean isEditable() {
         boolean isEditable = (this.typentity != null);
         if (isEditable) {
-            isEditable = user.getParam("SUPERVISOR", false);
+            isEditable = user.getParam(User.SUPERVISOR, false);
             if (!isEditable) {
-                isEditable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam("EditTypentity", false);
+                isEditable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
             }
         }
         return (isEditable);
@@ -212,9 +215,9 @@ public class ModelTree implements Serializable {
     public boolean isRemovable() {
         boolean isRemoveable = (this.typentity != null);
         if (isRemoveable) {
-            isRemoveable = user.getParam("SUPERVISOR", false);
+            isRemoveable = user.getParam(User.SUPERVISOR, false);
             if (!isRemoveable) {
-                isRemoveable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam("DelTypentity", false);
+                isRemoveable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
             }
         }
         return (isRemoveable);
@@ -287,6 +290,7 @@ public class ModelTree implements Serializable {
     private TreeNode pasteNode(TreeNode node, TreeNode nodeParent, int parentIndex) throws Exception {
         Typentity typEntityNew = controller.cloneTypentity((Typentity) node.getData());
         typEntityNew.setIdparent(((Typentity) nodeParent.getData()).getId());
+        typEntityNew.setAttrsystem(false);
         controller.create(typEntityNew);
         typEntityNew.setNewEntity(false);
         attrController.cloneAttribute((Typentity) node.getData(), typEntityNew);
@@ -381,5 +385,4 @@ public class ModelTree implements Serializable {
     public void setCopyNode(TreeNode copyNode) {
         this.copyNode = copyNode;
     }
-
 }
