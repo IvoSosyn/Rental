@@ -13,25 +13,25 @@
                         Detail položky
                     </f:facet>
        
-                    <p:outputLabel value="Pořadí:" for="poradi" />
+                    <p:outputLabel value="Pořadí:" for="@next" />
                     <p:inputNumber id="poradi" value="#{modelDetail.attribute.poradi}" placeholder="1 a více" required="true" minValue="1" requiredMessage="Povinná hodnota, minimálně 1" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="poradiMsg" event="blur" />
                     </p:inputNumber>
-                    <p:message id="poradiMsg" for="poradi" />
+                    <p:message id="poradiMsg" for="@previous" />
 
-                    <p:outputLabel value="Název:" for="attrname" />
+                    <p:outputLabel value="Název:" for="@next" />
                     <p:inputText id="attrname" value="#{modelDetail.attribute.attrname}" placeholder="2 znaky" required="true" requiredMessage="Povinná hodnota, název položky minimálně 2 znaky."  validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="attrnameMsg" event="blur" />
                     </p:inputText>
-                    <p:message  id="attrnameMsg" for="attrname" />
+                    <p:message  id="attrnameMsg" for="@previous" />
 
-                    <p:outputLabel value="Popis:" for="popis" />
+                    <p:outputLabel value="Popis:" for="@next" />
                     <p:inputText id="popis" value="#{modelDetail.attribute.popis}"  placeholder="...popis položky, který Vám ji více přiblíží ..."  validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="popisMsg" event="blur" />
                     </p:inputText>
-                    <p:message  id="popisMsg" for="popis" />
+                    <p:message  id="popisMsg" for="@previous" />
 
-                    <p:outputLabel value="Typ pole:" for="attrtype" />
+                    <p:outputLabel value="Typ pole:" for="@next" />
                     <p:selectOneMenu id="attrtype" value="#{modelDetail.attribute.attrtype}" required="true" style="width:125px"  validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
                         <f:selectItem itemLabel="Text" itemValue="C" />
                         <f:selectItem itemLabel="Číslo S desetinnýmy místy" itemValue="N" />
@@ -41,61 +41,61 @@
                         <f:selectItem itemLabel="Odkaz na číselník" itemValue="T" />
                         <p:ajax event="valueChange" listener="#{modelDetail.attrtypeChange}" update="attrtypeMsg attrsize attrdecimal"  />
                     </p:selectOneMenu>
-                    <p:message id="attrtypeMsg" for="attrtype"/>
+                    <p:message id="attrtypeMsg" for="@previous"/>
 
-                    <p:outputLabel value="Počet znaků:" for="attrsize" />
+                    <p:outputLabel value="Počet znaků:" for="@next" />
                     <p:spinner id="attrsize"  value="#{modelDetail.attribute.attrsize}" required="true" placeholder="1 ... 1000" min="1" max="1000" decimalPlaces="0" requiredMessage="Povinná hodnota, hodnota položky 1 ... 1000 ." validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="attrsizeMsg" event="blur" />
                     </p:spinner>
-                    <p:message id="attrsizeMsg" for="attrsize"/>
+                    <p:message id="attrsizeMsg" for="@previous"/>
 
-                    <p:outputLabel value="Počet desetinných míst:" for="attrdecimal" />
+                    <p:outputLabel value="Počet desetinných míst:" for="@next" />
                     <p:spinner id="attrdecimal" value="#{modelDetail.attribute.attrdecimal}" placeholder="0 ... 2"  min="0" max="2" decimalPlaces="0" requiredMessage="Povinná hodnota, hodnota položky 0 ... 2." validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}" >
                         <p:ajax update="attrdecimalMsg" event="blur"/>
                     </p:spinner>
-                    <p:message id="attrdecimalMsg" for="attrdecimal" />
+                    <p:message id="attrdecimalMsg" for="@previous" />
 
-                    <p:outputLabel value="Parser:" for="attrparser"/>
+                    <p:outputLabel value="Parser:" for="@next"/>
                     <p:inputTextarea id="attrparser" value="#{modelDetail.attribute.attrparser}" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="attrparserMsg" event="blur" />
                     </p:inputTextarea> 
-                    <p:message id="attrparserMsg" for="attrparser"/>
+                    <p:message id="attrparserMsg" for="@previous"/>
 
-                    <p:outputLabel value="Maska:" for="attrmask" />
+                    <p:outputLabel value="Maska:" for="@next" />
                     <p:inputText id="attrmask" value="#{modelDetail.attribute.attrmask}"  validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}" >
                         <p:ajax update="attrmaskMsg" event="blur" />
                     </p:inputText>
-                    <p:message  id="attrmaskMsg" for="attrmask"/>
+                    <p:message  id="attrmaskMsg" for="@previous"/>
 
-                    <p:outputLabel value="Script:" for="script" />
+                    <p:outputLabel value="Script:" for="@next" />
                     <p:inputTextarea id="script" value="#{modelDetail.attribute.script}"  validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}" >
                         <p:ajax update="scriptkMsg" event="blur" />
                     </p:inputTextarea>
-                    <p:message id="scriptkMsg" for="script"/>
+                    <p:message id="scriptkMsg" for="@previous"/>
 
-                    <p:outputLabel value="Číselník:" for="tables" />
+                    <p:outputLabel value="Číselník:" for="@next" />
                     <p:inputTextarea  id="tables" value="#{modelDetail.attribute.tables}"  validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}" >
                         <p:ajax update="tablesMsg" event="blur" />
                     </p:inputTextarea>
-                    <p:message id="tablesMsg" for="tables"/>
+                    <p:message id="tablesMsg" for="@previous"/>
 
-                    <p:outputLabel value="Platí Od:" for="platiod" />
+                    <p:outputLabel value="Platí Od:" for="@next" />
                     <p:datePicker id="platiod" value="#{modelDetail.attribute.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                         <p:ajax update="platiodMsg platido" event="blur" />
                     </p:datePicker>
-                    <p:message id="platiodMsg" for="platiod"/>
+                    <p:message id="platiodMsg" for="@previous"/>
 
-                    <p:outputLabel value="Do:" for="platido" />
+                    <p:outputLabel value="Do:" for="@next" />
                     <p:datePicker id="platido" value="#{modelDetail.attribute.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}" >
-                        <p:ajax update="platidoMsg" event="blur" />
+                        <p:ajax update="platidoMsg platiod" event="blur" />
                     </p:datePicker> 
-                    <p:message id="platidoMsg" for="platido"/>
+                    <p:message id="platidoMsg" for="@previous"/>
 
-                    <p:outputLabel value="Systém:" for="attrsystem" />
+                    <p:outputLabel value="Systém:" for="@next" />
                     <p:selectBooleanCheckbox id="attrsystem" value="#{modelDetail.attribute.attrsystem}" validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}" >
                         <p:ajax update="systemMsg" event="blur" />
                     </p:selectBooleanCheckbox>
-                    <p:message id="systemMsg" for="attrsystem"/>
+                    <p:message id="systemMsg" for="@previous"/>
 
                     <f:facet name="footer">                        
                         <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelTable.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isEditable()}" />

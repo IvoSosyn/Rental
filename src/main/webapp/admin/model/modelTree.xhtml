@@ -89,26 +89,34 @@
                         </f:facet>
 
                         <p:outputLabel value="Zkratka:" for="@next" />
-                        <p:inputText id="idTypentity" value="#{modelTree.typentity.typentity}" disabled="#{!modelTree.editable}" >
+                        <p:inputText id="idTypentity" value="#{modelTree.typentity.typentity}" disabled="#{!modelTree.editable}" required="true" >
                             <p:ajax update="idTypentityMsg" event="blur" />
                         </p:inputText>
                         <p:message id="idTypentityMsg" for="@previous"/>
 
                         <p:outputLabel value="Popis:"  for="@next"  />
-                        <p:inputText id="idPopis" value="#{modelTree.typentity.popis}" disabled="#{!modelTree.editable}"  > 
+                        <p:inputText id="idPopis" value="#{modelTree.typentity.popis}" disabled="#{!modelTree.editable}" required="true" > 
                             <p:ajax update="idPopisMsg" event="blur" />
                         </p:inputText>
                         <p:message id="idPopisMsg" for="@previous"/>
 
+                        <p:outputLabel value="Typ editace dat:" for="@next" />
+                        <p:selectOneMenu id="idEditor" value="#{modelTree.typentity.editor}"  style="width:125px"  validator="modelTreeValidator"  disabled="#{!modelTree.editable}"  >
+                            <f:selectItem itemLabel="Formulář" itemValue="F" />
+                            <f:selectItem itemLabel="Tabulka" itemValue="T" />
+                            <p:ajax event="valueChange" listener="#{modelTree.editorChange}" update="idEditorMsg"  />
+                        </p:selectOneMenu>
+                        <p:message id="idEditorMsg" for="@previous"/>
+
                         <p:outputLabel value="Platí Od:"  for="@next" />
-                        <p:datePicker id="platiOd" value="#{modelTree.typentity.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{!modelTree.editable}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí"  >
-                            <p:ajax update="platiOdMsg" event="blur" />
+                        <p:datePicker id="platiOd" value="#{modelTree.typentity.platiod}" validator="modelTreeValidator" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{!modelTree.editable}"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí"  >
+                            <p:ajax update="platiOdMsg platiDo" event="blur" />
                         </p:datePicker>
                         <p:message id="platiOdMsg" for="@previous"/>
 
                         <p:outputLabel value="Do:"  for="@next" />
-                        <p:datePicker id="platiDo" value="#{modelTree.typentity.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{!modelTree.editable}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" >
-                            <p:ajax update="platiDoMsg" event="blur" />
+                        <p:datePicker id="platiDo" value="#{modelTree.typentity.platido}" validator="modelTreeValidator" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" disabled="#{!modelTree.editable}" title=" Prázdné pole (neomezeně) nebo DO kdy položka platí" >
+                            <p:ajax update="platiDoMsg platiOd" event="blur" />
                         </p:datePicker>
                         <p:message id="platiDoMsg" for="@previous"/>
 

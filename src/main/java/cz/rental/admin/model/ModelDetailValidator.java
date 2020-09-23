@@ -7,8 +7,10 @@ package cz.rental.admin.model;
 
 import cz.rental.entity.Attribute;
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -27,7 +29,7 @@ import javax.naming.NamingException;
 public class ModelDetailValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
-    // @EJB
+    /// @Inject
     ModelDetail modelDetail;
     private Attribute attribute;
 
@@ -49,7 +51,7 @@ public class ModelDetailValidator implements Validator, Serializable {
             System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getAttrname()=" + modelDetail.getAttribute().getAttrname());
             System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPopis()=" + modelDetail.getAttribute().getPopis());
             System.out.println("*ModelDetailValidator.validate                                  value=" + value);
-            
+
         } catch (NamingException ex) {
             msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se najít modul 'ModelDetail'. ");
         }
@@ -86,7 +88,23 @@ public class ModelDetailValidator implements Validator, Serializable {
         } else if (component.getClientId().contains("script")) {
         } else if (component.getClientId().contains("tables")) {
         } else if (component.getClientId().contains("platiod")) {
+            ValueExpression vex
+                    = context.getApplication().getExpressionFactory()
+                            .createValueExpression(context.getELContext(),
+                                    "#{modelDetail.attribute.platido}", Date.class);
+            Date platiDo = (Date) vex.getValue(context.getELContext());
+            if (value!=null && platiDo != null && platiDo.before((Date) value)) {
+                attribute.setPlatido((Date) value);
+            }
         } else if (component.getClientId().contains("platido")) {
+            ValueExpression vex
+                    = context.getApplication().getExpressionFactory()
+                            .createValueExpression(context.getELContext(),
+                                    "#{modelDetail.attribute.platiod}", Date.class);
+            Date platiOd = (Date) vex.getValue(context.getELContext());
+            if (value!=null && platiOd != null && platiOd.after((Date) value)) {
+                attribute.setPlatiod((Date) value);
+            }
         }
         // Vyhodit chybu, pokud je testovana polozka chybna
         if (msg != null) {

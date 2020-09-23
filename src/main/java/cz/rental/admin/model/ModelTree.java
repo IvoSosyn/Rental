@@ -65,8 +65,9 @@ public class ModelTree implements Serializable {
     }
 
     /**
-     * Metoda je volana pri udalosti "select" v SelectOneMenu komponente
-     * TO-DO: zalozeni nove sablony-modelu doresit
+     * Metoda je volana pri udalosti "select" v SelectOneMenu komponente TO-DO:
+     * zalozeni nove sablony-modelu doresit
+     *
      * @param event
      */
     public void onModelSelect(SelectEvent event) {
@@ -165,6 +166,10 @@ public class ModelTree implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
 
+    }
+
+    public void editorChange(Object event) {
+        System.out.println("ModelTree.editorChange event"+event);
     }
 
     public void valueChange() {

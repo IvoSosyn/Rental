@@ -39,7 +39,7 @@ public class TypentityController extends JpaController {
      */
     public ArrayList<Typentity> getModelTypEntity() {
         Typentity modelTypentity;
-        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.typentity='MODELS'"));
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.typentity='CATALOG'"));
         ArrayList<Typentity> list = new ArrayList(this.getQuery().getResultList());
         if (!list.isEmpty()) {
             modelTypentity = list.get(0);
