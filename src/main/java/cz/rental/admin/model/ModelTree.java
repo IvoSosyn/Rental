@@ -59,9 +59,7 @@ public class ModelTree implements Serializable {
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        setModels(controller.getModelTypEntity());
         fillTreeNodes();
-
     }
 
     /**
@@ -75,15 +73,23 @@ public class ModelTree implements Serializable {
         fillTreeNodes();
     }
 
+    /**
+     * Hlavni metoda plnici "Tree" jednotlivými "TreeNode", kde v TreeNode.getData() je ulozena konkretni instance "Typentity" na zaklade rodicovskeho UUID "Typentity.idparent"
+     */
     public void fillTreeNodes() {
         if (this.typentityRoot == null) {
-            models = controller.getModelTypEntity();
+            this.models = controller.getCatalogTypEntity();
+            if (user.getParam(User.SUPERVISOR, false)) {
+                boolean added = this.models.addAll(controller.getRootTypEntity());
+                
+            }
             if (!models.isEmpty()) {
                 // TO-DO: dodelat vyber nastaveneho modelu podle naposledy vybraneho nebo jakou ma uzivatel firmu
                 this.typentityRoot = models.get(0);
             }
         }
         setRoot(controller.fillTreeNodes(this.typentityRoot));
+        modelTable.onNodeUnselect(null);
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -169,7 +175,7 @@ public class ModelTree implements Serializable {
     }
 
     public void editorChange(Object event) {
-        System.out.println("ModelTree.editorChange event"+event);
+        System.out.println("ModelTree.editorChange event" + event);
     }
 
     public void valueChange() {
@@ -210,6 +216,18 @@ public class ModelTree implements Serializable {
         System.out.println(" get 'fieldValue' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fieldValue"));
         System.out.println(" get 'typEntity' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity"));
 
+    }
+
+    /**
+     * Metoda testuje, zda-li ma uzivatel pravo vybrat model-sablonu SUPERVISOR
+     * nevybira, tam ma k dispozici vsechny uzly od nejvyssiho, kde je
+     * Typentity.idparent==null
+     *
+     * @return true|false uzivatel muze vybrat model-sablonu
+     */
+    public boolean isSelectableModel() {
+        boolean isSelectableModel = true;
+        return isSelectableModel;
     }
 
     /**

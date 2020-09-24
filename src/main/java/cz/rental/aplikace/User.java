@@ -22,6 +22,7 @@ import javax.servlet.ServletContext;
 public class User {
 
     public final static String SUPERVISOR = "SUPERVISOR";
+    public final static String ACCOUNT_EDIT = "ACCOUNT_EDIT";
     public final static String MODEL_EDIT = "MODEL_EDIT";
 
     @Inject
@@ -71,7 +72,7 @@ public class User {
             // Dohledat v DB
             booleanValue = true;
         }
-                // Uzivatel ma prava editovat "model" - sablony
+        // Uzivatel ma prava editovat "model" - sablony
         if (paramName.toUpperCase().contains(User.MODEL_EDIT)) {
             // Dohledat v DB
             booleanValue = false;
@@ -92,9 +93,10 @@ public class User {
         String stringValue = defaultValue;
         return stringValue;
     }
+
     /**
-     * Metoda vrati numerickou=double hodnotu pojmenovaneho parametru nabo defaultni
-     * hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
+     * Metoda vrati numerickou=double hodnotu pojmenovaneho parametru nabo
+     * defaultni hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
      *
      * @param paramName - jmeno pozadovaneho parametru
      * @param defaultValue - defaultni hodnota k navraceni, pokud parametr
@@ -105,9 +107,10 @@ public class User {
         double doubleValue = defaultValue;
         return doubleValue;
     }
+
     /**
-     * Metoda vrati datum pojmenovaneho parametru nabo defaultni
-     * hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
+     * Metoda vrati datum pojmenovaneho parametru nabo defaultni hodnotu, pokud
+     * neexistuje v DB nebo neni jeste nastaven
      *
      * @param paramName - jmeno pozadovaneho parametru
      * @param defaultValue - defaultni hodnota k navraceni, pokud parametr
@@ -119,4 +122,3 @@ public class User {
         return dateValue;
     }
 }
-

@@ -5,7 +5,7 @@
  */
 package cz.rental.admin.model;
 
-import cz.rental.aplikace.Aplikace;
+import cz.rental.utils.Aplikace;
 import cz.rental.aplikace.User;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
@@ -79,7 +79,7 @@ public class ModelTable implements Serializable {
         newAttr.setNewEntity(true);
         this.getAttributes().add(newAttr);
         selectedAttrs = new ArrayList<>();
-//        modelDetail.setAttribute(this.selectedAttr);
+        modelDetail.setAttribute(this.selectedAttr);
     }
 
     public void onNodeSelect(NodeSelectEvent event) {

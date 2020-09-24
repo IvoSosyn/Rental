@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Nájmy a pronájmy nemovitostí</title>       
+    </h:head>
+    <h:body>
+        <!--
+        <ui:composition template = "/templates/templateMain.xhtml" />	
+        ?faces-redirect=true
+        -->
+        <h:form id="idMainForm" >
+            <p:selectOneMenu id="mainSOM" value="#{main.selectedMainPage}" required="true" style="width:125px" >
+                <f:selectItem itemLabel="Main 1." itemValue="mainPage1" />
+                <f:selectItem itemLabel="Main 2." itemValue="mainPage2" />
+                <p:ajax event="valueChange" listener="#{main.mainPage()}" update=":idMainPage"  />
+            </p:selectOneMenu>
+        </h:form>
+        <h:panelGroup id="idMainPage" layout="block">
+            <ui:include id="idMainPage" src="#{main.mainPage()}" />
+        </h:panelGroup>
+    </h:body>  
+</html>
+

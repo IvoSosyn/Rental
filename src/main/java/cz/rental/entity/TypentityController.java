@@ -5,7 +5,7 @@
  */
 package cz.rental.entity;
 
-import cz.rental.aplikace.Aplikace;
+import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,10 +34,23 @@ public class TypentityController extends JpaController {
     private Query query = null;
 
     /**
-     *  Najde vsechny potomky katalogu tj. vsechny modely(sablony)
+     * Najde nejvyssi-"root" prvek (Typentity.idparent==null) celeho stromu
+     * zavislosti Typentity
+     *
+     * @return pole s prave 1 nejvyssim "root" prvkem
+     */
+    public ArrayList<Typentity> getRootTypEntity() {
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL"));
+        ArrayList<Typentity> list = new ArrayList(this.getQuery().getResultList());
+        return list;
+    }
+
+    /**
+     * Najde vsechny potomky katalogu tj. vsechny modely(sablony)
+     *
      * @return
      */
-    public ArrayList<Typentity> getModelTypEntity() {
+    public ArrayList<Typentity> getCatalogTypEntity() {
         Typentity modelTypentity;
         this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.typentity='CATALOG'"));
         ArrayList<Typentity> list = new ArrayList(this.getQuery().getResultList());
@@ -50,6 +63,16 @@ public class TypentityController extends JpaController {
         return list;
     }
 
+    /**
+     * Metoda vygeneruje "Tree" zavisloti a naplni jednotlive "TreeNode" datovou
+     * hodnotou "Typentity", provaze je mezi sebou=parent<>child na zaklade
+     * definice z DB
+     *
+     * @param typEntityRoot - nejvyssi vybrany Typentity, od ktereho se zacne
+     * plnit "Tree", nemusi to byt nutne "Root", muze to zacit z kterekoliv
+     * vetve
+     * @return strom slozeny z "TreeNode" s hodnotami "TypEntity"
+     */
     public TreeNode fillTreeNodes(Typentity typEntityRoot) {
         TreeNode root = new DefaultTreeNode("Root", null);
         this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent"));

@@ -5,7 +5,7 @@
  */
 package cz.rental.entity;
 
-import cz.rental.aplikace.Aplikace;
+import cz.rental.utils.Aplikace;
 import cz.rental.aplikace.User;
 import java.util.ArrayList;
 import java.util.Calendar;

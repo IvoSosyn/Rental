@@ -19,7 +19,7 @@
                     <p:panelGrid columns="1">
                         <f:facet name="header">                            
                             <p:outputLabel for="@next" value="Modely(šablony) : " />
-                            <p:selectOneMenu id="selectOneMenuModels" value="#{modelTree.typentityRoot}" converter="typentityConvertet" effect="fade">
+                            <p:selectOneMenu id="selectOneMenuModels" value="#{modelTree.typentityRoot}" converter="typentityConvertet" effect="fade" disabled="#{!modelTree.selectableModel}">
                                 <p:ajax event="itemSelect" listener="#{modelTree.onModelSelect}" update=":formModelTable :formModelDetail :formModelTree:modelTree :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:editReports :formModelTree:messages" >
                                     <f:attribute name="model" value="#{model}" />
                                 </p:ajax>                                    
