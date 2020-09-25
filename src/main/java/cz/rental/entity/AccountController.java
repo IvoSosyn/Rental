@@ -169,6 +169,7 @@ public class AccountController extends JpaController {
             attribute = new Attribute();
             attribute.setId(UUID.randomUUID());
             attribute.setPoradi(5);
+            attribute.setIdtypentity(entita.getIdtypentity().getId());
             attribute.setAttrname(attrname);
             attribute.setAttrtype('N');
             if (value instanceof String) {
