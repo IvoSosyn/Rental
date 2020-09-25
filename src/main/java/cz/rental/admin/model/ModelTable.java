@@ -64,6 +64,9 @@ public class ModelTable implements Serializable {
      * @param typentity
      */
     public void loadAttributesForTypentity(Typentity typentity) {
+        if (typentity==null) {
+            return;
+        }
         this.setTypentity(typentity);
         setAttributes(controller.getAttributeForTypentity(this.getTypentity()));
         int poradi = ModelTable.COUNT_ATTRIBUTE_NEW + (this.getAttributes().isEmpty() ? 0 : this.getAttributes().get(this.getAttributes().size() - 1).getPoradi());

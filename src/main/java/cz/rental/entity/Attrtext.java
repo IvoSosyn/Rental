@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 
@@ -45,6 +46,10 @@ public class Attrtext extends EntitySuperClassNajem implements Serializable {
     @JoinColumn(name = "idattribute", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Attribute idattribute;
+    
+    @Size(max = 2048)
+    @Column(length = 2048)
+    private String text;
 
     private Integer edit;
 
@@ -85,6 +90,20 @@ public class Attrtext extends EntitySuperClassNajem implements Serializable {
     @Override
     public String toString() {
         return "entity.Attrtext[ id=" + this.getId() + " ]";
+    }
+
+    /**
+     * @return the text
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * @param text the text to set
+     */
+    public void setText(String text) {
+        this.text = text;
     }
 
 }

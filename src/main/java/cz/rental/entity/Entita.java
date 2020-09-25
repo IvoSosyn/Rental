@@ -38,8 +38,7 @@ public class Entita extends EntitySuperClassNajem implements Serializable {
     @Basic(optional = false)
     @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
     @Convert("uuidConverter")
-    @NotNull
-    @Column(nullable = false, columnDefinition = "UUID")
+    @Column(nullable = true, columnDefinition = "UUID")
     private UUID idparent;
 
     @JoinColumn(name = "idtypentity", referencedColumnName = "id", nullable = false)

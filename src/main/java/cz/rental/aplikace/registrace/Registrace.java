@@ -5,13 +5,14 @@
  */
 package cz.rental.aplikace.registrace;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.PrimeFaces;
+import org.primefaces.context.PrimeFacesContext;
 
 /**
  *
@@ -21,9 +22,10 @@ import org.primefaces.PrimeFaces;
 @Stateless
 public class Registrace {
 
+
     @Inject
     private Account account;
-    
+
     private static final String XHTML_REGISTRACE_FILE = "/aplikace/registrace/regStep";
     private int selectedStep = 0;
 
@@ -55,7 +57,8 @@ public class Registrace {
     }
 
     public boolean isBackEnable() {
-        boolean isEnable = this.getSelectedStep() > 0;
+        boolean isEnable = this.getSelectedStep() > 0 && !FacesContext.getCurrentInstance().isValidationFailed();
+        FacesContext.getCurrentInstance().isValidationFailed();
         return isEnable;
     }
 
@@ -72,7 +75,8 @@ public class Registrace {
     }
 
     public boolean isNextEnable() {
-        boolean isEnable = true;
+        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed();;
+        FacesContext.getCurrentInstance().isValidationFailed();
         return isEnable;
     }
 
@@ -86,6 +90,18 @@ public class Registrace {
         if (nextRegPanel && this.getSelectedStep() < 3) {
             this.setSelectedStep(this.getSelectedStep() + 1);
         }
+    }
+
+    public String createAccount() {
+        try {
+            account.saveAccount();
+        } catch (Exception ex) {
+            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
+        }
+        createAccountDir();
+        createAccountHTML();
+        return "/admin/model/model.xhtml";
     }
 
     /**
@@ -115,29 +131,18 @@ public class Registrace {
     public void setAccount(Account account) {
         this.account = account;
     }
-    
-    
-    
-    
-    
-    
-    public void changePassword() {
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/password.xhtml", options, null);
-        System.out.println("PrimeFaces.current().dialog().openDynamic");
-        
+
+    private void saveAccount() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void closePassword(String password) {
-        PrimeFaces.current().dialog().closeDynamic(password);
-        System.out.println("PrimeFaces.current().dialog().closeDynamic");
+    private void createAccountDir() {
+    //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void newPassword(Object event) {
-        PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, "What we do in life", "Echoes in eternity."));
+    private void createAccountHTML() {
+      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
-    
-    
 }
