@@ -52,13 +52,12 @@ public class Registrace {
         this.setSelectedStep(seletedStep);
     }
 
-    public String regPanel() {
+    public String includeRegPanel() {
         return XHTML_REGISTRACE_FILE + getSelectedStep() + ".xhtml";
     }
 
     public boolean isBackEnable() {
-        boolean isEnable = this.getSelectedStep() > 0 && !FacesContext.getCurrentInstance().isValidationFailed();
-        FacesContext.getCurrentInstance().isValidationFailed();
+        boolean isEnable = this.getSelectedStep() > 0 && !FacesContext.getCurrentInstance().isValidationFailed();        
         return isEnable;
     }
 
@@ -75,8 +74,7 @@ public class Registrace {
     }
 
     public boolean isNextEnable() {
-        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed();;
-        FacesContext.getCurrentInstance().isValidationFailed();
+        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed() && !this.account.getCustomerEmail().isEmpty();
         return isEnable;
     }
 
@@ -130,10 +128,6 @@ public class Registrace {
      */
     public void setAccount(Account account) {
         this.account = account;
-    }
-
-    private void saveAccount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private void createAccountDir() {
