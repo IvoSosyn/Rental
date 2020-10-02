@@ -59,7 +59,7 @@
         </h:form>
         <p>.</p>
         <h:panelGroup id="idRegPanel">
-            <ui:include src="#{registrace.regPanel()}" />
+            <ui:include src="#{registrace.includeRegPanel()}" />
         </h:panelGroup>
         <h:form id="idNavigationForm" >
             <p:commandButton value="Zpět" actionListener="#{registrace.backRegPanel()}" disabled="#{!registrace.isBackEnable()}" rendered="#{registrace.isBackRendered()}" update="@all"/>

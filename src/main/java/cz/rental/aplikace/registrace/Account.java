@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.faces.application.FacesMessage;
 
 /**
  *
@@ -48,6 +47,8 @@ public class Account {
     private int customerPin = 0;
     private String customerAddress = "";
     private Typentity customerModel = null;
+    private String customerDir = null;
+    
 
     public Account() {
     }
@@ -273,5 +274,19 @@ public class Account {
      */
     public void setCustomerPasswordHelp(String customerPasswordHelp) {
         this.customerPasswordHelp = customerPasswordHelp;
+    }
+
+    /**
+     * @return the customerDir
+     */
+    public String getCustomerDir() {
+        return customerDir;
+    }
+
+    /**
+     * @param customerDir the customerDir to set
+     */
+    public void setCustomerDir(String customerDir) {
+        this.customerDir = customerDir;
     }
 }

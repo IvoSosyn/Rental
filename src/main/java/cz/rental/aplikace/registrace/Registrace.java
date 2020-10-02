@@ -5,8 +5,16 @@
  */
 package cz.rental.aplikace.registrace;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.Init;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -22,12 +30,16 @@ import org.primefaces.context.PrimeFacesContext;
 @Stateless
 public class Registrace {
 
-
     @Inject
     private Account account;
 
     private static final String XHTML_REGISTRACE_FILE = "/aplikace/registrace/regStep";
     private int selectedStep = 0;
+
+    @PostConstruct
+    public void init() {
+
+    }
 
     /**
      * Metoda rozhoduje, zda-li je nebo neni mozne vybrat "<p:MenuItem>" ze
@@ -57,7 +69,7 @@ public class Registrace {
     }
 
     public boolean isBackEnable() {
-        boolean isEnable = this.getSelectedStep() > 0 && !FacesContext.getCurrentInstance().isValidationFailed();        
+        boolean isEnable = this.getSelectedStep() > 0 && !FacesContext.getCurrentInstance().isValidationFailed();
         return isEnable;
     }
 
@@ -97,9 +109,15 @@ public class Registrace {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
         }
-        createAccountDir();
+        try {
+            createAccountDir();
+        } catch (IOException ex) {
+            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage()));
+        }
         createAccountHTML();
-        return "/admin/model/model.xhtml";
+        //return "/admin/model/model.xhtml";
+        return (account.getCustomerDir()+File.separator+"index.xhtml").replace('\\', '/');
     }
 
     /**
@@ -130,13 +148,58 @@ public class Registrace {
         this.account = account;
     }
 
-    private void createAccountDir() {
-    //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void createAccountDir() throws IOException {
+        if (this.account.getCustomerID() == null) {
+            return;
+        }
+        URL url = Registrace.class.getResource("");
+        int web_inf = url.getPath().indexOf("WEB-INF");
+        String rootDirName = "c:\\Program Files\\wildfly-20.0.0.Final\\standalone\\deployments\\Rental-Develop.war\\customers" + File.separator + this.account.getCustomerID().toString();
+        account.setCustomerDir(rootDirName);
+
+        File rootDir = new File(rootDirName);
+        rootDir.mkdir();
+
+//        rootDirName += File.separator + "html";
+//        rootDir = new File(rootDirName);
+//        rootDir.mkdir();
+        rootDirName +=  File.separator+"index.xhtml";
+        rootDir = new File(rootDirName);
+        rootDir.createNewFile();
+
     }
 
     private void createAccountHTML() {
-      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(account.getCustomerDir() + File.separator+  "index.xhtml");
+            pw.write("");
+            pw.write("<?xml version='1.0' encoding='UTF-8' ?>");
+            pw.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+            pw.write("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
+            pw.write("xmlns:ui=\"http://xmlns.jcp.org/jsf/facelets\"");
+            pw.write("xmlns:h=\"http://xmlns.jcp.org/jsf/html\"");
+            pw.write("xmlns:f=\"http://xmlns.jcp.org/jsf/core\"");
+            pw.write("xmlns:p=\"http://primefaces.org/ui\">");
+//            pw.write("<ui:composition>");
+            pw.write("<h:form  id=\"idCustomer\" >");
+            pw.write("<p:panelGrid columns=\"3\" >");
+            pw.write("<f:facet name=\"header\">");
+            pw.write("<p>Údaje o platbě</p>");
+            pw.write("</f:facet>");
+            pw.write("<div> Není zpřístupněno, po dobu testování je přístup zdarma.</div>");
+            pw.write("</p:panelGrid>");
+            pw.write("</h:form>");
+//            pw.write("</ui:composition>	");
 
+            pw.write("</html>");
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (pw != null) {
+            pw.close();
+        }
     }
 
 }
