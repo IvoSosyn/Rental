@@ -42,7 +42,7 @@ public class Account {
     @Inject
     private cz.rental.aplikace.User user;
 
-    final static String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "accounts";
+    final static String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
 
     private UUID customerID = null;
     private String customerName = "";
@@ -60,6 +60,14 @@ public class Account {
 
     @PostConstruct
     public void init() {
+        // Nacist root dir pro soubory uctu, pokud je zadan ve WEB.XML  napr. na Linuxu
+        //  <context-param>
+        //      <param-name>cz.rental.accounts.root.dir</param-name>
+        //      <param-value>/home/Rental/Accounts</param-value>
+        //  </context-param>
+        if (FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir") != null) {
+            this.accountsRootDir = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir");
+        }
         accountDir = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
 //        Set<String> setRes=FacesContext.getCurrentInstance().getExternalContext().getResourcePaths("/account");
 //        System.out.println(" Account.accountDir="+accountDir);
@@ -119,7 +127,9 @@ public class Account {
     }
 
     /**
-     *  Vytvori sadu adresaru pro ucet v preddefinovanem ulozisti a hlavni soubor uctu 'index.xhtml'
+     * Vytvori sadu adresaru pro ucet v preddefinovanem ulozisti a hlavni soubor
+     * uctu 'index.xhtml'
+     *
      * @throws IOException
      * @throws Exception
      */
@@ -145,8 +155,9 @@ public class Account {
     }
 
     /**
-     * Naplni hlavni soubor uctu 'index.xhtml' daty
-     * TO-DO: Melo by to jit do samostatneho souboru s osetrenim, co bylo vytvoreno a v jake verzi
+     * Naplni hlavni soubor uctu 'index.xhtml' daty TO-DO: Melo by to jit do
+     * samostatneho souboru s osetrenim, co bylo vytvoreno a v jake verzi
+     *
      * @throws FileNotFoundException
      */
     public void createAccountHTML() throws FileNotFoundException {
