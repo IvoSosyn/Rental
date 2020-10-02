@@ -10,11 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.Init;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -117,7 +115,7 @@ public class Registrace {
         }
         createAccountHTML();
         //return "/admin/model/model.xhtml";
-        return (account.getCustomerDir()+File.separator+"index.xhtml").replace('\\', '/');
+        return "/customers/22ec3d58-67ce-4e6a-a692-c6d167f47528/index.xhtml";
     }
 
     /**
