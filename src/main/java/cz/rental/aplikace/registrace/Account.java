@@ -9,6 +9,11 @@ import cz.rental.aplikace.User;
 import cz.rental.entity.AccountController;
 import cz.rental.entity.Typentity;
 import cz.rental.utils.SHA512;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -20,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.annotation.PostConstruct;
 
 /**
  *
@@ -36,6 +42,8 @@ public class Account {
     @Inject
     private cz.rental.aplikace.User user;
 
+    final static String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "accounts";
+
     private UUID customerID = null;
     private String customerName = "";
     private String customerEmail = "";
@@ -47,8 +55,19 @@ public class Account {
     private int customerPin = 0;
     private String customerAddress = "";
     private Typentity customerModel = null;
-    private String customerDir = null;
-    
+    private String accountsRootDir = Account.ACCOUNT_ROOT_DIR;
+    private String accountDir = null;
+
+    @PostConstruct
+    public void init() {
+        accountDir = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
+//        Set<String> setRes=FacesContext.getCurrentInstance().getExternalContext().getResourcePaths("/account");
+//        System.out.println(" Account.accountDir="+accountDir);
+//        for (String setRe : setRes) {
+//            System.out.println(" /account: resources="+setRe);
+//            
+//        }
+    }
 
     public Account() {
     }
@@ -87,11 +106,86 @@ public class Account {
         this.setCustomerPin(randomNum);
     }
 
+    /**
+     * Ulozi data Account do DB
+     *
+     * @throws Exception
+     */
     public void saveAccount() throws Exception {
-        if (this.customerID==null) {
-            this.customerID=UUID.randomUUID();
+        if (this.customerID == null) {
+            this.customerID = UUID.randomUUID();
         }
         controller.saveAccount(this);
+    }
+
+    /**
+     *  Vytvori sadu adresaru pro ucet v preddefinovanem ulozisti a hlavni soubor uctu 'index.xhtml'
+     * @throws IOException
+     * @throws Exception
+     */
+    public void createAccountDir() throws IOException, Exception {
+        if (this.getCustomerID() == null) {
+            return;
+        }
+        // Konstrukce cety k uctu uzivatele
+        File rootFile = new File(getRootAccountDirFor(null));
+        if (!rootFile.exists() && !rootFile.mkdirs()) {
+            throw new SQLException("Založení adresáře: '" + this.accountsRootDir + "' NEBYLO úspěšné, vytvořte ručně.");
+        }
+        // Vstupni soubor uctu
+        rootFile = new File(getRootAccountDirFor("index.xhtml"));
+        if (!rootFile.exists() && !rootFile.createNewFile()) {
+            throw new SQLException("Založení vstupního souboru: '" + getRootAccountDirFor("index.xhtml") + "' NEBYLO úspěšné, vytvořte ručně.");
+        }
+        // Data uctu
+        rootFile = new File(getRootAccountDirFor("data"));
+        if (!rootFile.exists() && !rootFile.mkdirs()) {
+            throw new SQLException("Založení adresáře: '" + getRootAccountDirFor("data") + "' NEBYLO úspěšné, vytvořte ručně.");
+        }
+    }
+
+    /**
+     * Naplni hlavni soubor uctu 'index.xhtml' daty
+     * TO-DO: Melo by to jit do samostatneho souboru s osetrenim, co bylo vytvoreno a v jake verzi
+     * @throws FileNotFoundException
+     */
+    public void createAccountHTML() throws FileNotFoundException {
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(getRootAccountDirFor("index.xhtml"));
+            pw.println("");
+            pw.println("<?xml version='1.0' encoding='UTF-8' ?>");
+            pw.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+            pw.println("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
+            pw.println("xmlns:ui=\"http://xmlns.jcp.org/jsf/facelets\"");
+            pw.println("xmlns:h=\"http://xmlns.jcp.org/jsf/html\"");
+            pw.println("xmlns:f=\"http://xmlns.jcp.org/jsf/core\"");
+            pw.println("xmlns:p=\"http://primefaces.org/ui\">");
+//            pw.println("<ui:composition>");
+            pw.println("<h:form  id=\"idCustomer\" >");
+            pw.println("<p:panelGrid columns=\"3\" >");
+            pw.println("<f:facet name=\"header\">");
+            pw.println("<p>Účet ID=" + this.getCustomerID() + "</p>");
+            pw.println("</f:facet>");
+            pw.println("<div> Konfigurace dat účtu </div>");
+            pw.println("</p:panelGrid>");
+            pw.println("</h:form>");
+//            pw.println("</ui:composition>	");
+            pw.println("</html>");
+
+        } catch (FileNotFoundException ex) {
+            if (pw != null) {
+                pw.close();
+            }
+            throw ex;
+        }
+        if (pw != null) {
+            pw.close();
+        }
+    }
+
+    public String getRootAccountDirFor(String fileName) {
+        return this.accountsRootDir + File.separator + this.getCustomerID() + (fileName != null ? File.separator + fileName : "");
     }
 
     /**
@@ -277,16 +371,30 @@ public class Account {
     }
 
     /**
-     * @return the customerDir
+     * @return the accountDir
      */
-    public String getCustomerDir() {
-        return customerDir;
+    public String getAccountDir() {
+        return accountDir;
     }
 
     /**
-     * @param customerDir the customerDir to set
+     * @param accountDir the accountDir to set
      */
-    public void setCustomerDir(String customerDir) {
-        this.customerDir = customerDir;
+    public void setAccountDir(String accountDir) {
+        this.accountDir = accountDir;
+    }
+
+    /**
+     * @return the accountsRootDir
+     */
+    public String getAccountsRootDir() {
+        return accountsRootDir;
+    }
+
+    /**
+     * @param accountsRootDir the accountsRootDir to set
+     */
+    public void setAccountsRootDir(String accountsRootDir) {
+        this.accountsRootDir = accountsRootDir;
     }
 }

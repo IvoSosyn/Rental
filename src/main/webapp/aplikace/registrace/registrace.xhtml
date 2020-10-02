@@ -49,6 +49,7 @@
     </style>
     <h:body>
         <h1>Registrace</h1>
+        <p:growl  life="7000" />
         <h:form id="idStepForm" >
             <p:steps activeIndex="#{registrace.selectedStep}" readonly="false" styleClass="custom">
                 <p:menuitem value="Kontakt" ajax="true"  actionListener="#{registrace.changeRegistracniPanel(0)}" update="@all" disabled="#{!registrace.isRegistracniPanelEnable(0)}" />

@@ -8,8 +8,6 @@ package cz.rental.aplikace.registrace;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -101,21 +99,30 @@ public class Registrace {
     }
 
     public String createAccount() {
+        // Uloz registraci uctu
         try {
             account.saveAccount();
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
         }
+        // Zaloz adresare k uctu a vstupni 'index.xhtml'
         try {
-            createAccountDir();
-        } catch (IOException ex) {
+            account.createAccountDir();
+        } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage()));
         }
-        createAccountHTML();
+        // Napln XHTML soubory daty ze sablony
+        try {
+            account.createAccountHTML();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při plnění a konfiguraci souborů k účtu. Opakujte později.", ex.getMessage()));
+        }
         //return "/admin/model/model.xhtml";
-        return "/customers/22ec3d58-67ce-4e6a-a692-c6d167f47528/index.xhtml";
+        // Pri neuspechu vratit na Login.xhtml
+        return account.getAccountDir() + File.separator + "index.xhtml";
     }
 
     /**
@@ -145,59 +152,4 @@ public class Registrace {
     public void setAccount(Account account) {
         this.account = account;
     }
-
-    private void createAccountDir() throws IOException {
-        if (this.account.getCustomerID() == null) {
-            return;
-        }
-        URL url = Registrace.class.getResource("");
-        int web_inf = url.getPath().indexOf("WEB-INF");
-        String rootDirName = "c:\\Program Files\\wildfly-20.0.0.Final\\standalone\\deployments\\Rental-Develop.war\\customers" + File.separator + this.account.getCustomerID().toString();
-        account.setCustomerDir(rootDirName);
-
-        File rootDir = new File(rootDirName);
-        rootDir.mkdir();
-
-//        rootDirName += File.separator + "html";
-//        rootDir = new File(rootDirName);
-//        rootDir.mkdir();
-        rootDirName +=  File.separator+"index.xhtml";
-        rootDir = new File(rootDirName);
-        rootDir.createNewFile();
-
-    }
-
-    private void createAccountHTML() {
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(account.getCustomerDir() + File.separator+  "index.xhtml");
-            pw.write("");
-            pw.write("<?xml version='1.0' encoding='UTF-8' ?>");
-            pw.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-            pw.write("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
-            pw.write("xmlns:ui=\"http://xmlns.jcp.org/jsf/facelets\"");
-            pw.write("xmlns:h=\"http://xmlns.jcp.org/jsf/html\"");
-            pw.write("xmlns:f=\"http://xmlns.jcp.org/jsf/core\"");
-            pw.write("xmlns:p=\"http://primefaces.org/ui\">");
-//            pw.write("<ui:composition>");
-            pw.write("<h:form  id=\"idCustomer\" >");
-            pw.write("<p:panelGrid columns=\"3\" >");
-            pw.write("<f:facet name=\"header\">");
-            pw.write("<p>Údaje o platbě</p>");
-            pw.write("</f:facet>");
-            pw.write("<div> Není zpřístupněno, po dobu testování je přístup zdarma.</div>");
-            pw.write("</p:panelGrid>");
-            pw.write("</h:form>");
-//            pw.write("</ui:composition>	");
-
-            pw.write("</html>");
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (pw != null) {
-            pw.close();
-        }
-    }
-
 }
