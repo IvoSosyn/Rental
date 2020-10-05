@@ -152,6 +152,10 @@ public class Account {
         if (!rootFile.exists() && !rootFile.mkdirs()) {
             throw new SQLException("Založení adresáře: '" + getRootAccountDirFor("data") + "' NEBYLO úspěšné, vytvořte ručně.");
         }
+        rootFile = new File(getRootAccountDirFor("data", "data1", null, "data3"));
+        if (!rootFile.exists() && !rootFile.mkdirs()) {
+            throw new SQLException("Založení adresáře: '" + getRootAccountDirFor("data") + "' NEBYLO úspěšné, vytvořte ručně.");
+        }
     }
 
     /**
@@ -195,8 +199,23 @@ public class Account {
         }
     }
 
-    public String getRootAccountDirFor(String fileName) {
-        return this.accountsRootDir + File.separator + this.getCustomerID() + (fileName != null ? File.separator + fileName : "");
+    /**
+     *   Metoda vytvori nazev adresare a podaresare pozadovaneho uctu napr.:
+     *  "\Rental\Account\<UUID>\data"; "\Rental\Account\<UUID>\index.xhtml"
+     * 
+     * @param fileNames - matice nazvu podadresarui a souboru, ktere metoda prevede na retezec s oddelovacem <code>Files.separator</code>
+     * @return
+     */
+    public String getRootAccountDirFor(String... fileNames) {
+        StringBuilder sb = new StringBuilder(this.accountsRootDir).append(File.separator).append(this.getCustomerID());
+        if (fileNames != null && fileNames.length > 0) {
+            for (String fn : fileNames) {
+                if (fn != null) {
+                    sb.append(File.separator).append(fn.trim());
+                }
+            }
+        }
+        return sb.toString();
     }
 
     /**
