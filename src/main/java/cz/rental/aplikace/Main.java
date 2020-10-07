@@ -5,11 +5,9 @@
  */
 package cz.rental.aplikace;
 
-import cz.rental.admin.model.ModelTable;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
