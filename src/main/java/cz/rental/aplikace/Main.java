@@ -5,7 +5,16 @@
  */
 package cz.rental.aplikace;
 
+import cz.rental.admin.model.ModelTable;
+import cz.rental.entity.Attribute;
+import cz.rental.entity.Typentity;
+import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -14,26 +23,57 @@ import javax.inject.Named;
  */
 @Named(value = "main")
 @Stateless
-public class Main {
-    private String selectedMainPage="mainPage2";
-            
-    public String mainPage() {
-        return "/aplikace/"+selectedMainPage+".xhtml";
+public class Main implements Serializable {
+
+    static final long serialVersionUID = 42L;
+
+    static final int COUNT_ATTRIBUTE_NEW = 5;
+
+    private Typentity typentity = null;
+    private ArrayList<Attribute> attributes = new ArrayList<>();
+
+    @EJB
+    cz.rental.entity.AttributeController controller;
+    @EJB
+    cz.rental.entity.TypentityController typEntityController;
+    @Inject
+    cz.rental.aplikace.User user;
+
+    @PostConstruct
+    public void init() {
+        // Pouze pro testovani
+        for (Typentity tp : this.typEntityController.getRootTypEntity()) {
+            loadAttributesForTypentity(tp);
+        }
     }
+
+    /**
+     * Metoda nacte pro zadany "typentity" pole "attribute" a ulozi do pole
+     * attributes
+     *
+     * @param typentity
+     */
+    public void loadAttributesForTypentity(Typentity typentity) {
+        if (typentity == null) {
+            return;
+        }
+        this.typentity = typentity;
+        this.setAttributes(controller.getAttributeForTypentity(this.typentity));
+    }
+
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
     /**
-     * @return the selectedMainPage
+     * @return the attributes
      */
-    public String getSelectedMainPage() {
-        return selectedMainPage;
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
     }
 
     /**
-     * @param selectedMainPage the selectedMainPage to set
+     * @param attributes the attributes to set
      */
-    public void setSelectedMainPage(String selectedMainPage) {
-        this.selectedMainPage = selectedMainPage;
+    public void setAttributes(ArrayList<Attribute> attributes) {
+        this.attributes = attributes;
     }
 }

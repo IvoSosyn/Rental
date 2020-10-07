@@ -15,15 +15,25 @@
         ?faces-redirect=true
         -->
         <h:form id="idMainForm" >
-            <p:selectOneMenu id="mainSOM" value="#{main.selectedMainPage}" required="true" style="width:125px" >
-                <f:selectItem itemLabel="Main 1." itemValue="mainPage1" />
-                <f:selectItem itemLabel="Main 2." itemValue="mainPage2" />
-                <p:ajax event="valueChange" listener="#{main.mainPage()}" update=":idMainPage"  />
-            </p:selectOneMenu>
+            <p:dataTable   var="attribute" value="#{main.attributes}" editable="true" editMode="cell" widgetVar="cellAttribute" >
+                <p:column headerText="Hodnota" >
+                    <p:cellEditor rendered="#{attribute.attrname=='accountTel'}">
+                        <f:facet name="output"> <p:outputLabel value="#{attribute.attrname}" /> </f:facet>
+                        <f:facet name="input"> <p:inputText value="#{attribute.attrname}" style="width:96%" label="AttrType"/> </f:facet>
+                    </p:cellEditor>
+                    <p:cellEditor  rendered="#{attribute.attrname=='accountPassword'}" >
+                        <f:facet name="output"> <p:outputLabel value="#{attribute.attrtype}" /> </f:facet>
+                        <f:facet name="input"> <p:inputText value="#{attribute.attrtype}" style="width:96%" label="AttrType"/> </f:facet>
+                    </p:cellEditor>
+                    <p:cellEditor  rendered="#{attribute.attrname=='acountAddress'}">
+                        <f:facet name="output"> <p:selectBooleanCheckbox value="#{attribute.attrsystem}" /> </f:facet>
+                        <f:facet name="input"><p:selectBooleanCheckbox value="#{attribute.attrsystem}" /></f:facet>
+                    </p:cellEditor>                
+                    
+                </p:column>
+            </p:dataTable>
         </h:form>
-        <h:panelGroup id="idMainPage" layout="block">
-            <ui:include id="idMainPage" src="#{main.mainPage()}" />
-        </h:panelGroup>
+
     </h:body>  
 </html>
 
