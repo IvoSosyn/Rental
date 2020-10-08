@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.rental.aplikace;
+package cz.rental.aplikace.evidence;
 
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
@@ -19,9 +19,9 @@ import javax.inject.Named;
  *
  * @author ivo
  */
-@Named(value = "main")
+@Named(value = "evidence")
 @Stateless
-public class Main implements Serializable {
+public class Evidence implements Serializable {
 
     static final long serialVersionUID = 42L;
 
