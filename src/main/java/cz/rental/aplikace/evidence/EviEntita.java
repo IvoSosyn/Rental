@@ -6,6 +6,7 @@
 package cz.rental.aplikace.evidence;
 
 import cz.rental.entity.Attribute;
+import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,15 +20,18 @@ import javax.inject.Named;
  *
  * @author ivo
  */
-@Named(value = "evidence")
+@Named(value = "eviEntita")
 @Stateless
-public class Evidence implements Serializable {
+public class EviEntita implements Serializable {
 
     static final long serialVersionUID = 42L;
 
-    static final int COUNT_ATTRIBUTE_NEW = 5;
+    static final int COUNT_ENTITA_NEW = 5;
 
     private Typentity typentity = null;
+    private Entita entita = null;
+    private ArrayList<Typentity> typenties = new ArrayList<>();
+    private ArrayList<Entita> entities = new ArrayList<>();
     private ArrayList<Attribute> attributes = new ArrayList<>();
 
     @EJB
@@ -39,15 +43,6 @@ public class Evidence implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (user != null && user.getAccount() != null && user.getAccount().getCustomerModel() != null) {
-            loadAttributesForTypentity(user.getAccount().getCustomerModel());
-        } else {
-            // Pouze pro testovani
-            for (Typentity tp : this.typEntityController.getRootTypEntity()) {
-                loadAttributesForTypentity(tp);
-            }
-        }
-
     }
 
     /**
@@ -56,11 +51,11 @@ public class Evidence implements Serializable {
      *
      * @param typentity
      */
-    public void loadAttributesForTypentity(Typentity typentity) {
-        if (typentity == null) {
+    public void loadEntitaForTypentity(Entita entita) {
+        if (entita == null) {
             return;
         }
-        this.typentity = typentity;
+        this.entita = entita;
         this.setAttributes(controller.getAttributeForTypentity(this.typentity));
     }
 

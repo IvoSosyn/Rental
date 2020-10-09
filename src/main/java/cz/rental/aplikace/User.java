@@ -5,6 +5,7 @@
  */
 package cz.rental.aplikace;
 
+import cz.rental.aplikace.registrace.Account;
 import java.util.Date;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
@@ -27,12 +28,14 @@ public class User {
 
     @Inject
     private ServletContext context;
+    @Inject
+    private Account account;
 
 //    @Inject
 //    private HttpServletRequest httpRequest;
     boolean debugApp = false;
 
-    UUID user = null;
+    private UUID userId = null;
 
     /**
      * Inicializace matice prav uzivatele
@@ -120,5 +123,33 @@ public class User {
     public Date getParam(String paramName, Date defaultValue) {
         Date dateValue = defaultValue;
         return dateValue;
+    }
+
+    /**
+     * @return the account
+     */
+    public Account getAccount() {
+        return account;
+    }
+
+    /**
+     * @param account the account to set
+     */
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    /**
+     * @return the userId
+     */
+    public UUID getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }

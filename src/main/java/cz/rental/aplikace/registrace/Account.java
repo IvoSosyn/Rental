@@ -359,16 +359,16 @@ public class Account {
     }
 
     /**
-     * @return the user
+     * @return the instanci <code>User</code>
      */
     public cz.rental.aplikace.User getUser() {
         return user;
     }
 
     /**
-     * @param user the user to set
+     * @param user the instance <code>User</code> to set
      */
-    public void setUser(cz.rental.aplikace.User user) {
+    public void setUserId(cz.rental.aplikace.User user) {
         this.user = user;
     }
 
