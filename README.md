@@ -12,6 +12,8 @@ WildFly - nutné změny
 - module eclipse-persistence doplnen o <dependencies>...<module name="javax.ws.rs.api"/>...</dependencies> jinak chyba NoClaasDefinitionFound
 - v konfiguraci "standalone.xml" zrušen řádek s poolem <datasource-class>org.postgresql.ds.PGSimpleDataSource</datasource-class> 
 - POZOR nelze uzavírat EntityManager.close() - to si vyhrazuje WildFly persistent manager
+- málo paměti, v souboru "C:\Program Files\wildfly-20.0.0.Final\bin\standalone.conf.bat" nutné přidat paměť "-Xms1024m -Xmx2048m -XX:MetaspaceSize=128M -XX:MaxMetaspaceSize=512m" 
+  nebo v nastavení NetBeans>Services>WildFly Application Server>Properties>Platform>VM Options
 
 DB PostgreSQL
 ============

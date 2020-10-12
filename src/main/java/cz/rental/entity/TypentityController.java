@@ -5,6 +5,7 @@
  */
 package cz.rental.entity;
 
+import cz.rental.aplikace.User;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -32,6 +34,9 @@ public class TypentityController extends JpaController {
     @PersistenceContext(unitName = "PostgreSQLNajem")
     private EntityManager em;
     private Query query = null;
+
+    @Inject
+    User user;
 
     /**
      * Najde nejvyssi-"root" prvek (Typentity.idparent==null) celeho stromu

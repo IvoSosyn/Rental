@@ -12,7 +12,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -21,10 +26,12 @@ import javax.persistence.Query;
  * @author sosyn
  */
 @Stateless
+@TransactionManagement(CONTAINER)
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AttributeController extends JpaController {
 
     @PersistenceContext(unitName = "PostgreSQLNajem")
-    //private EntityManager em;
+    private EntityManager em;
     private Query query = null;
     private Typentity typentity = null;
 

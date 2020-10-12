@@ -38,9 +38,9 @@ public class Account {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @EJB
-    private AccountController controller;
+    private AccountController accController;
     @Inject
-    private cz.rental.aplikace.User user;
+    private User user;
 
     final static String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
 
@@ -51,7 +51,7 @@ public class Account {
     private String customerPassword = "";
     private String customerPasswordControl = "";
     private String customerPasswordHelp = "";
-    private String customerPasswordSHA512 = SHA512.hash512("");
+    private String customerPasswordSHA512 = "";
     private int customerPin = 0;
     private String customerAddress = "";
     private Typentity customerModel = null;
@@ -68,7 +68,8 @@ public class Account {
         if (FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir") != null) {
             this.accountsRootDir = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir");
         }
-        accountDir = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
+        this.accountDir = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
+        this.customerPasswordSHA512 = SHA512.hash512("");
 //        Set<String> setRes=FacesContext.getCurrentInstance().getExternalContext().getResourcePaths("/account");
 //        System.out.println(" Account.accountDir="+accountDir);
 //        for (String setRe : setRes) {
@@ -77,11 +78,8 @@ public class Account {
 //        }
     }
 
-    public Account() {
-    }
-
     public Boolean isEditable() {
-        boolean isEditable = getUser().getParam(User.SUPERVISOR, false) || getUser().getParam(cz.rental.aplikace.User.ACCOUNT_EDIT, false);
+        boolean isEditable = this.user.getParam(User.SUPERVISOR, false) || this.user.getParam(cz.rental.aplikace.User.ACCOUNT_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
 
         return isEditable;
@@ -123,7 +121,7 @@ public class Account {
         if (this.customerID == null) {
             this.customerID = UUID.randomUUID();
         }
-        controller.saveAccount(this);
+        accController.saveAccount(this);
     }
 
     /**
@@ -138,7 +136,7 @@ public class Account {
             return;
         }
         // Konstrukce cety k uctu uzivatele
-        File rootFile = new File(getRootAccountDirFor(null));
+        File rootFile = new File(getRootAccountDirFor((String) null));
         if (!rootFile.exists() && !rootFile.mkdirs()) {
             throw new SQLException("Založení adresáře: '" + this.accountsRootDir + "' NEBYLO úspěšné, vytvořte ručně.");
         }
@@ -200,10 +198,11 @@ public class Account {
     }
 
     /**
-     *   Metoda vytvori nazev adresare a podaresare pozadovaneho uctu napr.:
-     *  "\Rental\Account\<UUID>\data"; "\Rental\Account\<UUID>\index.xhtml"
-     * 
-     * @param fileNames - matice nazvu podadresarui a souboru, ktere metoda prevede na retezec s oddelovacem <code>Files.separator</code>
+     * Metoda vytvori nazev adresare a podaresare pozadovaneho uctu napr.:
+     * "\Rental\Account\[UUID]\data"; "\Rental\Account\[UUID]\index.xhtml"
+     *
+     * @param fileNames - matice nazvu podadresarui a souboru, ktere metoda
+     * prevede na retezec s oddelovacem <code>Files.separator</code>
      * @return
      */
     public String getRootAccountDirFor(String... fileNames) {
@@ -342,34 +341,6 @@ public class Account {
      */
     public void setCustomerTel(String customerTel) {
         this.customerTel = customerTel;
-    }
-
-    /**
-     * @return the controller
-     */
-    public cz.rental.entity.AccountController getController() {
-        return controller;
-    }
-
-    /**
-     * @param controller the controller to set
-     */
-    public void setController(AccountController controller) {
-        this.controller = controller;
-    }
-
-    /**
-     * @return the instanci <code>User</code>
-     */
-    public cz.rental.aplikace.User getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the instance <code>User</code> to set
-     */
-    public void setUserId(cz.rental.aplikace.User user) {
-        this.user = user;
     }
 
     /**

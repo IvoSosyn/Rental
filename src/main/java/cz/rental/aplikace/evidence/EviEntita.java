@@ -5,6 +5,8 @@
  */
 package cz.rental.aplikace.evidence;
 
+import cz.rental.aplikace.User;
+import cz.rental.aplikace.registrace.Account;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
@@ -39,47 +41,34 @@ public class EviEntita implements Serializable {
     @EJB
     cz.rental.entity.AttributeController attrController;
     @Inject
-    cz.rental.aplikace.registrace.Account account;
+    Account account;
     @Inject
-    cz.rental.aplikace.User user;
+    User user;
 
     private Entita parentEntita = null;
     private Typentity typentity = null;
     private ArrayList<Entita> entities = new ArrayList<>();
     private Entita selectedEntita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
-    private ArrayList<ColumnModel> columns = new ArrayList<>();
+    private ArrayList<String> columns = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        /**
-         * <ui:include src="/aplikace/evidence/evientita.xhtml"/>
-         *
-         *
-         * < f:facet name="header">
-         * <h:outputText value="#{eviEntita.getColumnHeader(entita, entitaColumn)}" />
-         * </f:facet>
-         * <h:outputText value="#{eviEntita.getColumnValue(entita, entitaColumn)}" />
-         *
-         */
 
-//        this.entitaColumns.add("Entita.Popis");
-//        this.entitaColumns.add("Entita.Platiod");
-//        this.entitaColumns.add("Entita.Platido");
-        this.columns.add(new ColumnModel("Entita.Popis", "Entita.Popis"));
-        this.columns.add(new ColumnModel("Entita.Platiod", "Entita.Platiod"));
-        this.columns.add(new ColumnModel("Entita.Platiod", "Entita.Platiod"));
+        this.columns.add("Entita.Popis");
+        this.columns.add("Entita.Platiod");
+        this.columns.add("Entita.Platido");
 
         this.typentity = new Typentity();
         this.typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
         //
-        account.setCustomerID(UUID.fromString("34416c9f-26f2-44d8-b01d-6be4d6868dba"));
-        account.setCustomerModel(this.typentity);
+//        account.setCustomerID(UUID.fromString("34416c9f-26f2-44d8-b01d-6be4d6868dba"));
+//        account.setCustomerModel(this.typentity);
         //
         this.parentEntita = new Entita();
-        this.parentEntita.setId(account.getCustomerID());
-        this.parentEntita.setIdtypentity(account.getCustomerModel());
-        loadEntities(this.parentEntita, account.getCustomerModel());
+        this.parentEntita.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
+        this.parentEntita.setIdtypentity(this.typentity);
+        loadEntities(this.parentEntita, this.typentity);
     }
 
     /**
@@ -96,9 +85,9 @@ public class EviEntita implements Serializable {
             return;
         }
         this.parentEntita = parent;
-        this.setTypentity(typentity);
-        this.setEntities(entitaController.getEntities(this.parentEntita));
-        this.setAttributes(attrController.getAttributeForTypentity(typentity));
+        this.typentity = typentity;
+        this.entities = entitaController.getEntities(this.parentEntita);
+        this.attributes = attrController.getAttributeForTypentity(typentity);
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
             Entita newEntita = new Entita();
@@ -107,6 +96,7 @@ public class EviEntita implements Serializable {
             newEntita.setIdtypentity(this.getTypentity());
             newEntita.setPopis(this.getTypentity().getPopis());
             newEntita.setNewEntity(true);
+            this.entities.add(newEntita);
         }
     }
 
@@ -304,14 +294,14 @@ public class EviEntita implements Serializable {
     /**
      * @return the entitaColumns
      */
-    public ArrayList<ColumnModel> getColumns() {
+    public ArrayList<String> getColumns() {
         return this.columns;
     }
 
     /**
      * @param columns the entitaColumns to set
      */
-    public void setColumns(ArrayList<ColumnModel> columns) {
+    public void setColumns(ArrayList<String> columns) {
         this.columns = columns;
     }
 

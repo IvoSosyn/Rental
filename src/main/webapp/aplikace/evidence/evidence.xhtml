@@ -11,24 +11,7 @@
             <ui:define name="contens">
                 <div class="ui-g">
                     <div>
-        <h:form id="idEntitaForm" >
-            <p:panelGrid columns="1">
-                <f:facet name="header">                            
-                    <p:outputLabel value="Tabulka entit:" />
-                </f:facet>
-                <p:dataTable id="idEntitaTbl" var="entita" value="#{eviEntita.entities}" widgetVar="entitaTable" >                    
-                    <p:column headerText="Id">
-                        <h:outputText value="#{entita.id}" />
-                    </p:column>
-                    <p:column headerText="IdParent">
-                        <h:outputText value="#{entita.idparent}" />
-                    </p:column>
-                    <p:column headerText="IdTypEntity">
-                        <h:outputText value="#{entita.idtypentity}" />
-                    </p:column>
-                </p:dataTable>
-            </p:panelGrid>
-        </h:form>
+                        <ui:include src="/aplikace/evidence/evientita.xhtml"/>
                     </div>
                 </div>
             </ui:define>

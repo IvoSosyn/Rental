@@ -17,15 +17,12 @@
                     <p:outputLabel value="Tabulka entit:" />
                 </f:facet>
                 <p:dataTable id="idEntitaTbl" var="entita" value="#{eviEntita.entities}" widgetVar="entitaTable" >                    
-                    <p:column headerText="Id">
-                        <h:outputText value="#{entita.id}" />
-                    </p:column>
-                    <p:column headerText="IdParent">
-                        <h:outputText value="#{entita.idparent}" />
-                    </p:column>
-                    <p:column headerText="IdTypEntity">
-                        <h:outputText value="#{entita.idtypentity}" />
-                    </p:column>
+                    <p:columns  value="#{eviEntita.columns}" var="column" >
+                        <f:facet name="header">
+                            <h:outputText value="#{eviEntita.getColumnHeader(entita, column)}" />
+                        </f:facet>
+                        <h:outputText value="#{eviEntita.getColumnValue(entita, column)}" />
+                    </p:columns>
                 </p:dataTable>
             </p:panelGrid>
         </h:form>
