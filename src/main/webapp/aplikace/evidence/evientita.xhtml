@@ -7,10 +7,10 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:body>
-        <ui:composition template = "/templates/templateMain.xhtml">	
-            <ui:define name="contens">
-                <div class="ui-g">
-                    <div>
+        <!--
+        <ui:composition template = "/templates/templateMain.xhtml" />	
+        ?faces-redirect=true
+        -->
         <h:form id="idEntitaForm" >
             <p:panelGrid columns="1">
                 <f:facet name="header">                            
@@ -29,10 +29,6 @@
                 </p:dataTable>
             </p:panelGrid>
         </h:form>
-                    </div>
-                </div>
-            </ui:define>
-        </ui:composition>
-    </h:body>
+    </h:body>  
 </html>
 

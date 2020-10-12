@@ -32,14 +32,8 @@ public class EviEntita implements Serializable {
 
     static final long serialVersionUID = 42L;
 
-    static final int COUNT_ENTITA_NEW = 5;
+    static final int COUNT_ENTITA_NEW = 1;
 
-    private Entita parent = null;
-    private Typentity typentity = null;
-    private ArrayList<Entita> entities = new ArrayList<>();
-    private Entita selectedEntita = null;
-    private ArrayList<Attribute> attributes = new ArrayList<>();
-    private ArrayList<String> columns = new ArrayList<>();
     @EJB
     cz.rental.entity.EntitaController entitaController;
     @EJB
@@ -49,22 +43,43 @@ public class EviEntita implements Serializable {
     @Inject
     cz.rental.aplikace.User user;
 
+    private Entita parentEntita = null;
+    private Typentity typentity = null;
+    private ArrayList<Entita> entities = new ArrayList<>();
+    private Entita selectedEntita = null;
+    private ArrayList<Attribute> attributes = new ArrayList<>();
+    private ArrayList<ColumnModel> columns = new ArrayList<>();
+
     @PostConstruct
     public void init() {
-        this.columns.add("Entita.Popis");
-        this.columns.add("Entita.Platiod");
-        this.columns.add("Entita.Platido");
-        //
+        /**
+         * <ui:include src="/aplikace/evidence/evientita.xhtml"/>
+         *
+         *
+         * < f:facet name="header">
+         * <h:outputText value="#{eviEntita.getColumnHeader(entita, entitaColumn)}" />
+         * </f:facet>
+         * <h:outputText value="#{eviEntita.getColumnValue(entita, entitaColumn)}" />
+         *
+         */
+
+//        this.entitaColumns.add("Entita.Popis");
+//        this.entitaColumns.add("Entita.Platiod");
+//        this.entitaColumns.add("Entita.Platido");
+        this.columns.add(new ColumnModel("Entita.Popis", "Entita.Popis"));
+        this.columns.add(new ColumnModel("Entita.Platiod", "Entita.Platiod"));
+        this.columns.add(new ColumnModel("Entita.Platiod", "Entita.Platiod"));
+
         this.typentity = new Typentity();
         this.typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
         //
         account.setCustomerID(UUID.fromString("34416c9f-26f2-44d8-b01d-6be4d6868dba"));
         account.setCustomerModel(this.typentity);
         //
-        this.parent = new Entita();
-        this.parent.setId(account.getCustomerID());
-        this.parent.setIdtypentity(account.getCustomerModel());
-        loadEntities(this.parent, account.getCustomerModel());
+        this.parentEntita = new Entita();
+        this.parentEntita.setId(account.getCustomerID());
+        this.parentEntita.setIdtypentity(account.getCustomerModel());
+        loadEntities(this.parentEntita, account.getCustomerModel());
     }
 
     /**
@@ -80,17 +95,19 @@ public class EviEntita implements Serializable {
         if (typentity == null || parent == null) {
             return;
         }
-        this.parent = parent;
+        this.parentEntita = parent;
         this.setTypentity(typentity);
-        this.setEntities(entitaController.getEntities(this.parent));
+        this.setEntities(entitaController.getEntities(this.parentEntita));
         this.setAttributes(attrController.getAttributeForTypentity(typentity));
-        // Nova Entita
-        Entita newEntita = new Entita();
-        newEntita.setId(UUID.randomUUID());
-        newEntita.setIdparent(parent.getId());
-        newEntita.setIdtypentity(this.getTypentity());
-        newEntita.setPopis(this.getTypentity().getPopis());
-        newEntita.setNewEntity(true);
+        for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
+            // Nova Entita
+            Entita newEntita = new Entita();
+            newEntita.setId(UUID.randomUUID());
+            newEntita.setIdparent(parent.getId());
+            newEntita.setIdtypentity(this.getTypentity());
+            newEntita.setPopis(this.getTypentity().getPopis());
+            newEntita.setNewEntity(true);
+        }
     }
 
     /**
@@ -285,17 +302,36 @@ public class EviEntita implements Serializable {
     }
 
     /**
-     * @return the columns
+     * @return the entitaColumns
      */
-    public ArrayList<String> getColumns() {
-        return columns;
+    public ArrayList<ColumnModel> getColumns() {
+        return this.columns;
     }
 
     /**
-     * @param columns the columns to set
+     * @param columns the entitaColumns to set
      */
-    public void setColumns(ArrayList<String> columns) {
+    public void setColumns(ArrayList<ColumnModel> columns) {
         this.columns = columns;
+    }
+
+    static public class ColumnModel implements Serializable {
+
+        private String header;
+        private String property;
+
+        public ColumnModel(String header, String property) {
+            this.header = header;
+            this.property = property;
+        }
+
+        public String getHeader() {
+            return header;
+        }
+
+        public String getProperty() {
+            return property;
+        }
     }
 
 }

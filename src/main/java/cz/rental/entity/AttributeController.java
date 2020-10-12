@@ -6,12 +6,13 @@
 package cz.rental.entity;
 
 import cz.rental.aplikace.User;
+import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -23,7 +24,7 @@ import javax.persistence.Query;
 public class AttributeController extends JpaController {
 
     @PersistenceContext(unitName = "PostgreSQLNajem")
-    private EntityManager em;
+    //private EntityManager em;
     private Query query = null;
     private Typentity typentity = null;
 
@@ -100,5 +101,69 @@ public class AttributeController extends JpaController {
                 this.destroy(selectedAttr);
             }
         }
+    }
+
+    public Object getAttrValue(Entita entita, Attribute attr, Date platiOd, Date platiDo) {
+        Object obj = null;
+        StringBuilder sb = new StringBuilder("SELECT v FROM ");
+        switch (attr.getAttrtype()) {
+            case 'T': {
+            }
+            case 'C': {
+                sb.append("Attrtext");
+                break;
+            }
+            case 'L': {
+            }
+            case 'N': {
+            }
+            case 'I': {
+                sb.append("Attrnumeric");
+                break;
+            }
+            case 'D': {
+                sb.append("Attrdate");
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        sb.append(" v WHERE v.identita=:idEntita AND v.idattribute=:Attribute AND (v.platiod IS NULL OR v.platiod<=:platiDo) AND (v.platido IS NULL OR v.platido>=:platiOd) ");
+        sb.append(" ORDER BY v.platiod ASC NULLS FIRST, v.platido ASC NULLS LAST, v.timemodify ASC NULLS FIRST");
+        Query queryValue = getEm().createQuery(sb.toString());
+        queryValue.setParameter("idEntita", entita.getId());
+        queryValue.setParameter("Attribute", attr);
+        queryValue.setParameter("platiOd", platiOd == null ? Aplikace.getPlatiOd() : platiOd);
+        queryValue.setParameter("platiDo", platiDo == null ? Aplikace.getPlatiDo() : platiDo);
+        ArrayList<EntitySuperClassNajem> listValue = new ArrayList<>(queryValue.getResultList());
+        EntitySuperClassNajem esc = null;
+        if (!listValue.isEmpty()) {
+            switch (attr.getAttrtype()) {
+                case 'T': {
+                }
+                case 'C': {
+                    obj = ((Attrtext) listValue.get(listValue.size() - 1)).getText();
+                    break;
+                }
+                case 'L': {
+                }
+                case 'N': {
+                }
+                case 'I': {
+                    obj = ((Attrnumeric) listValue.get(listValue.size() - 1)).getCislo();
+                    break;
+                }
+                case 'D': {
+                    sb.append("Attrdate");
+                    obj = ((Attrdate) listValue.get(listValue.size() - 1)).getDatumcas();
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+        return obj;
     }
 }
