@@ -23,8 +23,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 /**
  *
@@ -43,8 +41,8 @@ public class EviEntita implements Serializable {
     @EJB
     cz.rental.entity.AttributeController attrController;
 
+    @Inject
     Account account;
-    User user;
 
     private Entita parentEntita = null;
     private Typentity typentity = null;
@@ -55,24 +53,28 @@ public class EviEntita implements Serializable {
 
     @PostConstruct
     public void init() {
-        try {
-            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         this.columns.add("Entita.Popis");
+        this.columns.add("Typentity.Popis");
+        this.columns.add("Attribute.DIC");
         this.columns.add("Entita.Platiod");
         this.columns.add("Entita.Platido");
 
         this.typentity = new Typentity();
-        this.typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
+        this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
+        this.typentity.setPopis("945889e4-4383-480e-9d77-dafe665fd475");
         //
 //        account.setCustomerID(UUID.fromString("34416c9f-26f2-44d8-b01d-6be4d6868dba"));
 //        account.setCustomerModel(this.typentity);
         //
         this.parentEntita = new Entita();
-        this.parentEntita.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
+//        this.parentEntita.setId(UUID.fromString("22ec3d58-67ce-4e6a-a692-c6d167f47528"));
+        this.parentEntita.setId(null);
         this.parentEntita.setIdtypentity(this.typentity);
         loadEntities(this.parentEntita, this.typentity);
     }
@@ -118,19 +120,14 @@ public class EviEntita implements Serializable {
      * Entita.metoda nebo z pole Typentity.metoda
      */
     public String getColumnHeader(Entita entita, String column) {
-        String table = "Attribute";
+        String table = "Entita";
         String field = "popis";
-        String value = "";
-        Typentity tpe = null;
+        String value = column;
         String[] tableField;
-        if (entita == null || entita.getIdtypentity() == null) {
-            return "";
-        }
-        tpe = entita.getIdtypentity();
         if (column == null || column.isEmpty()) {
-            column = "Attribute.popis";
+            column = "Entita.popis";
         }
-        tableField = column.split(".");
+        tableField = column.split("\\.");
         switch (tableField.length) {
             case 0: {
                 break;
@@ -147,21 +144,24 @@ public class EviEntita implements Serializable {
             default:
         }
         // Pokud se jedna o hodnotu Attribute je potreba dohledaat v DB
-        if (table.equalsIgnoreCase("Attribute") && this.getAttributes() != null) {
-            for (Attribute attr : this.getAttributes()) {
-                if (attr.getAttrname().trim().equalsIgnoreCase(field.trim())) {
-                    value = attr.getPopis();
-                    break;
+        if (table.equalsIgnoreCase("Attribute")) {
+            value = column;
+            if (this.getAttributes() != null) {
+                for (Attribute attr : this.getAttributes()) {
+                    if (attr.getAttrname().trim().equalsIgnoreCase(field.trim())) {
+                        value = attr.getPopis();
+                        break;
+                    }
                 }
             }
         }
         // Pokud se jedna o tabulku "Typentity" metoda vrati hodnotu pole z  instance Entita
         if (table.equalsIgnoreCase("Typentity")) {
-            value = field;
+            value = column;
         }
         // Pokud se jedna o tabulku "Entita" metoda vrati hodnotu pole z  instance Entita
         if (table.equalsIgnoreCase("Entita")) {
-            value = field;
+            value = column;
         }
         return value;
     }
@@ -190,7 +190,7 @@ public class EviEntita implements Serializable {
         if (column == null || column.isEmpty()) {
             column = "Attribute.popis";
         }
-        tableField = column.split(".");
+        tableField = column.split("\\.");
         switch (tableField.length) {
             case 0: {
                 break;
@@ -211,8 +211,11 @@ public class EviEntita implements Serializable {
             for (Attribute attr : this.getAttributes()) {
                 if (attr.getAttrname().trim().equalsIgnoreCase(field.trim())) {
                     //TO-DO: najit hodnotu v DB pro vybranou Attribute a Typentity
-                    value = attr.getPopis();
-                    value = attrController.getAttrValue(entita, attr, (Date) null, (Date) null).toString();
+                    Object obj = attr.getPopis();
+                    obj = attrController.getAttrValue(entita, attr, (Date) null, (Date) null);
+                    if (obj != null) {
+                        value = obj.toString();
+                    }
                     ///
                     break;
                 }
@@ -222,19 +225,18 @@ public class EviEntita implements Serializable {
         if (table.equalsIgnoreCase("Typentity")) {
             Method method;
             try {
-                method = tpe.getClass().getMethod("get" + field, (Class) null);
-                value = method.invoke(tpe, (Object) null).toString();
+                method = tpe.getClass().getMethod("get" + field, new Class[]{});
+                value = method.invoke(tpe, new Object[]{}).toString();
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         // Pokud se jedna o tabulku "Entita" metoda vrati hodnotu pole z  instance Entita
         if (table.equalsIgnoreCase("Entita")) {
-            Method method;
             try {
-                method = entita.getClass().getMethod("get" + field, (Class) null);
-                value = method.invoke(entita, (Object) null).toString();
-            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Method method = tpe.getClass().getMethod("get" + field, new Class[]{});
+                value = (String) method.invoke(entita, new Object[]{});
+            } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
                 Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

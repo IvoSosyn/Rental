@@ -25,7 +25,7 @@ import javax.persistence.Query;
 public class EntitaController extends JpaController {
 
     private Query query = null;
-    
+
     /**
      * Metoda vyhleda v DB vsechny zaznamy Entita pro rodicovske parent.id
      *
@@ -34,8 +34,10 @@ public class EntitaController extends JpaController {
      * @return pole vsech Entita, ktere maji Entita.idparent==parent.id
      */
     public ArrayList<Entita> getEntities(Entita parent) {
-        this.query = this.getEm().createQuery("SELECT e FROM Entita e WHERE e.idparent= :idParent AND (e.platiod IS NULL OR e.platiod <= :PlatiDO) AND (e.platido IS NULL OR e.platido >= :PlatiOD)");
-        this.query.setParameter("idParent", parent.getId());
+        this.query = this.getEm().createQuery("SELECT e FROM Entita e WHERE e.idparent" + (parent.getId() == null ? " IS NULL" : "=:idParent") + " AND (e.platiod IS NULL OR e.platiod <= :PlatiDO) AND (e.platido IS NULL OR e.platido >= :PlatiOD)");
+        if (parent.getId() != null) {
+            this.query.setParameter("idParent", parent.getId());
+        }
         this.query.setParameter("PlatiOD", Aplikace.getPlatiOd());
         this.query.setParameter("PlatiDO", Aplikace.getPlatiDo());
         List<Entita> list = this.query.getResultList();
