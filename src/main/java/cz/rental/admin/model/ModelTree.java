@@ -6,6 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.aplikace.User;
+import cz.rental.aplikace.registrace.Account;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
@@ -52,13 +54,20 @@ public class ModelTree implements Serializable {
     cz.rental.entity.AttrController attrController;
     @EJB
     cz.rental.admin.model.ModelTable modelTable;
-    @Inject
-    cz.rental.aplikace.User user;
+
+    Account account;
+    User user;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
+        try {
+            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
         fillTreeNodes();
     }
 
@@ -74,14 +83,16 @@ public class ModelTree implements Serializable {
     }
 
     /**
-     * Hlavni metoda plnici "Tree" jednotlivými "TreeNode", kde v TreeNode.getData() je ulozena konkretni instance "Typentity" na zaklade rodicovskeho UUID "Typentity.idparent"
+     * Hlavni metoda plnici "Tree" jednotlivými "TreeNode", kde v
+     * TreeNode.getData() je ulozena konkretni instance "Typentity" na zaklade
+     * rodicovskeho UUID "Typentity.idparent"
      */
     public void fillTreeNodes() {
         if (this.typentityRoot == null) {
             this.models = controller.getCatalogTypEntity();
             if (user.getParam(User.SUPERVISOR, false)) {
                 boolean added = this.models.addAll(controller.getRootTypEntity());
-                
+
             }
             if (!models.isEmpty()) {
                 // TO-DO: dodelat vyber nastaveneho modelu podle naposledy vybraneho nebo jakou ma uzivatel firmu

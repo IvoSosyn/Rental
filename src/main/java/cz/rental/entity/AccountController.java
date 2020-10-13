@@ -12,14 +12,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.Query;
 
 /**
@@ -31,13 +34,20 @@ import javax.persistence.Query;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AccountController extends JpaController {
 
-    @PersistenceContext(unitName = "PostgreSQLNajem")
-    private EntityManager em;
     private Query query = null;
     private Typentity typentity = null;
 
-    @Inject
     User user;
+
+    @PostConstruct
+    public void init() {
+        try {
+
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public ArrayList<Attribute> getAttributeForTypentity(Typentity typentity) {
         this.typentity = typentity;

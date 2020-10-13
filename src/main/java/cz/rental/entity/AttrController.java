@@ -7,6 +7,7 @@ package cz.rental.entity;
 
 import cz.rental.utils.Aplikace;
 import cz.rental.aplikace.User;
+import cz.rental.aplikace.registrace.Account;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,12 +15,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
-import javax.inject.Inject;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.Query;
 
 /**
@@ -31,10 +34,20 @@ import javax.persistence.Query;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AttrController extends JpaController {
 
-    @Inject    
+    Account account;
     User user;
-    
+
     Query query = null;
+
+    @PostConstruct
+    public void init() {
+        try {
+            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public AttrController() {
     }
@@ -294,11 +307,13 @@ public class AttrController extends JpaController {
     }
 
     /**
-     * Metoda vymaze z databaze vsechny Attribute, ktere maji <CODE>Attribute.idtypentity=:idTypEntity</CODE>
+     * Metoda vymaze z databaze vsechny Attribute, ktere maji
+     * <CODE>Attribute.idtypentity=:idTypEntity</CODE>
+     *
      * @param idTypEntity - ID Typentity, jehoz Attribute se maji smazat
      */
     public void deleteAllTypentityId(UUID idTypEntity) {
-        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity"+(user.getParam(User.SUPERVISOR, false)?"":" AND NOT a.attrsystem"));
+        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity" + (user.getParam(User.SUPERVISOR, false) ? "" : " AND NOT a.attrsystem"));
         this.query.setParameter("idTypEntity", idTypEntity);
         int deleted = this.query.executeUpdate();
         //System.out.println(" Delete from Attribute "+deleted);

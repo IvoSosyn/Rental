@@ -7,6 +7,7 @@ package cz.rental.admin.model;
 
 import cz.rental.utils.Aplikace;
 import cz.rental.aplikace.User;
+import cz.rental.aplikace.registrace.Account;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
@@ -21,8 +22,9 @@ import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
 
@@ -49,13 +51,21 @@ public class ModelTable implements Serializable {
     cz.rental.entity.AttributeController controller;
     @EJB
     ModelDetail modelDetail;
-    @Inject
-    cz.rental.aplikace.User user;
+
+    Account account;
+    User user;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
+        try {
+            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -64,7 +74,7 @@ public class ModelTable implements Serializable {
      * @param typentity
      */
     public void loadAttributesForTypentity(Typentity typentity) {
-        if (typentity==null) {
+        if (typentity == null) {
             return;
         }
         this.setTypentity(typentity);

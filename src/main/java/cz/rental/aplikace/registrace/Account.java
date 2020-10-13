@@ -21,11 +21,14 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -33,13 +36,13 @@ import javax.annotation.PostConstruct;
  */
 @Named(value = "account")
 @Stateful
-public class Account {
+public class Account{
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @EJB
     private AccountController accController;
-    @Inject
+    
     private User user;
 
     final static String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
@@ -59,7 +62,13 @@ public class Account {
     private String accountDir = null;
 
     @PostConstruct
+    
     public void init() {
+        try {
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // Nacist root dir pro soubory uctu, pokud je zadan ve WEB.XML  napr. na Linuxu
         //  <context-param>
         //      <param-name>cz.rental.accounts.root.dir</param-name>
@@ -78,17 +87,20 @@ public class Account {
 //        }
     }
 
+    
     public Boolean isEditable() {
-        boolean isEditable = this.user.getParam(User.SUPERVISOR, false) || this.user.getParam(cz.rental.aplikace.User.ACCOUNT_EDIT, false);
+        boolean isEditable = this.getUser().getParam(User.SUPERVISOR, false) || getUser().getParam(cz.rental.aplikace.User.ACCOUNT_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
 
         return isEditable;
     }
 
+    
     public boolean isButtonEnable() {
         return !FacesContext.getCurrentInstance().isValidationFailed();
     }
 
+    
     public void changePassword() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("modal", true);
@@ -96,17 +108,20 @@ public class Account {
         //System.out.println("PrimeFaces.current().dialog().openDynamic");
     }
 
+    
     public void closePassword(String password) {
         PrimeFaces.current().dialog().closeDynamic(password);
         //System.out.println("PrimeFaces.current().dialog().closeDynamic");
     }
 
+    
     public void newPassword() {
         this.setCustomerPasswordSHA512(SHA512.hash512(this.customerPassword));
         //System.out.println("Account.newPassword " + this.customerPassword);
         //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, this.getCustomerPassword(), this.getCustomerPasswordSHA512()));
     }
 
+    
     public void changePin() {
         int randomNum = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
         this.setCustomerPin(randomNum);
@@ -162,6 +177,7 @@ public class Account {
      *
      * @throws FileNotFoundException
      */
+
     public void createAccountHTML() throws FileNotFoundException {
         PrintWriter pw = null;
         try {
@@ -205,6 +221,7 @@ public class Account {
      * prevede na retezec s oddelovacem <code>Files.separator</code>
      * @return
      */
+
     public String getRootAccountDirFor(String... fileNames) {
         StringBuilder sb = new StringBuilder(this.accountsRootDir).append(File.separator).append(this.getCustomerID());
         if (fileNames != null && fileNames.length > 0) {
@@ -220,6 +237,7 @@ public class Account {
     /**
      * @return the customerID
      */
+    
     public UUID getCustomerID() {
         return customerID;
     }
@@ -227,6 +245,7 @@ public class Account {
     /**
      * @param customerID the customerID to set
      */
+    
     public void setCustomerID(UUID customerID) {
         this.customerID = customerID;
     }
@@ -234,6 +253,7 @@ public class Account {
     /**
      * @return the customerName
      */
+    
     public String getCustomerName() {
         return customerName;
     }
@@ -241,6 +261,7 @@ public class Account {
     /**
      * @param customerName the customerName to set
      */
+    
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
@@ -248,6 +269,7 @@ public class Account {
     /**
      * @return the customerEmail
      */
+    
     public String getCustomerEmail() {
         return customerEmail;
     }
@@ -255,6 +277,7 @@ public class Account {
     /**
      * @param customerEmail the customerEmail to set
      */
+    
     public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
     }
@@ -262,6 +285,7 @@ public class Account {
     /**
      * @return the customerPassword
      */
+    
     public String getCustomerPassword() {
         return customerPassword;
     }
@@ -269,6 +293,7 @@ public class Account {
     /**
      * @param customerPassword the customerPassword to set
      */
+    
     public void setCustomerPassword(String customerPassword) {
         this.customerPassword = customerPassword;
     }
@@ -276,6 +301,7 @@ public class Account {
     /**
      * @return the customerPasswordSHA512
      */
+    
     public String getCustomerPasswordSHA512() {
         return customerPasswordSHA512;
     }
@@ -283,6 +309,7 @@ public class Account {
     /**
      * @param customerPasswordSHA512 the customerPasswordSHA512 to set
      */
+    
     public void setCustomerPasswordSHA512(String customerPasswordSHA512) {
         this.customerPasswordSHA512 = customerPasswordSHA512;
     }
@@ -290,6 +317,7 @@ public class Account {
     /**
      * @return the customerPin
      */
+    
     public int getCustomerPin() {
         return customerPin;
     }
@@ -297,6 +325,7 @@ public class Account {
     /**
      * @param customerPin the customerPin to set
      */
+    
     public void setCustomerPin(int customerPin) {
         this.customerPin = customerPin;
     }
@@ -304,6 +333,7 @@ public class Account {
     /**
      * @return the customerAddress
      */
+    
     public String getCustomerAddress() {
         return customerAddress;
     }
@@ -311,6 +341,7 @@ public class Account {
     /**
      * @param customerAddress the customerAddress to set
      */
+    
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;
     }
@@ -318,6 +349,7 @@ public class Account {
     /**
      * @return the customerModel
      */
+    
     public Typentity getCustomerModel() {
         return customerModel;
     }
@@ -325,6 +357,7 @@ public class Account {
     /**
      * @param customerModel the customerModel to set
      */
+    
     public void setCustomerModel(Typentity customerModel) {
         this.customerModel = customerModel;
     }
@@ -332,6 +365,7 @@ public class Account {
     /**
      * @return the customerTel
      */
+    
     public String getCustomerTel() {
         return customerTel;
     }
@@ -339,6 +373,7 @@ public class Account {
     /**
      * @param customerTel the customerTel to set
      */
+    
     public void setCustomerTel(String customerTel) {
         this.customerTel = customerTel;
     }
@@ -346,6 +381,7 @@ public class Account {
     /**
      * @return the customerPasswordControl
      */
+    
     public String getCustomerPasswordControl() {
         return customerPasswordControl;
     }
@@ -353,6 +389,7 @@ public class Account {
     /**
      * @param customerPasswordControl the customerPasswordControl to set
      */
+    
     public void setCustomerPasswordControl(String customerPasswordControl) {
         this.customerPasswordControl = customerPasswordControl;
     }
@@ -360,6 +397,7 @@ public class Account {
     /**
      * @return the customerPasswordHelp
      */
+    
     public String getCustomerPasswordHelp() {
         return customerPasswordHelp;
     }
@@ -367,6 +405,7 @@ public class Account {
     /**
      * @param customerPasswordHelp the customerPasswordHelp to set
      */
+    
     public void setCustomerPasswordHelp(String customerPasswordHelp) {
         this.customerPasswordHelp = customerPasswordHelp;
     }
@@ -374,6 +413,7 @@ public class Account {
     /**
      * @return the accountDir
      */
+    
     public String getAccountDir() {
         return accountDir;
     }
@@ -381,6 +421,7 @@ public class Account {
     /**
      * @param accountDir the accountDir to set
      */
+    
     public void setAccountDir(String accountDir) {
         this.accountDir = accountDir;
     }
@@ -388,6 +429,7 @@ public class Account {
     /**
      * @return the accountsRootDir
      */
+    
     public String getAccountsRootDir() {
         return accountsRootDir;
     }
@@ -395,7 +437,22 @@ public class Account {
     /**
      * @param accountsRootDir the accountsRootDir to set
      */
+    
     public void setAccountsRootDir(String accountsRootDir) {
         this.accountsRootDir = accountsRootDir;
+    }
+
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 }

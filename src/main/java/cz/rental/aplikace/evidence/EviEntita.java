@@ -23,6 +23,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -40,9 +42,8 @@ public class EviEntita implements Serializable {
     cz.rental.entity.EntitaController entitaController;
     @EJB
     cz.rental.entity.AttributeController attrController;
-    @Inject
+
     Account account;
-    @Inject
     User user;
 
     private Entita parentEntita = null;
@@ -54,7 +55,12 @@ public class EviEntita implements Serializable {
 
     @PostConstruct
     public void init() {
-
+        try {
+            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.columns.add("Entita.Popis");
         this.columns.add("Entita.Platiod");
         this.columns.add("Entita.Platido");

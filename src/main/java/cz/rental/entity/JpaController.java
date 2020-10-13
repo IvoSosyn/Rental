@@ -22,7 +22,7 @@ public class JpaController implements Serializable {
 
     @PersistenceContext(unitName = "PostgreSQLNajem")
     private EntityManager em;
-
+    
     private Query query = null;
 
     /**
@@ -53,6 +53,7 @@ public class JpaController implements Serializable {
      * Metoda zapise zmeny do DB, parametr entita musi jiz v DB existovat
      *
      * @param entita dedicove EntitySuperClassNajem (skoro vsechny tabulky)
+     * @throws entity.exceptions.NonexistentEntityException
      * @throws PreexistingEntityException vyjimka, pokud entita jeste NEexistuje
      * v DB
      * @throws Exception obecna vyjimka z transakce

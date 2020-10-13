@@ -10,10 +10,10 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.PrimeFacesContext;
 
@@ -25,7 +25,7 @@ import org.primefaces.context.PrimeFacesContext;
 @Stateless
 public class Registrace {
 
-    @Inject
+    @EJB
     private Account account;
 
     private static final String XHTML_REGISTRACE_FILE = "/aplikace/registrace/regStep";
@@ -138,17 +138,5 @@ public class Registrace {
         this.selectedStep = selectedStep;
     }
 
-    /**
-     * @return the account
-     */
-    public Account getAccount() {
-        return account;
-    }
-
-    /**
-     * @param account the account to set
-     */
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+    
 }

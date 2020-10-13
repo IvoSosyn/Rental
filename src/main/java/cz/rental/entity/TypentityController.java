@@ -6,18 +6,21 @@
 package cz.rental.entity;
 
 import cz.rental.aplikace.User;
+import cz.rental.aplikace.registrace.Account;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.Query;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -31,12 +34,20 @@ import org.primefaces.model.TreeNode;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class TypentityController extends JpaController {
 
-    @PersistenceContext(unitName = "PostgreSQLNajem")
-    private EntityManager em;
     private Query query = null;
 
-    @Inject
+    Account account;
     User user;
+
+    @PostConstruct
+    public void init() {
+        try {
+            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Najde nejvyssi-"root" prvek (Typentity.idparent==null) celeho stromu

@@ -5,7 +5,6 @@
  */
 package cz.rental.aplikace;
 
-import cz.rental.aplikace.registrace.Account;
 import java.util.Date;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
@@ -22,14 +21,11 @@ import javax.servlet.ServletContext;
 @Stateful
 public class User {
 
-    public final static String SUPERVISOR = "SUPERVISOR";
-    public final static String ACCOUNT_EDIT = "ACCOUNT_EDIT";
-    public final static String MODEL_EDIT = "MODEL_EDIT";
-
+    public static final String SUPERVISOR = "Supervisor";
+    public static final String MODEL_EDIT = "ModelEdit";
+    public static final String ACCOUNT_EDIT = "AccounEdit";
     @Inject
     private ServletContext context;
-    @Inject
-    private Account account;
 
 //    @Inject
 //    private HttpServletRequest httpRequest;
@@ -41,6 +37,7 @@ public class User {
      * Inicializace matice prav uzivatele
      */
     @PostConstruct
+
     public void init() {
         String param;
         if (context == null) {
@@ -77,6 +74,10 @@ public class User {
         }
         // Uzivatel ma prava editovat "model" - sablony
         if (paramName.toUpperCase().contains(User.MODEL_EDIT)) {
+            // Dohledat v DB
+            booleanValue = false;
+        }
+        if (paramName.toUpperCase().contains(User.ACCOUNT_EDIT)) {
             // Dohledat v DB
             booleanValue = false;
         }
@@ -126,20 +127,6 @@ public class User {
     }
 
     /**
-     * @return the account
-     */
-    public Account getAccount() {
-        return account;
-    }
-
-    /**
-     * @param account the account to set
-     */
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    /**
      * @return the userId
      */
     public UUID getUserId() {
@@ -152,4 +139,5 @@ public class User {
     public void setUserId(UUID userId) {
         this.userId = userId;
     }
+
 }

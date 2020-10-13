@@ -6,17 +6,21 @@
 package cz.rental.admin.model;
 
 import cz.rental.aplikace.User;
+import cz.rental.aplikace.registrace.Account;
 import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -37,14 +41,20 @@ public class ModelDetail implements Serializable {
 
     @EJB
     cz.rental.entity.AttributeController controller;
-    @Inject
-    cz.rental.aplikace.User user;
+    
+    Account account;
+    User user;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        editabelAttrsize = new ArrayList<>();
+        try {
+            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }        editabelAttrsize = new ArrayList<>();
         editabelAttrsize.add('C');
         editabelAttrsize.add('N');
         editabelAttrsize.add('I');

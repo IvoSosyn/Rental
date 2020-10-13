@@ -5,15 +5,20 @@
  */
 package cz.rental.aplikace.evidence;
 
+import cz.rental.aplikace.User;
+import cz.rental.aplikace.registrace.Account;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -34,13 +39,20 @@ public class Evidence implements Serializable {
     cz.rental.entity.AttributeController controller;
     @EJB
     cz.rental.entity.TypentityController typEntityController;
-    @Inject
-    cz.rental.aplikace.User user;
+
+    Account account;
+    User user;
 
     @PostConstruct
     public void init() {
-        if (user != null && user.getAccount() != null && user.getAccount().getCustomerModel() != null) {
-            loadAttributesForTypentity(user.getAccount().getCustomerModel());
+        try {
+            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+        } catch (NamingException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (this.account != null && this.account.getUser() != null && this.account.getCustomerModel() != null) {
+            loadAttributesForTypentity(this.account.getCustomerModel());
         } else {
             // Pouze pro testovani
             for (Typentity tp : this.typEntityController.getRootTypEntity()) {

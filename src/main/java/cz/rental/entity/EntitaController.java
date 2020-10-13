@@ -13,8 +13,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -26,8 +24,6 @@ import javax.persistence.Query;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class EntitaController extends JpaController {
 
-    @PersistenceContext(unitName = "PostgreSQLNajem")
-    private EntityManager em;
     private Query query = null;
     
     /**
