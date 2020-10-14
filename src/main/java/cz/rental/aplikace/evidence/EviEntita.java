@@ -5,7 +5,6 @@
  */
 package cz.rental.aplikace.evidence;
 
-import cz.rental.aplikace.User;
 import cz.rental.aplikace.registrace.Account;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
@@ -21,8 +20,11 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -51,6 +53,11 @@ public class EviEntita implements Serializable {
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<String> columns = new ArrayList<>();
 
+    private ArrayList<String> columnsSource = new ArrayList<>();
+    private ArrayList<String> columnsTarget = new ArrayList<>();
+
+    private DualListModel<String> columnsDualList;
+
     @PostConstruct
     public void init() {
 //        try {
@@ -64,6 +71,11 @@ public class EviEntita implements Serializable {
         this.columns.add("Attribute.DIC");
         this.columns.add("Entita.Platiod");
         this.columns.add("Entita.Platido");
+
+        for (String column : this.columns) {
+            getColumnsSource().add(column);
+        }
+        setColumnsDualList(new DualListModel<>(this.getColumnsSource(), this.getColumnsTarget()));
 
         this.typentity = new Typentity();
         this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
@@ -106,6 +118,10 @@ public class EviEntita implements Serializable {
             newEntita.setNewEntity(true);
             this.entities.add(newEntita);
         }
+    }
+
+    public void columnsSelect() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Dosud neimplementovano", "Dosud neimplementovano"));
     }
 
     /**
@@ -330,6 +346,48 @@ public class EviEntita implements Serializable {
         public String getProperty() {
             return property;
         }
+    }
+
+    /**
+     * @return the columnsSource
+     */
+    public ArrayList<String> getColumnsSource() {
+        return columnsSource;
+    }
+
+    /**
+     * @param columnsSource the columnsSource to set
+     */
+    public void setColumnsSource(ArrayList<String> columnsSource) {
+        this.columnsSource = columnsSource;
+    }
+
+    /**
+     * @return the columnsTarget
+     */
+    public ArrayList<String> getColumnsTarget() {
+        return columnsTarget;
+    }
+
+    /**
+     * @param columnsTarget the columnsTarget to set
+     */
+    public void setColumnsTarget(ArrayList<String> columnsTarget) {
+        this.columnsTarget = columnsTarget;
+    }
+
+    /**
+     * @return the columnsDualList
+     */
+    public DualListModel<String> getColumnsDualList() {
+        return columnsDualList;
+    }
+
+    /**
+     * @param columnsDualList the columnsDualList to set
+     */
+    public void setColumnsDualList(DualListModel<String> columnsDualList) {
+        this.columnsDualList = columnsDualList;
     }
 
 }

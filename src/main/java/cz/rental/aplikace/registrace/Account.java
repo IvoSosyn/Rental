@@ -27,6 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -43,6 +44,7 @@ public class Account{
     @EJB
     private AccountController accController;
     
+    @Inject
     private User user;
 
     final static String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
@@ -61,14 +63,13 @@ public class Account{
     private String accountsRootDir = Account.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
 
-    @PostConstruct
-    
+    @PostConstruct  
     public void init() {
-        try {
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         // Nacist root dir pro soubory uctu, pokud je zadan ve WEB.XML  napr. na Linuxu
         //  <context-param>
         //      <param-name>cz.rental.accounts.root.dir</param-name>
