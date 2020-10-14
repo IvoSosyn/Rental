@@ -17,8 +17,8 @@
                 <p:dataTable id="idEntitaTbl" var="entita" value="#{eviEntita.entities}" widgetVar="entitaTable"  >                    
                     <f:facet name="header">                            
                         <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
-                        <div align="right">
-                            <p:commandButton value="Sloupce" oncomplete="PF('entitiesColumnsDialog').show()" ajax="true"  icon="fa fa-columns" update=":idEntitaForm" />
+                        <div align="right">                    
+                            <p:commandButton value="Sloupce" onclick="PF('idColumnsDialog').show();return;" icon="fa fa-columns" ajax="true" />
                         </div>
                     </f:facet>
                     <p:columns  value="#{eviEntita.columns}" var="column" >
@@ -29,14 +29,13 @@
                     </p:columns>
                 </p:dataTable>
             </p:panelGrid>
-
-            <p:dialog modal="true" showEffect="fade" hideEffect="fade" widgetVar="entitiesColumnsDialog">
+            <p:dialog id="idColumnsDialog"  widgetVar="idColumnsDialog" modal="false" >
+                <p:growl id="idColumnsGrowl" showDetail="true" skipDetailIfEqualsSummary="true"/>
                 <h:panelGrid id="displayThemes" columns="1">
                     <p:pickList id="entitiesColumns" value="#{eviEntita.columnsDualList}" var="column" itemLabel="#{column}" itemValue="#{column}" />
-                    <p:commandButton id="citySubmit" value="Submit" update=":idEntitaForm" oncomplete="PF('entitiesColumnsDialog').dispose()" style="margin-top:5px" />
+                    <p:commandButton id="idColumsButton" value="OK"  actionListener="#{eviEntita.configureColumns}" oncomplete="PF('idColumnsDialog').hide();return;" update=":idEntitaForm" style="margin-top:5px" />
                 </h:panelGrid>
             </p:dialog>
-
         </h:form>
     </h:body>  
 </html>

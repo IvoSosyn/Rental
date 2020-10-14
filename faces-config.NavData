@@ -2,23 +2,21 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
+        <Node id="templates/contens.xhtml" x="150" y="600" zoom="true"/>
         <Node id="templates/templateMain.xhtml" x="400" y="300" zoom="true"/>
         <Node id="admin/model/modelTable.xhtml" x="400" y="450" zoom="true"/>
-        <Node id="templates/contens.xhtml" x="150" y="600" zoom="true"/>
-        <Node id="index.xhtml" x="150" y="750" zoom="true"/>
         <Node id="aplikace/registrace/password_1.xhtml" x="900" y="450" zoom="true"/>
+        <Node id="index.xhtml" x="150" y="750" zoom="true"/>
         <Node id="aplikace/registrace/regStep0.xhtml" x="650" y="300" zoom="true"/>
         <Node id="aplikace/registrace/regStep1.xhtml" x="1150" y="300" zoom="true"/>
         <Node id="aplikace/registrace/registrace.xhtml" x="150" y="450" zoom="true"/>
-        <Node id="customers/readme.html" x="150" y="150" zoom="true"/>
         <Node id="aplikace/registrace/regStep3.xhtml" x="650" y="150" zoom="true"/>
         <Node id="admin/model/model.xhtml" x="400" y="150" zoom="true"/>
         <Node id="aplikace/registrace/regStep2.xhtml" x="900" y="300" zoom="true"/>
-        <Node id="templates/header.xhtml" x="900" y="150" zoom="true"/>
         <Node id="admin/model/modelDetail.xhtml" x="650" y="450" zoom="true"/>
         <Node id="aplikace/registrace/password.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="templates/header.xhtml" x="900" y="150" zoom="true"/>
         <Node id="templates/footer.xhtml" x="1150" y="150" zoom="true"/>
-        <Node id="aplikace/main.xhtml" x="150" y="300" zoom="false"/>
         <Node id="admin/model/modelTree.xhtml" x="1400" y="150" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>

@@ -14,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +26,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
+import org.primefaces.PrimeFaces.Dialog;
+import org.primefaces.context.PrimeRequestContext;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -53,9 +58,8 @@ public class EviEntita implements Serializable {
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<String> columns = new ArrayList<>();
 
+    private Dialog dialog;
     private ArrayList<String> columnsSource = new ArrayList<>();
-    private ArrayList<String> columnsTarget = new ArrayList<>();
-
     private DualListModel<String> columnsDualList;
 
     @PostConstruct
@@ -75,7 +79,7 @@ public class EviEntita implements Serializable {
         for (String column : this.columns) {
             getColumnsSource().add(column);
         }
-        setColumnsDualList(new DualListModel<>(this.getColumnsSource(), this.getColumnsTarget()));
+        setColumnsDualList(new DualListModel<>(this.columnsSource, this.columns));
 
         this.typentity = new Typentity();
         this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
@@ -259,6 +263,23 @@ public class EviEntita implements Serializable {
         return value;
     }
 
+    public String viewColumns() {
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+        options.put("draggable", false);
+        options.put("resizable", false);
+        options.put("contentHeight", 320);
+
+        this.dialog = PrimeFaces.current().dialog();
+        this.dialog.openDynamic("/aplikace/evidence/evientitacolumn", options, null);
+        return "";
+    }
+
+    public void configureColumns() {
+        this.columns = new ArrayList(this.columnsDualList.getTarget());
+//        this.dialog.closeDynamic(this.columnsDualList.getTarget());
+    }
+
     /**
      * @return the typentity
      */
@@ -329,25 +350,6 @@ public class EviEntita implements Serializable {
         this.columns = columns;
     }
 
-    static public class ColumnModel implements Serializable {
-
-        private String header;
-        private String property;
-
-        public ColumnModel(String header, String property) {
-            this.header = header;
-            this.property = property;
-        }
-
-        public String getHeader() {
-            return header;
-        }
-
-        public String getProperty() {
-            return property;
-        }
-    }
-
     /**
      * @return the columnsSource
      */
@@ -360,20 +362,6 @@ public class EviEntita implements Serializable {
      */
     public void setColumnsSource(ArrayList<String> columnsSource) {
         this.columnsSource = columnsSource;
-    }
-
-    /**
-     * @return the columnsTarget
-     */
-    public ArrayList<String> getColumnsTarget() {
-        return columnsTarget;
-    }
-
-    /**
-     * @param columnsTarget the columnsTarget to set
-     */
-    public void setColumnsTarget(ArrayList<String> columnsTarget) {
-        this.columnsTarget = columnsTarget;
     }
 
     /**
