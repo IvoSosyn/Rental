@@ -11,14 +11,24 @@
         <ui:composition template = "/templates/templateMain.xhtml" />	
         ?faces-redirect=true
         -->
-        <h:form id="idEntitaForm" >
+        <h:form id="formEntita" >
             <p:growl id="idEntitaGrowl" showDetail="true" skipDetailIfEqualsSummary="true"/>
             <p:panelGrid columns="1">
-                <p:dataTable id="idEntitaTbl" var="entita" value="#{eviEntita.entities}" widgetVar="entitaTable"  >                    
+                <p:dataTable id="idEntitaTbl" 
+                             var="entita" 
+                             value="#{eviEntita.entities}" 
+                             widgetVar="entitaTable" 
+                             rowKey="#{entita.id}"
+                             selection="#{eviEntita.selectedEntita}" 
+                             selectionMode="single"  >
+
+                    <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelect}" update=":formEntita" />
+                    <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":formEntita" />
+                    
                     <f:facet name="header">                            
                         <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
                         <div align="right">                    
-                            <p:commandButton value="Sloupce" onclick="PF('idColumnsDialog').show();return;" icon="fa fa-columns" ajax="true" />
+                            <p:commandButton value="Sloupce" onclick="PF('dialogColumns').show();return;" icon="fa fa-columns" ajax="true" />
                         </div>
                     </f:facet>
                     <p:columns  value="#{eviEntita.columns}" var="column" >
@@ -29,11 +39,20 @@
                     </p:columns>
                 </p:dataTable>
             </p:panelGrid>
-            <p:dialog id="idColumnsDialog"  widgetVar="idColumnsDialog" modal="false" >
-                <p:growl id="idColumnsGrowl" showDetail="true" skipDetailIfEqualsSummary="true"/>
-                <h:panelGrid id="displayThemes" columns="1">
-                    <p:pickList id="entitiesColumns" value="#{eviEntita.columnsDualList}" var="column" itemLabel="#{column}" itemValue="#{column}" />
-                    <p:commandButton id="idColumsButton" value="OK"  actionListener="#{eviEntita.configureColumns}" oncomplete="PF('idColumnsDialog').hide();return;" update=":idEntitaForm" style="margin-top:5px" />
+        </h:form>
+        <h:form id="formEntitaColumns">
+            <p:dialog id="dialogColumns"  widgetVar="dialogColumns" modal="false" header="Vyberte si z následující tabulky sloupce k zobrazení:" >
+                <p:growl id="growlColumns" showDetail="true" skipDetailIfEqualsSummary="true"/>
+                <h:panelGrid id="panelGridColumns" columns="1">
+                    <h:panelGrid id="panelGridComment">
+                        <p>Myší (Drag&amp;Drop) si můžete vybrat sloupce přetažením z leva do prava</p>                    
+                        <p>nebo pořadí sloupců přetážením sloupce nahoru nebo dolů</p>                    
+                    </h:panelGrid>
+                    <p:pickList id="pickListColumns" value="#{eviEntita.columnsDualList}" var="column" itemLabel="#{column}" itemValue="#{column}" showTargetControls="true" responsive="true" >
+                        <f:facet name="sourceCaption">K výběru</f:facet>
+                        <f:facet name="targetCaption">Vybrané</f:facet>
+                    </p:pickList>
+                    <p:commandButton id="buttonOkColumn" value="OK"  actionListener="#{eviEntita.configureColumns()}" oncomplete="PF('dialogColumns').hide();return;" update=":formEntita" style="margin-top:5px" />
                 </h:panelGrid>
             </p:dialog>
         </h:form>

@@ -28,7 +28,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.PrimeFaces.Dialog;
-import org.primefaces.context.PrimeRequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -71,15 +72,8 @@ public class EviEntita implements Serializable {
 //            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
 //        }
         this.columns.add("Entita.Popis");
-        this.columns.add("Typentity.Popis");
-        this.columns.add("Attribute.DIC");
         this.columns.add("Entita.Platiod");
         this.columns.add("Entita.Platido");
-
-        for (String column : this.columns) {
-            getColumnsSource().add(column);
-        }
-        setColumnsDualList(new DualListModel<>(this.columnsSource, this.columns));
 
         this.typentity = new Typentity();
         this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
@@ -112,6 +106,14 @@ public class EviEntita implements Serializable {
         this.typentity = typentity;
         this.entities = entitaController.getEntities(this.parentEntita);
         this.attributes = attrController.getAttributeForTypentity(typentity);
+        for (Attribute attr : this.attributes) {
+            String column = "Attribute." + attr.getAttrname().trim();
+            if (!columns.contains(column)) {
+                getColumnsSource().add(column);
+            }
+        }
+        setColumnsDualList(new DualListModel<>(this.columnsSource, this.columns));
+
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
             Entita newEntita = new Entita();
@@ -278,6 +280,17 @@ public class EviEntita implements Serializable {
     public void configureColumns() {
         this.columns = new ArrayList(this.columnsDualList.getTarget());
 //        this.dialog.closeDynamic(this.columnsDualList.getTarget());
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+
     }
 
     /**
