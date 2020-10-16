@@ -185,4 +185,45 @@ public class AttributeController extends JpaController {
         }
         return obj;
     }
+
+    /**
+     * Metoda nacte z DB vsechny hodnoty pro Entita a jeji Attribute
+     *
+     * @param entita
+     * @param attribute
+     * @return
+     */
+    public ArrayList<EntitySuperClassNajem> getAllAttrValues(Entita entita, Attribute attribute) {
+        Object obj = null;
+        StringBuilder sb = new StringBuilder("SELECT v FROM ");
+        switch (attribute.getAttrtype()) {
+            case 'T': {
+            }
+            case 'C': {
+                sb.append("Attrtext");
+                break;
+            }
+            case 'L': {
+            }
+            case 'N': {
+            }
+            case 'I': {
+                sb.append("Attrnumeric");
+                break;
+            }
+            case 'D': {
+                sb.append("Attrdate");
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        sb.append(" v WHERE v.identita=:idEntita AND v.idattribute=:Attribute");
+        sb.append(" ORDER BY v.platiod ASC NULLS FIRST, v.platido ASC NULLS LAST, v.timemodify ASC NULLS FIRST");
+        Query queryValue = getEm().createQuery(sb.toString());
+        queryValue.setParameter("idEntita", entita.getId());
+        queryValue.setParameter("Attribute", attribute);
+        return new ArrayList<>(queryValue.getResultList());
+    }
 }
