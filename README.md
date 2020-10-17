@@ -28,3 +28,22 @@ PrimeFaces
         <navigation-handler>
         </view-handler>
         jinak nefunguje(nezobrazí se)  PrimeFaces.current().dialog().openDynamic(...);
+    !!! Stejně to nfunguje !!!
+
+Keyword             Type	Description
+@this               Standard	Current component.
+@all                Standard	Whole view.
+@form               Standard	Closest ancestor form of current component.
+@none               Standard	No component.
+@namingcontainer    PrimeFaces	Closest ancestor naming container of current component.
+@parent             PrimeFaces	Parent of the current component.
+@composite          PrimeFaces	Closest composite component ancestor.
+@child(n)           PrimeFaces	nth child.
+@row(n)             PrimeFaces	nth row.
+@previous           PrimeFaces	Previous sibling.
+@next               PrimeFaces	Next sibling.
+@widgetVar(name)    PrimeFaces	Component with given widgetVar.
+@root               PrimeFaces	UIViewRoot instance of the view, can be used to start searching from the root instead the current component.
+@id(id              PrimeFaces	Used to search components by their id ignoring the component tree structure and naming containers.
+
+

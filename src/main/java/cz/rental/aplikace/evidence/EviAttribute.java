@@ -8,7 +8,6 @@ package cz.rental.aplikace.evidence;
 import cz.rental.aplikace.registrace.Account;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
-import cz.rental.utils.Aplikace;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
@@ -57,30 +56,85 @@ public class EviAttribute implements Serializable {
      */
     public void loadAttributes(Entita entita) {
         if (entita == null) {
+            attributes = new ArrayList<>();
             return;
         }
         this.entita = entita;
         /**
-         * TO-DO: Zohlednit PlatiOd a PlatiDo sablony ve vyberu dat Attribute, aby se vybraly pouze platne v danem obdobi
+         * TO-DO: Zohlednit PlatiOd a PlatiDo sablony ve vyberu dat Attribute,
+         * aby se vybraly pouze platne v danem obdobi
          */
         this.attributes = getAttrController().getAttributeForTypentity(entita.getIdtypentity());
+        this.values = new ArrayList<>(this.attributes.size());
         for (Attribute attr : this.getAttributes()) {
-             // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
-            boolean add = this.values.add(new EviValue(entita, attr, null, null));
+            // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
+            boolean add = this.values.add(new EviValue(this.attrController, this.entita, attr, null, null));
         }
     }
 
     public void onRowSelect(SelectEvent event) {
-        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita) event.getObject()).getPopis()));
+        System.out.println("EviAttr.onRowSelect  event.getObject()=" + event.getObject());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviAttr.onRowSelect - dosud neimplementováno", ((Entita) event.getObject()).getPopis()));
+        loadAttributes(((Entita) event.getObject()));
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita) event.getObject()).getPopis()));
+        System.out.println("EviAttr.onRowUnselect  event.getObject()=" + event.getObject());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviAttr.onRowUnselect - dosud neimplementováno", ((Entita) event.getObject()).getPopis()));
+        loadAttributes(null);
 
     }
 
+    public boolean isRenderedC(EviValue attrValue) {
+        boolean lRet = false;
+        // System.out.println("attrValue.getAttribute().getAttrtype(): " + attrValue.getAttribute().getAttrtype());
+        if (attrValue.getAttribute().getAttrtype().equals('C')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedI(EviValue attrValue) {
+        boolean lRet = false;
+        if (attrValue.getAttribute().getAttrtype().equals('I')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedN(EviValue attrValue) {
+        boolean lRet = false;
+        if (attrValue.getAttribute().getAttrtype().equals('N')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedB(EviValue attrValue) {
+        boolean lRet = false;
+        if (attrValue.getAttribute().getAttrtype().equals('B')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedD(EviValue attrValue) {
+        boolean lRet = false;
+        if (attrValue.getAttribute().getAttrtype().equals('D')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedT(EviValue attrValue) {
+        boolean lRet = false;
+        if (attrValue.getAttribute().getAttrtype().equals('T')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+    
+    
     /**
      * @return the attributes
      */

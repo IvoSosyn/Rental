@@ -1,35 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <title>Nájmy a pronájmy nemovitostí</title>       
-    </h:head>
     <h:body>
         <!--
         <ui:composition template = "/templates/templateMain.xhtml" />	
         ?faces-redirect=true
         -->
-        <h:form id="idMainForm" >
-            <p:dataTable   var="attribute" value="#{evidence.attributes}" editable="true" editMode="cell" widgetVar="cellAttribute" >
-                <p:column headerText="Hodnota" >
-                    <p:cellEditor rendered="#{attribute.attrname=='accountTel'}">
-                        <f:facet name="output"> <p:outputLabel value="#{attribute.attrname}" /> </f:facet>
-                        <f:facet name="input"> <p:inputText value="#{attribute.attrname}" style="width:96%" label="AttrType"/> </f:facet>
-                    </p:cellEditor>
-                    <p:cellEditor  rendered="#{attribute.attrname=='accountPassword'}" >
-                        <f:facet name="output"> <p:outputLabel value="#{attribute.attrtype}" /> </f:facet>
-                        <f:facet name="input"> <p:inputText value="#{attribute.attrtype}" style="width:96%" label="AttrType"/> </f:facet>
-                    </p:cellEditor>
-                    <p:cellEditor  rendered="#{attribute.attrname=='acountAddress'}">
-                        <f:facet name="output"> <p:selectBooleanCheckbox value="#{attribute.attrsystem}" /> </f:facet>
-                        <f:facet name="input"><p:selectBooleanCheckbox value="#{attribute.attrsystem}" /></f:facet>
-                    </p:cellEditor>                                    
+        <h:form id="formAttr" >
+            <p:dataTable   var="attrValue" value="#{eviAttr.values}" editable="true" editMode="cell" widgetVar="cellAttribute" >
+                <p:column headerText="Položka" >
+                    <h:outputText value="#{attrValue.attribute.attrname}: " />
                 </p:column>
+                <p:column headerText="Hodnota" >
+                    <p:cellEditor rendered="#{eviAttr.isRenderedC(attrValue)}">
+                        <f:facet name="output"> <p:outputLabel value="#{attrValue.value}" title="#{attrValue.attribute.popis}" /> </f:facet>
+                        <f:facet name="input"> <p:inputText value="#{attrValue.value}" style="width:96%" label="#{attrValue.attribute.popis}" size="#{attrValue.attribute.attrsize}" /> </f:facet>
+                    </p:cellEditor>
+                    <p:cellEditor  rendered="#{eviAttr.isRenderedB(attrValue)}">
+                        <f:facet name="output"><p:selectBooleanCheckbox value="#{attrValue.value}" title="#{attrValue.attribute.popis}" disabled="true" /> </f:facet>
+                        <f:facet name="input"><p:selectBooleanCheckbox  value="#{attrValue.value}"  disabled="false"  /></f:facet>
+                    </p:cellEditor>                                    
+                    <p:cellEditor  rendered="#{eviAttr.isRenderedI(attrValue)}">
+<p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/>                        
+<!--
+<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
+<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
+-->
+                    </p:cellEditor>                                    
+                    <p:cellEditor  rendered="#{eviAttr.isRenderedN(attrValue)}">
+<p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/>                        
+<!--
+<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
+<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
+-->
+                    </p:cellEditor>                                    
+                    <p:cellEditor  rendered="#{eviAttr.isRenderedD(attrValue)}">
+                        <f:facet name="output"> 
+                            <p:datePicker value="#{attrValue.value}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false" />
+                        </f:facet>
+                        <f:facet name="input">       
+                            <p:datePicker value="#{attrValue.value}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false"  >
+                                <p:ajax update="@form" />
+                            </p:datePicker>
+                        </f:facet>
+                    </p:cellEditor>                                    
+                    <p:cellEditor rendered="#{eviAttr.isRenderedT(attrValue)}">
+                        <f:facet name="output"> <h:outputText value="#{attrValue.value}" title="#{attrValue.attribute.popis}" /> </f:facet>
+                        <f:facet name="input"> <p:inputText value="#{attrValue.value}" style="width:96%" label="#{attrValue.attribute.popis}"/> </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <f:facet name="footer">                        
+                    <p:commandButton id="buttonSaveAttrValue" value="Ulož" ajax="true"  />
+                </f:facet>
             </p:dataTable>
         </h:form>
 

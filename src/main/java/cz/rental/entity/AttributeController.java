@@ -194,7 +194,6 @@ public class AttributeController extends JpaController {
      * @return
      */
     public ArrayList<EntitySuperClassNajem> getAllAttrValues(Entita entita, Attribute attribute) {
-        Object obj = null;
         StringBuilder sb = new StringBuilder("SELECT v FROM ");
         switch (attribute.getAttrtype()) {
             case 'T': {
@@ -219,11 +218,18 @@ public class AttributeController extends JpaController {
                 break;
             }
         }
-        sb.append(" v WHERE v.identita=:idEntita AND v.idattribute=:Attribute");
+        sb.append(" v WHERE ");
+        sb.append(entita != null ? " v.identita=:idEntita " : " v.identita IS NULL ");
+        sb.append(" AND ");
+        sb.append(attribute != null ? " v.idattribute=:Attribute " : " v.idattribute IS NULL ");
         sb.append(" ORDER BY v.platiod ASC NULLS FIRST, v.platido ASC NULLS LAST, v.timemodify ASC NULLS FIRST");
         Query queryValue = getEm().createQuery(sb.toString());
-        queryValue.setParameter("idEntita", entita.getId());
-        queryValue.setParameter("Attribute", attribute);
+        if (entita != null) {
+            queryValue.setParameter("idEntita", entita.getId());
+        }
+        if (attribute != null) {
+            queryValue.setParameter("Attribute", attribute);
+        }
         return new ArrayList<>(queryValue.getResultList());
     }
 }

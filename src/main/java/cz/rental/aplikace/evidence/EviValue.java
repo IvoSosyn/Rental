@@ -15,6 +15,7 @@ import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -22,7 +23,6 @@ import javax.ejb.EJB;
  */
 public class EviValue {
 
-    @EJB
     cz.rental.entity.AttributeController attrController;
 
     private Entita entita = null;
@@ -34,16 +34,21 @@ public class EviValue {
     private Date valuePlatiOd = null;
     private Date valuePlatiDo = null;
 
+    public EviValue() {
+    }
+
     /**
      * Konstruktor s povinnzmi parametry
      *
+     * @param attrController controller pro DB operace
      * @param entita pro kterou hledame hodnoty attribute nesmi byt null
      * @param attribute pro kterou hledame hodnoty nesmi byt null
      * @param platiOd omezeni platnosti cele instance OD data, muze byt null
      * @param platiDo omezeni platnosti cele instance DO data, muze byt null
      */
-    public EviValue(Entita entita, Attribute attribute, Date platiOd, Date platiDo) {
-        this.attribute = attribute;
+    public EviValue(cz.rental.entity.AttributeController attrController, Entita entita, Attribute attribute, Date platiOd, Date platiDo) {
+        this.attrController = attrController;
+        this.entita = entita;
         this.attribute = attribute;
         this.platiOd = platiOd;
         this.platiDo = platiDo;
