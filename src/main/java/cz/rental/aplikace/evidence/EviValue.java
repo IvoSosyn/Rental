@@ -12,10 +12,9 @@ import cz.rental.entity.Attrtext;
 import cz.rental.entity.Entita;
 import cz.rental.entity.EntitySuperClassNajem;
 import cz.rental.utils.Aplikace;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 
 /**
  *
@@ -34,11 +33,8 @@ public class EviValue {
     private Date valuePlatiOd = null;
     private Date valuePlatiDo = null;
 
-    public EviValue() {
-    }
-
     /**
-     * Konstruktor s povinnzmi parametry
+     * Konstruktor s povinnymi parametry
      *
      * @param attrController controller pro DB operace
      * @param entita pro kterou hledame hodnoty attribute nesmi byt null
@@ -93,6 +89,136 @@ public class EviValue {
                 }
             }
         }
+    }
+
+    /**
+     * *
+     * Metoda vraci velikost hodnoty pole AttrXXXXX
+     *
+     * @return pocet zobrazenych znaku
+     */
+    public Integer getAttrSize() {
+        int size = 10;
+        System.out.println("getAttrSize() Attribute: " + attribute.getPopis() + "/" + attribute.getAttrname() + "/" + attribute.getAttrtype() + "/" + attribute.getAttrsize() + "/" + attribute.getAttrdecimal() + "/" + value);
+        if (this.attribute.getAttrsize() instanceof BigInteger) {
+            size = this.attribute.getAttrsize().intValue();
+        } else {
+            switch (attribute.getAttrtype()) {
+                case 'T': {
+                    size = 30;
+                    break;
+                }
+                case 'C': {
+                    size = 150;
+                    break;
+                }
+                case 'L': {
+                }
+                case 'N': {
+                }
+                case 'I': {
+                    size = 10;
+                    break;
+                }
+                case 'D': {
+                    size = 10;
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+        System.out.println("   getAttrSize() size: " + size);
+        return size;
+    }
+
+    /**
+     * *
+     * Metoda vraci pocet desetinnych mist pole AttrXXXXX
+     *
+     * @return pocet desetinnych mist
+     */
+    public Integer getAttrDecimal() {
+        int decimal = 2;
+        if (this.attribute.getAttrdecimal() instanceof BigInteger) {
+            decimal = this.attribute.getAttrdecimal().intValue();
+        } else {
+            switch (attribute.getAttrtype()) {
+                case 'T': {
+                }
+                case 'C': {
+                    decimal = 0;
+                    break;
+                }
+                case 'L': {
+                }
+                case 'N': {
+                    decimal = 2;
+                    break;
+                }
+                case 'I': {
+                    decimal = 0;
+                    break;
+                }
+                case 'D': {
+                    decimal = 0;
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+        return decimal;
+    }
+
+    public boolean isRenderedC() {
+        boolean lRet = false;
+        if (this.attribute.getAttrtype().equals('C')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedI() {
+        boolean lRet = false;
+        if (this.attribute.getAttrtype().equals('I')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedN() {
+        boolean lRet = false;
+        if (this.attribute.getAttrtype().equals('N')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedB() {
+        boolean lRet = false;
+        if (this.attribute.getAttrtype().equals('B')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedD() {
+        boolean lRet = false;
+        if (this.attribute.getAttrtype().equals('D')) {
+            lRet = true;
+        }
+        return lRet;
+    }
+
+    public boolean isRenderedT() {
+        boolean lRet = false;
+        if (this.attribute.getAttrtype().equals('T')) {
+            lRet = true;
+        }
+        return lRet;
     }
 
     /**

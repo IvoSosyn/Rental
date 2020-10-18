@@ -51,6 +51,8 @@ public class EviEntita implements Serializable {
 
     @Inject
     Account account;
+    @Inject
+    private EviAttribute eviAttribute;
 
     private Entita parentEntita = null;
     private Typentity typentity = null;
@@ -283,13 +285,15 @@ public class EviEntita implements Serializable {
     }
 
     public void onRowSelect(SelectEvent event) {
-        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+//        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+        eviAttribute.loadAttributes(((Entita) event.getObject()));
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+//        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+        eviAttribute.loadAttributes(null);
 
     }
 
@@ -389,6 +393,20 @@ public class EviEntita implements Serializable {
      */
     public void setColumnsDualList(DualListModel<String> columnsDualList) {
         this.columnsDualList = columnsDualList;
+    }
+
+    /**
+     * @return the eviAttribute
+     */
+    public EviAttribute getEviAttribute() {
+        return eviAttribute;
+    }
+
+    /**
+     * @param eviAttribute the eviAttribute to set
+     */
+    public void setEviAttribute(EviAttribute eviAttribute) {
+        this.eviAttribute = eviAttribute;
     }
 
 }

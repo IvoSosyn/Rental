@@ -55,6 +55,8 @@ public class Attribute extends EntitySuperClassNajem implements Serializable, Cl
     @Column(nullable = false)
     private Character attrtype;
 
+    @NotNull
+    @Column(nullable = false)
     private BigInteger attrsize;
 
     @Basic(optional = false)

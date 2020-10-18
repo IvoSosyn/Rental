@@ -15,30 +15,30 @@
                 <p:column headerText="Položka" >
                     <h:outputText value="#{attrValue.attribute.attrname}: " />
                 </p:column>
+
+                <!-- *********** String -->                    
                 <p:column headerText="Hodnota" >
-                    <p:cellEditor rendered="#{eviAttr.isRenderedC(attrValue)}">
+                    <p:cellEditor rendered="#{attrValue.isRenderedC()}">
                         <f:facet name="output"> <p:outputLabel value="#{attrValue.value}" title="#{attrValue.attribute.popis}" /> </f:facet>
-                        <f:facet name="input"> <p:inputText value="#{attrValue.value}" style="width:96%" label="#{attrValue.attribute.popis}" size="#{attrValue.attribute.attrsize}" /> </f:facet>
+                        <f:facet name="input"> <p:inputText value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" /> </f:facet>
                     </p:cellEditor>
-                    <p:cellEditor  rendered="#{eviAttr.isRenderedB(attrValue)}">
-                        <f:facet name="output"><p:selectBooleanCheckbox value="#{attrValue.value}" title="#{attrValue.attribute.popis}" disabled="true" /> </f:facet>
-                        <f:facet name="input"><p:selectBooleanCheckbox  value="#{attrValue.value}"  disabled="false"  /></f:facet>
+                    <!-- *********** Boolean -->                    
+                    <p:cellEditor  rendered="#{attrValue.isRenderedB()}">
+                        <f:facet name="output"><p:selectBooleanCheckbox value="#{attrValue.value}" disabled="true" /> </f:facet>
+                        <f:facet name="input"><p:selectBooleanCheckbox  value="#{attrValue.value}" disabled="false"  /></f:facet>
                     </p:cellEditor>                                    
-                    <p:cellEditor  rendered="#{eviAttr.isRenderedI(attrValue)}">
-<p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/>                        
-<!--
-<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
-<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
--->
+                    <!-- *********** Integer -->                    
+                    <p:cellEditor  rendered="#{attrValue.isRenderedI()}">
+                        <f:facet name="output"> <p:inputNumber value="#{attrValue.value}" disabled="true" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" /> </f:facet>                    
+                        <f:facet name="input"> <p:inputNumber value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" /> </f:facet>
                     </p:cellEditor>                                    
-                    <p:cellEditor  rendered="#{eviAttr.isRenderedN(attrValue)}">
-<p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/>                        
-<!--
-<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
-<f:facet name="intput"> <p:inputNumber value="#{attrValue.value}" disabled="false" size="#{attrValue.attribute.attrsize}" decimalPlaces="#{attrValue.attribute.attrdecimal}"/> </f:facet>
--->
+                    <!-- *********** Double -->                    
+                    <p:cellEditor  rendered="#{attrValue.isRenderedN()}">
+                        <f:facet name="output"> <p:inputNumber value="#{attrValue.value}" disabled="true" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" /> </f:facet>                    
+                        <f:facet name="input"> <p:inputNumber value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" /> </f:facet>
                     </p:cellEditor>                                    
-                    <p:cellEditor  rendered="#{eviAttr.isRenderedD(attrValue)}">
+                    <!-- *********** Date -->                    
+                    <p:cellEditor  rendered="#{attrValue.isRenderedD()}">
                         <f:facet name="output"> 
                             <p:datePicker value="#{attrValue.value}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false" />
                         </f:facet>
@@ -48,13 +48,14 @@
                             </p:datePicker>
                         </f:facet>
                     </p:cellEditor>                                    
-                    <p:cellEditor rendered="#{eviAttr.isRenderedT(attrValue)}">
-                        <f:facet name="output"> <h:outputText value="#{attrValue.value}" title="#{attrValue.attribute.popis}" /> </f:facet>
-                        <f:facet name="input"> <p:inputText value="#{attrValue.value}" style="width:96%" label="#{attrValue.attribute.popis}"/> </f:facet>
+                    <!-- *********** Table(ciselnik) -->                    
+                    <p:cellEditor rendered="#{attrValue.isRenderedT()}">
+                        <f:facet name="output"> <h:outputText value="#{attrValue.value}"  title="#{attrValue.attribute.popis}" /> </f:facet>
+                        <f:facet name="input"> <p:inputText value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}"  size="#{attrValue.attrSize}"  title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" /> </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <f:facet name="footer">                        
-                    <p:commandButton id="buttonSaveAttrValue" value="Ulož" ajax="true"  />
+                    <p:commandButton id="buttonSaveAttrValue" value="Ulož" ajax="true"  icon="fa fa-save" />
                 </f:facet>
             </p:dataTable>
         </h:form>

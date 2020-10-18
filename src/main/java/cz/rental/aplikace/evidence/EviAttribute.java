@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces.Dialog;
@@ -72,69 +70,6 @@ public class EviAttribute implements Serializable {
         }
     }
 
-    public void onRowSelect(SelectEvent event) {
-        System.out.println("EviAttr.onRowSelect  event.getObject()=" + event.getObject());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviAttr.onRowSelect - dosud neimplementováno", ((Entita) event.getObject()).getPopis()));
-        loadAttributes(((Entita) event.getObject()));
-    }
-
-    public void onRowUnselect(UnselectEvent event) {
-        System.out.println("EviAttr.onRowUnselect  event.getObject()=" + event.getObject());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviAttr.onRowUnselect - dosud neimplementováno", ((Entita) event.getObject()).getPopis()));
-        loadAttributes(null);
-
-    }
-
-    public boolean isRenderedC(EviValue attrValue) {
-        boolean lRet = false;
-        // System.out.println("attrValue.getAttribute().getAttrtype(): " + attrValue.getAttribute().getAttrtype());
-        if (attrValue.getAttribute().getAttrtype().equals('C')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedI(EviValue attrValue) {
-        boolean lRet = false;
-        if (attrValue.getAttribute().getAttrtype().equals('I')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedN(EviValue attrValue) {
-        boolean lRet = false;
-        if (attrValue.getAttribute().getAttrtype().equals('N')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedB(EviValue attrValue) {
-        boolean lRet = false;
-        if (attrValue.getAttribute().getAttrtype().equals('B')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedD(EviValue attrValue) {
-        boolean lRet = false;
-        if (attrValue.getAttribute().getAttrtype().equals('D')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedT(EviValue attrValue) {
-        boolean lRet = false;
-        if (attrValue.getAttribute().getAttrtype().equals('T')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-    
-    
     /**
      * @return the attributes
      */
