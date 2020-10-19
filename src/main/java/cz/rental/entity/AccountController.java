@@ -161,7 +161,7 @@ public class AccountController extends JpaController {
         saveAcountAttr(entita, account.getCustomerName(), "accountName");
         saveAcountAttr(entita, account.getCustomerAddress(), "acountAddress");
         saveAcountAttr(entita, account.getCustomerEmail(), "acountEmail");
-        saveAcountAttr(entita, account.getCustomerTel(), "accountTel");
+        saveAcountAttr(entita, account.getCustomerTelNumber(), "accountTel");
         saveAcountAttr(entita, account.getCustomerPasswordSHA512(), "accountPassword");
         if (account.getCustomerModel() instanceof Typentity) {
             saveAcountAttr(entita, account.getCustomerModel().getId().toString(), "accountModel");

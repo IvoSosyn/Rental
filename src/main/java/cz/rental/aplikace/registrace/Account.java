@@ -24,12 +24,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 /**
  *
@@ -52,7 +48,7 @@ public class Account{
     private UUID customerID = null;
     private String customerName = "";
     private String customerEmail = "";
-    private String customerTel = "";
+    private String customerTelNumber     = "";
     private String customerPassword = "";
     private String customerPasswordControl = "";
     private String customerPasswordHelp = "";
@@ -364,19 +360,19 @@ public class Account{
     }
 
     /**
-     * @return the customerTel
+     * @return the customerTelNumber
      */
     
-    public String getCustomerTel() {
-        return customerTel;
+    public String getCustomerTelNumber() {
+        return customerTelNumber;
     }
 
     /**
-     * @param customerTel the customerTel to set
+     * @param customerTelNumber the customerTelNumber to set
      */
     
-    public void setCustomerTel(String customerTel) {
-        this.customerTel = customerTel;
+    public void setCustomerTelNumber(String customerTelNumber) {
+        this.customerTelNumber = customerTelNumber;
     }
 
     /**
