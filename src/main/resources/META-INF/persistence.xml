@@ -11,6 +11,16 @@
     <class>cz.rental.admin.entity.Typentity</class>
     <class>cz.rental.admin.entity.Attrdate</class>
     <class>cz.rental.admin.entity.Attribute</class>
+    <class>cz.rental.entity1.Attrtext</class>
+    <class>cz.rental.entity1.Attribute</class>
+    <class>cz.rental.entity1.Typentity</class>
+    <class>cz.rental.entity1.Attruuid</class>
+    <class>cz.rental.entity1.Entita</class>
+    <class>cz.rental.entity1.User</class>
+    <class>cz.rental.entity1.Account</class>
+    <class>cz.rental.entity1.Attrnumeric</class>
+    <class>cz.rental.entity1.Userrights</class>
+    <class>cz.rental.entity1.Attrdate</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!--    <shared-cache-mode>NONE</shared-cache-mode> -->
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
