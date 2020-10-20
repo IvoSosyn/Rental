@@ -12,12 +12,15 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 
@@ -61,6 +64,13 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idtypentity")
     private Collection<Entita> entitaCollection;
+
+    @JoinColumn(name = "idaccount", referencedColumnName = "id")
+    @ManyToOne
+    private Account idaccount;
+
+    @OneToMany(mappedBy = "idmodel")
+    private Collection<Account> accountCollection;
 
     public Typentity() {
         super();
@@ -113,4 +123,22 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
     public void setEditor(Character editor) {
         this.editor = editor;
     }
+
+    public Account getIdaccount() {
+        return idaccount;
+    }
+
+    public void setIdaccount(Account idaccount) {
+        this.idaccount = idaccount;
+    }
+
+    @XmlTransient
+    public Collection<Account> getAccountCollection() {
+        return accountCollection;
+    }
+
+    public void setAccountCollection(Collection<Account> accountCollection) {
+        this.accountCollection = accountCollection;
+    }
+
 }

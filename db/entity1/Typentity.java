@@ -5,6 +5,7 @@
  */
 package cz.rental.entity1;
 
+import cz.rental.entity.Account;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
