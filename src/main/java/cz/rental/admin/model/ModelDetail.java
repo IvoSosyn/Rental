@@ -6,7 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Account;
+import cz.rental.aplikace.registrace.Ucet;
 import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -42,7 +42,7 @@ public class ModelDetail implements Serializable {
     @EJB
     cz.rental.entity.AttributeController controller;
     
-    Account account;
+    Ucet account;
     User user;
 
     // Add business logic below. (Right-click in editor and choose
@@ -50,10 +50,10 @@ public class ModelDetail implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
             user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
         } catch (NamingException ex) {
-            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
         }        editabelAttrsize = new ArrayList<>();
         editabelAttrsize.add('C');
         editabelAttrsize.add('N');

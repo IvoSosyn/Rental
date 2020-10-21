@@ -6,7 +6,7 @@
 package cz.rental.aplikace.evidence;
 
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Account;
+import cz.rental.aplikace.registrace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
@@ -40,19 +40,19 @@ public class Evidence implements Serializable {
     @EJB
     cz.rental.entity.TypentityController typEntityController;
 
-    Account account;
+    Ucet account;
     User user;
 
     @PostConstruct
     public void init() {
         try {
-            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
             user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
         } catch (NamingException ex) {
-            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (this.account != null && this.account.getUser() != null && this.account.getCustomerModel() != null) {
-            loadAttributesForTypentity(this.account.getCustomerModel());
+        if (this.account != null && this.account.getUser() != null && this.account.getAccount().getIdmodel() != null) {
+            loadAttributesForTypentity(this.account.this.account.getAccount().getIdmodel());
         } else {
             // Pouze pro testovani
             for (Typentity tp : this.typEntityController.getRootTypEntity()) {

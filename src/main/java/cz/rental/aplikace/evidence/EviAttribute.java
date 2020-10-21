@@ -5,7 +5,7 @@
  */
 package cz.rental.aplikace.evidence;
 
-import cz.rental.aplikace.registrace.Account;
+import cz.rental.aplikace.registrace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import java.io.Serializable;
@@ -35,7 +35,7 @@ public class EviAttribute implements Serializable {
     private cz.rental.entity.AttributeController attrController;
 
     @Inject
-    private Account account;
+    private Ucet account;
 
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
@@ -157,14 +157,14 @@ public class EviAttribute implements Serializable {
     /**
      * @return the account
      */
-    public Account getAccount() {
+    public Ucet getAccount() {
         return account;
     }
 
     /**
      * @param account the account to set
      */
-    public void setAccount(Account account) {
+    public void setAccount(Ucet account) {
         this.account = account;
     }
 

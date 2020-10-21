@@ -7,7 +7,7 @@ package cz.rental.admin.model;
 
 import cz.rental.utils.Aplikace;
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Account;
+import cz.rental.aplikace.registrace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
@@ -52,7 +52,7 @@ public class ModelTable implements Serializable {
     @EJB
     ModelDetail modelDetail;
 
-    Account account;
+    Ucet account;
     User user;
 
     // Add business logic below. (Right-click in editor and choose
@@ -60,10 +60,10 @@ public class ModelTable implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
             user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
         } catch (NamingException ex) {
-            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

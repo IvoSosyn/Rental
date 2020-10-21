@@ -7,7 +7,7 @@ package cz.rental.entity;
 
 import cz.rental.utils.Aplikace;
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Account;
+import cz.rental.aplikace.registrace.Ucet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +34,7 @@ import javax.persistence.Query;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AttrController extends JpaController {
 
-    Account account;
+    Ucet account;
     User user;
 
     Query query = null;
@@ -42,10 +42,10 @@ public class AttrController extends JpaController {
     @PostConstruct
     public void init() {
         try {
-            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
             user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
         } catch (NamingException ex) {
-            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

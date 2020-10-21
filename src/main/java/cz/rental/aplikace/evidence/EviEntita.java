@@ -5,7 +5,7 @@
  */
 package cz.rental.aplikace.evidence;
 
-import cz.rental.aplikace.registrace.Account;
+import cz.rental.aplikace.registrace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
@@ -50,7 +50,7 @@ public class EviEntita implements Serializable {
     cz.rental.entity.AttributeController attrController;
 
     @Inject
-    Account account;
+    Ucet account;
     @Inject
     private EviAttribute eviAttribute;
 
@@ -68,10 +68,10 @@ public class EviEntita implements Serializable {
     @PostConstruct
     public void init() {
 //        try {
-//            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Ucet");
 //            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
 //        } catch (NamingException ex) {
-//            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
 //        }
         this.columns.add("Entita.Popis");
         this.columns.add("Entita.Platiod");

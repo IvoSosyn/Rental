@@ -6,7 +6,7 @@
 package cz.rental.entity;
 
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Account;
+import cz.rental.aplikace.registrace.Ucet;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,16 +37,16 @@ public class AttributeController extends JpaController {
     private Query query = null;
     private Typentity typentity = null;
 
-    Account account;
+    Ucet account;
     User user;
 
     @PostConstruct
     public void init() {
         try {
-            account = (Account) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
             user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
         } catch (NamingException ex) {
-            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

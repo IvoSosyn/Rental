@@ -26,7 +26,7 @@ import org.primefaces.context.PrimeFacesContext;
 public class Registrace {
 
     @EJB
-    private Account account;
+    private Ucet account;
 
     private static final String XHTML_REGISTRACE_FILE = "/aplikace/registrace/regStep";
     private int selectedStep = 0;
@@ -81,7 +81,7 @@ public class Registrace {
     }
 
     public boolean isNextEnable() {
-        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed() && !this.account.getCustomerEmail().isEmpty();
+        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed() && !this.account.getAccount().getEmail().isEmpty();
         return isEnable;
     }
 
@@ -98,12 +98,14 @@ public class Registrace {
     }
 
     public String createAccount() {
+        boolean isOk = true;
         // Uloz registraci uctu
         try {
             account.saveAccount();
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
+            isOk = false;
         }
         // Zaloz adresare k uctu a vstupni 'index.xhtml'
         try {
@@ -111,6 +113,7 @@ public class Registrace {
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage()));
+            isOk = false;
         }
         // Napln XHTML soubory daty ze sablony
         try {
@@ -118,10 +121,15 @@ public class Registrace {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při plnění a konfiguraci souborů k účtu. Opakujte později.", ex.getMessage()));
+            isOk = false;
         }
-        //return "/admin/model/model.xhtml";
-        // Pri neuspechu vratit na Login.xhtml
-        return account.getAccountDir() + File.separator + "index.xhtml";
+        if (isOk) {
+            return "/aplikace/evidence/evidence.xhtml";
+        } else {
+            // Pri neuspechu vratit na zcatek registrace
+            return "/aplikace/registrace/registrace.xhtml";
+        }
+
     }
 
     /**
@@ -138,5 +146,4 @@ public class Registrace {
         this.selectedStep = selectedStep;
     }
 
-    
 }
