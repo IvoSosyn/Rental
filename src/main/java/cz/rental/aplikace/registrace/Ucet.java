@@ -45,8 +45,10 @@ public class Ucet {
     @Inject
     private User user;
 
-    private Account account=null;
-    String password="";
+    private Account account = null;
+    private String password = "";
+    private String passwordControl = "";
+    private String passwordHelp = "";
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
 
@@ -63,9 +65,9 @@ public class Ucet {
         //      <param-value>/home/Rental/Accounts</param-value>
         //  </context-param>
         if (FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir") != null) {
-            this.accountsRootDir=FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir");
+            this.accountsRootDir = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir");
         }
-        this.accountDir=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
+        this.accountDir = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
         //this.setCustomerPasswordSHA512(SHA512.hash512(""));
 //        Set<String> setRes=FacesContext.getCurrentInstance().getExternalContext().getResourcePaths("/account");
 //        System.out.println(" Ucet.accountDir="+accountDir);
@@ -73,18 +75,21 @@ public class Ucet {
 //            System.out.println(" /account: resources="+setRe);
 //            
 //        }
-        this.account=new Account();
+        this.account = new Account();
         this.account.setNewEntity(true);
         this.account.setId(UUID.randomUUID());
         this.account.setPin(9020);
+        this.account.setFullname("Ing.Ivo Sosýn");
         this.account.setEmail("sosyn@seznam.cz");
+        this.account.setStreet1("Fűgnerova 51/14");
+        this.account.setStreet2("Pod Cvilínem");
         this.account.setCity("Krnov");
+        this.account.setPostcode("794 01");
+
     }
 
-    
-    
     public Boolean isEditable() {
-        boolean isEditable = this.user.getParam(User.SUPERVISOR, false) || getUser().getParam(cz.rental.aplikace.User.ACCOUNT_EDIT, false);
+        boolean isEditable = this.user.getParam(User.SUPERVISOR, false) || this.user.getParam(User.ACCOUNT_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         return isEditable;
     }
@@ -106,7 +111,8 @@ public class Ucet {
     }
 
     public void newPassword() {
-        this.account.setPasswordsha512( SHA512.hash512(this.password) );
+        this.account.setPasswordsha512(SHA512.hash512(this.password));
+        this.account.setPasswordhelp(this.passwordHelp);
         //System.out.println("Ucet.newPassword " + this.customerPassword);
         //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, this.getCustomerPassword(), this.getCustomerPasswordSHA512()));
     }
@@ -254,7 +260,48 @@ public class Ucet {
      * @param account the account to set
      */
     public void setAccount(Account account) {
-        this.account = account;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return the passwordControl
+     */
+    public String getPasswordControl() {
+        return passwordControl;
+    }
+
+    /**
+     * @param passwordControl the passwordControl to set
+     */
+    public void setPasswordControl(String passwordControl) {
+        this.passwordControl = passwordControl;
+    }
+
+    /**
+     * @return the passwordHelp
+     */
+    public String getPasswordHelp() {
+        return passwordHelp;
+    }
+
+    /**
+     * @param passwordHelp the passwordHelp to set
+     */
+    public void setPasswordHelp(String passwordHelp) {
+        this.passwordHelp = passwordHelp;
     }
 
 }

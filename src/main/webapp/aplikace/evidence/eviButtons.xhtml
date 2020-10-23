@@ -6,7 +6,15 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:body>
-        Panel s tlačítky
+        <h:form id="formEntitaButtons" >
+            <p:growl id="idEntitaGrowlButtons" showDetail="true" skipDetailIfEqualsSummary="true"/>
+            <p:fieldset legend="Následná evidence" toggleable="true" toggleSpeed="500" >
+                <p:ajax event="toggle" update=":formEntitaButtons:idEntitaGrowlButtons" />
+                <p:repeat  value="#{eviEntita.entities}"  var="entita" >
+                    <p:commandButton label="#{entita.popis}" value="#{entita.popis}" />
+                </p:repeat>
+            </p:fieldset>
+        </h:form>
     </h:body>  
 </html>
 

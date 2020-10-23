@@ -13,7 +13,7 @@
                     <p>Souhlas se zpracováním</p>
                 </f:facet>
            
-                    <p style="text-align: right;">Identifikátor účtu: #{account.customerID}</p>
+                <p style="text-align: right;">Identifikátor účtu: #{registrace.ucet.account.id}</p>
             </p:panelGrid>
             <p> Uložit data a vygenerovat účet. </p>
             <p:commandButton value="Uložit" title="Uložit data a vygenerovat účet." action="#{registrace.createAccount}" update="@all" type="submit" ajax="false"/>

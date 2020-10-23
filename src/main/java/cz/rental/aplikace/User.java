@@ -68,16 +68,16 @@ public class User {
             booleanValue = debugApp;
         }
         // Uzivatel ma prava administratora
-        if (paramName.toUpperCase().contains(User.SUPERVISOR)) {
+        if (paramName.toUpperCase().contains(User.SUPERVISOR.toUpperCase())) {
             // Dohledat v DB
             booleanValue = true;
         }
         // Uzivatel ma prava editovat "model" - sablony
-        if (paramName.toUpperCase().contains(User.MODEL_EDIT)) {
+        if (paramName.toUpperCase().contains(User.MODEL_EDIT.toUpperCase())) {
             // Dohledat v DB
             booleanValue = false;
         }
-        if (paramName.toUpperCase().contains(User.ACCOUNT_EDIT)) {
+        if (paramName.toUpperCase().contains(User.ACCOUNT_EDIT.toUpperCase())) {
             // Dohledat v DB
             booleanValue = false;
         }

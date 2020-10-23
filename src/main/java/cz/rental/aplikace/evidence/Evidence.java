@@ -11,20 +11,11 @@ import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Named;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 
-/**
- *
- * @author ivo
- */
-@Named(value = "evidence")
 @Stateless
 public class Evidence implements Serializable {
 
@@ -40,19 +31,22 @@ public class Evidence implements Serializable {
     @EJB
     cz.rental.entity.TypentityController typEntityController;
 
+    @Inject
     Ucet account;
+    @Inject
     User user;
 
     @PostConstruct
     public void init() {
-        try {
-            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (this.account != null && this.account.getUser() != null && this.account.getAccount().getIdmodel() != null) {
-            loadAttributesForTypentity(this.account.this.account.getAccount().getIdmodel());
+//        try {
+//            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        if (this.account != null && this.account.getAccount().getIdmodel() != null) {
+            this.typentity = this.account.getAccount().getIdmodel();
+            loadAttributesForTypentity( this.typentity );
         } else {
             // Pouze pro testovani
             for (Typentity tp : this.typEntityController.getRootTypEntity()) {

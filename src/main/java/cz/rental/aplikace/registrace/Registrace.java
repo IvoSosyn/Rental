@@ -5,7 +5,6 @@
  */
 package cz.rental.aplikace.registrace;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,14 +25,13 @@ import org.primefaces.context.PrimeFacesContext;
 public class Registrace {
 
     @EJB
-    private Ucet account;
+    private Ucet ucet;
 
     private static final String XHTML_REGISTRACE_FILE = "/aplikace/registrace/regStep";
     private int selectedStep = 0;
 
     @PostConstruct
     public void init() {
-
     }
 
     /**
@@ -81,7 +79,7 @@ public class Registrace {
     }
 
     public boolean isNextEnable() {
-        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed() && !this.account.getAccount().getEmail().isEmpty();
+        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed() && !this.ucet.getAccount().getEmail().isEmpty();
         return isEnable;
     }
 
@@ -101,7 +99,7 @@ public class Registrace {
         boolean isOk = true;
         // Uloz registraci uctu
         try {
-            account.saveAccount();
+            this.ucet.saveAccount();
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
@@ -109,7 +107,7 @@ public class Registrace {
         }
         // Zaloz adresare k uctu a vstupni 'index.xhtml'
         try {
-            account.createAccountDir();
+            this.ucet.createAccountDir();
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage()));
@@ -117,7 +115,7 @@ public class Registrace {
         }
         // Napln XHTML soubory daty ze sablony
         try {
-            account.createAccountHTML();
+            this.ucet.createAccountHTML();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při plnění a konfiguraci souborů k účtu. Opakujte později.", ex.getMessage()));
@@ -146,4 +144,17 @@ public class Registrace {
         this.selectedStep = selectedStep;
     }
 
+    /**
+     * @return the ucet
+     */
+    public Ucet getUcet() {
+        return ucet;
+    }
+
+    /**
+     * @param ucet the ucet to set
+     */
+    public void setUcet(Ucet ucet) {
+        this.ucet = ucet;
+    }
 }
