@@ -5,7 +5,7 @@
  */
 package cz.rental.aplikace.evidence;
 
-import cz.rental.aplikace.registrace.Ucet;
+import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
@@ -40,6 +40,20 @@ import org.primefaces.model.DualListModel;
 @Stateless
 public class EviEntita implements Serializable {
 
+    /**
+     * @return the ucet
+     */
+    public Ucet getUcet() {
+        return ucet;
+    }
+
+    /**
+     * @param ucet the ucet to set
+     */
+    public void setUcet(Ucet ucet) {
+        this.ucet = ucet;
+    }
+
     static final long serialVersionUID = 42L;
 
     static final int COUNT_ENTITA_NEW = 1;
@@ -50,7 +64,8 @@ public class EviEntita implements Serializable {
     cz.rental.entity.AttributeController attrController;
 
     @Inject
-    Ucet account;
+    private Ucet ucet;
+    
     @Inject
     private EviAttribute eviAttribute;
 
@@ -68,7 +83,7 @@ public class EviEntita implements Serializable {
     @PostConstruct
     public void init() {
 //        try {
-//            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Ucet");
+//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Ucet");
 //            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
 //        } catch (NamingException ex) {
 //            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
@@ -81,8 +96,8 @@ public class EviEntita implements Serializable {
         this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
         this.typentity.setPopis("945889e4-4383-480e-9d77-dafe665fd475");
         //
-//        account.setCustomerID(UUID.fromString("34416c9f-26f2-44d8-b01d-6be4d6868dba"));
-//        account.setCustomerModel(this.typentity);
+//        ucet.setCustomerID(UUID.fromString("34416c9f-26f2-44d8-b01d-6be4d6868dba"));
+//        ucet.setCustomerModel(this.typentity);
         //
         this.parentEntita = new Entita();
 //        this.parentEntita.setId(UUID.fromString("22ec3d58-67ce-4e6a-a692-c6d167f47528"));

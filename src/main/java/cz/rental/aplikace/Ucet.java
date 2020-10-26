@@ -1,11 +1,10 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.rental.aplikace.registrace;
+package cz.rental.aplikace;
 
-import cz.rental.aplikace.User;
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
 import cz.rental.utils.SHA512;
@@ -31,7 +30,7 @@ import javax.inject.Inject;
  *
  * @author ivo
  */
-@Named(value = "account")
+@Named(value = "ucet")
 @Stateful
 public class Ucet {
 
@@ -303,5 +302,4 @@ public class Ucet {
     public void setPasswordHelp(String passwordHelp) {
         this.passwordHelp = passwordHelp;
     }
-
 }

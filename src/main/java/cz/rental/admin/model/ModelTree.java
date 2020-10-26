@@ -6,7 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Ucet;
+import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.ArrayList;

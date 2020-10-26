@@ -6,7 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Ucet;
+import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.math.BigInteger;

@@ -5,7 +5,7 @@
  */
 package cz.rental.aplikace.evidence;
 
-import cz.rental.aplikace.registrace.Ucet;
+import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import java.io.Serializable;
@@ -16,8 +16,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces.Dialog;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -35,7 +33,7 @@ public class EviAttribute implements Serializable {
     private cz.rental.entity.AttributeController attrController;
 
     @Inject
-    private Ucet account;
+    private Ucet ucet;
 
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
@@ -155,17 +153,17 @@ public class EviAttribute implements Serializable {
     }
 
     /**
-     * @return the account
+     * @return the ucet
      */
-    public Ucet getAccount() {
-        return account;
+    public Ucet getUcet() {
+        return ucet;
     }
 
     /**
-     * @param account the account to set
+     * @param account the ucet to set
      */
-    public void setAccount(Ucet account) {
-        this.account = account;
+    public void setUcet(Ucet account) {
+        this.ucet = account;
     }
 
     /**

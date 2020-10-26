@@ -5,6 +5,7 @@
  */
 package cz.rental.aplikace;
 
+import cz.rental.utils.Aplikace;
 import java.util.Date;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ public class User {
     public static final String SUPERVISOR = "Supervisor";
     public static final String MODEL_EDIT = "ModelEdit";
     public static final String ACCOUNT_EDIT = "AccounEdit";
+
     @Inject
     private ServletContext context;
 
@@ -32,6 +34,7 @@ public class User {
     boolean debugApp = false;
 
     private UUID userId = null;
+    private Date datumZmeny = Aplikace.getZmenaOd();
 
     /**
      * Inicializace matice prav uzivatele
@@ -138,6 +141,20 @@ public class User {
      */
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    /**
+     * @return the datumZmeny
+     */
+    public Date getDatumZmeny() {
+        return datumZmeny;
+    }
+
+    /**
+     * @param datumZmeny the datumZmeny to set
+     */
+    public void setDatumZmeny(Date datumZmeny) {
+        this.datumZmeny = datumZmeny;
     }
 
 }

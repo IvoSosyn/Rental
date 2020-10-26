@@ -7,7 +7,7 @@ package cz.rental.entity;
 
 import cz.rental.utils.Aplikace;
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Ucet;
+import cz.rental.aplikace.Ucet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

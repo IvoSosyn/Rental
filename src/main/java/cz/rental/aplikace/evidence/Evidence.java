@@ -6,7 +6,7 @@
 package cz.rental.aplikace.evidence;
 
 import cz.rental.aplikace.User;
-import cz.rental.aplikace.registrace.Ucet;
+import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;

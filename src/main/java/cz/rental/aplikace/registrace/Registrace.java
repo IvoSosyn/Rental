@@ -5,6 +5,7 @@
  */
 package cz.rental.aplikace.registrace;
 
+import cz.rental.aplikace.Ucet;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
