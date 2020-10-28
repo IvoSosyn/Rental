@@ -13,7 +13,7 @@
         <h:form id="formAttr" >
             <p:dataTable   var="attrValue" value="#{eviAttr.values}" editable="true" editMode="cell" widgetVar="cellAttribute" >
                 <p:column headerText="Položka" >
-                    <h:outputText value="#{attrValue.attribute.attrname}: " />
+                    <h:outputText value="#{attrValue.attribute.attrname}: " title="#{attrValue.attribute.popis}" />
                 </p:column>
 
                 <!-- *********** String -->                    

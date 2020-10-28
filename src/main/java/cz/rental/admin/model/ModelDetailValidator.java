@@ -46,11 +46,11 @@ public class ModelDetailValidator implements Validator, Serializable {
         try {
             modelDetail = (ModelDetail) InitialContext.doLookup("java:module/ModelDetail");
             this.setAttribute(modelDetail.getAttribute());
-            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getId()=" + modelDetail.getAttribute().getId());
-            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPoradi()=" + modelDetail.getAttribute().getPoradi());
-            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getAttrname()=" + modelDetail.getAttribute().getAttrname());
-            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPopis()=" + modelDetail.getAttribute().getPopis());
-            System.out.println("*ModelDetailValidator.validate                                  value=" + value);
+//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getId()=" + modelDetail.getAttribute().getId());
+//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPoradi()=" + modelDetail.getAttribute().getPoradi());
+//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getAttrname()=" + modelDetail.getAttribute().getAttrname());
+//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPopis()=" + modelDetail.getAttribute().getPopis());
+//            System.out.println("*ModelDetailValidator.validate                                  value=" + value);
 
         } catch (NamingException ex) {
             msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se najít modul 'ModelDetail'. ");

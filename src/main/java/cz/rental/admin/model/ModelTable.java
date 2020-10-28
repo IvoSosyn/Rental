@@ -6,7 +6,7 @@
 package cz.rental.admin.model;
 
 import cz.rental.utils.Aplikace;
-import cz.rental.aplikace.User;
+import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
@@ -22,6 +22,7 @@ import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -52,19 +53,18 @@ public class ModelTable implements Serializable {
     @EJB
     ModelDetail modelDetail;
 
-    Ucet account;
-    User user;
+    @Inject
+    Ucet ucet;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        try {
-            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 
@@ -221,7 +221,7 @@ public class ModelTable implements Serializable {
      * @return uzivatel muze pridavat zaznamy
      */
     public boolean isAppendable() {
-        boolean isAppendable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
+        boolean isAppendable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
         return (isAppendable);
     }
 
@@ -235,7 +235,7 @@ public class ModelTable implements Serializable {
     public boolean isPasteable() {
         boolean isPasteable = (this.copyAttrs != null && !this.copyAttrs.isEmpty());
         if (isPasteable) {
-            isPasteable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
+            isPasteable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
         }
         return (isPasteable);
     }
@@ -248,7 +248,7 @@ public class ModelTable implements Serializable {
     public boolean isRemovable() {
         boolean isRemoveable = (this.selectedAttrs != null && !this.selectedAttrs.isEmpty());
         if (isRemoveable) {
-            isRemoveable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
+            isRemoveable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
         }
         return (isRemoveable);
     }

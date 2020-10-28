@@ -121,7 +121,7 @@
                         <p:message id="platiDoMsg" for="@previous"/>
 
                         <p:outputLabel value="Systém:"  for="@next" />
-                        <h:selectBooleanCheckbox id="system" value="#{modelTree.typentity.attrsystem}"  disabled="#{!modelTree.editable or !user.getParam('SUPERVISOR',false)}" >
+                        <h:selectBooleanCheckbox id="system" value="#{modelTree.typentity.attrsystem}"  disabled="#{!modelTree.editable or !uzivatel.getParam('SUPERVISOR',false)}" >
                             <p:ajax update="systemMsg" event="blur" />
                         </h:selectBooleanCheckbox>
                         <p:message id="systemMsg" for="@previous"/>

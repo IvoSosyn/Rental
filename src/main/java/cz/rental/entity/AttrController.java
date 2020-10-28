@@ -6,7 +6,7 @@
 package cz.rental.entity;
 
 import cz.rental.utils.Aplikace;
-import cz.rental.aplikace.User;
+import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,19 +34,18 @@ import javax.persistence.Query;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AttrController extends JpaController {
 
-    Ucet account;
-    User user;
+    Ucet ucet;
 
     Query query = null;
 
     @PostConstruct
     public void init() {
-        try {
-            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public AttrController() {
@@ -313,7 +312,7 @@ public class AttrController extends JpaController {
      * @param idTypEntity - ID Typentity, jehoz Attribute se maji smazat
      */
     public void deleteAllTypentityId(UUID idTypEntity) {
-        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity" + (user.getParam(User.SUPERVISOR, false) ? "" : " AND NOT a.attrsystem"));
+        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity" + (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) ? "" : " AND NOT a.attrsystem"));
         this.query.setParameter("idTypEntity", idTypEntity);
         int deleted = this.query.executeUpdate();
         //System.out.println(" Delete from Attribute "+deleted);

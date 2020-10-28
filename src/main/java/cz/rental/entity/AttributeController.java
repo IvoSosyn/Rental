@@ -5,7 +5,7 @@
  */
 package cz.rental.entity;
 
-import cz.rental.aplikace.User;
+import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
@@ -37,17 +37,16 @@ public class AttributeController extends JpaController {
     private Query query = null;
     private Typentity typentity = null;
 
-    Ucet account;
-    User user;
+    Ucet ucet;
 
     @PostConstruct
     public void init() {
-        try {
-            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public ArrayList<Attribute> getAttributeForTypentity(Typentity typentity) {
@@ -116,7 +115,7 @@ public class AttributeController extends JpaController {
 
     public void deleteAttrs(ArrayList<Attribute> selectedAttrs) throws Exception {
         for (Attribute selectedAttr : selectedAttrs) {
-            if (!selectedAttr.isNewEntity() && (user.getParam(User.SUPERVISOR, false) ? true : selectedAttr.getAttrsystem() != null && !selectedAttr.getAttrsystem())) {
+            if (!selectedAttr.isNewEntity() && (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) ? true : selectedAttr.getAttrsystem() != null && !selectedAttr.getAttrsystem())) {
                 this.destroy(selectedAttr);
             }
         }

@@ -18,9 +18,9 @@ import javax.servlet.ServletContext;
  *
  * @author ivo
  */
-@Named(value = "user")
+@Named(value = "uzivatel")
 @Stateful
-public class User {
+public class Uzivatel {
 
     public static final String SUPERVISOR = "Supervisor";
     public static final String MODEL_EDIT = "ModelEdit";
@@ -35,6 +35,7 @@ public class User {
 
     private UUID userId = null;
     private Date datumZmeny = Aplikace.getZmenaOd();
+    private cz.rental.entity.User user = null;
 
     /**
      * Inicializace matice prav uzivatele
@@ -71,16 +72,16 @@ public class User {
             booleanValue = debugApp;
         }
         // Uzivatel ma prava administratora
-        if (paramName.toUpperCase().contains(User.SUPERVISOR.toUpperCase())) {
+        if (paramName.toUpperCase().contains(Uzivatel.SUPERVISOR.toUpperCase())) {
             // Dohledat v DB
             booleanValue = true;
         }
         // Uzivatel ma prava editovat "model" - sablony
-        if (paramName.toUpperCase().contains(User.MODEL_EDIT.toUpperCase())) {
+        if (paramName.toUpperCase().contains(Uzivatel.MODEL_EDIT.toUpperCase())) {
             // Dohledat v DB
             booleanValue = false;
         }
-        if (paramName.toUpperCase().contains(User.ACCOUNT_EDIT.toUpperCase())) {
+        if (paramName.toUpperCase().contains(Uzivatel.ACCOUNT_EDIT.toUpperCase())) {
             // Dohledat v DB
             booleanValue = false;
         }
@@ -155,6 +156,20 @@ public class User {
      */
     public void setDatumZmeny(Date datumZmeny) {
         this.datumZmeny = datumZmeny;
+    }
+
+    /**
+     * @return the user
+     */
+    public cz.rental.entity.User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(cz.rental.entity.User user) {
+        this.user = user;
     }
 
 }

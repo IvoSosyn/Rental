@@ -37,7 +37,7 @@ public class EviAttribute implements Serializable {
 
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
-    private ArrayList<EviValue> values = new ArrayList<>();
+    private ArrayList<EviAttrValue> values = new ArrayList<>();
 
     private Dialog dialog;
 
@@ -64,7 +64,7 @@ public class EviAttribute implements Serializable {
         this.values = new ArrayList<>(this.attributes.size());
         for (Attribute attr : this.getAttributes()) {
             // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
-            boolean add = this.values.add(new EviValue(this.attrController, this.entita, attr, null, null));
+            boolean add = this.values.add(new EviAttrValue(this.attrController, this.entita, attr, null, null));
         }
     }
 
@@ -85,14 +85,14 @@ public class EviAttribute implements Serializable {
     /**
      * @return the values
      */
-    public ArrayList<EviValue> getValues() {
+    public ArrayList<EviAttrValue> getValues() {
         return values;
     }
 
     /**
      * @param values the values to set
      */
-    public void setValues(ArrayList<EviValue> values) {
+    public void setValues(ArrayList<EviAttrValue> values) {
         this.values = values;
     }
 

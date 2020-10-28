@@ -1,4 +1,4 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -7,6 +7,8 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
+import cz.rental.entity.User;
+import cz.rental.utils.Aplikace;
 import cz.rental.utils.SHA512;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,7 +26,6 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 /**
  *
@@ -41,10 +42,8 @@ public class Ucet {
     @EJB
     private AccountController accController;
 
-    @Inject
-    private User user;
-
-    private Account account = null;
+    private Account account;
+    private Uzivatel uzivatel;
     private String password = "";
     private String passwordControl = "";
     private String passwordHelp = "";
@@ -54,7 +53,7 @@ public class Ucet {
     @PostConstruct
     public void init() {
 //        try {
-//            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//            uzivatel = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.Uzivatel");
 //        } catch (NamingException ex) {
 //            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
 //        }
@@ -84,11 +83,40 @@ public class Ucet {
         this.account.setStreet2("Pod Cvilínem");
         this.account.setCity("Krnov");
         this.account.setPostcode("794 01");
+        this.account.setPlatiod(Aplikace.getPlatiOd());
+        this.account.setPlatido(Aplikace.getPlatiDo());
+        
+        this.uzivatel = new Uzivatel();
+    }
 
+    /**
+     * Metoda vyhleda ucet v DB a porovna SHA-512 hesla s heslem v DB. Pokud je
+     * shoda, naplni instancni promennou <code>account</code> udaji z DB
+     *
+     * @param pin Jedinecny PIN uctu
+     * @param email Email majitele uctu
+     * @param passwordSHA512 Hash SHA-512 hesla
+     * @return Uccet existuje True|False
+     * @throws Exception
+     */
+    public Boolean getUcetAndUzivatel(String pin, String email, String passwordSHA512) throws Exception {
+        boolean ucetExist = false;
+        Account acc = accController.getAccountForPIN(pin);
+        if (!(acc instanceof Account)) {
+            throw new Exception("Účet pro PIN:" + pin + " NEEXISTUJE.");
+        }
+        User accUser = accController.getUserForAccount(acc, email);
+        if (accUser instanceof User && accUser.getPasswordsha512().equals(passwordSHA512)) {
+            this.account = acc;
+            this.uzivatel.setUser(accUser);
+        } else {
+            throw new Exception("Účet pro PIN:" + pin + " a eMail: " + email + " NEEXISTUJE nebo máte chybné heslo.");
+        }
+        return ucetExist;
     }
 
     public Boolean isEditable() {
-        boolean isEditable = this.user.getParam(User.SUPERVISOR, false) || this.user.getParam(User.ACCOUNT_EDIT, false);
+        boolean isEditable = this.uzivatel.getParam(Uzivatel.SUPERVISOR, false) || this.uzivatel.getParam(Uzivatel.ACCOUNT_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         return isEditable;
     }
@@ -97,6 +125,9 @@ public class Ucet {
         return !FacesContext.getCurrentInstance().isValidationFailed();
     }
 
+    /**
+     * NEFUNGUJE PrimeFaces.current().dialog().openDynamic(...)
+     */
     public void changePassword() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("modal", true);
@@ -104,6 +135,11 @@ public class Ucet {
         //System.out.println("PrimeFaces.current().dialog().openDynamic");
     }
 
+    /**
+     * NEFUNGUJE PrimeFaces.current().dialog().closeDynamic(...)
+     *
+     * @param password
+     */
     public void closePassword(String password) {
         PrimeFaces.current().dialog().closeDynamic(password);
         //System.out.println("PrimeFaces.current().dialog().closeDynamic");
@@ -221,17 +257,17 @@ public class Ucet {
     }
 
     /**
-     * @return the user
+     * @return the uzivatel
      */
-    public User getUser() {
-        return user;
+    public Uzivatel getUzivatel() {
+        return uzivatel;
     }
 
     /**
-     * @param user the user to set
+     * @param uzivatel the uzivatel to set
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUzivatel(Uzivatel uzivatel) {
+        this.uzivatel = uzivatel;
     }
 
     /**

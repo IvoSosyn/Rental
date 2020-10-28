@@ -5,22 +5,18 @@
  */
 package cz.rental.entity;
 
-import cz.rental.aplikace.User;
 import cz.rental.aplikace.Ucet;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 import javax.persistence.Query;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -35,18 +31,18 @@ import org.primefaces.model.TreeNode;
 public class TypentityController extends JpaController {
 
     private Query query = null;
-
-    Ucet account;
-    User user;
+    
+    @Inject
+    Ucet ucet;
 
     @PostConstruct
     public void init() {
-        try {
-            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     /**

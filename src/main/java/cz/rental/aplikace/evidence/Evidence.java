@@ -5,84 +5,107 @@
  */
 package cz.rental.aplikace.evidence;
 
-import cz.rental.aplikace.User;
 import cz.rental.aplikace.Ucet;
-import cz.rental.entity.Attribute;
-import cz.rental.entity.Typentity;
+import cz.rental.utils.Aplikace;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
+import javax.inject.Named;
+import org.primefaces.context.PrimeFacesContext;
+import org.primefaces.event.SelectEvent;
 
+@Named(value = "evidence")
 @Stateless
 public class Evidence implements Serializable {
 
     static final long serialVersionUID = 42L;
 
-    static final int COUNT_ATTRIBUTE_NEW = 5;
-
-    private Typentity typentity = null;
-    private ArrayList<Attribute> attributes = new ArrayList<>();
-
-    @EJB
-    cz.rental.entity.AttributeController controller;
-    @EJB
-    cz.rental.entity.TypentityController typEntityController;
-
     @Inject
-    Ucet account;
-    @Inject
-    User user;
+    private Ucet ucet;
+
+    private Date platiOd;
+    private Date platiDo;
+    private Date datumZmeny;
 
     @PostConstruct
     public void init() {
-//        try {
-//            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-//            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        if (this.account != null && this.account.getAccount().getIdmodel() != null) {
-            this.typentity = this.account.getAccount().getIdmodel();
-            loadAttributesForTypentity( this.typentity );
-        } else {
-            // Pouze pro testovani
-            for (Typentity tp : this.typEntityController.getRootTypEntity()) {
-                loadAttributesForTypentity(tp);
-            }
-        }
+        platiOd=ucet.getAccount().getPlatiod();
+        platiDo=ucet.getAccount().getPlatido();
+        datumZmeny=ucet.getUzivatel().getDatumZmeny();
+    }
 
+    public void handleDateSelect(SelectEvent event) {
+        Date date = (Date) event.getObject();
+        //Add facesmessage
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Metoda evidence.handleDateSelect() není implementována.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(date)));
+    }
+
+    public void handleDateChange(ValueChangeEvent e) {
+          System.out.println("valueChangeListener invoked on "+e.getComponent().getClientId(FacesContext.getCurrentInstance())+":" 
+                      + " OLD: " + e.getOldValue() 
+                      + " NEW: " + e.getNewValue());
+        //  System.out.println("Evidence.platiOd: "+Aplikace.getSimpleDateFormat().format(this.platiOd)+ " / Evidence.platiDo: "+Aplikace.getSimpleDateFormat().format(this.platiDo) );
+        // PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getComponent().getClientId(FacesContext.getCurrentInstance()),"Evidence.platiOd: "+Aplikace.getSimpleDateFormat().format(this.platiOd)+ " / Evidence.platiDo: "+Aplikace.getSimpleDateFormat().format(this.platiDo)));
     }
 
     /**
-     * Metoda nacte pro zadany "typentity" pole "attribute" a ulozi do pole
-     * attributes
-     *
-     * @param typentity
+     * @return the ucet
      */
-    public void loadAttributesForTypentity(Typentity typentity) {
-        if (typentity == null) {
-            return;
-        }
-        this.typentity = typentity;
-        this.setAttributes(controller.getAttributeForTypentity(this.typentity));
-    }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    /**
-     * @return the attributes
-     */
-    public ArrayList<Attribute> getAttributes() {
-        return attributes;
+    public Ucet getUcet() {
+        return ucet;
     }
 
     /**
-     * @param attributes the attributes to set
+     * @param ucet the ucet to set
      */
-    public void setAttributes(ArrayList<Attribute> attributes) {
-        this.attributes = attributes;
+    public void setUcet(Ucet ucet) {
+        this.ucet = ucet;
+    }
+
+    /**
+     * @return the platiOd
+     */
+    public Date getPlatiOd() {
+        return platiOd;
+    }
+
+    /**
+     * @param platiOd the platiOd to set
+     */
+    public void setPlatiOd(Date platiOd) {
+        this.platiOd = platiOd;
+    }
+
+    /**
+     * @return the platiDo
+     */
+    public Date getPlatiDo() {
+        return platiDo;
+    }
+
+    /**
+     * @param platiDo the platiDo to set
+     */
+    public void setPlatiDo(Date platiDo) {
+        this.platiDo = platiDo;
+    }
+
+    /**
+     * @return the datumZmeny
+     */
+    public Date getDatumZmeny() {
+        return datumZmeny;
+    }
+
+    /**
+     * @param datumZmeny the datumZmeny to set
+     */
+    public void setDatumZmeny(Date datumZmeny) {
+        this.datumZmeny = datumZmeny;
     }
 }

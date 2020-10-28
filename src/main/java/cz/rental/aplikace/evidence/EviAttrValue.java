@@ -20,7 +20,7 @@ import java.util.Date;
  *
  * @author ivo
  */
-public class EviValue {
+public class EviAttrValue {
 
     cz.rental.entity.AttributeController attrController;
 
@@ -42,7 +42,7 @@ public class EviValue {
      * @param platiOd omezeni platnosti cele instance OD data, muze byt null
      * @param platiDo omezeni platnosti cele instance DO data, muze byt null
      */
-    public EviValue(cz.rental.entity.AttributeController attrController, Entita entita, Attribute attribute, Date platiOd, Date platiDo) {
+    public EviAttrValue(cz.rental.entity.AttributeController attrController, Entita entita, Attribute attribute, Date platiOd, Date platiDo) {
         this.attrController = attrController;
         this.entita = entita;
         this.attribute = attribute;

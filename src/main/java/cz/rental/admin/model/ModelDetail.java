@@ -5,7 +5,7 @@
  */
 package cz.rental.admin.model;
 
-import cz.rental.aplikace.User;
+import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import java.io.Serializable;
@@ -18,6 +18,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -42,19 +43,21 @@ public class ModelDetail implements Serializable {
     @EJB
     cz.rental.entity.AttributeController controller;
     
-    Ucet account;
-    User user;
+    @Inject
+    Ucet ucet;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        try {
-            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-        }        editabelAttrsize = new ArrayList<>();
+//        try {
+//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+//        }        
+        
+        editabelAttrsize = new ArrayList<>();
         editabelAttrsize.add('C');
         editabelAttrsize.add('N');
         editabelAttrsize.add('I');
@@ -88,7 +91,7 @@ public class ModelDetail implements Serializable {
     }
 
     public Boolean isEditable() {
-        boolean isEditable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
+        boolean isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         if (!(this.attribute instanceof Attribute)) {
             isEditable = false;
@@ -101,11 +104,11 @@ public class ModelDetail implements Serializable {
             isEditable = this.editabelAttrdecimal.contains(this.attribute.getAttrtype());
         }
         if (isEditable && uic.getId().equals("attrsystem")) {
-            isEditable = user.getParam(User.SUPERVISOR, false);
+            isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
         }
         // Systemove polozky muze editovat pouze SUPERVISOR
         if (isEditable && this.attribute.getAttrsystem() != null && this.attribute.getAttrsystem()) {
-            isEditable = user.getParam(User.SUPERVISOR, false);
+            isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
         }
 
         return isEditable;

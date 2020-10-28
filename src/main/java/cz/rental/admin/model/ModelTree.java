@@ -5,7 +5,7 @@
  */
 package cz.rental.admin.model;
 
-import cz.rental.aplikace.User;
+import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
@@ -18,9 +18,8 @@ import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.inject.Inject;
 import javax.inject.Named;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
@@ -55,19 +54,19 @@ public class ModelTree implements Serializable {
     @EJB
     cz.rental.admin.model.ModelTable modelTable;
 
-    Ucet account;
-    User user;
+    @Inject
+    Ucet ucet;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-        try {
-            account = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-        } catch (NamingException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
+//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         fillTreeNodes();
     }
 
@@ -90,7 +89,7 @@ public class ModelTree implements Serializable {
     public void fillTreeNodes() {
         if (this.typentityRoot == null) {
             this.models = controller.getCatalogTypEntity();
-            if (user.getParam(User.SUPERVISOR, false)) {
+            if (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
                 boolean added = this.models.addAll(controller.getRootTypEntity());
 
             }
@@ -132,7 +131,7 @@ public class ModelTree implements Serializable {
     private void deleteFromDb(TreeNode selectedNode) {
         try {
             Typentity typEntityDel = (Typentity) selectedNode.getData();
-            if (typEntityDel.getAttrsystem() != null && typEntityDel.getAttrsystem() && !user.getParam(User.SUPERVISOR, false)) {
+            if (typEntityDel.getAttrsystem() != null && typEntityDel.getAttrsystem() && !ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
                 return;
             }
             this.attrController.deleteAllTypentityId(typEntityDel.getId());
@@ -247,7 +246,7 @@ public class ModelTree implements Serializable {
      * @return uzivatel muze pridavat zaznamy
      */
     public boolean isAppendable() {
-        boolean isAppendable = user.getParam(User.SUPERVISOR, false) || user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
+        boolean isAppendable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
         return (isAppendable);
     }
 
@@ -260,9 +259,9 @@ public class ModelTree implements Serializable {
     public boolean isEditable() {
         boolean isEditable = (this.typentity != null);
         if (isEditable) {
-            isEditable = user.getParam(User.SUPERVISOR, false);
+            isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
             if (!isEditable) {
-                isEditable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
+                isEditable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
             }
         }
         return (isEditable);
@@ -276,9 +275,9 @@ public class ModelTree implements Serializable {
     public boolean isRemovable() {
         boolean isRemoveable = (this.typentity != null);
         if (isRemoveable) {
-            isRemoveable = user.getParam(User.SUPERVISOR, false);
+            isRemoveable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
             if (!isRemoveable) {
-                isRemoveable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && user.getParam(cz.rental.aplikace.User.MODEL_EDIT, false);
+                isRemoveable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
             }
         }
         return (isRemoveable);
