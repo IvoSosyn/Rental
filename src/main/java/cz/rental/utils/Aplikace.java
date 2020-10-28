@@ -39,10 +39,10 @@ public class Aplikace {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.MONTH, Calendar.JANUARY);
-        platiOd = new Date(preferencesUser.getLong("najem.platiOd", calendar.getTimeInMillis()));
+        platiOd = new Date(calendar.getTimeInMillis());
         calendar.add(Calendar.YEAR, 1);
         calendar.add(Calendar.MINUTE, -1);
-        platiDo = new Date(preferencesUser.getLong("najem.platiDo", calendar.getTimeInMillis()));
+        platiDo = new Date(calendar.getTimeInMillis());
         zmenaOd = new Date();
     }
 

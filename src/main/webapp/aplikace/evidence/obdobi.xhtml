@@ -19,7 +19,6 @@
                     <p:outputLabel title="Zpracovávané období DO" for="@next" > DO: </p:outputLabel>
                     <p:datePicker  id="ucetPlatiDO" value="#{evidence.platiDo}" valueChangeListener="#{evidence.handleDateChange}" onchange="submit();" validator="obdobiValidator" converter="obdobiConverter" converterMessage="Nesprávný format datumu." locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" >
                         <p:ajax event="dateSelect" listener="#{evidence.handleDateSelect}" update="ucetPlatiOD growlPlatnost" />
-                        <p:ajax  update="ucetPlatiOD" />
                     </p:datePicker>
                 </div>
                 <div class="ui-g-9 ui-md-6 ui-lg-6">
