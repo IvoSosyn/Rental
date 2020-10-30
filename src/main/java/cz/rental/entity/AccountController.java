@@ -53,22 +53,6 @@ public class AccountController extends JpaController {
     }
 
     /**
-     * Metoda vraci 'Uzivatel' DB zaznam pro pozadovany jedinecny 'Account' a
-     * 'Email'
-     *
-     * @param account Nadrazeny "Account", ke kteremu je uzivatel prirazen
-     * @param email Email uzivatele
-     * @return Uzivatelsky zaznam nebo 'null', kdyz se uzivatel neexistuje
-     */
-    public User getUserForAccount(Account account, String email) {
-        this.query = getEm().createQuery("SELECT u FROM User u WHERE u.idaccount=:account AND u.email=:email ");
-        this.query.setParameter("account", account);
-        this.query.setParameter("email", email);
-        User accUser = (User) query.getSingleResult();
-        return accUser;
-    }
-
-    /**
      * Metoda vraci ucet z DB na zaklade povinnych parametru PIN a EMAIL
      *
      * @param pin jednoznacny PIN vlastnika uctu

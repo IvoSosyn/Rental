@@ -7,7 +7,6 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
-import cz.rental.entity.User;
 import cz.rental.utils.Aplikace;
 import cz.rental.utils.SHA512;
 import java.io.File;
@@ -26,6 +25,7 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 /**
  *
@@ -41,9 +41,10 @@ public class Ucet {
     // "Insert Code > Add Business Method")
     @EJB
     private AccountController accController;
+    @Inject
+    private Uzivatel uzivatel;
 
     private Account account;
-    private Uzivatel uzivatel;
     private String password = "";
     private String passwordControl = "";
     private String passwordHelp = "";
@@ -85,8 +86,7 @@ public class Ucet {
         this.account.setPostcode("794 01");
         this.account.setPlatiod(Aplikace.getPlatiOd());
         this.account.setPlatido(Aplikace.getPlatiDo());
-        
-        this.uzivatel = new Uzivatel();
+
     }
 
     /**
@@ -105,10 +105,8 @@ public class Ucet {
         if (!(acc instanceof Account)) {
             throw new Exception("Účet pro PIN:" + pin + " NEEXISTUJE.");
         }
-        User accUser = accController.getUserForAccount(acc, email);
-        if (accUser instanceof User && accUser.getPasswordsha512().equals(passwordSHA512)) {
+        if (uzivatel.getUserForAccount(acc, email, passwordSHA512)) {
             this.account = acc;
-            this.uzivatel.setUser(accUser);
         } else {
             throw new Exception("Účet pro PIN:" + pin + " a eMail: " + email + " NEEXISTUJE nebo máte chybné heslo.");
         }

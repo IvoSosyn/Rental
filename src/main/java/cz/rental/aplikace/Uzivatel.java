@@ -5,13 +5,19 @@
  */
 package cz.rental.aplikace;
 
-import cz.rental.utils.Aplikace;
+import cz.rental.entity.Account;
+import cz.rental.entity.User;
+import cz.rental.entity.UserController;
 import java.util.Date;
-import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 /**
@@ -28,23 +34,29 @@ public class Uzivatel {
 
     @Inject
     private ServletContext context;
+    @EJB
+    private UserController userController;
 
 //    @Inject
 //    private HttpServletRequest httpRequest;
     boolean debugApp = false;
-
-    private UUID userId = null;
-    private Date datumZmeny = Aplikace.getZmenaOd();
     private cz.rental.entity.User user = null;
 
     /**
      * Inicializace matice prav uzivatele
      */
     @PostConstruct
-
     public void init() {
         String param;
-        if (context == null) {
+        if (!(userController instanceof UserController)) {
+            try {
+                userController = (UserController) InitialContext.doLookup("java:module/UserController!cz.rental.entity.UserController");
+            } catch (NamingException ex) {
+                Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (context == null || userController == null) {
             return;
         }
         param = context.getInitParameter("javax.faces.PROJECT_STAGE");
@@ -52,6 +64,22 @@ public class Uzivatel {
             debugApp = true;
         }
 
+    }
+
+    /**
+     * Metoda vzhleda v DB 'User' pro 'Ucet' a 'email' a v pripade ze souhlasi
+     * heslo, naplni promennou <code>user</code>
+     *
+     * @param acc ucet registrace
+     * @param email email uzivatele
+     * @param passwordSHA512 HASH - 512 hesla
+     * @return
+     */
+    public boolean getUserForAccount(Account acc, String email, String passwordSHA512) {
+        if (userController instanceof UserController) {
+            this.user = userController.getUserForAccount(acc, email, passwordSHA512);
+        }
+        return (this.user instanceof User);
     }
 
     /**
@@ -67,23 +95,14 @@ public class Uzivatel {
      */
     public boolean getParam(String paramName, boolean defaultValue) {
         boolean booleanValue = defaultValue;
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
         // Apliace je v DEBUG rezimu true|false
         if (paramName.toUpperCase().contains("DEBUG")) {
             booleanValue = debugApp;
-        }
-        // Uzivatel ma prava administratora
-        if (paramName.toUpperCase().contains(Uzivatel.SUPERVISOR.toUpperCase())) {
-            // Dohledat v DB
-            booleanValue = true;
-        }
-        // Uzivatel ma prava editovat "model" - sablony
-        if (paramName.toUpperCase().contains(Uzivatel.MODEL_EDIT.toUpperCase())) {
-            // Dohledat v DB
-            booleanValue = false;
-        }
-        if (paramName.toUpperCase().contains(Uzivatel.ACCOUNT_EDIT.toUpperCase())) {
-            // Dohledat v DB
-            booleanValue = false;
+        } else {
+            booleanValue = (boolean) userController.getUserParam(user, paramName.toUpperCase(), true);
         }
         return booleanValue;
     }
@@ -98,8 +117,10 @@ public class Uzivatel {
      * @return hodnota pozadovaneho parametru nebo default
      */
     public String getParam(String paramName, String defaultValue) {
-        String stringValue = defaultValue;
-        return stringValue;
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
+        return (String) userController.getUserParam(this.user, paramName, defaultValue);
     }
 
     /**
@@ -112,8 +133,10 @@ public class Uzivatel {
      * @return hodnota pozadovaneho parametru nebo default
      */
     public double getParam(String paramName, double defaultValue) {
-        double doubleValue = defaultValue;
-        return doubleValue;
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
+        return (double) userController.getUserParam(this.user, paramName, defaultValue);
     }
 
     /**
@@ -126,46 +149,25 @@ public class Uzivatel {
      * @return datum pozadovaneho parametru nebo default
      */
     public Date getParam(String paramName, Date defaultValue) {
-        Date dateValue = defaultValue;
-        return dateValue;
-    }
-
-    public boolean setParam(String paramName, boolean value) {
-        boolean lOk = true;
-        return lOk;
-    }
-
-    public boolean setParam(String paramName, String value) {
-        boolean lOk = true;
-        return lOk;
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
+        return (Date) userController.getUserParam(this.user, paramName, defaultValue);
     }
 
     /**
-     * @return the userId
+     * Ulozeni uzivatelskeho parametru do DB
+     *
+     * @param paramName - jmeno ukladaneho parametru
+     * @param value - hodnota ukleadaneho parametru (String, Boolean, Double,
+     * Date)
+     * @return ulozeni do DB bylo uspesne true|false
      */
-    public UUID getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * @return the datumZmeny
-     */
-    public Date getDatumZmeny() {
-        return datumZmeny;
-    }
-
-    /**
-     * @param datumZmeny the datumZmeny to set
-     */
-    public void setDatumZmeny(Date datumZmeny) {
-        this.datumZmeny = datumZmeny;
+    public boolean setParam(String paramName, Object value) {
+        if (!(userController instanceof UserController)) {
+            return false;
+        }
+        return userController.setUserParam(this.user, paramName, value);
     }
 
     /**
@@ -181,5 +183,4 @@ public class Uzivatel {
     public void setUser(cz.rental.entity.User user) {
         this.user = user;
     }
-
 }

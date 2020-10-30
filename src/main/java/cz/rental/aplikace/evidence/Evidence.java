@@ -19,6 +19,14 @@ import javax.inject.Named;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 
+/**
+ * Trida poskytuje metody pro obsluhu evidence Entita a jejich Attributes -
+ * poskytuje instancni promenne cestou getXXX a setXXX metod s odkazy na 'Ucet'
+ * a jeho clena tridy 'Uzivatel'
+ *
+ *
+ * @author ivo
+ */
 @Named(value = "evidence")
 @Stateless
 public class Evidence implements Serializable {
@@ -28,15 +36,8 @@ public class Evidence implements Serializable {
     @Inject
     private Ucet ucet;
 
-    private Date platiOd;
-    private Date platiDo;
-    private Date datumZmeny;
-
     @PostConstruct
     public void init() {
-        platiOd=ucet.getAccount().getPlatiod();
-        platiDo=ucet.getAccount().getPlatido();
-        datumZmeny=ucet.getUzivatel().getDatumZmeny();
     }
 
     public void handleDateSelect(SelectEvent event) {
@@ -46,9 +47,9 @@ public class Evidence implements Serializable {
     }
 
     public void handleDateChange(ValueChangeEvent e) {
-          System.out.println("valueChangeListener invoked on "+e.getComponent().getClientId(FacesContext.getCurrentInstance())+":" 
-                      + " OLD: " + e.getOldValue() 
-                      + " NEW: " + e.getNewValue());
+        System.out.println("valueChangeListener invoked on " + e.getComponent().getClientId(FacesContext.getCurrentInstance()) + ":"
+                + " OLD: " + e.getOldValue()
+                + " NEW: " + e.getNewValue());
         //  System.out.println("Evidence.platiOd: "+Aplikace.getSimpleDateFormat().format(this.platiOd)+ " / Evidence.platiDo: "+Aplikace.getSimpleDateFormat().format(this.platiDo) );
         // PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getComponent().getClientId(FacesContext.getCurrentInstance()),"Evidence.platiOd: "+Aplikace.getSimpleDateFormat().format(this.platiOd)+ " / Evidence.platiDo: "+Aplikace.getSimpleDateFormat().format(this.platiDo)));
     }
@@ -71,41 +72,48 @@ public class Evidence implements Serializable {
      * @return the platiOd
      */
     public Date getPlatiOd() {
-        return platiOd;
+        return ucet.getUzivatel().getParam("ObdobiOD", Aplikace.getPlatiOd());
     }
 
     /**
      * @param platiOd the platiOd to set
      */
     public void setPlatiOd(Date platiOd) {
-        this.platiOd = platiOd;
+        ucet.getUzivatel().setParam("ObdobiOD", platiOd);
+        if (!ucet.getUzivatel().setParam("ObdobiOD", platiOd)) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení parametru 'ObdobiOD' NEBYLA úspěšná.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(platiOd)));
+        }
     }
 
     /**
      * @return the platiDo
      */
     public Date getPlatiDo() {
-        return platiDo;
+        return ucet.getUzivatel().getParam("ObdobiDO", Aplikace.getPlatiDo());
     }
 
     /**
      * @param platiDo the platiDo to set
      */
     public void setPlatiDo(Date platiDo) {
-        this.platiDo = platiDo;
+        if (!ucet.getUzivatel().setParam("ObdobiDO", platiDo)) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení parametru 'ObdobiDO' NEBYLA úspěšná.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(platiDo)));
+        }
     }
 
     /**
      * @return the datumZmeny
      */
     public Date getDatumZmeny() {
-        return datumZmeny;
+        return ucet.getUzivatel().getParam("ZmenaOD", Aplikace.getPlatiDo());
     }
 
     /**
      * @param datumZmeny the datumZmeny to set
      */
     public void setDatumZmeny(Date datumZmeny) {
-        this.datumZmeny = datumZmeny;
+        if (!ucet.getUzivatel().setParam("ZmenaOD", datumZmeny)) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení parametru 'ZmenaOD' NEBYLA úspěšná.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(datumZmeny)));
+        }
     }
 }

@@ -20,7 +20,9 @@
     <class>cz.rental.entity1.Attrdate</class>
     <class>cz.rental.entity.Account</class>
     <class>cz.rental.entity.User</class>
-    <class>cz.rental.entity.Userrights</class>
+    <class>cz.rental.entity1.Account</class>
+    <class>cz.rental.entity1.User</class>
+    <class>cz.rental.entity.Userparam</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!--    <shared-cache-mode>NONE</shared-cache-mode> -->
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>

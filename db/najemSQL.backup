@@ -5,7 +5,7 @@
 -- Dumped from database version 12.1
 -- Dumped by pg_dump version 12.1
 
--- Started on 2020-10-19 22:31:33
+-- Started on 2020-10-30 21:19:12
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,7 +20,7 @@ SET row_security = off;
 
 DROP DATABASE najem;
 --
--- TOC entry 3011 (class 1262 OID 41389)
+-- TOC entry 3011 (class 1262 OID 42103)
 -- Name: najem; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -52,7 +52,7 @@ COMMENT ON DATABASE najem IS 'Databáze pro evidenci a výpočet nájemného';
 
 
 --
--- TOC entry 3 (class 3079 OID 41390)
+-- TOC entry 3 (class 3079 OID 42104)
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -69,7 +69,7 @@ COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 
 
 --
--- TOC entry 2 (class 3079 OID 41427)
+-- TOC entry 2 (class 3079 OID 42141)
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -86,7 +86,7 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
--- TOC entry 594 (class 1247 OID 41439)
+-- TOC entry 594 (class 1247 OID 42153)
 -- Name: _platido; Type: DOMAIN; Schema: public; Owner: postgres
 --
 
@@ -105,7 +105,7 @@ COMMENT ON DOMAIN public._platido IS 'Plati DO';
 
 
 --
--- TOC entry 597 (class 1247 OID 41441)
+-- TOC entry 597 (class 1247 OID 42155)
 -- Name: _platiod; Type: DOMAIN; Schema: public; Owner: postgres
 --
 
@@ -124,7 +124,7 @@ COMMENT ON DOMAIN public._platiod IS 'Plati OD';
 
 
 --
--- TOC entry 685 (class 1247 OID 41443)
+-- TOC entry 685 (class 1247 OID 42157)
 -- Name: _popis; Type: DOMAIN; Schema: public; Owner: postgres
 --
 
@@ -143,7 +143,7 @@ COMMENT ON DOMAIN public._popis IS 'Popisne pole';
 
 
 --
--- TOC entry 688 (class 1247 OID 41445)
+-- TOC entry 688 (class 1247 OID 42159)
 -- Name: _timeinsert; Type: DOMAIN; Schema: public; Owner: postgres
 --
 
@@ -162,7 +162,7 @@ COMMENT ON DOMAIN public._timeinsert IS 'Cas zalozeni zaznamu';
 
 
 --
--- TOC entry 691 (class 1247 OID 41447)
+-- TOC entry 691 (class 1247 OID 42161)
 -- Name: _timemodify; Type: DOMAIN; Schema: public; Owner: postgres
 --
 
@@ -181,7 +181,7 @@ COMMENT ON DOMAIN public._timemodify IS 'Cas posledni modifikace zaznamu';
 
 
 --
--- TOC entry 694 (class 1247 OID 41449)
+-- TOC entry 694 (class 1247 OID 42163)
 -- Name: _uzivatel; Type: DOMAIN; Schema: public; Owner: postgres
 --
 
@@ -200,7 +200,7 @@ COMMENT ON DOMAIN public._uzivatel IS 'Uzivatel, ktery provedl posledni modifika
 
 
 --
--- TOC entry 260 (class 1255 OID 41450)
+-- TOC entry 260 (class 1255 OID 42164)
 -- Name: settimemodify(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -233,7 +233,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 204 (class 1259 OID 41451)
+-- TOC entry 204 (class 1259 OID 42165)
 -- Name: account; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -343,7 +343,7 @@ COMMENT ON COLUMN public.account.idmodel IS 'ID šablony';
 
 
 --
--- TOC entry 205 (class 1259 OID 41459)
+-- TOC entry 205 (class 1259 OID 42173)
 -- Name: attrdate; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -419,7 +419,7 @@ COMMENT ON COLUMN public.attrdate.edit IS '0=nový záznam,1=editováno uživate
 
 
 --
--- TOC entry 206 (class 1259 OID 41465)
+-- TOC entry 206 (class 1259 OID 42179)
 -- Name: attribute; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -535,7 +535,7 @@ COMMENT ON COLUMN public.attribute.tables IS 'Tabulka s číselníkem';
 
 
 --
--- TOC entry 207 (class 1259 OID 41476)
+-- TOC entry 207 (class 1259 OID 42190)
 -- Name: attrnumeric; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -575,7 +575,7 @@ COMMENT ON COLUMN public.attrnumeric.edit IS '0=nový záznam,1=editováno uživ
 
 
 --
--- TOC entry 208 (class 1259 OID 41482)
+-- TOC entry 208 (class 1259 OID 42196)
 -- Name: attrtext; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -624,7 +624,7 @@ COMMENT ON COLUMN public.attrtext.edit IS '0=nový záznam,1=editováno uživate
 
 
 --
--- TOC entry 209 (class 1259 OID 41489)
+-- TOC entry 209 (class 1259 OID 42203)
 -- Name: attruuid; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -673,7 +673,7 @@ COMMENT ON COLUMN public.attruuid.edit IS '0=nový záznam,1=editováno uživate
 
 
 --
--- TOC entry 210 (class 1259 OID 41495)
+-- TOC entry 210 (class 1259 OID 42209)
 -- Name: entita; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -720,7 +720,7 @@ COMMENT ON COLUMN public.entita.idparent IS 'ID nadřazené entity';
 
 
 --
--- TOC entry 211 (class 1259 OID 41501)
+-- TOC entry 211 (class 1259 OID 42215)
 -- Name: typentity; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -761,7 +761,7 @@ COMMENT ON COLUMN public.typentity.editor IS 'Editace atributů ''F'' -formulá�
 
 
 --
--- TOC entry 212 (class 1259 OID 41509)
+-- TOC entry 212 (class 1259 OID 42223)
 -- Name: user; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -888,59 +888,113 @@ COMMENT ON COLUMN public."user".supervisor IS 'Uživatel s nejvyššími právy 
 
 
 --
--- TOC entry 213 (class 1259 OID 41516)
--- Name: userrights; Type: TABLE; Schema: public; Owner: postgres
+-- TOC entry 213 (class 1259 OID 42230)
+-- Name: userparam; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.userrights (
+CREATE TABLE public.userparam (
     id uuid NOT NULL,
     iduser uuid NOT NULL,
-    rightname text,
+    paramname text,
     tablename text,
     idtable uuid,
     textvalue text,
-    numbervalue numeric,
+    numvalue numeric,
+    datevalue timestamp with time zone,
     platiod public._platiod,
     platido public._platido,
     popis public._popis,
     timeinsert public._timeinsert,
     timemodify public._timemodify,
-    usermodify public._uzivatel,
-    supervisor boolean
+    usermodify public._uzivatel
 );
 
 
-ALTER TABLE public.userrights OWNER TO postgres;
+ALTER TABLE public.userparam OWNER TO postgres;
 
 --
 -- TOC entry 3070 (class 0 OID 0)
 -- Dependencies: 213
--- Name: TABLE userrights; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: TABLE userparam; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON TABLE public.userrights IS 'Tabulka uživatelských práv';
+COMMENT ON TABLE public.userparam IS 'Tabulka uživatelských práv';
 
 
 --
 -- TOC entry 3071 (class 0 OID 0)
 -- Dependencies: 213
--- Name: COLUMN userrights.id; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: COLUMN userparam.id; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON COLUMN public.userrights.id IS 'ID práva';
+COMMENT ON COLUMN public.userparam.id IS 'ID parametru';
 
 
 --
 -- TOC entry 3072 (class 0 OID 0)
 -- Dependencies: 213
--- Name: COLUMN userrights.iduser; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: COLUMN userparam.iduser; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON COLUMN public.userrights.iduser IS 'ID uživatele';
+COMMENT ON COLUMN public.userparam.iduser IS 'ID uživatele';
 
 
 --
--- TOC entry 2996 (class 0 OID 41451)
+-- TOC entry 3073 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: COLUMN userparam.paramname; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.userparam.paramname IS 'Název parametru';
+
+
+--
+-- TOC entry 3074 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: COLUMN userparam.tablename; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.userparam.tablename IS 'Název referenční tabulky';
+
+
+--
+-- TOC entry 3075 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: COLUMN userparam.idtable; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.userparam.idtable IS 'ID záznamu z referenční tabulky';
+
+
+--
+-- TOC entry 3076 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: COLUMN userparam.textvalue; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.userparam.textvalue IS 'Hodnota typu text';
+
+
+--
+-- TOC entry 3077 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: COLUMN userparam.numvalue; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.userparam.numvalue IS 'Hodnota typu Numeric';
+
+
+--
+-- TOC entry 3078 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: COLUMN userparam.datevalue; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.userparam.datevalue IS 'Hodnota typu Datum';
+
+
+--
+-- TOC entry 2996 (class 0 OID 42165)
 -- Dependencies: 204
 -- Data for Name: account; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -948,7 +1002,7 @@ COMMENT ON COLUMN public.userrights.iduser IS 'ID uživatele';
 
 
 --
--- TOC entry 2997 (class 0 OID 41459)
+-- TOC entry 2997 (class 0 OID 42173)
 -- Dependencies: 205
 -- Data for Name: attrdate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -956,7 +1010,7 @@ COMMENT ON COLUMN public.userrights.iduser IS 'ID uživatele';
 
 
 --
--- TOC entry 2998 (class 0 OID 41465)
+-- TOC entry 2998 (class 0 OID 42179)
 -- Dependencies: 206
 -- Data for Name: attribute; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1091,7 +1145,7 @@ INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, att
 
 
 --
--- TOC entry 2999 (class 0 OID 41476)
+-- TOC entry 2999 (class 0 OID 42190)
 -- Dependencies: 207
 -- Data for Name: attrnumeric; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1099,7 +1153,7 @@ INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, att
 
 
 --
--- TOC entry 3000 (class 0 OID 41482)
+-- TOC entry 3000 (class 0 OID 42196)
 -- Dependencies: 208
 -- Data for Name: attrtext; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1107,7 +1161,7 @@ INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, att
 
 
 --
--- TOC entry 3001 (class 0 OID 41489)
+-- TOC entry 3001 (class 0 OID 42203)
 -- Dependencies: 209
 -- Data for Name: attruuid; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1115,7 +1169,7 @@ INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, att
 
 
 --
--- TOC entry 3002 (class 0 OID 41495)
+-- TOC entry 3002 (class 0 OID 42209)
 -- Dependencies: 210
 -- Data for Name: entita; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1123,7 +1177,7 @@ INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, att
 
 
 --
--- TOC entry 3003 (class 0 OID 41501)
+-- TOC entry 3003 (class 0 OID 42215)
 -- Dependencies: 211
 -- Data for Name: typentity; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1145,7 +1199,7 @@ INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, ed
 
 
 --
--- TOC entry 3004 (class 0 OID 41509)
+-- TOC entry 3004 (class 0 OID 42223)
 -- Dependencies: 212
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1153,15 +1207,15 @@ INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, ed
 
 
 --
--- TOC entry 3005 (class 0 OID 41516)
+-- TOC entry 3005 (class 0 OID 42230)
 -- Dependencies: 213
--- Data for Name: userrights; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: userparam; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- TOC entry 2816 (class 2606 OID 41523)
+-- TOC entry 2816 (class 2606 OID 42237)
 -- Name: attrdate AttrDate_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1170,7 +1224,7 @@ ALTER TABLE ONLY public.attrdate
 
 
 --
--- TOC entry 2826 (class 2606 OID 41525)
+-- TOC entry 2826 (class 2606 OID 42239)
 -- Name: attrnumeric AttrNumeric_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1179,7 +1233,7 @@ ALTER TABLE ONLY public.attrnumeric
 
 
 --
--- TOC entry 2830 (class 2606 OID 41527)
+-- TOC entry 2830 (class 2606 OID 42241)
 -- Name: attrtext AttrText_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1188,7 +1242,7 @@ ALTER TABLE ONLY public.attrtext
 
 
 --
--- TOC entry 2835 (class 2606 OID 41529)
+-- TOC entry 2835 (class 2606 OID 42243)
 -- Name: attruuid AttrUUID_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1197,7 +1251,7 @@ ALTER TABLE ONLY public.attruuid
 
 
 --
--- TOC entry 2822 (class 2606 OID 41531)
+-- TOC entry 2822 (class 2606 OID 42245)
 -- Name: attribute Attribute_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1206,7 +1260,7 @@ ALTER TABLE ONLY public.attribute
 
 
 --
--- TOC entry 2839 (class 2606 OID 41533)
+-- TOC entry 2839 (class 2606 OID 42247)
 -- Name: entita Entita_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1215,7 +1269,7 @@ ALTER TABLE ONLY public.entita
 
 
 --
--- TOC entry 2843 (class 2606 OID 41535)
+-- TOC entry 2843 (class 2606 OID 42249)
 -- Name: typentity TypEntity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1224,7 +1278,7 @@ ALTER TABLE ONLY public.typentity
 
 
 --
--- TOC entry 2811 (class 2606 OID 41537)
+-- TOC entry 2811 (class 2606 OID 42251)
 -- Name: account account_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1233,7 +1287,7 @@ ALTER TABLE ONLY public.account
 
 
 --
--- TOC entry 2848 (class 2606 OID 41539)
+-- TOC entry 2848 (class 2606 OID 42253)
 -- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1242,16 +1296,16 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- TOC entry 2851 (class 2606 OID 41541)
--- Name: userrights userrights_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2851 (class 2606 OID 42255)
+-- Name: userparam userparam_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.userrights
-    ADD CONSTRAINT userrights_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.userparam
+    ADD CONSTRAINT userparam_pkey PRIMARY KEY (id);
 
 
 --
--- TOC entry 2813 (class 1259 OID 41542)
+-- TOC entry 2813 (class 1259 OID 42256)
 -- Name: AttrDate_IdAttribute-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1259,7 +1313,7 @@ CREATE INDEX "AttrDate_IdAttribute-IDX" ON public.attrdate USING btree (idattrib
 
 
 --
--- TOC entry 2814 (class 1259 OID 41543)
+-- TOC entry 2814 (class 1259 OID 42257)
 -- Name: AttrDate_IdEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1267,7 +1321,7 @@ CREATE INDEX "AttrDate_IdEntita-IDX" ON public.attrdate USING btree (identita, p
 
 
 --
--- TOC entry 2823 (class 1259 OID 41544)
+-- TOC entry 2823 (class 1259 OID 42258)
 -- Name: AttrNumeric_IdAttribute-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1275,7 +1329,7 @@ CREATE INDEX "AttrNumeric_IdAttribute-IDX" ON public.attrnumeric USING btree (id
 
 
 --
--- TOC entry 2824 (class 1259 OID 41545)
+-- TOC entry 2824 (class 1259 OID 42259)
 -- Name: AttrNumeric_IdEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1283,7 +1337,7 @@ CREATE INDEX "AttrNumeric_IdEntita-IDX" ON public.attrnumeric USING btree (ident
 
 
 --
--- TOC entry 2827 (class 1259 OID 41546)
+-- TOC entry 2827 (class 1259 OID 42260)
 -- Name: AttrText_IdAttribute-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1291,7 +1345,7 @@ CREATE INDEX "AttrText_IdAttribute-IDX" ON public.attrtext USING btree (idattrib
 
 
 --
--- TOC entry 2828 (class 1259 OID 41547)
+-- TOC entry 2828 (class 1259 OID 42261)
 -- Name: AttrText_IdEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1299,7 +1353,7 @@ CREATE INDEX "AttrText_IdEntita-IDX" ON public.attrtext USING btree (identita, p
 
 
 --
--- TOC entry 2831 (class 1259 OID 41548)
+-- TOC entry 2831 (class 1259 OID 42262)
 -- Name: AttrUUID_IdAttribute-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1307,7 +1361,7 @@ CREATE INDEX "AttrUUID_IdAttribute-IDX" ON public.attruuid USING btree (idattrib
 
 
 --
--- TOC entry 2832 (class 1259 OID 41549)
+-- TOC entry 2832 (class 1259 OID 42263)
 -- Name: AttrUUID_IdEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1315,7 +1369,7 @@ CREATE INDEX "AttrUUID_IdEntita-IDX" ON public.attruuid USING btree (identita);
 
 
 --
--- TOC entry 2833 (class 1259 OID 41550)
+-- TOC entry 2833 (class 1259 OID 42264)
 -- Name: AttrUUID_IdTable-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1323,7 +1377,7 @@ CREATE INDEX "AttrUUID_IdTable-IDX" ON public.attruuid USING btree (idtable);
 
 
 --
--- TOC entry 2817 (class 1259 OID 41551)
+-- TOC entry 2817 (class 1259 OID 42265)
 -- Name: Attribute_attrName-idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1331,7 +1385,7 @@ CREATE INDEX "Attribute_attrName-idx" ON public.attribute USING btree (attrname 
 
 
 --
--- TOC entry 3073 (class 0 OID 0)
+-- TOC entry 3079 (class 0 OID 0)
 -- Dependencies: 2817
 -- Name: INDEX "Attribute_attrName-idx"; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1340,7 +1394,7 @@ COMMENT ON INDEX public."Attribute_attrName-idx" IS 'Název pole (UPPER)';
 
 
 --
--- TOC entry 2818 (class 1259 OID 41552)
+-- TOC entry 2818 (class 1259 OID 42266)
 -- Name: Attribute_idEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1348,7 +1402,7 @@ CREATE INDEX "Attribute_idEntita-IDX" ON public.attribute USING btree (identita)
 
 
 --
--- TOC entry 2819 (class 1259 OID 41553)
+-- TOC entry 2819 (class 1259 OID 42267)
 -- Name: Attribute_idTypEntity-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1356,7 +1410,7 @@ CREATE INDEX "Attribute_idTypEntity-IDX" ON public.attribute USING btree (idtype
 
 
 --
--- TOC entry 2820 (class 1259 OID 41554)
+-- TOC entry 2820 (class 1259 OID 42268)
 -- Name: Attribute_idTypEntity_attrSystem_poradi-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1364,7 +1418,7 @@ CREATE INDEX "Attribute_idTypEntity_attrSystem_poradi-IDX" ON public.attribute U
 
 
 --
--- TOC entry 3074 (class 0 OID 0)
+-- TOC entry 3080 (class 0 OID 0)
 -- Dependencies: 2820
 -- Name: INDEX "Attribute_idTypEntity_attrSystem_poradi-IDX"; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1374,7 +1428,7 @@ COMMENT ON INDEX public."Attribute_idTypEntity_attrSystem_poradi-IDX" IS 'Index 
 
 
 --
--- TOC entry 2836 (class 1259 OID 41555)
+-- TOC entry 2836 (class 1259 OID 42269)
 -- Name: Entita_idParent-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1382,7 +1436,7 @@ CREATE INDEX "Entita_idParent-IDX" ON public.entita USING btree (idparent);
 
 
 --
--- TOC entry 2837 (class 1259 OID 41556)
+-- TOC entry 2837 (class 1259 OID 42270)
 -- Name: Entita_idTypEntity-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1390,15 +1444,15 @@ CREATE INDEX "Entita_idTypEntity-IDX" ON public.entita USING btree (idtypentity)
 
 
 --
--- TOC entry 2849 (class 1259 OID 41557)
--- Name: IDX_userrights_idUser_rightName; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2849 (class 1259 OID 42271)
+-- Name: IDX_userparam_idUser_paramName; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX "IDX_userrights_idUser_rightName" ON public.userrights USING btree (iduser, rightname);
+CREATE INDEX "IDX_userparam_idUser_paramName" ON public.userparam USING btree (iduser, paramname);
 
 
 --
--- TOC entry 2840 (class 1259 OID 41558)
+-- TOC entry 2840 (class 1259 OID 42272)
 -- Name: TypEntity_idAccount-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1406,7 +1460,7 @@ CREATE INDEX "TypEntity_idAccount-IDX" ON public.typentity USING btree (idaccoun
 
 
 --
--- TOC entry 2841 (class 1259 OID 41559)
+-- TOC entry 2841 (class 1259 OID 42273)
 -- Name: TypEntity_idParent-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1414,7 +1468,7 @@ CREATE INDEX "TypEntity_idParent-IDX" ON public.typentity USING btree (idparent)
 
 
 --
--- TOC entry 2844 (class 1259 OID 41560)
+-- TOC entry 2844 (class 1259 OID 42274)
 -- Name: TypEntity_typEntity-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1422,7 +1476,7 @@ CREATE INDEX "TypEntity_typEntity-IDX" ON public.typentity USING btree (typentit
 
 
 --
--- TOC entry 2809 (class 1259 OID 41561)
+-- TOC entry 2809 (class 1259 OID 42275)
 -- Name: accountPIN_Email; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1430,7 +1484,7 @@ CREATE INDEX "accountPIN_Email" ON public.account USING btree (pin, email);
 
 
 --
--- TOC entry 3075 (class 0 OID 0)
+-- TOC entry 3081 (class 0 OID 0)
 -- Dependencies: 2809
 -- Name: INDEX "accountPIN_Email"; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1439,7 +1493,7 @@ COMMENT ON INDEX public."accountPIN_Email" IS 'Index PIN+email';
 
 
 --
--- TOC entry 2812 (class 1259 OID 41562)
+-- TOC entry 2812 (class 1259 OID 42276)
 -- Name: fki_FK_account_idTypentity; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1447,7 +1501,7 @@ CREATE INDEX "fki_FK_account_idTypentity" ON public.account USING btree (idmodel
 
 
 --
--- TOC entry 2845 (class 1259 OID 41563)
+-- TOC entry 2845 (class 1259 OID 42277)
 -- Name: fki_FK_user_idAccount; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1455,7 +1509,7 @@ CREATE INDEX "fki_FK_user_idAccount" ON public."user" USING btree (idaccount);
 
 
 --
--- TOC entry 2846 (class 1259 OID 41564)
+-- TOC entry 2846 (class 1259 OID 42278)
 -- Name: userAccount_Email; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1463,7 +1517,7 @@ CREATE INDEX "userAccount_Email" ON public."user" USING btree (idaccount, email)
 
 
 --
--- TOC entry 2861 (class 2620 OID 41565)
+-- TOC entry 2861 (class 2620 OID 42279)
 -- Name: account AccountInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1471,7 +1525,7 @@ CREATE TRIGGER "AccountInsert" BEFORE INSERT ON public.account FOR EACH ROW EXEC
 
 
 --
--- TOC entry 2862 (class 2620 OID 41566)
+-- TOC entry 2862 (class 2620 OID 42280)
 -- Name: attrdate AttrDateInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1479,7 +1533,7 @@ CREATE TRIGGER "AttrDateInsert" BEFORE INSERT ON public.attrdate FOR EACH ROW EX
 
 
 --
--- TOC entry 3076 (class 0 OID 0)
+-- TOC entry 3082 (class 0 OID 0)
 -- Dependencies: 2862
 -- Name: TRIGGER "AttrDateInsert" ON attrdate; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1488,7 +1542,7 @@ COMMENT ON TRIGGER "AttrDateInsert" ON public.attrdate IS 'Trigger po přidání
 
 
 --
--- TOC entry 2864 (class 2620 OID 41567)
+-- TOC entry 2864 (class 2620 OID 42281)
 -- Name: attrnumeric AttrNumericInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1496,7 +1550,7 @@ CREATE TRIGGER "AttrNumericInsert" BEFORE INSERT ON public.attrnumeric FOR EACH 
 
 
 --
--- TOC entry 3077 (class 0 OID 0)
+-- TOC entry 3083 (class 0 OID 0)
 -- Dependencies: 2864
 -- Name: TRIGGER "AttrNumericInsert" ON attrnumeric; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1505,7 +1559,7 @@ COMMENT ON TRIGGER "AttrNumericInsert" ON public.attrnumeric IS 'Trigger po při
 
 
 --
--- TOC entry 2865 (class 2620 OID 41568)
+-- TOC entry 2865 (class 2620 OID 42282)
 -- Name: attrtext AttrTextInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1513,7 +1567,7 @@ CREATE TRIGGER "AttrTextInsert" BEFORE INSERT ON public.attrtext FOR EACH ROW EX
 
 
 --
--- TOC entry 3078 (class 0 OID 0)
+-- TOC entry 3084 (class 0 OID 0)
 -- Dependencies: 2865
 -- Name: TRIGGER "AttrTextInsert" ON attrtext; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1522,7 +1576,7 @@ COMMENT ON TRIGGER "AttrTextInsert" ON public.attrtext IS 'Trigger po přidání
 
 
 --
--- TOC entry 2866 (class 2620 OID 41569)
+-- TOC entry 2866 (class 2620 OID 42283)
 -- Name: attruuid AttrUUIDInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1530,7 +1584,7 @@ CREATE TRIGGER "AttrUUIDInsert" BEFORE INSERT ON public.attruuid FOR EACH ROW EX
 
 
 --
--- TOC entry 3079 (class 0 OID 0)
+-- TOC entry 3085 (class 0 OID 0)
 -- Dependencies: 2866
 -- Name: TRIGGER "AttrUUIDInsert" ON attruuid; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1539,7 +1593,7 @@ COMMENT ON TRIGGER "AttrUUIDInsert" ON public.attruuid IS 'Trigger po přidání
 
 
 --
--- TOC entry 2863 (class 2620 OID 41570)
+-- TOC entry 2863 (class 2620 OID 42284)
 -- Name: attribute AttributeInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1547,7 +1601,7 @@ CREATE TRIGGER "AttributeInsert" BEFORE INSERT ON public.attribute FOR EACH ROW 
 
 
 --
--- TOC entry 2867 (class 2620 OID 41571)
+-- TOC entry 2867 (class 2620 OID 42285)
 -- Name: typentity TypEntityInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1555,7 +1609,7 @@ CREATE TRIGGER "TypEntityInsert" BEFORE INSERT ON public.typentity FOR EACH ROW 
 
 
 --
--- TOC entry 3080 (class 0 OID 0)
+-- TOC entry 3086 (class 0 OID 0)
 -- Dependencies: 2867
 -- Name: TRIGGER "TypEntityInsert" ON typentity; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1564,24 +1618,24 @@ COMMENT ON TRIGGER "TypEntityInsert" ON public.typentity IS 'Trigger nad přidá
 
 
 --
--- TOC entry 2869 (class 2620 OID 41572)
--- Name: userrights UseRightsInsert; Type: TRIGGER; Schema: public; Owner: postgres
+-- TOC entry 2869 (class 2620 OID 42286)
+-- Name: userparam UseRightsInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER "UseRightsInsert" BEFORE INSERT ON public.userrights FOR EACH ROW EXECUTE FUNCTION public.settimemodify();
+CREATE TRIGGER "UseRightsInsert" BEFORE INSERT ON public.userparam FOR EACH ROW EXECUTE FUNCTION public.settimemodify();
 
 
 --
--- TOC entry 3081 (class 0 OID 0)
+-- TOC entry 3087 (class 0 OID 0)
 -- Dependencies: 2869
--- Name: TRIGGER "UseRightsInsert" ON userrights; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: TRIGGER "UseRightsInsert" ON userparam; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON TRIGGER "UseRightsInsert" ON public.userrights IS 'Insert do uživatelských práv';
+COMMENT ON TRIGGER "UseRightsInsert" ON public.userparam IS 'Insert do uživatelských práv';
 
 
 --
--- TOC entry 2868 (class 2620 OID 41573)
+-- TOC entry 2868 (class 2620 OID 42287)
 -- Name: user UserInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1589,7 +1643,7 @@ CREATE TRIGGER "UserInsert" BEFORE INSERT ON public."user" FOR EACH ROW EXECUTE 
 
 
 --
--- TOC entry 2853 (class 2606 OID 41574)
+-- TOC entry 2853 (class 2606 OID 42288)
 -- Name: attrdate AttrDate_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1598,7 +1652,7 @@ ALTER TABLE ONLY public.attrdate
 
 
 --
--- TOC entry 3082 (class 0 OID 0)
+-- TOC entry 3088 (class 0 OID 0)
 -- Dependencies: 2853
 -- Name: CONSTRAINT "AttrDate_Attribute-FK" ON attrdate; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1607,7 +1661,7 @@ COMMENT ON CONSTRAINT "AttrDate_Attribute-FK" ON public.attrdate IS 'Odkaz na ta
 
 
 --
--- TOC entry 2854 (class 2606 OID 41579)
+-- TOC entry 2854 (class 2606 OID 42293)
 -- Name: attrnumeric AttrNumeric_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1616,7 +1670,7 @@ ALTER TABLE ONLY public.attrnumeric
 
 
 --
--- TOC entry 3083 (class 0 OID 0)
+-- TOC entry 3089 (class 0 OID 0)
 -- Dependencies: 2854
 -- Name: CONSTRAINT "AttrNumeric_Attribute-FK" ON attrnumeric; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1625,7 +1679,7 @@ COMMENT ON CONSTRAINT "AttrNumeric_Attribute-FK" ON public.attrnumeric IS 'Odkaz
 
 
 --
--- TOC entry 2855 (class 2606 OID 41584)
+-- TOC entry 2855 (class 2606 OID 42298)
 -- Name: attrtext AttrText_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1634,7 +1688,7 @@ ALTER TABLE ONLY public.attrtext
 
 
 --
--- TOC entry 3084 (class 0 OID 0)
+-- TOC entry 3090 (class 0 OID 0)
 -- Dependencies: 2855
 -- Name: CONSTRAINT "AttrText_Attribute-FK" ON attrtext; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1643,7 +1697,7 @@ COMMENT ON CONSTRAINT "AttrText_Attribute-FK" ON public.attrtext IS 'Odkaz na ta
 
 
 --
--- TOC entry 2856 (class 2606 OID 41589)
+-- TOC entry 2856 (class 2606 OID 42303)
 -- Name: attruuid AttrUUID_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1652,7 +1706,7 @@ ALTER TABLE ONLY public.attruuid
 
 
 --
--- TOC entry 3085 (class 0 OID 0)
+-- TOC entry 3091 (class 0 OID 0)
 -- Dependencies: 2856
 -- Name: CONSTRAINT "AttrUUID_Attribute-FK" ON attruuid; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1661,7 +1715,7 @@ COMMENT ON CONSTRAINT "AttrUUID_Attribute-FK" ON public.attruuid IS 'Odkaz na ta
 
 
 --
--- TOC entry 2857 (class 2606 OID 41594)
+-- TOC entry 2857 (class 2606 OID 42308)
 -- Name: entita Entita_TypEntity-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1670,7 +1724,7 @@ ALTER TABLE ONLY public.entita
 
 
 --
--- TOC entry 2852 (class 2606 OID 41599)
+-- TOC entry 2852 (class 2606 OID 42313)
 -- Name: account FK_account_idTypentity; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1679,7 +1733,7 @@ ALTER TABLE ONLY public.account
 
 
 --
--- TOC entry 3086 (class 0 OID 0)
+-- TOC entry 3092 (class 0 OID 0)
 -- Dependencies: 2852
 -- Name: CONSTRAINT "FK_account_idTypentity" ON account; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1688,7 +1742,7 @@ COMMENT ON CONSTRAINT "FK_account_idTypentity" ON public.account IS 'Index na ID
 
 
 --
--- TOC entry 2858 (class 2606 OID 41604)
+-- TOC entry 2858 (class 2606 OID 42318)
 -- Name: typentity FK_typentity_idAccount; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1697,7 +1751,7 @@ ALTER TABLE ONLY public.typentity
 
 
 --
--- TOC entry 3087 (class 0 OID 0)
+-- TOC entry 3093 (class 0 OID 0)
 -- Dependencies: 2858
 -- Name: CONSTRAINT "FK_typentity_idAccount" ON typentity; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1706,7 +1760,7 @@ COMMENT ON CONSTRAINT "FK_typentity_idAccount" ON public.typentity IS 'FK na ID 
 
 
 --
--- TOC entry 2859 (class 2606 OID 41609)
+-- TOC entry 2859 (class 2606 OID 42323)
 -- Name: user FK_user_idAccount; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1715,7 +1769,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- TOC entry 3088 (class 0 OID 0)
+-- TOC entry 3094 (class 0 OID 0)
 -- Dependencies: 2859
 -- Name: CONSTRAINT "FK_user_idAccount" ON "user"; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1724,24 +1778,24 @@ COMMENT ON CONSTRAINT "FK_user_idAccount" ON public."user" IS 'FK na ID Account 
 
 
 --
--- TOC entry 2860 (class 2606 OID 41614)
--- Name: userrights FK_userrights_idUser; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2860 (class 2606 OID 42328)
+-- Name: userparam FK_userparam_idUser; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.userrights
-    ADD CONSTRAINT "FK_userrights_idUser" FOREIGN KEY (iduser) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.userparam
+    ADD CONSTRAINT "FK_userparam_idUser" FOREIGN KEY (iduser) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- TOC entry 3089 (class 0 OID 0)
+-- TOC entry 3095 (class 0 OID 0)
 -- Dependencies: 2860
--- Name: CONSTRAINT "FK_userrights_idUser" ON userrights; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: CONSTRAINT "FK_userparam_idUser" ON userparam; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON CONSTRAINT "FK_userrights_idUser" ON public.userrights IS 'FK na ID uživatele - právo nemůže být bez uživatele';
+COMMENT ON CONSTRAINT "FK_userparam_idUser" ON public.userparam IS 'FK na ID uživatele - právo nemůže být bez uživatele';
 
 
--- Completed on 2020-10-19 22:31:39
+-- Completed on 2020-10-30 21:19:16
 
 --
 -- PostgreSQL database dump complete

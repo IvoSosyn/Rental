@@ -67,7 +67,7 @@ public class User extends EntitySuperClassNajem implements Serializable, Cloneab
     private Account idaccount;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "iduser")
-    private Collection<Userrights> userrightsCollection;
+    private Collection<Userparam> userparamCollection;
 
     public User() {
     }
@@ -127,15 +127,15 @@ public class User extends EntitySuperClassNajem implements Serializable, Cloneab
     public void setIdaccount(Account idaccount) {
         this.idaccount = idaccount;
     }
-
     @XmlTransient
-    public Collection<Userrights> getUserrightsCollection() {
-        return userrightsCollection;
+    public Collection<Userparam> getUserparamCollection() {
+        return userparamCollection;
     }
 
-    public void setUserrightsCollection(Collection<Userrights> userrightsCollection) {
-        this.userrightsCollection = userrightsCollection;
+    public void setUserparamCollection(Collection<Userparam> userparamCollection) {
+        this.userparamCollection = userparamCollection;
     }
+
 
     @Override
     public String toString() {
