@@ -130,6 +130,16 @@ public class Uzivatel {
         return dateValue;
     }
 
+    public boolean setParam(String paramName, boolean value) {
+        boolean lOk = true;
+        return lOk;
+    }
+
+    public boolean setParam(String paramName, String value) {
+        boolean lOk = true;
+        return lOk;
+    }
+
     /**
      * @return the userId
      */
