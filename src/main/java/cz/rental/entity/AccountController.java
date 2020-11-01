@@ -74,11 +74,12 @@ public class AccountController extends JpaController {
      * @throws Exception vyjimka v pripade, ze se nepodarilo ulozit ucet do DB
      */
     public void saveAccount(Account account) throws Exception {
-        if (account.isNewEntity()) {
-            getEm().persist(account);
-
-        } else {
+        Account findAccount = (Account) this.findEntita(account);
+        if (findAccount instanceof Account) {
             getEm().merge(account);
+        } else {
+            getEm().persist(account);
+            account.setNewEntity(false);
         }
     }
 }

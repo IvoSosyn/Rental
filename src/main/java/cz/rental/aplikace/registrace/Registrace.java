@@ -33,6 +33,9 @@ public class Registrace {
 
     @PostConstruct
     public void init() {
+        if (!(ucet instanceof Ucet)) {
+            System.out.println(" Registrace.ucet==null");
+        }
     }
 
     /**
@@ -106,6 +109,13 @@ public class Registrace {
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
             isOk = false;
         }
+        try {
+            this.ucet.saveUzivatel();
+        } catch (Exception ex) {
+            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage()));
+            isOk = false;
+        }
         // Zaloz adresare k uctu a vstupni 'index.xhtml'
         try {
             this.ucet.createAccountDir();
@@ -143,6 +153,32 @@ public class Registrace {
      */
     public void setSelectedStep(int selectedStep) {
         this.selectedStep = selectedStep;
+    }
+
+    public boolean isPassBtnSaveEnabled() {
+        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed()
+                && this.ucet.getPassword() != null && !this.ucet.getPassword().isEmpty()
+                && this.ucet.getPasswordControl() != null && !this.ucet.getPasswordControl().isEmpty()
+                && this.ucet.getPassword().equals(this.ucet.getPasswordControl());
+
+        return isEnable;
+
+    }
+
+    /**
+     * Metoda vraci kratkou infomaci o naplneni Account.passwordsha512
+     *
+     * @return hlaseni
+     */
+    public String passwordMessage() {
+        if (this.ucet.getAccount().getPasswordsha512() instanceof String && !this.ucet.getAccount().getPasswordsha512().isEmpty()) {
+            if (this.ucet.getAccount().getPasswordhelp() instanceof String && !this.ucet.getAccount().getPasswordhelp().isEmpty()) {
+                return "Nápověda hesla: " + this.ucet.getAccount().getPasswordhelp().trim();
+            } else {
+                return "Máte uložené heslo.";
+            }
+        }
+        return "Heslo NENÍ definované";
     }
 
     /**

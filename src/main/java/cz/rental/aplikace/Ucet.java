@@ -7,6 +7,8 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
+import cz.rental.entity.Typentity;
+import cz.rental.entity.User;
 import cz.rental.utils.Aplikace;
 import cz.rental.utils.SHA512;
 import java.io.File;
@@ -14,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +28,8 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.PostConstruct;
+import javax.el.ValueExpression;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 
 /**
@@ -43,7 +48,6 @@ public class Ucet {
     private AccountController accController;
     @Inject
     private Uzivatel uzivatel;
-
     private Account account;
     private String password = "";
     private String passwordControl = "";
@@ -67,26 +71,32 @@ public class Ucet {
             this.accountsRootDir = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir");
         }
         this.accountDir = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
-        //this.setCustomerPasswordSHA512(SHA512.hash512(""));
+        //this.setCustomerPasswordSHA512(SHA512.getSHA512(""));
 //        Set<String> setRes=FacesContext.getCurrentInstance().getExternalContext().getResourcePaths("/account");
 //        System.out.println(" Ucet.accountDir="+accountDir);
 //        for (String setRe : setRes) {
 //            System.out.println(" /account: resources="+setRe);
 //            
 //        }
-        this.account = new Account();
-        this.account.setNewEntity(true);
-        this.account.setId(UUID.randomUUID());
-        this.account.setPin(9020);
-        this.account.setFullname("Ing.Ivo Sosýn");
-        this.account.setEmail("sosyn@seznam.cz");
-        this.account.setStreet1("Fűgnerova 51/14");
-        this.account.setStreet2("Pod Cvilínem");
-        this.account.setCity("Krnov");
-        this.account.setPostcode("794 01");
-        this.account.setPlatiod(Aplikace.getPlatiOd());
-        this.account.setPlatido(Aplikace.getPlatiDo());
-
+        if (!(this.account instanceof Account)) {
+            this.account = new Account();
+            this.account.setNewEntity(true);
+            this.account.setId(UUID.randomUUID());
+            this.account.setPin(9020);
+            this.account.setFullname("Ing.Ivo Sosýn");
+            this.account.setEmail("sosyn@seznam.cz");
+            this.account.setStreet1("Fűgnerova 51/14");
+            this.account.setStreet2("Pod Cvilínem");
+            this.account.setCity("Krnov");
+            this.account.setPostcode("794 01");
+            this.account.setTelnumber("736667337");
+            Typentity typentity = new Typentity();
+            typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
+            this.account.setIdmodel((Typentity) this.accController.findEntita(typentity));
+            this.account.setPasswordsha512(SHA512.getSHA512("daniela"));
+            this.account.setPlatiod(Aplikace.getPlatiOd());
+            this.account.setPlatido(Aplikace.getPlatiDo());
+        }
     }
 
     /**
@@ -127,30 +137,45 @@ public class Ucet {
      * NEFUNGUJE PrimeFaces.current().dialog().openDynamic(...)
      */
     public void changePassword() {
+//                    <p:commandButton value="Heslo" actionListener="#{registrace.ucet.changePassword()}" disabled="#{!registrace.ucet.isButtonEnable()}" />
+
+        System.out.println("PrimeFaces.current().dialog().openDynamic");
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("modal", true);
-        PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/password.xhtml", options, null);
-        //System.out.println("PrimeFaces.current().dialog().openDynamic");
+        PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/password_1", options, null);
     }
 
     /**
      * NEFUNGUJE PrimeFaces.current().dialog().closeDynamic(...)
-     *
-     * @param password
      */
-    public void closePassword(String password) {
-        PrimeFaces.current().dialog().closeDynamic(password);
-        //System.out.println("PrimeFaces.current().dialog().closeDynamic");
-    }
-
-    public void newPassword() {
-        this.account.setPasswordsha512(SHA512.hash512(this.password));
+    public void closePassword() {
+        System.out.println("PrimeFaces.current().dialog().closeDynamic");
+        this.account.setPasswordsha512(SHA512.getSHA512(this.password));
         this.account.setPasswordhelp(this.passwordHelp);
-        //System.out.println("Ucet.newPassword " + this.customerPassword);
-        //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, this.getCustomerPassword(), this.getCustomerPasswordSHA512()));
+        PrimeFaces.current().dialog().closeDynamic(password);
     }
 
-    public void changePin() {
+    public void encryptPassword() {
+        System.out.println("Ucet.newPassword()");
+        this.account.setPasswordsha512(SHA512.getSHA512(this.password));
+        this.account.setPasswordhelp(this.passwordHelp);
+        //System.out.println("Ucet.encryptPassword " + this.customerPassword);
+        //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, this.getCustomerPassword(), this.getCustomerPasswordSHA512()));
+        // oncomplete="PF('dialogPass').hide();"
+        PrimeFaces.current().executeScript("PF('dialogPass').hide();");
+        
+        ValueExpression vex
+                = FacesContext.getCurrentInstance().getApplication().getExpressionFactory()
+                        .createValueExpression(FacesContext.getCurrentInstance().getELContext(),
+                                "#{registrace.ucet.account.passwordsha512}", String.class);
+        vex.setValue(FacesContext.getCurrentInstance().getELContext(), this.account.getPasswordsha512());
+        PrimeFaces.current().ajax().update(":formReg0Kontakt:idAccPass");
+
+        // FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(":formReg0Kontakt:idAccPass");
+    }
+
+    public void changePin(ActionEvent event) {
+        System.out.println("Ucet.changePin()");
         int randomNum = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
         this.account.setPin(randomNum);
     }
@@ -162,6 +187,23 @@ public class Ucet {
      */
     public void saveAccount() throws Exception {
         getAccController().saveAccount(this.account);
+    }
+
+    public void saveUzivatel() throws Exception {
+        User firstUser = this.uzivatel.getUser();
+        if (firstUser == null) {
+            firstUser = new User();
+//            firstUser.setId(UUID.randomUUID());
+            firstUser.setNewEntity(true);
+            this.uzivatel.setUser(firstUser);
+        }
+        firstUser.setIdaccount(this.account);
+        firstUser.setFullname(this.account.getFullname());
+        firstUser.setEmail(this.account.getEmail());
+        firstUser.setPasswordsha512(this.account.getPasswordsha512());
+        firstUser.setPasswordhelp(this.account.getPasswordhelp());
+        firstUser.setTelnumber(this.account.getTelnumber());
+        this.uzivatel.saveUser(firstUser);
     }
 
     /**
@@ -336,4 +378,5 @@ public class Ucet {
     public void setPasswordHelp(String passwordHelp) {
         this.passwordHelp = passwordHelp;
     }
+
 }

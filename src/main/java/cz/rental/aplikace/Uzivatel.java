@@ -83,6 +83,20 @@ public class Uzivatel {
     }
 
     /**
+     * Metoda zalozi nebo aktualizuje zaznam User v DB
+     *
+     * @param changedUser - uzivatel k vytvoreni|aktualizaci do DB
+     * @throws Exception vyjimka, pokud ulození do DB nebude uspesne
+     */
+    public void saveUser(User changedUser) throws Exception {
+        if (this.userController.findEntita(changedUser) instanceof User) {
+            this.userController.edit(changedUser);
+        } else {
+            this.userController.create(changedUser);
+        }
+    }
+
+    /**
      * Metoda vrati logickou hodnotu pojmenovaneho parametru nabo defaultni
      * hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
      *
@@ -183,4 +197,5 @@ public class Uzivatel {
     public void setUser(cz.rental.entity.User user) {
         this.user = user;
     }
+
 }

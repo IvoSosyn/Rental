@@ -6,73 +6,71 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition>
-        <h:form  id="formReg0Kontakt" >
-            <p:panelGrid columns="3" >
-                <f:facet name="header">
-                    <p>Registrační údaje zřizovatele účtu</p>
-                </f:facet>
 
-                <p:outputLabel value="Majitel:" for="@next" />
-                <p:inputText size="100" maxlength="200" id="idAccName" value="#{registrace.ucet.account.fullname}" placeholder="Plné jméno majitele účtu ..." required="true" validator="accountValidator" disabled="#{!registrace.ucet.isEditable()}" requiredMessage=" Položka je povinná, vyplňte ji ..."  >
-                    <p:ajax update="@all" event="blur" />
-                </p:inputText>
-                <p:message id="accNameMsg" for="@previous" />
+    <h:form  id="formReg0Kontakt" >
+        <p:panelGrid columns="3" >
 
-                <p:outputLabel value="Ulice:" for="@next" />
-                <p:inputTextarea rows="3" cols="100" maxlength="350" id="idAccStreet1" value="#{registrace.ucet.account.street1}" placeholder="Ulice majitele účtu ..." required="true" validator="accountValidator" disabled="#{!registrace.ucet.isEditable()}"  >
-                    <p:ajax update="@all" event="blur" />
-                </p:inputTextarea>
-                <p:message id="accStreet1Msg" for="@previous" />
+            <f:facet name="header">
+                <p>Registrační údaje zřizovatele účtu</p>
+            </f:facet>
 
-                <p:outputLabel value="Část obce:" for="@next" />
-                <p:inputTextarea rows="3" cols="100" maxlength="350" id="idAccStreet2" value="#{registrace.ucet.account.street2}" placeholder="Část obce majitele účtu ..." required="false" validator="accountValidator" disabled="#{!registrace.ucet.isEditable()}"  >
-                    <p:ajax update="@all" event="blur" />
-                </p:inputTextarea>
-                <p:message id="accStreet2Msg" for="@previous" />
+            <p:outputLabel value="Majitel:" for="@next" />            
+            <p:inputText size="100" maxlength="200" id="idAccName" value="#{registrace.ucet.account.fullname}" placeholder="Plné jméno majitele účtu ..." required="true" validator="ucetValidator" disabled="#{!registrace.ucet.isEditable()}" requiredMessage=" Položka je povinná, vyplňte ji ..."  >
+                <p:ajax update="@all" event="blur" />
+            </p:inputText>
+            <p:message id="accNameMsg" for="@previous" />
 
-                <p:outputLabel value="Město:" for="@next" />
-                <p:inputTextarea rows="1" cols="100" maxlength="350" id="idAccCity" value="#{registrace.ucet.account.city}" placeholder="Město/Obec majitele účtu ..." required="false" validator="accountValidator" disabled="#{!registrace.ucet.isEditable()}"  >
-                    <p:ajax update="@all" event="blur" />
-                </p:inputTextarea>
-                <p:message id="accCitzMsg" for="@previous" />
+            <p:outputLabel value="Ulice:" for="@next" />
+            <p:inputTextarea rows="3" cols="100" maxlength="350" id="idAccStreet1" value="#{registrace.ucet.account.street1}" placeholder="Ulice majitele účtu ..." required="true" validator="ucetValidator" disabled="#{!registrace.ucet.isEditable()}"  >
+                <p:ajax update="@all" event="blur" />
+            </p:inputTextarea>
+            <p:message id="accStreet1Msg" for="@previous" />
 
-                <p:outputLabel value="E-mail:" for="@next" />
-                <p:inputText  size="100" maxlength="150" id="idAccEmail" value="#{registrace.ucet.account.email}" placeholder="Email majitele účtu ..." required="true" validator="accountValidator" disabled="#{!registrace.ucet.isEditable()}"  >
-                    <p:ajax update="@all" event="blur" />
-                    <p:keyFilter regEx="/[a-z0-9_.-@]/i"/>  
-                </p:inputText>
-                <p:message id="accEmailMsg" for="@previous" />
+            <p:outputLabel value="Část obce:" for="@next" />
+            <p:inputTextarea rows="3" cols="100" maxlength="350" id="idAccStreet2" value="#{registrace.ucet.account.street2}" placeholder="Část obce majitele účtu ..." required="false" validator="ucetValidator" disabled="#{!registrace.ucet.isEditable()}"  >
+                <p:ajax update="@all" event="blur" />
+            </p:inputTextarea>
+            <p:message id="accStreet2Msg" for="@previous" />
 
-                <p:outputLabel value="Telefon:" for="@next" />
-                <p:inputMask id="idAccTel" value="#{registrace.ucet.account.telnumber}" mask="(+420) 999 999 999"  required="true" validator="accountValidator" disabled="#{!registrace.ucet.isEditable()}" >
-                    <p:ajax update="@all" event="blur" />                
-                </p:inputMask>
-                <p:message id="accTelMsg" for="@previous" />
+            <p:outputLabel value="Město:" for="@next" />
+            <p:inputTextarea rows="1" cols="100" maxlength="350" id="idAccCity" value="#{registrace.ucet.account.city}" placeholder="Město/Obec majitele účtu ..." required="false" validator="ucetValidator" disabled="#{!registrace.ucet.isEditable()}"  >
+                <p:ajax update="@all" event="blur" />
+            </p:inputTextarea>
+            <p:message id="accCitzMsg" for="@previous" />
 
-                <p:outputLabel value="Heslo:" for="@next" />
-                <h:panelGroup>
-                    <p:inputText size="128" id="idAccPass" value="#{registrace.ucet.account.passwordsha512}" placeholder="Heslo majitele účtu ..." required="true" validator="accountValidator" disabled="true"  >
-                        <p:ajax update="@all" event="blur" />
-                    </p:inputText>
-                    <p:spacer width="10" />
-                    <p:commandButton value="Heslo"  onclick="PF('dialogPass').show();return false;" disabled="#{!registrace.ucet.isButtonEnable()}" update="@all"  />
-                </h:panelGroup>
-                <p:message id="accPassMsg" for="idAccPass" />
+            <p:outputLabel value="E-mail:" for="@next" />
+            <p:inputText  size="100" maxlength="150" id="idAccEmail" value="#{registrace.ucet.account.email}" placeholder="Email majitele účtu ..." required="true" validator="ucetValidator" disabled="#{!registrace.ucet.isEditable()}"  >
+                <p:ajax update="@all" event="blur" />
+                <p:keyFilter regEx="/[a-z0-9_.-@]/i"/>  
+            </p:inputText>
+            <p:message id="accEmailMsg" for="@previous" />
 
-                <p:outputLabel value="PIN:" for="@next" />
-                <h:panelGroup >
-                    <p:inputNumber size="4" maxValue="9999" id="idAccPin" value="#{registrace.ucet.account.pin}" placeholder="Přidělený PIN ..." required="true" validator="accountValidator" disabled="true"  >
-                        <p:ajax update="@all" event="blur" />
-                    </p:inputNumber>
-                    <p:spacer width="10" />
-                    <p:commandButton value="Změnit PIN" actionListener="#{registrace.ucet.changePin()}" disabled="#{!registrace.ucet.isButtonEnable()}" update="@form:idAccPin" />                            
-                </h:panelGroup>
-                <p:message id="accPinMsg" for="idAccPin" />
+            <p:outputLabel value="Telefon:" for="@next" />
+            <p:inputMask id="idAccTel" value="#{registrace.ucet.account.telnumber}" mask="(+420) 999 999 999"  required="true" validator="ucetValidator" disabled="#{!registrace.ucet.isEditable()}" >
+                <p:ajax update="@all" event="blur" />                
+            </p:inputMask>
+            <p:message id="accTelMsg" for="@previous" />
 
-            </p:panelGrid>
-            <ui:include src="/aplikace/registrace/password.xhtml"/>
-        </h:form>
-    </ui:composition>	
+            <p:outputLabel value="Heslo:" for="@next"  />
+            <h:panelGroup>
+                <p:outputLabel  id="idAccPass" value="#{registrace.passwordMessage()}"  />
+                <p:spacer width="10" />
+                <p:commandButton value="Heslo"  onclick="PF('dialogPass').show();" disabled="#{!registrace.ucet.isButtonEnable()}" />
+            </h:panelGroup>
+            <p:message id="accPassMsg" for="idAccPass" />
+
+            <p:outputLabel value="PIN:" for="@next" />
+            <h:panelGroup >
+                <p:outputLabel id="idAccPin" value="#{registrace.ucet.account.pin}" />
+                <p:spacer width="10" />
+                <h:commandButton  value="Změnit PIN"  actionListener="#{registrace.ucet.changePin}" disabled="#{!registrace.ucet.isButtonEnable()}" >
+                    <p:ajax event="click" update="idAccPin" />
+                </h:commandButton>
+            </h:panelGroup>
+            <p:message id="accPinMsg" for="idAccPin" />
+        </p:panelGrid>
+    </h:form>
+
+    <ui:include src="/aplikace/registrace/password.xhtml"/>
 </html>
 

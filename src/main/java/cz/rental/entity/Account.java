@@ -87,7 +87,7 @@ public class Account extends EntitySuperClassNajem implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idaccount")
     private Collection<User> userCollection;
 
-    @JoinColumn(name = "idmodel", referencedColumnName = "id")
+    @JoinColumn(columnDefinition ="UUID" ,name = "idmodel", referencedColumnName = "id")
     @ManyToOne
     private Typentity idmodel;
 

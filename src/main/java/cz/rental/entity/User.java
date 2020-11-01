@@ -60,8 +60,6 @@ public class User extends EntitySuperClassNajem implements Serializable, Cloneab
     @Column(length = 150)
     private String passwordhelp;
 
-    private Boolean supervisor;
-
     @JoinColumn(name = "idaccount", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Account idaccount;
@@ -110,14 +108,6 @@ public class User extends EntitySuperClassNajem implements Serializable, Cloneab
 
     public void setPasswordhelp(String passwordhelp) {
         this.passwordhelp = passwordhelp;
-    }
-
-    public Boolean getSupervisor() {
-        return supervisor;
-    }
-
-    public void setSupervisor(Boolean supervisor) {
-        this.supervisor = supervisor;
     }
 
     public Account getIdaccount() {
