@@ -12,8 +12,12 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
 import org.primefaces.context.PrimeFacesContext;
 
@@ -155,13 +159,60 @@ public class Registrace {
         this.selectedStep = selectedStep;
     }
 
-    public boolean isPassBtnSaveEnabled() {
-        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed()
-                && this.ucet.getPassword() != null && !this.ucet.getPassword().isEmpty()
-                && this.ucet.getPasswordControl() != null && !this.ucet.getPasswordControl().isEmpty()
-                && this.ucet.getPassword().equals(this.ucet.getPasswordControl());
+    /**
+     * !!! NEPOUZIVAT !!!
+     * @param event
+     */
+    public void validatePassword(ComponentSystemEvent event) {
 
+      FacesContext fc = FacesContext.getCurrentInstance();
+
+      UIComponent components = event.getComponent();
+
+      // get password
+      UIInput uiInputPassword = (UIInput) components.findComponent("idPass");
+      String password = uiInputPassword.getLocalValue() == null ? ""
+        : uiInputPassword.getLocalValue().toString();
+      String passwordId = uiInputPassword.getClientId();
+
+      // get confirm password
+      UIInput uiInputConfirmPassword = (UIInput) components.findComponent("idPassControl");
+      String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
+        : uiInputConfirmPassword.getLocalValue().toString();
+
+      // Let required="true" do its job.
+      if (password.isEmpty() || confirmPassword.isEmpty()) {
+        return;
+      }
+
+      if (!password.equals(confirmPassword)) {
+
+        FacesMessage msg = new FacesMessage("Password must match confirm password");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        fc.addMessage(null, msg);
+        fc.renderResponse();
+            
+      }
+    }
+    
+    /**
+     *  Metoda testuje, zda-li lze ulozit heslo
+     * @return
+     */
+    public boolean isPassBtnSaveEnabled() {
+        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
         return isEnable;
+//        if (!isEnable) {
+//            return false;
+//        }
+//        String password = this.getUcet().getPassword();
+//        String passwordControl = this.getUcet().getPasswordControl();;
+//
+//        isEnable = isEnable && password!= null && !password.isEmpty()
+//                && passwordControl != null && !passwordControl.isEmpty()
+//                && password.equals(passwordControl);
+//
+//        return isEnable;
 
     }
 

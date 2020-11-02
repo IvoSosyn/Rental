@@ -63,9 +63,7 @@
             <h:panelGroup >
                 <p:outputLabel id="idAccPin" value="#{registrace.ucet.account.pin}" />
                 <p:spacer width="10" />
-                <h:commandButton  value="Změnit PIN"  actionListener="#{registrace.ucet.changePin}" disabled="#{!registrace.ucet.isButtonEnable()}" >
-                    <p:ajax event="click" update="idAccPin" />
-                </h:commandButton>
+                <p:commandButton  value="Změnit PIN"  actionListener="#{registrace.ucet.changePin}" disabled="#{!registrace.ucet.isButtonEnable()}" update="idAccPin" />
             </h:panelGroup>
             <p:message id="accPinMsg" for="idAccPin" />
         </p:panelGrid>
