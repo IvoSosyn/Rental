@@ -163,7 +163,7 @@ public class Ucet {
         //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, this.getCustomerPassword(), this.getCustomerPasswordSHA512()));
         // oncomplete="PF('dialogPass').hide();"
         PrimeFaces.current().executeScript("PF('dialogPass').hide();");
-        
+
         ValueExpression vex
                 = FacesContext.getCurrentInstance().getApplication().getExpressionFactory()
                         .createValueExpression(FacesContext.getCurrentInstance().getELContext(),
@@ -193,7 +193,7 @@ public class Ucet {
         User firstUser = this.uzivatel.getUser();
         if (firstUser == null) {
             firstUser = new User();
-//            firstUser.setId(UUID.randomUUID());
+            firstUser.setId(UUID.randomUUID());
             firstUser.setNewEntity(true);
             this.uzivatel.setUser(firstUser);
         }
@@ -203,6 +203,7 @@ public class Ucet {
         firstUser.setPasswordsha512(this.account.getPasswordsha512());
         firstUser.setPasswordhelp(this.account.getPasswordhelp());
         firstUser.setTelnumber(this.account.getTelnumber());
+        this.account.getUserCollection().add(firstUser);
         this.uzivatel.saveUser(firstUser);
     }
 

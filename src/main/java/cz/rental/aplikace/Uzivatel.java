@@ -93,6 +93,7 @@ public class Uzivatel {
             this.userController.edit(changedUser);
         } else {
             this.userController.create(changedUser);
+            changedUser.setNewEntity(false);
         }
     }
 
