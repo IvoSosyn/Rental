@@ -61,25 +61,7 @@ public class PasswordValidator implements Validator, Serializable {
             if (value == null || ((String) value).isEmpty() || ((String) value).trim().length() < MINIMAL_PASSWORD_LENGTH) {
                 msg = new FacesMessage("Chybné heslo.", "Heslo musí mít minimálně " + MINIMAL_PASSWORD_LENGTH + " znaky.");
             }
-        } else if (component.getId().equals("idPassControl")) {
-            if (value == null || ((String) value).isEmpty() || ((String) value).trim().length() < MINIMAL_PASSWORD_LENGTH) {
-                msg = new FacesMessage("Chybné kontrolní heslo.");
-            } else {
-                // get password
-                UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
-                UIInput pass = (UIInput) view.findComponent("formPassword:idPass");
-                String password = (String) pass.getLocalValue();
-//                ValueExpression vex
-//                        = context.getApplication().getExpressionFactory()
-//                                .createValueExpression(context.getELContext(),
-//                                        "#{registrace.ucet.password}", String.class);
-//                password = (String) vex.getValue(context.getELContext());
-                if (password == null || password.isEmpty()) {
-                } else if (!((String) value).equals(password)) {
-                    msg = new FacesMessage("Hesla se neshodují ! Heslo: " + password + " kontrola: " + value);
-                }
-            }
-        }
+        } 
         // Vyhodit chybu, pokud je testovana polozka chybna
         if (msg != null) {
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);

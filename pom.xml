@@ -61,8 +61,13 @@
             <version>2.7.7</version>
             <scope>runtime</scope>
         </dependency>        
+        <dependency>
+            <groupId>org.omnifaces</groupId>
+            <artifactId>omnifaces</artifactId>
+            <version>3.8.1</version>
+        </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
