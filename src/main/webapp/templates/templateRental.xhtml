@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Pronájmy</title>        
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/all.min-jsf.css" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/v4-shims.min-jsf.css" />
+        <h:outputStylesheet name="/css/jsfcrud.css"/>
+        <h:outputScript name="/js/jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+        <p:growl id="growl" showDetail="true" life="7000" />
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="center" size="50" >
+                <ui:insert name="contens">
+                    <ui:include src="/templates/contens.xhtml"/>
+                </ui:insert>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="20">
+                <ui:insert name="footer" >
+                    <ui:include src="/templates/footer.xhtml"/>
+                </ui:insert>
+            </p:layoutUnit>
+        </p:layout>
+
+    </h:body>
+</html>

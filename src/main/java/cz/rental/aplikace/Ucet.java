@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -49,9 +48,11 @@ public class Ucet {
     @Inject
     private Uzivatel uzivatel;
     private Account account;
+    private Integer pin = 9020;
     private String password = "";
     private String passwordControl = "";
     private String passwordHelp = "";
+    private String email = "";
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
 
@@ -111,7 +112,7 @@ public class Ucet {
      */
     public Boolean getUcetAndUzivatel(String pin, String email, String passwordSHA512) throws Exception {
         boolean ucetExist = false;
-        Account acc = accController.getAccountForPIN(pin);
+        Account acc = accController.getAccountForPIN(this.pin);
         if (!(acc instanceof Account)) {
             throw new Exception("Účet pro PIN:" + pin + " NEEXISTUJE.");
         }
@@ -338,6 +339,7 @@ public class Ucet {
     public void setAccount(Account account) {
     }
 
+
     /**
      * @return the password
      */
@@ -378,6 +380,34 @@ public class Ucet {
      */
     public void setPasswordHelp(String passwordHelp) {
         this.passwordHelp = passwordHelp;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the pin
+     */
+    public Integer getPin() {
+        return pin;
+    }
+
+    /**
+     * @param pin the pin to set
+     */
+    public void setPin(Integer pin) {
+        this.pin = pin;
     }
 
 }

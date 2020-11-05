@@ -6,6 +6,7 @@
 package cz.rental.entity;
 
 import cz.rental.aplikace.Uzivatel;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -13,6 +14,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 /**
@@ -45,10 +48,14 @@ public class AccountController extends JpaController {
      * @param pin jedinecny PIN uctu
      * @return pozadovany Account nebo 'null', kdyz ucet neexistuje
      */
-    public Account getAccountForPIN(String pin) {
+    public Account getAccountForPIN(int pin) {
+        Account account =null;
         this.query = getEm().createQuery("SELECT a FROM Account a WHERE a.pin=:pin ");
         this.query.setParameter("pin", pin);
-        Account account = (Account) query.getSingleResult();
+        ArrayList<Account> accounts = new ArrayList<>(query.getResultList());
+        if (accounts.size() > 0) {
+            account = accounts.get(0);
+        }
         return account;
     }
 
@@ -59,11 +66,15 @@ public class AccountController extends JpaController {
      * @param email vstupni email vlastnika uctu, bude duplikovan v uzivateli
      * @return ucet nebo null, kdyz ucet neexistuje
      */
-    public Account getAccount(String pin, String email) {
-        this.query = getEm().createQuery("SELECT a FROM Account a WHERE a.pin=:pin AND a.email=:email ");
+    public Account getAccountForPinAndEmail(int pin, String email) {
+        Account account = null;
+        this.query = getEm().createQuery("SELECT a FROM User u INNER JOIN u.idaccount a WHERE a.pin=:pin AND u.email=:email ");
         this.query.setParameter("pin", pin);
         this.query.setParameter("email", email);
-        Account account = (Account) query.getSingleResult();
+        ArrayList<Account> accounts = new ArrayList<>(query.getResultList());
+        if (accounts.size() > 0) {
+            account = accounts.get(0);
+        }
         return account;
     }
 

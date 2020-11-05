@@ -2,26 +2,29 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="aplikace/evidence/eviattr.xhtml" x="87" y="361" zoom="true"/>
+        <Node id="aplikace/login.xhtml" x="-233" y="135" zoom="true"/>
+        <Node id="aplikace/evidence/eviattr.xhtml" x="-159" y="487" zoom="true"/>
+        <Node id="admin/model/modelTable.xhtml" x="515" y="86" zoom="true"/>
         <Node id="templates/templateMain.xhtml" x="127" y="50" zoom="true"/>
         <Node id="templates/contens.xhtml" x="150" y="117" zoom="true"/>
-        <Node id="admin/model/modelTable.xhtml" x="515" y="86" zoom="true"/>
         <Node id="account/readme.html" x="843" y="245" zoom="true"/>
-        <Node id="aplikace/registrace/password_1.xhtml" x="503" y="477" zoom="true"/>
         <Node id="aplikace/evidence/evidence.xhtml" x="84" y="245" zoom="true"/>
-        <Node id="index.xhtml" x="49" y="16" zoom="true"/>
+        <Node id="aplikace/registrace/password_1.xhtml" x="529" y="467" zoom="true"/>
+        <Node id="index.xhtml" x="-64" y="9" zoom="false"/>
         <Node id="aplikace/registrace/regStep0.xhtml" x="499" y="283" zoom="true"/>
-        <Node id="aplikace/registrace/regStep1.xhtml" x="505" y="320" zoom="true"/>
+        <Node id="aplikace/registrace/regStep1.xhtml" x="509" y="336" zoom="true"/>
         <Node id="aplikace/registrace/registrace.xhtml" x="499" y="247" zoom="true"/>
-        <Node id="aplikace/registrace/regStep3.xhtml" x="506" y="388" zoom="true"/>
+        <Node id="aplikace/registrace/regStep3.xhtml" x="505" y="423" zoom="true"/>
         <Node id="admin/model/model.xhtml" x="515" y="8" zoom="true"/>
-        <Node id="aplikace/registrace/regStep2.xhtml" x="505" y="354" zoom="true"/>
-        <Node id="aplikace/evidence/evientitacolumn.xhtml" x="82" y="321" zoom="true"/>
+        <Node id="aplikace/registrace/regStep2.xhtml" x="506" y="378" zoom="true"/>
+        <Node id="aplikace/evidence/obdobi.xhtml" x="69" y="314" zoom="true"/>
+        <Node id="aplikace/evidence/evientitacolumn.xhtml" x="150" y="485" zoom="true"/>
         <Node id="admin/model/modelDetail.xhtml" x="519" y="118" zoom="true"/>
-        <Node id="aplikace/registrace/password.xhtml" x="498" y="443" zoom="true"/>
         <Node id="templates/header.xhtml" x="146" y="86" zoom="true"/>
+        <Node id="aplikace/registrace/password.xhtml" x="856" y="316" zoom="true"/>
         <Node id="templates/footer.xhtml" x="151" y="147" zoom="true"/>
-        <Node id="aplikace/evidence/evientita.xhtml" x="85" y="284" zoom="true"/>
+        <Node id="aplikace/evidence/eviButtons.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="aplikace/evidence/evientita.xhtml" x="62" y="389" zoom="true"/>
         <Node id="admin/model/modelTree.xhtml" x="522" y="50" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>

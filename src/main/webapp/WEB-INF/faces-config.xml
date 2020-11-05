@@ -68,6 +68,10 @@
             <from-outcome>case1</from-outcome>
             <to-view-id>/aplikace/registrace/regStep1.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>case2</from-outcome>
+            <to-view-id>/aplikace/registrace/password.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/aplikace/registrace/regStep1.xhtml</from-view-id>
@@ -81,13 +85,6 @@
         <navigation-case>
             <from-outcome>case1</from-outcome>
             <to-view-id>/aplikace/registrace/regStep3.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/aplikace/evidence/evidence.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>case2</from-outcome>
-            <to-view-id>/aplikace/evidence/evientita.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
@@ -114,6 +111,38 @@
         <navigation-case>
             <from-outcome>case2</from-outcome>
             <to-view-id>/aplikace/evidence/evientitacolumn.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>case1</from-outcome>
+            <to-view-id>/aplikace/login.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/aplikace/login.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>case1</from-outcome>
+            <to-view-id>/aplikace/registrace/registrace.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>case2</from-outcome>
+            <to-view-id>/aplikace/evidence/evidence.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/aplikace/evidence/evidence.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>case1</from-outcome>
+            <to-view-id>/aplikace/evidence/obdobi.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/aplikace/evidence/obdobi.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>case2</from-outcome>
+            <to-view-id>/aplikace/evidence/evientita.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>
