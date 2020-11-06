@@ -28,8 +28,10 @@ import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.PostConstruct;
 import javax.el.ValueExpression;
+import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -48,11 +50,11 @@ public class Ucet {
     @Inject
     private Uzivatel uzivatel;
     private Account account;
-    private Integer pin = 9020;
-    private String password = "";
-    private String passwordControl = "";
+    private Integer pin = 0;
+    private String email = null;
+    private String password = null;
+    private String passwordControl = null;
     private String passwordHelp = "";
-    private String email = "";
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
 
@@ -135,44 +137,35 @@ public class Ucet {
     }
 
     /**
-     * NEFUNGUJE PrimeFaces.current().dialog().openDynamic(...)
+     * Metoda zavola dialog (samostatny .XHTML soubor) pro zadani hesla 
      */
-    public void changePassword() {
-//                    <p:commandButton value="Heslo" actionListener="#{registrace.ucet.changePassword()}" disabled="#{!registrace.ucet.isButtonEnable()}" />
-
-        System.out.println("PrimeFaces.current().dialog().openDynamic");
-        Map<String, Object> options = new HashMap<String, Object>();
+    public void editPassword() {
+        Map<String, Object> options = new HashMap<>();
         options.put("modal", true);
-        PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/password_1", options, null);
+        options.put("modal", true);
+        options.put("draggable", true);
+        options.put("resizable", true);
+        options.put("width", 1000);
+        options.put("height", 350);
+        options.put("contentWidth", 1000);
+        options.put("contentHeight", 350);
+        options.put("closeOnEscape", true);
+        // options.put("includeViewParams", true);
+        PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/password.xhtml", options, null);
     }
 
     /**
-     * NEFUNGUJE PrimeFaces.current().dialog().closeDynamic(...)
+     * Metoda uzavre dialog se zadanim hesla
+     * - je volana ze samostatneho XHTML souboru, ve kterem je dialog
      */
-    public void closePassword() {
-        System.out.println("PrimeFaces.current().dialog().closeDynamic");
-        this.account.setPasswordsha512(SHA512.getSHA512(this.password));
-        this.account.setPasswordhelp(this.passwordHelp);
-        PrimeFaces.current().dialog().closeDynamic(password);
+    public void savePassword() {
+        PrimeFaces.current().dialog().closeDynamic(this.password);
     }
 
-    public void encryptPassword() {
-        System.out.println("Ucet.newPassword()");
+    public void passFromDialog(SelectEvent event) {
         this.account.setPasswordsha512(SHA512.getSHA512(this.password));
         this.account.setPasswordhelp(this.passwordHelp);
-        //System.out.println("Ucet.encryptPassword " + this.customerPassword);
-        //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, this.getCustomerPassword(), this.getCustomerPasswordSHA512()));
-        // oncomplete="PF('dialogPass').hide();"
-        PrimeFaces.current().executeScript("PF('dialogPass').hide();");
-
-        ValueExpression vex
-                = FacesContext.getCurrentInstance().getApplication().getExpressionFactory()
-                        .createValueExpression(FacesContext.getCurrentInstance().getELContext(),
-                                "#{registrace.ucet.account.passwordsha512}", String.class);
-        vex.setValue(FacesContext.getCurrentInstance().getELContext(), this.account.getPasswordsha512());
-        PrimeFaces.current().ajax().update(":formReg0Kontakt:idAccPass");
-
-        // FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(":formReg0Kontakt:idAccPass");
+        // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
     }
 
     public void changePin(ActionEvent event) {
@@ -338,7 +331,6 @@ public class Ucet {
      */
     public void setAccount(Account account) {
     }
-
 
     /**
      * @return the password

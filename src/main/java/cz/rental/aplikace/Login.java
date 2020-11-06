@@ -12,10 +12,12 @@ import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -33,9 +35,9 @@ public class Login implements Serializable {
     private Ucet ucet;
 
     private Integer pin = 0;
-    private String password = "";
-    private String passwordHelp = "";
-    private String email = "";
+    private String email = null;
+    private String password = null;
+    private String passwordHelp = null;
 
     public void handleLogin(ValueChangeEvent event) {
         // Po validaci hodnot formulare si kazdou novou hodnotu ulozim do prislusne promenne (takovy lokalni COMMIT)
@@ -85,8 +87,20 @@ public class Login implements Serializable {
     }
 
     public String actionRegistrace() {
-        return "aplikace/registrace/regucet.xhtml";
+        return "aplikace/registrace/registrace.xhtml";
     }
+
+    public void openDynamicDialog() {
+        PrimeFaces.current().dialog().openDynamic("aplikace/registrace/dynamicDialog.xhtml");
+    }
+
+    public void closeDynamicDialog() {
+        PrimeFaces.current().dialog().closeDynamic("CloseDynamicDialog");
+    }
+    public void valueFromDynamicDialog(SelectEvent event) {
+        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(event.getObject().toString()));
+    }
+    
 
     /**
      * @return the pin
