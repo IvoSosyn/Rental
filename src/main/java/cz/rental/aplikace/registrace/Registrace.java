@@ -102,6 +102,22 @@ public class Registrace {
         }
     }
 
+    /**
+     * Metoda vraci kratkou infomaci o naplneni Account.passwordsha512
+     *
+     * @return hlaseni
+     */
+    public String passwordMessage() {
+        if (this.getUcet().getAccount().getPasswordsha512() instanceof String && !this.getUcet().getAccount().getPasswordsha512().isEmpty()) {
+            if (this.getUcet().getAccount().getPasswordhelp() instanceof String && !this.getUcet().getAccount().getPasswordhelp().isEmpty()) {
+                return "Nápověda hesla: " + this.getUcet().getAccount().getPasswordhelp().trim();
+            } else {
+                return "Máte uložené heslo.";
+            }
+        }
+        return "Heslo NENÍ definované";
+    }
+
     public String createAccount() {
         boolean isOk = true;
         // Uloz registraci uctu
@@ -156,79 +172,6 @@ public class Registrace {
      */
     public void setSelectedStep(int selectedStep) {
         this.selectedStep = selectedStep;
-    }
-
-    /**
-     * !!! NEPOUZIVAT !!!
-     * @param event
-     */
-    public void validatePassword(ComponentSystemEvent event) {
-
-      FacesContext fc = FacesContext.getCurrentInstance();
-
-      UIComponent components = event.getComponent();
-
-      // get password
-      UIInput uiInputPassword = (UIInput) components.findComponent("idPass");
-      String password = uiInputPassword.getLocalValue() == null ? ""
-        : uiInputPassword.getLocalValue().toString();
-      String passwordId = uiInputPassword.getClientId();
-
-      // get confirm password
-      UIInput uiInputConfirmPassword = (UIInput) components.findComponent("idPassControl");
-      String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
-        : uiInputConfirmPassword.getLocalValue().toString();
-
-      // Let required="true" do its job.
-      if (password.isEmpty() || confirmPassword.isEmpty()) {
-        return;
-      }
-
-      if (!password.equals(confirmPassword)) {
-
-        FacesMessage msg = new FacesMessage("Password must match confirm password");
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-        fc.addMessage(null, msg);
-        fc.renderResponse();
-            
-      }
-    }
-    
-    /**
-     *  Metoda testuje, zda-li lze ulozit heslo
-     * @return
-     */
-    public boolean isPassBtnSaveEnabled() {
-        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
-        return isEnable;
-//        if (!isEnable) {
-//            return false;
-//        }
-//        String password = this.getUcet().getPassword();
-//        String passwordControl = this.getUcet().getPasswordControl();;
-//
-//        isEnable = isEnable && password!= null && !password.isEmpty()
-//                && passwordControl != null && !passwordControl.isEmpty()
-//                && password.equals(passwordControl);
-//
-//        return isEnable;
-
-    }
-
-    /**
-     * Metoda vraci kratkou infomaci o naplneni Account.passwordsha512
-     *
-     * @return hlaseni
-     */
-    public String passwordMessage() {
-        if (this.ucet.getAccount().getPasswordsha512() instanceof String && !this.ucet.getAccount().getPasswordsha512().isEmpty()) {
-            if (this.ucet.getAccount().getPasswordhelp() instanceof String && !this.ucet.getAccount().getPasswordhelp().isEmpty()) {
-                return "Nápověda hesla: " + this.ucet.getAccount().getPasswordhelp().trim();
-            } else {
-                return "Máte uložené heslo.";
-            }
-        }
-        return "Heslo NENÍ definované";
     }
 
     /**

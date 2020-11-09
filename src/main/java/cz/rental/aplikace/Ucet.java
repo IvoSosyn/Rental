@@ -27,9 +27,10 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.PostConstruct;
-import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIInput;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import org.primefaces.event.SelectEvent;
 
@@ -137,7 +138,7 @@ public class Ucet {
     }
 
     /**
-     * Metoda zavola dialog (samostatny .XHTML soubor) pro zadani hesla 
+     * Metoda zavola dialog (samostatny .XHTML soubor) pro zadani hesla
      */
     public void editPassword() {
         Map<String, Object> options = new HashMap<>();
@@ -155,8 +156,8 @@ public class Ucet {
     }
 
     /**
-     * Metoda uzavre dialog se zadanim hesla
-     * - je volana ze samostatneho XHTML souboru, ve kterem je dialog
+     * Metoda uzavre dialog se zadanim hesla - je volana ze samostatneho XHTML
+     * souboru, ve kterem je dialog
      */
     public void savePassword() {
         PrimeFaces.current().dialog().closeDynamic(this.password);
@@ -168,12 +169,49 @@ public class Ucet {
         // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
     }
 
+    /**
+     *
+     * @param event
+     */
+    public void validatePassword(ValueChangeEvent event) {
+
+        String newConfirmPass=(String) event.getNewValue();
+        
+        if (newConfirmPass==null || newConfirmPass.isEmpty() || !this.password.equals(newConfirmPass)) {
+            FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(event.getComponent().getClientId(), msg);
+        }
+    }
+
+    /**
+     * Metoda testuje, zda-li lze ulozit heslo
+     *
+     * @return
+     */
+    public boolean isPassBtnSaveEnabled() {
+        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
+        if (!isEnable) {
+            return false;
+        }
+//        String password = this.getUcet().getPassword();
+//        String passwordControl = this.getUcet().getPasswordControl();;
+//
+        isEnable = this.getPassword()!= null && !this.getPassword().isEmpty()
+                && this.getPasswordControl()!= null && !this.getPasswordControl().isEmpty()
+                && this.getPassword().equals(this.getPasswordControl());
+
+        return isEnable;
+
+    }
+
     public void changePin(ActionEvent event) {
         System.out.println("Ucet.changePin()");
         int randomNum = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
         this.account.setPin(randomNum);
     }
 
+    
     /**
      * Ulozi data Ucet do DB
      *
@@ -200,6 +238,7 @@ public class Ucet {
         this.account.getUserCollection().add(firstUser);
         this.uzivatel.saveUser(firstUser);
     }
+
 
     /**
      * Vytvori sadu adresaru pro ucet v preddefinovanem ulozisti a hlavni soubor

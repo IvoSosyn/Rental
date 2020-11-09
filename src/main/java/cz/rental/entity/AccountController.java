@@ -92,5 +92,6 @@ public class AccountController extends JpaController {
             getEm().persist(account);
             account.setNewEntity(false);
         }
+        this.findEntita(account);
     }
 }

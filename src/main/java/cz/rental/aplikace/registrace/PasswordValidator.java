@@ -10,8 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
@@ -57,7 +55,7 @@ public class PasswordValidator implements Validator, Serializable {
             System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
         } else if (component == null) {
             msg = new FacesMessage("System failed", "Systémová chyba, neznámá komponenta.");
-        } else if (component.getId().equals("idPass")) {
+        } else if (component.getId().equals("password")) {
             if (value == null || ((String) value).isEmpty() || ((String) value).trim().length() < MINIMAL_PASSWORD_LENGTH) {
                 msg = new FacesMessage("Chybné heslo.", "Heslo musí mít minimálně " + MINIMAL_PASSWORD_LENGTH + " znaky.");
             }

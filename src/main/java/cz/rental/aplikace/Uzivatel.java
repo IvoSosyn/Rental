@@ -94,7 +94,9 @@ public class Uzivatel {
         } else {
             this.userController.create(changedUser);
             changedUser.setNewEntity(false);
-        }
+        } 
+        
+        this.userController.findEntita(changedUser);
     }
 
     /**
