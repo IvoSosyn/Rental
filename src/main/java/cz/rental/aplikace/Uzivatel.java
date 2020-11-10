@@ -8,12 +8,13 @@ package cz.rental.aplikace;
 import cz.rental.entity.Account;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.InitialContext;
@@ -25,8 +26,10 @@ import javax.servlet.ServletContext;
  * @author ivo
  */
 @Named(value = "uzivatel")
-@Stateful
-public class Uzivatel {
+@SessionScoped
+public class Uzivatel implements Serializable {
+
+    static final long serialVersionUID = 42L;
 
     public static final String SUPERVISOR = "Supervisor";
     public static final String MODEL_EDIT = "ModelEdit";
@@ -40,7 +43,7 @@ public class Uzivatel {
 //    @Inject
 //    private HttpServletRequest httpRequest;
     boolean debugApp = false;
-    private cz.rental.entity.User user = null;
+    private User user = null;
 
     /**
      * Inicializace matice prav uzivatele
@@ -55,7 +58,6 @@ public class Uzivatel {
                 Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
         if (context == null || userController == null) {
             return;
         }
@@ -63,7 +65,8 @@ public class Uzivatel {
         if (param != null && param.toUpperCase().contains("DEBUG")) {
             debugApp = true;
         }
-
+        this.user = new User();
+        this.user.setNewEntity(true);
     }
 
     /**
@@ -85,18 +88,19 @@ public class Uzivatel {
     /**
      * Metoda zalozi nebo aktualizuje zaznam User v DB
      *
-     * @param changedUser - uzivatel k vytvoreni|aktualizaci do DB
      * @throws Exception vyjimka, pokud ulození do DB nebude uspesne
      */
-    public void saveUser(User changedUser) throws Exception {
-        if (this.userController.findEntita(changedUser) instanceof User) {
-            this.userController.edit(changedUser);
+    public void saveUser() throws Exception {
+        if (!(this.user instanceof User)) {
+            return;
+        }
+        if (this.userController.findEntita(this.user) instanceof User) {
+            this.userController.edit(this.user);
         } else {
-            this.userController.create(changedUser);
-            changedUser.setNewEntity(false);
-        } 
-        
-        this.userController.findEntita(changedUser);
+            this.userController.create(this.user);
+            this.user.setNewEntity(false);
+        }
+        this.userController.findEntita(this.user);
     }
 
     /**
@@ -190,7 +194,7 @@ public class Uzivatel {
     /**
      * @return the user
      */
-    public cz.rental.entity.User getUser() {
+    public User getUser() {
         return user;
     }
 

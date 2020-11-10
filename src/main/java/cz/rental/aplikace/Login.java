@@ -7,6 +7,8 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
+import cz.rental.entity.User;
+import cz.rental.entity.UserController;
 import cz.rental.utils.SHA512;
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -31,6 +33,8 @@ public class Login implements Serializable {
 
     @EJB
     private AccountController accController;
+    @EJB
+    private UserController userController;
     @Inject
     private Ucet ucet;
 
@@ -77,8 +81,11 @@ public class Login implements Serializable {
      */
     public String actionLogin() {
         Account acc = accController.getAccountForPinAndEmail(this.pin, this.email);
-        if (acc instanceof Account && acc.getPasswordsha512() != null && SHA512.getSHA512(this.password).equals(acc.getPasswordsha512())) {
+        User usr = userController.getUserForAccount(acc, email, SHA512.getSHA512(this.password));
+        if (acc instanceof Account && usr instanceof User ) {
 //            PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo je OK."));
+            this.ucet.setAccount(acc);
+            this.ucet.getUzivatel().setUser(usr);
             return "aplikace/evidence/evidence.xhtml";
         } else {
             PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Špatné heslo", "Nelze pokračovat, opravte stěžejní bezpečnostní údaj."));
@@ -97,10 +104,10 @@ public class Login implements Serializable {
     public void closeDynamicDialog() {
         PrimeFaces.current().dialog().closeDynamic("CloseDynamicDialog");
     }
+
     public void valueFromDynamicDialog(SelectEvent event) {
-        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(event.getObject().toString()));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(event.getObject().toString()));
     }
-    
 
     /**
      * @return the pin

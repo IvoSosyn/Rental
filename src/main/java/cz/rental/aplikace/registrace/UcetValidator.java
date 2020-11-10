@@ -6,12 +6,11 @@
 package cz.rental.aplikace.registrace;
 
 import cz.rental.aplikace.evidence.Evidence;
-import cz.rental.utils.Aplikace;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
-import javax.el.ValueExpression;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -24,7 +23,7 @@ import javax.faces.validator.ValidatorException;
  * @author sosyn
  */
 @FacesValidator("ucetValidator")
-@Stateless
+@SessionScoped
 public class UcetValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
@@ -47,6 +46,12 @@ public class UcetValidator implements Validator, Serializable {
         } else if (component == null) {
             System.out.println(" Neznámá komponenta: ");
             msg = new FacesMessage("System failed", "Systémová chyba, neznámá komponenta. ");
+        } else if (component.getClientId().contains("idAccEmail")) {
+            Pattern r = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
+            Matcher m = r.matcher((String) value);
+            if (!m.matches()) {
+                msg = new FacesMessage("Nesprávný formát e-mailové adresy.", "E-mail identifikuje uživatele a je to povinný údaj.");
+            }
         }
         // Vyhodit chybu, pokud je testovana polozka chybna
         if (msg != null) {

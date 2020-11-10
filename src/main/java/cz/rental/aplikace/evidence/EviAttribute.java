@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces.Dialog;
@@ -22,7 +22,7 @@ import org.primefaces.PrimeFaces.Dialog;
  * @author ivo
  */
 @Named(value = "eviAttr")
-@Stateless
+@SessionScoped
 public class EviAttribute implements Serializable {
 
     private static long serialVersionUID = 42L;

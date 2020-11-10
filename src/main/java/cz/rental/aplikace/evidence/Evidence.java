@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -28,7 +29,7 @@ import org.primefaces.event.SelectEvent;
  * @author ivo
  */
 @Named(value = "evidence")
-@Stateless
+@SessionScoped
 public class Evidence implements Serializable {
 
     static final long serialVersionUID = 42L;

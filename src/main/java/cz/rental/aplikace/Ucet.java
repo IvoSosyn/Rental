@@ -7,28 +7,19 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
-import cz.rental.entity.Typentity;
-import cz.rental.entity.User;
-import cz.rental.utils.Aplikace;
 import cz.rental.utils.SHA512;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIInput;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
@@ -39,10 +30,14 @@ import org.primefaces.event.SelectEvent;
  * @author ivo
  */
 @Named(value = "ucet")
-@Stateful
-public class Ucet {
+@SessionScoped
+public class Ucet implements Serializable {
 
-    private static String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
+    static final long serialVersionUID = 42L;
+
+    public static final String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
+    public static final int ACCOUNT_MIN_PIN = 1000;
+    public static final int ACCOUNT_MAX_PIN = 9999 + 1;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -61,46 +56,8 @@ public class Ucet {
 
     @PostConstruct
     public void init() {
-//        try {
-//            uzivatel = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.Uzivatel");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        // Nacist root dir pro soubory uctu, pokud je zadan ve WEB.XML  napr. na Linuxu
-        //  <context-param>
-        //      <param-name>cz.rental.accounts.root.dir</param-name>
-        //      <param-value>/home/Rental/Accounts</param-value>
-        //  </context-param>
-        if (FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir") != null) {
-            this.accountsRootDir = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("cz.rental.accounts.root.dir");
-        }
-        this.accountDir = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/account");
-        //this.setCustomerPasswordSHA512(SHA512.getSHA512(""));
-//        Set<String> setRes=FacesContext.getCurrentInstance().getExternalContext().getResourcePaths("/account");
-//        System.out.println(" Ucet.accountDir="+accountDir);
-//        for (String setRe : setRes) {
-//            System.out.println(" /account: resources="+setRe);
-//            
-//        }
-        if (!(this.account instanceof Account)) {
-            this.account = new Account();
-            this.account.setNewEntity(true);
-            this.account.setId(UUID.randomUUID());
-            this.account.setPin(9020);
-            this.account.setFullname("Ing.Ivo Sosýn");
-            this.account.setEmail("sosyn@seznam.cz");
-            this.account.setStreet1("Fűgnerova 51/14");
-            this.account.setStreet2("Pod Cvilínem");
-            this.account.setCity("Krnov");
-            this.account.setPostcode("794 01");
-            this.account.setTelnumber("736667337");
-            Typentity typentity = new Typentity();
-            typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
-            this.account.setIdmodel((Typentity) this.accController.findEntita(typentity));
-            this.account.setPasswordsha512(SHA512.getSHA512("daniela"));
-            this.account.setPlatiod(Aplikace.getPlatiOd());
-            this.account.setPlatido(Aplikace.getPlatiDo());
-        }
+        this.account = new Account();
+        this.account.setNewEntity(true);
     }
 
     /**
@@ -125,16 +82,6 @@ public class Ucet {
             throw new Exception("Účet pro PIN:" + pin + " a eMail: " + email + " NEEXISTUJE nebo máte chybné heslo.");
         }
         return ucetExist;
-    }
-
-    public Boolean isEditable() {
-        boolean isEditable = this.uzivatel.getParam(Uzivatel.SUPERVISOR, false) || this.uzivatel.getParam(Uzivatel.ACCOUNT_EDIT, false);
-        UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
-        return isEditable;
-    }
-
-    public boolean isButtonEnable() {
-        return !FacesContext.getCurrentInstance().isValidationFailed();
     }
 
     /**
@@ -175,9 +122,9 @@ public class Ucet {
      */
     public void validatePassword(ValueChangeEvent event) {
 
-        String newConfirmPass=(String) event.getNewValue();
-        
-        if (newConfirmPass==null || newConfirmPass.isEmpty() || !this.password.equals(newConfirmPass)) {
+        String newConfirmPass = (String) event.getNewValue();
+
+        if (newConfirmPass == null || newConfirmPass.isEmpty() || !this.password.equals(newConfirmPass)) {
             FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(event.getComponent().getClientId(), msg);
@@ -197,8 +144,8 @@ public class Ucet {
 //        String password = this.getUcet().getPassword();
 //        String passwordControl = this.getUcet().getPasswordControl();;
 //
-        isEnable = this.getPassword()!= null && !this.getPassword().isEmpty()
-                && this.getPasswordControl()!= null && !this.getPasswordControl().isEmpty()
+        isEnable = this.getPassword() != null && !this.getPassword().isEmpty()
+                && this.getPasswordControl() != null && !this.getPasswordControl().isEmpty()
                 && this.getPassword().equals(this.getPasswordControl());
 
         return isEnable;
@@ -206,12 +153,14 @@ public class Ucet {
     }
 
     public void changePin(ActionEvent event) {
-        System.out.println("Ucet.changePin()");
-        int randomNum = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
-        this.account.setPin(randomNum);
+        //System.out.println("Ucet.changePin()");
+        int randomPin = 0;
+        do {
+            randomPin = ThreadLocalRandom.current().nextInt(Ucet.ACCOUNT_MIN_PIN, Ucet.ACCOUNT_MAX_PIN);
+        } while (this.accController.getAccountForPIN(randomPin) != null);
+        this.account.setPin(randomPin);
     }
 
-    
     /**
      * Ulozi data Ucet do DB
      *
@@ -219,115 +168,6 @@ public class Ucet {
      */
     public void saveAccount() throws Exception {
         getAccController().saveAccount(this.account);
-    }
-
-    public void saveUzivatel() throws Exception {
-        User firstUser = this.uzivatel.getUser();
-        if (firstUser == null) {
-            firstUser = new User();
-            firstUser.setId(UUID.randomUUID());
-            firstUser.setNewEntity(true);
-            this.uzivatel.setUser(firstUser);
-        }
-        firstUser.setIdaccount(this.account);
-        firstUser.setFullname(this.account.getFullname());
-        firstUser.setEmail(this.account.getEmail());
-        firstUser.setPasswordsha512(this.account.getPasswordsha512());
-        firstUser.setPasswordhelp(this.account.getPasswordhelp());
-        firstUser.setTelnumber(this.account.getTelnumber());
-        this.account.getUserCollection().add(firstUser);
-        this.uzivatel.saveUser(firstUser);
-    }
-
-
-    /**
-     * Vytvori sadu adresaru pro ucet v preddefinovanem ulozisti a hlavni soubor
-     * uctu 'index.xhtml'
-     *
-     * @throws IOException
-     * @throws Exception
-     */
-    public void createAccountDir() throws IOException, Exception {
-        // Konstrukce cety k uctu uzivatele
-        File rootFile = new File(getRootAccountDirFor((String) null));
-        if (!rootFile.exists() && !rootFile.mkdirs()) {
-            throw new SQLException("Založení adresáře: '" + this.accountsRootDir + "' NEBYLO úspěšné, vytvořte ručně.");
-        }
-        // Vstupni soubor uctu
-        rootFile = new File(getRootAccountDirFor("index.xhtml"));
-        if (!rootFile.exists() && !rootFile.createNewFile()) {
-            throw new SQLException("Založení vstupního souboru: '" + getRootAccountDirFor("index.xhtml") + "' NEBYLO úspěšné, vytvořte ručně.");
-        }
-        // Data uctu
-        rootFile = new File(getRootAccountDirFor("data"));
-        if (!rootFile.exists() && !rootFile.mkdirs()) {
-            throw new SQLException("Založení adresáře: '" + getRootAccountDirFor("data") + "' NEBYLO úspěšné, vytvořte ručně.");
-        }
-        rootFile = new File(getRootAccountDirFor("data", "data1", null, "data3"));
-        if (!rootFile.exists() && !rootFile.mkdirs()) {
-            throw new SQLException("Založení adresáře: '" + getRootAccountDirFor("data") + "' NEBYLO úspěšné, vytvořte ručně.");
-        }
-    }
-
-    /**
-     * Naplni hlavni soubor uctu 'index.xhtml' daty TO-DO: Melo by to jit do
-     * samostatneho souboru s osetrenim, co bylo vytvoreno a v jake verzi
-     *
-     * @throws FileNotFoundException
-     */
-    public void createAccountHTML() throws FileNotFoundException {
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(getRootAccountDirFor("index.xhtml"));
-            pw.println("");
-            pw.println("<?xml version='1.0' encoding='UTF-8' ?>");
-            pw.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-            pw.println("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
-            pw.println("xmlns:ui=\"http://xmlns.jcp.org/jsf/facelets\"");
-            pw.println("xmlns:h=\"http://xmlns.jcp.org/jsf/html\"");
-            pw.println("xmlns:f=\"http://xmlns.jcp.org/jsf/core\"");
-            pw.println("xmlns:p=\"http://primefaces.org/ui\">");
-//            pw.println("<ui:composition>");
-            pw.println("<h:form  id=\"idCustomer\" >");
-            pw.println("<p:panelGrid columns=\"3\" >");
-            pw.println("<f:facet name=\"header\">");
-            pw.println("<p>Účet ID=" + this.account.getId() + "</p>");
-            pw.println("</f:facet>");
-            pw.println("<div> Konfigurace dat účtu </div>");
-            pw.println("</p:panelGrid>");
-            pw.println("</h:form>");
-//            pw.println("</ui:composition>	");
-            pw.println("</html>");
-
-        } catch (FileNotFoundException ex) {
-            if (pw != null) {
-                pw.close();
-            }
-            throw ex;
-        }
-        if (pw != null) {
-            pw.close();
-        }
-    }
-
-    /**
-     * Metoda vytvori nazev adresare a podaresare pozadovaneho uctu napr.:
-     * "\Rental\Ucet\[UUID]\data"; "\Rental\Ucet\[UUID]\index.xhtml"
-     *
-     * @param fileNames - matice nazvu podadresarui a souboru, ktere metoda
-     * prevede na retezec s oddelovacem <code>Files.separator</code>
-     * @return
-     */
-    public String getRootAccountDirFor(String... fileNames) {
-        StringBuilder sb = new StringBuilder(this.accountsRootDir).append(File.separator).append(this.account.getId());
-        if (fileNames != null && fileNames.length > 0) {
-            for (String fn : fileNames) {
-                if (fn != null) {
-                    sb.append(File.separator).append(fn.trim());
-                }
-            }
-        }
-        return sb.toString();
     }
 
     /**
@@ -369,6 +209,7 @@ public class Ucet {
      * @param account the account to set
      */
     public void setAccount(Account account) {
+        this.account = account;
     }
 
     /**
@@ -439,6 +280,34 @@ public class Ucet {
      */
     public void setPin(Integer pin) {
         this.pin = pin;
+    }
+
+    /**
+     * @return the accountsRootDir
+     */
+    public String getAccountsRootDir() {
+        return accountsRootDir;
+    }
+
+    /**
+     * @param accountsRootDir the accountsRootDir to set
+     */
+    public void setAccountsRootDir(String accountsRootDir) {
+        this.accountsRootDir = accountsRootDir;
+    }
+
+    /**
+     * @return the accountDir
+     */
+    public String getAccountDir() {
+        return accountDir;
+    }
+
+    /**
+     * @param accountDir the accountDir to set
+     */
+    public void setAccountDir(String accountDir) {
+        this.accountDir = accountDir;
     }
 
 }

@@ -8,6 +8,7 @@ package cz.rental.entity;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;

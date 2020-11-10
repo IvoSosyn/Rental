@@ -9,8 +9,8 @@ import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.el.ValueExpression;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -25,7 +25,7 @@ import javax.naming.NamingException;
  * @author sosyn
  */
 @FacesValidator("modelDetailValidator")
-@Stateless
+@SessionScoped
 public class ModelDetailValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
@@ -93,7 +93,7 @@ public class ModelDetailValidator implements Validator, Serializable {
                             .createValueExpression(context.getELContext(),
                                     "#{modelDetail.attribute.platido}", Date.class);
             Date platiDo = (Date) vex.getValue(context.getELContext());
-            if (value!=null && platiDo != null && platiDo.before((Date) value)) {
+            if (value != null && platiDo != null && platiDo.before((Date) value)) {
                 attribute.setPlatido((Date) value);
             }
         } else if (component.getClientId().contains("platido")) {
@@ -102,7 +102,7 @@ public class ModelDetailValidator implements Validator, Serializable {
                             .createValueExpression(context.getELContext(),
                                     "#{modelDetail.attribute.platiod}", Date.class);
             Date platiOd = (Date) vex.getValue(context.getELContext());
-            if (value!=null && platiOd != null && platiOd.after((Date) value)) {
+            if (value != null && platiOd != null && platiOd.after((Date) value)) {
                 attribute.setPlatiod((Date) value);
             }
         }

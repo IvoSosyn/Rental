@@ -46,8 +46,8 @@ public class User extends EntitySuperClassNajem implements Serializable, Cloneab
     @Column(nullable = false, length = 100)
     private String email;
 
-    @Size(max = 12)
-    @Column(length = 12)
+    @Size(max = 20)
+    @Column(length = 20)
     private String telnumber;
 
     @Basic(optional = false)

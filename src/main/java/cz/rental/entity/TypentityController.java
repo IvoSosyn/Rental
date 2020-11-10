@@ -17,7 +17,10 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
+import javax.persistence.QueryTimeoutException;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -31,7 +34,7 @@ import org.primefaces.model.TreeNode;
 public class TypentityController extends JpaController {
 
     private Query query = null;
-    
+
     @Inject
     Ucet ucet;
 
@@ -122,6 +125,24 @@ public class TypentityController extends JpaController {
         typentityNew.setId(UUID.randomUUID());
         typentityNew.setNewEntity(true);
         return typentityNew;
+    }
+
+    /**
+     * Metoda najde zaznam v DB odpovidajici Typentity.id == id
+     *
+     * @param id ID hledaneho zazamu Typentity.id
+     * @return nalezeny zanam Typentity nebo null
+     */
+    public Typentity getTypentityForParentID(UUID id) {
+        Typentity typentity = null;
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :id"));
+        this.getQuery().setParameter("id", id);
+        ArrayList<Typentity> typentities = new ArrayList<>(this.getQuery().getResultList());
+        for (Typentity tp : typentities) {
+            typentity = tp;
+            break;
+        }
+        return typentity;
     }
 
 }

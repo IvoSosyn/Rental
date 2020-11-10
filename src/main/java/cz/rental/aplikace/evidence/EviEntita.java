@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -37,27 +37,14 @@ import org.primefaces.model.DualListModel;
  * @author ivo
  */
 @Named(value = "eviEntita")
-@Stateless
+@SessionScoped
 public class EviEntita implements Serializable {
-
-    /**
-     * @return the ucet
-     */
-    public Ucet getUcet() {
-        return ucet;
-    }
-
-    /**
-     * @param ucet the ucet to set
-     */
-    public void setUcet(Ucet ucet) {
-        this.ucet = ucet;
-    }
 
     static final long serialVersionUID = 42L;
 
     static final int COUNT_ENTITA_NEW = 1;
-
+    @EJB
+    cz.rental.entity.TypentityController typentityController;
     @EJB
     cz.rental.entity.EntitaController entitaController;
     @EJB
@@ -65,7 +52,7 @@ public class EviEntita implements Serializable {
 
     @Inject
     private Ucet ucet;
-    
+
     @Inject
     private EviAttribute eviAttribute;
 
@@ -91,18 +78,25 @@ public class EviEntita implements Serializable {
         this.columns.add("Entita.Popis");
         this.columns.add("Entita.Platiod");
         this.columns.add("Entita.Platido");
-
-        this.typentity = new Typentity();
-        this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
-        this.typentity.setPopis("945889e4-4383-480e-9d77-dafe665fd475");
-        //
-//        ucet.setCustomerID(UUID.fromString("34416c9f-26f2-44d8-b01d-6be4d6868dba"));
-//        ucet.setCustomerModel(this.typentity);
-        //
+//
         this.parentEntita = new Entita();
 //        this.parentEntita.setId(UUID.fromString("22ec3d58-67ce-4e6a-a692-c6d167f47528"));
         this.parentEntita.setId(null);
         this.parentEntita.setIdtypentity(this.typentity);
+        // 
+        // Dohledat model Typentity s jeho definovanymi Attribute pro matici Entita
+        this.typentity = ucet.getAccount().getIdmodel();
+        if (this.typentity != null && this.typentity.getIdparent() == null) {
+            // V pripade vrcholove Typentity najdu nejblizsi dalsi
+            this.typentity = typentityController.getTypentityForParentID(this.typentity.getId());
+        }
+        if (this.typentity == null) {
+            this.typentity = new Typentity();
+            this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
+            this.typentity.setPopis("945889e4-4383-480e-9d77-dafe665fd475");
+        }
+
+        // Nacist matici Entita pro Typentita a null jako parent entitu-nema predka  
         loadEntities(this.parentEntita, this.typentity);
     }
 
@@ -137,7 +131,7 @@ public class EviEntita implements Serializable {
             newEntita.setId(UUID.randomUUID());
             newEntita.setIdparent(parent.getId());
             newEntita.setIdtypentity(this.getTypentity());
-            newEntita.setPopis(this.getTypentity().getPopis());
+            newEntita.setPopis("...");
             newEntita.setNewEntity(true);
             this.entities.add(newEntita);
         }
@@ -310,6 +304,20 @@ public class EviEntita implements Serializable {
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
         eviAttribute.loadAttributes(null);
 
+    }
+
+    /**
+     * @return the ucet
+     */
+    public Ucet getUcet() {
+        return ucet;
+    }
+
+    /**
+     * @param ucet the ucet to set
+     */
+    public void setUcet(Ucet ucet) {
+        this.ucet = ucet;
     }
 
     /**

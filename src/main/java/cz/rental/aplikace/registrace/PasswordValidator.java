@@ -7,7 +7,7 @@ package cz.rental.aplikace.registrace;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -20,7 +20,7 @@ import javax.faces.validator.ValidatorException;
  * @author sosyn
  */
 @FacesValidator("passwordValidator")
-@Stateless
+@SessionScoped
 public class PasswordValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
@@ -59,7 +59,7 @@ public class PasswordValidator implements Validator, Serializable {
             if (value == null || ((String) value).isEmpty() || ((String) value).trim().length() < MINIMAL_PASSWORD_LENGTH) {
                 msg = new FacesMessage("Chybné heslo.", "Heslo musí mít minimálně " + MINIMAL_PASSWORD_LENGTH + " znaky.");
             }
-        } 
+        }
         // Vyhodit chybu, pokud je testovana polozka chybna
         if (msg != null) {
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);

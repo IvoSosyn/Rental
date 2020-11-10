@@ -14,8 +14,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 /**
@@ -49,7 +47,7 @@ public class AccountController extends JpaController {
      * @return pozadovany Account nebo 'null', kdyz ucet neexistuje
      */
     public Account getAccountForPIN(int pin) {
-        Account account =null;
+        Account account = null;
         this.query = getEm().createQuery("SELECT a FROM Account a WHERE a.pin=:pin ");
         this.query.setParameter("pin", pin);
         ArrayList<Account> accounts = new ArrayList<>(query.getResultList());
@@ -92,6 +90,6 @@ public class AccountController extends JpaController {
             getEm().persist(account);
             account.setNewEntity(false);
         }
-        this.findEntita(account);
+        account = (Account) this.findEntita(account);
     }
 }

@@ -6,8 +6,10 @@
 package cz.rental.admin.model;
 
 import cz.rental.entity.Typentity;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.el.ValueExpression;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -18,7 +20,10 @@ import javax.faces.convert.FacesConverter;
  * @author ivo
  */
 @FacesConverter(value = "typentityConvertet")
-public class TypentityConvertet implements Converter {
+@SessionScoped
+public class TypentityConvertet implements Converter, Serializable {
+
+    static final long serialVersionUID = 42L;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {

@@ -6,7 +6,6 @@
 package cz.rental.entity;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Basic;
@@ -17,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.eclipse.persistence.annotations.Convert;
@@ -58,31 +56,6 @@ public class Userparam extends EntitySuperClassNajem implements Serializable, Cl
     @Temporal(TemporalType.TIMESTAMP)
     private Date datevalue;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date platiod;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date platido;
-    
-    @Size(max = 512)
-    @Column(length = 100)
-    private String popis;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timeinsert;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timemodify;
-    
-    @Size(max = 128)
-    @Column(length = 10)
-    private String usermodify;
     
     @JoinColumn(name = "iduser", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
@@ -137,54 +110,6 @@ public class Userparam extends EntitySuperClassNajem implements Serializable, Cl
 
     public void setDatevalue(Date datevalue) {
         this.datevalue = datevalue;
-    }
-
-    public Date getPlatiod() {
-        return platiod;
-    }
-
-    public void setPlatiod(Date platiod) {
-        this.platiod = platiod;
-    }
-
-    public Date getPlatido() {
-        return platido;
-    }
-
-    public void setPlatido(Date platido) {
-        this.platido = platido;
-    }
-
-    public String getPopis() {
-        return popis;
-    }
-
-    public void setPopis(String popis) {
-        this.popis = popis;
-    }
-
-    public Date getTimeinsert() {
-        return timeinsert;
-    }
-
-    public void setTimeinsert(Date timeinsert) {
-        this.timeinsert = timeinsert;
-    }
-
-    public Date getTimemodify() {
-        return timemodify;
-    }
-
-    public void setTimemodify(Date timemodify) {
-        this.timemodify = timemodify;
-    }
-
-    public String getUsermodify() {
-        return usermodify;
-    }
-
-    public void setUsermodify(String usermodify) {
-        this.usermodify = usermodify;
     }
 
     public User getIduser() {

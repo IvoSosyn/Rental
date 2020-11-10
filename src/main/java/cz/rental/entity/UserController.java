@@ -15,7 +15,12 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
+import javax.persistence.QueryTimeoutException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  *
@@ -42,6 +47,7 @@ public class UserController extends JpaController {
      * @return Uzivatelsky zaznam nebo 'null', kdyz se uzivatel neexistuje
      */
     public User getUserForAccount(Account account, String email, String passwordSHA512) {
+        User accUser = null;
         StringBuilder sb = new StringBuilder("SELECT u FROM User u WHERE u.idaccount=:account AND u.email=:email ");
         if (passwordSHA512 instanceof String) {
             sb.append(" AND u.passwordsha512=:passwordSHA512");
@@ -52,7 +58,11 @@ public class UserController extends JpaController {
         if (passwordSHA512 instanceof String) {
             this.query.setParameter("passwordSHA512", passwordSHA512);
         }
-        User accUser = (User) query.getSingleResult();
+        try {
+            accUser = (User) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException | IllegalStateException | QueryTimeoutException e) {
+            System.out.println(" UserController.getUserForAccount() vraci chybu" + e.getMessage());
+        }
         return accUser;
     }
 
@@ -72,7 +82,8 @@ public class UserController extends JpaController {
     }
 
     /**
-     * Metoda nacte uzivatelsky parametr z DB nebo vrati <code>defaultValue</code>
+     * Metoda nacte uzivatelsky parametr z DB nebo vrati
+     * <code>defaultValue</code>
      *
      * @param user uzivatel, ke kteremu se poji parametr
      * @param paramName jemeno pozadovaneho parametru
@@ -81,11 +92,16 @@ public class UserController extends JpaController {
      */
     public Object getUserParam(User user, String paramName, Object defaultValue) {
         Object value = defaultValue;
+        Userparam userParam = null;
         if (user instanceof User && paramName instanceof String && defaultValue != null) {
             this.query = getEm().createQuery("SELECT p FROM Userparam p WHERE p.iduser=:user AND p.paramname=:paramName");
             this.query.setParameter("user", user);
             this.query.setParameter("paramName", paramName);
-            Userparam userParam = (Userparam) this.query.getSingleResult();
+            try {
+                userParam = (Userparam) this.query.getSingleResult();
+            } catch (NoResultException | NonUniqueResultException | QueryTimeoutException e) {
+                System.out.println(" UserController.getUserParam() chyba:" + e.getMessage());
+            }
             if (userParam instanceof Userparam) {
                 if (defaultValue instanceof Date) {
                     value = userParam.getDatevalue();
@@ -111,11 +127,16 @@ public class UserController extends JpaController {
      */
     public boolean setUserParam(User user, String paramName, Object value) {
         boolean lOk = user instanceof User && paramName instanceof String;
+        Userparam userParam = null;
         if (lOk) {
             this.query = getEm().createQuery("SELECT p FROM Userparam p WHERE p.iduser=:user AND p.paramname=:paramName ");
             this.query.setParameter("user", user);
             this.query.setParameter("paramName", paramName);
-            Userparam userParam = (Userparam) this.query.getSingleResult();
+            try {
+                userParam = (Userparam) this.query.getSingleResult();
+            } catch (NoResultException | NonUniqueResultException | QueryTimeoutException e) {
+                System.out.println(" UserController.setUserParam() chyba:" + e.getMessage());
+            }
             if (!(userParam instanceof Userparam)) {
                 userParam = new Userparam();
                 userParam.setId(UUID.randomUUID());
@@ -136,7 +157,7 @@ public class UserController extends JpaController {
                 userParam.setTextvalue(value == null ? "" : value.toString());
             }
             try {
-                if (userParam.isNewEntity()) {
+                if (getEm().find(Userparam.class, userParam.getId()) == null) {
                     getEm().persist(userParam);
                     userParam.setNewEntity(false);
                 } else {
@@ -144,6 +165,10 @@ public class UserController extends JpaController {
                 }
             } catch (Exception e) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, e);
+                for (ConstraintViolation cv : ((ConstraintViolationException)e).getConstraintViolations()) {
+                    cv.getLeafBean();
+                }
+                
                 lOk = false;
             }
         }

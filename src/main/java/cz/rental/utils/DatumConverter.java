@@ -5,6 +5,7 @@
  */
 package cz.rental.utils;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -22,7 +24,10 @@ import javax.faces.convert.FacesConverter;
  * @author ivo
  */
 @FacesConverter("obdobiConverter")
-public class DatumConverter implements Converter {
+@SessionScoped
+public class DatumConverter implements Converter, Serializable {
+
+    static final long serialVersionUID = 42L;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {

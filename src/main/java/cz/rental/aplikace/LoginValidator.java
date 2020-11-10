@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -23,6 +24,7 @@ import javax.faces.validator.ValidatorException;
  * @author sosyn
  */
 @FacesValidator("loginValidator")
+@SessionScoped
 public class LoginValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
@@ -46,22 +48,22 @@ public class LoginValidator implements Validator, Serializable {
             System.out.println(" Neznámá komponenta: ");
             msg = new FacesMessage("System failed", "Systémová chyba, neznámá komponenta. ");
         } else if (component.getClientId().contains("loginPIN")) {
-            
+
             if ((Integer) value < 100 || (Integer) value > 9999) {
                 msg = new FacesMessage("Nesprávný PIN tj. identifikátor účtu.", "Přidělený PIN musí být v rozmezí 100-9999.");
-            }else if(accController.getAccountForPIN((Integer) value)==null){
-                msg = new FacesMessage("PIN neexistuj", String.format("Zadaný PIN: %1$d NEEXISTUJE.",value));
+            } else if (accController.getAccountForPIN((Integer) value) == null) {
+                msg = new FacesMessage("PIN neexistuj", String.format("Zadaný PIN: %1$d NEEXISTUJE.", value));
             }
-            
+
         } else if (component.getClientId().contains("loginEmail")) {
-            
+
             Pattern r = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
             Matcher m = r.matcher((String) value);
             if (!m.matches()) {
                 msg = new FacesMessage("Nesprávný formát e-mailové adresy.", "E-mail identifikuje uživatele a je to povinný údaj.");
             }
         } else if (component.getClientId().contains("loginPassword")) {
-            
+
             if (value == null || ((String) value).isEmpty()) {
                 msg = new FacesMessage("Heslo nesmí být prázdné.", "Heslo je povinné.");
             }

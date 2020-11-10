@@ -18,14 +18,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
 
@@ -35,7 +33,7 @@ import org.primefaces.event.NodeUnselectEvent;
  * @author sosyn
  */
 @Named("modelTable")
-@Stateless
+@SessionScoped
 public class ModelTable implements Serializable {
 
     static final long serialVersionUID = 42L;
@@ -50,7 +48,8 @@ public class ModelTable implements Serializable {
 
     @EJB
     cz.rental.entity.AttributeController controller;
-    @EJB
+
+    @Inject
     ModelDetail modelDetail;
 
     @Inject

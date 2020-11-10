@@ -11,17 +11,13 @@ import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -31,7 +27,7 @@ import org.primefaces.event.UnselectEvent;
  * @author sosyn
  */
 @Named("modelDetail")
-@Stateless
+@SessionScoped
 public class ModelDetail implements Serializable {
 
     static final long serialVersionUID = 42L;
@@ -42,7 +38,7 @@ public class ModelDetail implements Serializable {
 
     @EJB
     cz.rental.entity.AttributeController controller;
-    
+
     @Inject
     Ucet ucet;
 
@@ -56,7 +52,7 @@ public class ModelDetail implements Serializable {
 //        } catch (NamingException ex) {
 //            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
 //        }        
-        
+
         editabelAttrsize = new ArrayList<>();
         editabelAttrsize.add('C');
         editabelAttrsize.add('N');
@@ -97,7 +93,6 @@ public class ModelDetail implements Serializable {
             isEditable = false;
         }
         if (isEditable && uic.getId().equals("attrsize")) {
-            // isEditable=this.attribute.getAttrtype().compareTo('N')==0 || this.attribute.getAttrtype().compareTo('C')==0;
             isEditable = this.editabelAttrsize.contains(this.attribute.getAttrtype());
         }
         if (isEditable && uic.getId().equals("attrdecimal")) {

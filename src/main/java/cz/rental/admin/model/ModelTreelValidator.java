@@ -9,8 +9,8 @@ import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.el.ValueExpression;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -25,7 +25,7 @@ import javax.naming.NamingException;
  * @author sosyn
  */
 @FacesValidator("modelTreeValidator")
-@Stateless
+@SessionScoped
 public class ModelTreelValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
@@ -74,7 +74,7 @@ public class ModelTreelValidator implements Validator, Serializable {
             }
         } else if (component.getClientId().contains("platiDo")) {
             ValueExpression vex
-                = context.getApplication().getExpressionFactory()
+                    = context.getApplication().getExpressionFactory()
                             .createValueExpression(context.getELContext(),
                                     "#{modelTree.typentity.platiod}", Date.class);
             Date platiOd = (Date) vex.getValue(context.getELContext());

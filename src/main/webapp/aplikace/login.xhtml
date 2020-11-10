@@ -55,8 +55,8 @@
 
                 <div class="ui-fluid">
                     <div class="p-field">
-                        <p:outputLabel title="PIN majitele účtu." for="@next" >PIN: </p:outputLabel>
-                        <p:inputNumber id="loginPIN"  value="#{login.pin}" valueChangeListener="#{login.handleLogin}" validator="loginValidator"  maxValue="9999" maxlength="4" required="true" requiredMessage="PIN je povinná hodnota, zadejte ji. Identifikuje Váš účet." >
+                        <p:outputLabel title="PIN majitele účtu." for="@next" >&nbsp;&nbsp;&nbsp;&nbsp;PIN: </p:outputLabel>
+                        <p:inputNumber id="loginPIN"  value="#{login.pin}" valueChangeListener="#{login.handleLogin}" validator="loginValidator"  maxValue="9999" maxlength="4" size="4" required="true" requiredMessage="PIN je povinná hodnota, zadejte ji. Identifikuje Váš účet." >
                             <p:ajax update="loginPinMsg growlLogin" />
                         </p:inputNumber>
                         <p:message id="loginPinMsg" for="@previous" />                                                           
@@ -64,7 +64,7 @@
 
                     <div class="p-field">
                         <p:outputLabel title="Email uživatele." for="@next" >E-mail: </p:outputLabel>
-                        <p:inputText id="loginEmail"  value="#{login.email}" valueChangeListener="#{login.handleLogin}" validator="loginValidator" required="true" requiredMessage="E-mail je povinná hodnota, zadejte ji. Identifikuje Vás jako uživatele.">
+                        <p:inputText id="loginEmail"  value="#{login.email}" valueChangeListener="#{login.handleLogin}" validator="loginValidator"  size="50" required="true" requiredMessage="E-mail je povinná hodnota, zadejte ji. Identifikuje Vás jako uživatele.">
                             <p:ajax update="loginEmailMsg growlLogin" />
                         </p:inputText>
                         <p:message id="loginEmailMsg" for="@previous" />                                                           
@@ -74,7 +74,7 @@
                         <div class="ui-g">
                             <div class="ui-g-10">
                                 <p:outputLabel title="Heslo uživatele." for="@next" >Heslo: </p:outputLabel>
-                                <p:password id="loginPassword" value="#{login.password}" valueChangeListener="#{login.handleLogin}" validator="loginValidator" maxlength="512"  required="true" requiredMessage="Heslo je povinná hodnota, zadejte ji. Chrání Vaše data.">
+                                <p:password id="loginPassword" value="#{login.password}" valueChangeListener="#{login.handleLogin}" validator="loginValidator" size="50" maxlength="512"  required="true" requiredMessage="Heslo je povinná hodnota, zadejte ji. Chrání Vaše data.">
                                     <p:ajax update="loginPassMsg growlLogin" />
                                 </p:password>
                                 <p:message id="loginPassMsg" for="@previous" />                                                           
@@ -96,15 +96,17 @@
         </h:form>
         <h:form>
             <p style="margin-top: 10px;">&nbsp;</p>
-            <p:separator/>
-            <p style="margin-top: 10px;">&nbsp;</p>
+            <p:separator style="border: 3px solid cadetblue;"/>
             <p style="margin-top: 10px;">&nbsp;</p>
         </h:form>
         <h:form id="formLoginReg"   >
             <p:growl id="growlLoginReg" showDetail="true" />
             <p:panel id="panelLoginReg" header="Nemáte ještě účet ?" >
                 <p:outputLabel value="Zaregistrujte se: " for="@next" />
+                <p:commandLink ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{login.actionRegistrace()}"  style="margin-right:20px;" />        
+<!--
                 <p:commandButton ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{login.actionRegistrace()}"  style="margin-right:20px;" />        
+-->
             </p:panel>
         </h:form>
     </h:body>  

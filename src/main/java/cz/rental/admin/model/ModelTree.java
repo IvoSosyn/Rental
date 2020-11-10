@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -32,7 +32,7 @@ import org.primefaces.model.TreeNode;
  * @author sosyn
  */
 @Named("modelTree")
-@Stateless
+@SessionScoped
 public class ModelTree implements Serializable {
 
     static final long serialVersionUID = 42L;
@@ -51,9 +51,10 @@ public class ModelTree implements Serializable {
     cz.rental.entity.TypentityController controller;
     @EJB
     cz.rental.entity.AttrController attrController;
-    @EJB
-    cz.rental.admin.model.ModelTable modelTable;
 
+    @Inject
+    ModelTable modelTable;
+    
     @Inject
     Ucet ucet;
 
