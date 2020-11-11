@@ -10,7 +10,6 @@ import cz.rental.utils.Aplikace;
 import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -109,6 +108,14 @@ public class Evidence implements Serializable {
         return ucet.getUzivatel().getParam("ZmenaOD", Aplikace.getPlatiDo());
     }
 
+        /**
+     * @return the datumZmeny
+     */
+    public String datumZmenyAsString() {        
+        return Aplikace.getSimpleDateFormat().format(ucet.getUzivatel().getParam("ZmenaOD", Aplikace.getPlatiDo())) ;
+    }
+
+    
     /**
      * @param datumZmeny the datumZmeny to set
      */

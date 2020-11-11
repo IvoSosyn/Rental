@@ -8,11 +8,21 @@ package cz.rental.aplikace.evidence;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
+import cz.rental.utils.Aplikace;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces.Dialog;
@@ -31,6 +41,8 @@ public class EviAttribute implements Serializable {
 
     @EJB
     private cz.rental.entity.AttributeController attrController;
+    @EJB
+    private cz.rental.entity.EntitaController entitaController;
 
     @Inject
     private Ucet ucet;
@@ -65,6 +77,37 @@ public class EviAttribute implements Serializable {
         for (Attribute attr : this.getAttributes()) {
             // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
             boolean add = this.values.add(new EviAttrValue(this.attrController, this.entita, attr, null, null));
+        }
+    }
+
+    /**
+     * Metoda ulozi vsechny hodnty do DB
+     *
+     * @param event udalost, ktera vyvolala ulozeni
+     */
+    public void saveAttributes(ActionEvent event) {
+
+        Date zmenaOd = new Date();
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String param = params.get("zmenaOD");
+        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Metoda saveAttrValues(ActionEvent event) neni zatim immplementovana", "ActionEvent event" + event.getSource()));
+        //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Metoda saveAttrValues(ActionEvent event) neni zatim immplementovana", "ActionEvent event" + event.getSource()));
+        try {
+            // Nejdriv ulozim zmeny do DB vety Entita
+            if (entitaController.findEntita(this.entita) == null) {
+                entitaController.create(this.entita);
+                this.entita.setNewEntity(false);
+
+            } else {
+                entitaController.edit(this.entita);
+            }
+            zmenaOd = Aplikace.getSimpleDateFormat().parse(param);
+            for (EviAttrValue eviAttrValue : this.values) {
+                eviAttrValue.save(zmenaOd);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(EviAttribute.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly uloženy.", "Chyba" + ex.getMessage()));
         }
     }
 

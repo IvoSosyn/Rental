@@ -91,6 +91,74 @@ public class EviAttrValue {
         }
     }
 
+    void save(Date zmenaOd) throws Exception {
+        EntitySuperClassNajem attrValueNew = null;
+        Date attrValueplatiOd = zmenaOd;
+        Date attrValueplatiDo = null;
+        // TO-DO: Ukončit předchozí platnosti a vložit novou hodnotu
+        for (EntitySuperClassNajem attrValue : attrValues) {
+            if (attrValue.getPlatiod() == null && attrValue.getPlatido().before(zmenaOd)) {
+
+            }
+            if (attrValue.getPlatiod() == null && attrValue.getPlatiod().after(zmenaOd)) {
+
+            }
+            if (attrValue.getPlatiod() != null && attrValue.getPlatiod().after(zmenaOd)) {
+
+            }
+            if (attrValue.getPlatido() != null && attrValue.getPlatido().before(zmenaOd)) {
+
+            }
+        }
+        switch (this.attribute.getAttrtype()) {
+            case 'T': {
+            }
+            case 'C': {
+                attrValueNew = new Attrtext();
+                ((Attrtext) attrValueNew).setIdentita(this.entita.getId());
+                ((Attrtext) attrValueNew).setIdattribute(this.attribute);
+                ((Attrtext) attrValueNew).setText((String) this.value);
+                break;
+            }
+            case 'L': {
+            }
+            case 'N': {
+            }
+            case 'I': {
+                attrValueNew = new Attrnumeric();
+                ((Attrnumeric) attrValueNew).setIdentita(this.entita.getId());
+                ((Attrnumeric) attrValueNew).setIdattribute(this.attribute);
+                ((Attrnumeric) attrValueNew).setCislo((double) this.value);
+                break;
+            }
+            case 'D': {
+                value = ((Attrdate) attrValueNew).getDatumcas();
+                attrValueNew = new Attrdate();
+                ((Attrdate) attrValueNew).setIdentita(this.entita.getId());
+                ((Attrdate) attrValueNew).setIdattribute(this.attribute);
+                ((Attrdate) attrValueNew).setDatumcas((Date) this.value);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        if (attrValueNew != null) {
+            attrValueNew.setPopis(this.attribute.getPopis());
+            attrValueNew.setPlatiod(attrValueplatiOd);
+            attrValueNew.setPlatido(attrValueplatiDo);
+            attrValueNew.setNewEntity(true);
+            if (this.attrController.findEntita(attrValueNew)==null) {
+                this.attrController.create(attrValueNew);
+                attrValueNew.setNewEntity(false);
+            }else{
+                this.attrController.edit(attrValueNew);
+            }
+            
+            
+        }
+    }
+
     /**
      * *
      * Metoda vraci velikost hodnoty pole AttrXXXXX
@@ -173,52 +241,8 @@ public class EviAttrValue {
         return decimal;
     }
 
-    public boolean isRenderedC() {
-        boolean lRet = false;
-        if (this.attribute.getAttrtype().equals('C')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedI() {
-        boolean lRet = false;
-        if (this.attribute.getAttrtype().equals('I')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedN() {
-        boolean lRet = false;
-        if (this.attribute.getAttrtype().equals('N')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedB() {
-        boolean lRet = false;
-        if (this.attribute.getAttrtype().equals('B')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedD() {
-        boolean lRet = false;
-        if (this.attribute.getAttrtype().equals('D')) {
-            lRet = true;
-        }
-        return lRet;
-    }
-
-    public boolean isRenderedT() {
-        boolean lRet = false;
-        if (this.attribute.getAttrtype().equals('T')) {
-            lRet = true;
-        }
-        return lRet;
+    public boolean isRenderedAttr(String attrType) {
+        return this.attribute.getAttrtype().equals(attrType.charAt(0));
     }
 
     /**
