@@ -137,6 +137,14 @@ public class EviEntita implements Serializable {
         }
     }
 
+    /**
+     * Metoda pro opakovane nacteni matice Entita 
+     * slouzi k aktualizaci
+     */
+    public void reLoadEntities() {
+        loadEntities(this.parentEntita, this.typentity);
+    }
+
     public void columnsSelect() {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Dosud neimplementovano", "Dosud neimplementovano"));
     }
@@ -296,13 +304,13 @@ public class EviEntita implements Serializable {
     public void onRowSelect(SelectEvent event) {
 //        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviAttribute.loadAttributes(((Entita) event.getObject()));
+        eviAttribute.loadAttributes(((Entita) event.getObject()), this);
     }
 
     public void onRowUnselect(UnselectEvent event) {
 //        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviAttribute.loadAttributes(null);
+        eviAttribute.loadAttributes(null, this);
 
     }
 

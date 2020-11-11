@@ -47,6 +47,7 @@ public class EviAttribute implements Serializable {
     @Inject
     private Ucet ucet;
 
+    private EviEntita source = null;
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<EviAttrValue> values = new ArrayList<>();
@@ -60,9 +61,11 @@ public class EviAttribute implements Serializable {
     /**
      * Metoda nacte vsechny Attribute pro Entita a naplni pole "values"
      *
-     * @param entita
+     * @param entita zaznam, pro ktery nacitam Attribute
+     * @param source zaznam, jehoz matice Entita se ma aktualizovat
      */
-    public void loadAttributes(Entita entita) {
+    public void loadAttributes(Entita entita, EviEntita source) {
+        this.source = source;
         if (entita == null) {
             attributes = new ArrayList<>();
             return;
@@ -100,6 +103,9 @@ public class EviAttribute implements Serializable {
 
             } else {
                 entitaController.edit(this.entita);
+            }
+            if (this.source != null) {
+                this.source.reLoadEntities();
             }
             zmenaOd = Aplikace.getSimpleDateFormat().parse(param);
             for (EviAttrValue eviAttrValue : this.values) {
