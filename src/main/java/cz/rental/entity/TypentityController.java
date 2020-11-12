@@ -17,10 +17,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
-import javax.persistence.QueryTimeoutException;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -143,6 +140,18 @@ public class TypentityController extends JpaController {
             break;
         }
         return typentity;
+    }
+
+    /**
+     * Metoda vrati pole potomku(childs) pro parametr Typentity
+     *
+     * @param typentity
+     * @return
+     */
+    public ArrayList<Typentity> getTypentityChilds(Typentity typentity) {
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :id"));
+        this.getQuery().setParameter("id", typentity.getId());
+        return new ArrayList<Typentity>(this.getQuery().getResultList());
     }
 
 }

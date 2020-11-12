@@ -62,6 +62,7 @@ public class EviEntita implements Serializable {
     private Entita selectedEntita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<String> columns = new ArrayList<>();
+    private ArrayList<Typentity> typentityChilds = new ArrayList<>();
 
     private Dialog dialog;
     private ArrayList<String> columnsSource = new ArrayList<>();
@@ -135,11 +136,12 @@ public class EviEntita implements Serializable {
             newEntita.setNewEntity(true);
             this.entities.add(newEntita);
         }
+
+        this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
     }
 
     /**
-     * Metoda pro opakovane nacteni matice Entita 
-     * slouzi k aktualizaci
+     * Metoda pro opakovane nacteni matice Entita slouzi k aktualizaci
      */
     public void reLoadEntities() {
         loadEntities(this.parentEntita, this.typentity);
@@ -314,6 +316,10 @@ public class EviEntita implements Serializable {
 
     }
 
+    public void changeTypentity(Typentity typentity) {
+        loadEntities(selectedEntita, typentity);
+    }
+
     /**
      * @return the ucet
      */
@@ -438,6 +444,20 @@ public class EviEntita implements Serializable {
      */
     public void setEviAttribute(EviAttribute eviAttribute) {
         this.eviAttribute = eviAttribute;
+    }
+
+    /**
+     * @return the typentityChilds
+     */
+    public ArrayList<Typentity> getTypentityChilds() {
+        return typentityChilds;
+    }
+
+    /**
+     * @param typentityChilds the typentityChilds to set
+     */
+    public void setTypentityChilds(ArrayList<Typentity> typentityChilds) {
+        this.typentityChilds = typentityChilds;
     }
 
 }

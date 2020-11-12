@@ -15,7 +15,7 @@
                         <p:menubar >
                             <p:submenu label="Nemovitosti" icon="fa fa-road">
                                 <p:submenu label="Evidence">
-                                    <p:menuitem value="Nemovitostí" url="faces/rentals/rentals.xhtml" icon="fa fa-user"  title="Evidence nemovitostí"/>
+                                    <p:menuitem value="Nemovitostí" action="/rentals/rentals.xhtml" icon="fa fa-user"  title="Evidence nemovitostí"/>
                                 </p:submenu>
                             </p:submenu>               
                             <p:submenu label="Ekonomika" icon="fa fa-money">
@@ -27,13 +27,13 @@
                                     <p:menuitem value="Globální" title="Globální parametry aplikace." />
                                 </p:submenu>
                                 <p:submenu label="Číselníky" >
-                                    <p:menuitem value="Uživatelé" url="faces/admin/users/users.xhtml" title="Správa uživatelů" />
-                                    <p:menuitem value="Model"  url="faces/admin/model/model.xhtml" title="Datové modely závislostí uzlů a atributů uzlů" />
+                                    <p:menuitem value="Uživatelé" action="/admin/users/users.xhtml" title="Správa uživatelů" />
+                                    <p:menuitem value="Model" action="/admin/model/model.xhtml" title="Datové modely závislostí uzlů a atributů uzlů" />
                                 </p:submenu>
                                 <p:submenu label="Data" >
-                                    <p:menuitem value="Export" url="faces/admin/export.xhtml" title="Export veškerých dat" />
+                                    <p:menuitem value="Export" action="/admin/export.xhtml" title="Export veškerých dat" />
                                     <p:submenu label="Import"  >
-                                        <p:menuitem value="Havlíček" url="faces/admin/havlicek.xhtml" title="Import dat z DOS dBase programu" />
+                                        <p:menuitem value="Havlíček" action="/admin/havlicek.xhtml" title="Import dat z DOS dBase programu" />
                                     </p:submenu>
                                 </p:submenu>
                             </p:submenu>               

@@ -10,8 +10,8 @@
             <p:growl id="idEntitaGrowlButtons" showDetail="true" skipDetailIfEqualsSummary="true"/>
             <p:fieldset legend="Následná evidence" toggleable="true" toggleSpeed="500" >
                 <p:ajax event="toggle" update=":formEntitaButtons:idEntitaGrowlButtons" />
-                <p:repeat  value="#{eviEntita.entities}"  var="entita" >
-                    <p:commandButton label="#{entita.popis}" value="#{entita.popis}" />
+                <p:repeat  value="#{eviEntita.typentityChilds}"  var="typentity" >
+                    <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" update=":formEntita :formAttr :formEntitaButtons" />
                 </p:repeat>
             </p:fieldset>
         </h:form>
