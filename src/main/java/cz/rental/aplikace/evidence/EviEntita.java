@@ -320,6 +320,10 @@ public class EviEntita implements Serializable {
         loadEntities(selectedEntita, typentity);
     }
 
+    public void changeTypentityBack() {
+        loadEntities(this.parentEntita, this.parentEntita.getIdtypentity());
+    }
+
     /**
      * @return the ucet
      */

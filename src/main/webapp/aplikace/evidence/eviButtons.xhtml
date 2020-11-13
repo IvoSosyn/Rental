@@ -14,6 +14,7 @@
                     <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" update=":formEntita :formAttr :formEntitaButtons" />
                 </p:repeat>
             </p:fieldset>
+            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" update=":formEntita :formAttr :formEntitaButtons"  icon="fa fa-caret-left" />
         </h:form>
     </h:body>  
 </html>

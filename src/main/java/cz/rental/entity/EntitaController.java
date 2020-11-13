@@ -38,12 +38,14 @@ public class EntitaController extends JpaController {
         StringBuilder sb = new StringBuilder("SELECT e FROM Entita e WHERE e.idparent");
         if (parent.getId() != null) {
             sb.append("=:idParent");
-            this.query.setParameter("idParent", parent.getId());
         } else {
             sb.append(" IS NULL");
         }
         sb.append(" AND (e.platiod IS NULL OR e.platiod <= :PlatiDO) AND (e.platido IS NULL OR e.platido >= :PlatiOD)");
         this.query = this.getEm().createQuery(sb.toString());
+        if (parent.getId() != null) {
+            this.query.setParameter("idParent", parent.getId());
+        }
         this.query.setParameter("PlatiOD", Aplikace.getPlatiOd());
         this.query.setParameter("PlatiDO", Aplikace.getPlatiDo());
         List<Entita> list = this.query.getResultList();

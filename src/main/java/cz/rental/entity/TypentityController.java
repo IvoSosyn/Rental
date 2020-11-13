@@ -130,6 +130,24 @@ public class TypentityController extends JpaController {
      * @param id ID hledaneho zazamu Typentity.id
      * @return nalezeny zanam Typentity nebo null
      */
+    public Typentity getTypentity(UUID id) {
+        Typentity typentity = null;
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.id= :id"));
+        this.getQuery().setParameter("id", id);
+        try {
+            typentity = (Typentity) this.getQuery().getSingleResult();
+        } catch (Exception e) {
+            System.out.println(" TypentityContoller.getTypentity#e: "+e.getMessage());
+        }
+        return typentity;
+    }
+
+    /**
+     * Metoda najde zaznam v DB odpovidajici Typentity.id == id
+     *
+     * @param id ID hledaneho zazamu Typentity.id
+     * @return nalezeny zanam Typentity nebo null
+     */
     public Typentity getTypentityForParentID(UUID id) {
         Typentity typentity = null;
         this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :id"));
