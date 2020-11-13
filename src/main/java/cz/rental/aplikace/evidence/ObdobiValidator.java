@@ -5,10 +5,11 @@
  */
 package cz.rental.aplikace.evidence;
 
-import cz.rental.entity.AccountController;
+import cz.rental.utils.Aplikace;
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
+import javax.el.ValueExpression;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -27,8 +28,7 @@ public class ObdobiValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
 
-    @EJB
-    private AccountController accController;
+    Evidence evidence;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -45,6 +45,40 @@ public class ObdobiValidator implements Validator, Serializable {
         } else if (component == null) {
             System.out.println(" Neznámá komponenta: ");
             msg = new FacesMessage("System failed", "Systémová chyba, neznámá komponenta. ");
+        } else if (component.getClientId().contains("ucetPlatiOD")) {
+            ValueExpression vex
+                    = context.getApplication().getExpressionFactory()
+                            .createValueExpression(context.getELContext(),
+                                    "#{evidence.platiDo}", Date.class);
+            Date platiDo = (Date) vex.getValue(context.getELContext());
+            if (value != null && platiDo != null && platiDo.before((Date) value)) {
+                vex.setValue(context.getELContext(), value);
+            }
+        } else if (component.getClientId().contains("ucetPlatiDO")) {
+            ValueExpression vex
+                    = context.getApplication().getExpressionFactory()
+                            .createValueExpression(context.getELContext(),
+                                    "#{evidence.platiOd}", Date.class);
+            Date platiOd = (Date) vex.getValue(context.getELContext());
+            if (value != null && platiOd != null && platiOd.after((Date) value)) {
+                msg = new FacesMessage("Chyba rozsahu platnosti", "Datum konce rozsahu DO  musí být větší než : " + Aplikace.getSimpleDateFormat().format(platiOd));
+                // vex.setValue(context.getELContext(), value);
+            }
+        } else if (component.getClientId().contains("ucetZmenaOD")) {
+            ValueExpression vex
+                    = context.getApplication().getExpressionFactory()
+                            .createValueExpression(context.getELContext(),
+                                    "#{evidence.platiOd}", Date.class);
+            Date platiOd = (Date) vex.getValue(context.getELContext());
+
+            vex = context.getApplication().getExpressionFactory()
+                    .createValueExpression(context.getELContext(),
+                            "#{evidence.platiDo}", Date.class);
+            Date platiDo = (Date) vex.getValue(context.getELContext());
+            if (value != null && ((platiOd != null && platiOd.after((Date) value)) || (platiDo != null && platiDo.before((Date) value)))) {
+                msg = new FacesMessage("Chyba rozsahu platnosti", "Datum zpracovani musi být v rozsahu OD - DO: " + Aplikace.getSimpleDateFormat().format(platiOd) + " - " + Aplikace.getSimpleDateFormat().format(platiDo));
+                // vex.setValue(context.getELContext(), value);
+            }
         }
         // Vyhodit chybu, pokud je testovana polozka chybna
         if (msg != null) {
