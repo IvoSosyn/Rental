@@ -34,6 +34,7 @@ public class ObdobiValidator implements Validator, Serializable {
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
+
     }
 
     @Override
