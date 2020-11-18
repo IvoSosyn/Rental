@@ -52,4 +52,22 @@ public class EntitaController extends JpaController {
         return new ArrayList<>(list);
     }
 
+    /**
+     * Metoda najde zaznam Entita v DB nebo vraci 'null'
+     *
+     * @param id identifikator zaznamu
+     * @return zaznam Entita nebo null
+     */
+    public Entita getEntita(UUID id) {
+        Entita entita = null;
+        this.setQuery(this.getEm().createQuery("SELECT e FROM Entita e WHERE e.id= :id"));
+        this.getQuery().setParameter("id", id);
+        try {
+            entita = (Entita) this.getQuery().getSingleResult();
+        } catch (Exception e) {
+            System.out.println(" EntitaContoller.getEntita#e: " + e.getMessage());
+        }
+        return entita;
+    }
+
 }

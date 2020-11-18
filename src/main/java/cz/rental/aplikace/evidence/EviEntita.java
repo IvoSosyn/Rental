@@ -321,7 +321,11 @@ public class EviEntita implements Serializable {
     }
 
     public void changeTypentityBack() {
-        loadEntities(this.parentEntita, this.parentEntita.getIdtypentity());
+        Entita parentEntitaofParent = entitaController.getEntita(this.parentEntita.getIdparent());
+        if (parentEntitaofParent instanceof Entita) {
+            this.selectedEntita = this.parentEntita;
+            loadEntities(parentEntitaofParent, parentEntitaofParent.getIdtypentity());
+        }
     }
 
     /**

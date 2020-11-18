@@ -131,8 +131,7 @@ public class EviAttrValue {
                 ((Attrnumeric) attrValueNew).setCislo((double) this.value);
                 break;
             }
-            case 'D': {
-                value = ((Attrdate) attrValueNew).getDatumcas();
+            case 'D': {                
                 attrValueNew = new Attrdate();
                 ((Attrdate) attrValueNew).setIdentita(this.entita.getId());
                 ((Attrdate) attrValueNew).setIdattribute(this.attribute);
