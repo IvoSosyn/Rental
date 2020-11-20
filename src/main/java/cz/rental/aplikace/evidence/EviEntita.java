@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,14 +77,10 @@ public class EviEntita implements Serializable {
 //        } catch (NamingException ex) {
 //            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        this.columns.add("Entita.Popis");
-        this.columns.add("Entita.Platiod");
-        this.columns.add("Entita.Platido");
 //
         this.parentEntita = new Entita();
 //        this.parentEntita.setId(UUID.fromString("22ec3d58-67ce-4e6a-a692-c6d167f47528"));
         this.parentEntita.setId(null);
-        this.parentEntita.setIdtypentity(this.typentity);
         // 
         // Dohledat model Typentity s jeho definovanymi Attribute pro matici Entita
         this.typentity = ucet.getAccount().getIdmodel();
@@ -96,6 +93,7 @@ public class EviEntita implements Serializable {
             this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
             this.typentity.setPopis("945889e4-4383-480e-9d77-dafe665fd475");
         }
+        this.parentEntita.setIdtypentity(this.typentity);
 
         // Nacist matici Entita pro Typentita a null jako parent entitu-nema predka  
         loadEntities(this.parentEntita, this.typentity);
@@ -117,7 +115,21 @@ public class EviEntita implements Serializable {
         this.parentEntita = parent;
         this.typentity = typentity;
         this.entities = entitaController.getEntities(this.parentEntita);
-        this.attributes = attrController.getAttributeForTypentity(typentity);
+        this.attributes = attrController.getAttributeForTypentity(this.typentity);
+        // Definice sloupcu tabulky Entity
+        // TO-DO: nacist z konfigurace uzivatele pro dany Typentity        
+        this.columns = new ArrayList<>();
+        String userColumns = this.ucet.getUzivatel().getParam(this.typentity.getId().toString(), "");
+        if (!userColumns.isEmpty()) {
+            this.columns.addAll(Arrays.asList(userColumns.split(";")));
+        }
+        // Doplnim pole pouzitelnych sloupcu o promenne z Entita
+        for (String entitaColumns : new String[]{"Entita.Popis", "Entita.Platiod", "Entita.Platido"}) {
+            if (!columns.contains(entitaColumns)) {
+                getColumnsSource().add(entitaColumns);
+            }
+        }
+        // Doplnim pole pouzitelnych sloupcu o Attribute
         for (Attribute attr : this.attributes) {
             String column = "Attribute." + attr.getAttrname().trim();
             if (!columns.contains(column)) {
@@ -300,7 +312,17 @@ public class EviEntita implements Serializable {
 
     public void configureColumns() {
         this.columns = new ArrayList(this.columnsDualList.getTarget());
-//        this.dialog.closeDynamic(this.columnsDualList.getTarget());
+        StringBuilder sb = new StringBuilder("");
+        columns.forEach((String column) -> {
+            if (sb.length() > 0) {
+                sb.append(";");
+            }
+            sb.append(column);
+        });
+        if (sb.length() > 0) {
+            this.ucet.getUzivatel().setParam(this.typentity.getId().toString(), sb.toString());
+        }
+        //        this.dialog.closeDynamic(this.columnsDualList.getTarget());
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -323,9 +345,12 @@ public class EviEntita implements Serializable {
     public void changeTypentityBack() {
         Entita parentEntitaofParent = entitaController.getEntita(this.parentEntita.getIdparent());
         if (parentEntitaofParent instanceof Entita) {
-            this.selectedEntita = this.parentEntita;
-            loadEntities(parentEntitaofParent, parentEntitaofParent.getIdtypentity());
+            parentEntitaofParent = new Entita();
+            parentEntitaofParent.setId(null);
+            parentEntitaofParent.setIdtypentity(this.typentity);
         }
+        this.selectedEntita = this.parentEntita;
+        loadEntities(parentEntitaofParent, parentEntitaofParent.getIdtypentity());
     }
 
     /**

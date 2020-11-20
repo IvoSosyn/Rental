@@ -12,17 +12,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.Query;
 
 /**
@@ -49,6 +44,13 @@ public class AttributeController extends JpaController {
 //        }
     }
 
+    /**
+     * Metoda vrací pole(matici) s Attribute pro zadany parametr
+     * <code>typentity</code>
+     *
+     * @param typentity zaznam sablony, pro ktery hledam pole Attribute
+     * @return
+     */
     public ArrayList<Attribute> getAttributeForTypentity(Typentity typentity) {
         this.typentity = typentity;
         if (this.typentity == null) {
@@ -62,7 +64,17 @@ public class AttributeController extends JpaController {
         return new ArrayList<>(list);
     }
 
-    public ArrayList<Attribute> getAttributeWhere(UUID id, String alias, String whereCondition) {
+    /**
+     * Metoda vraci pole(matici) Attribute pro Typentity se zadanou podminkou
+     * <code>whereCondition</code>
+     *
+     * @param idtypentity ID typu entity(sablony), pro ktery hledam pole
+     * Attribute
+     * @param alias alias pro entitu, vetsinou 'a'
+     * @param whereCondition pridana podminka vyberu
+     * @return matice Attribute pro dany Typentiy
+     */
+    public ArrayList<Attribute> getAttributeWhere(UUID idtypentity, String alias, String whereCondition) {
         if (whereCondition == null) {
             return null;
         }
@@ -73,11 +85,21 @@ public class AttributeController extends JpaController {
 
         // String strQuery = "SELECT " + alias + " FROM Attribute " + alias + " WHERE " + whereCondition + " AND " + alias + ".idtypentity= :idTypEntity AND " + alias + ".identita IS NULL ORDER BY " + alias + ".poradi";
         this.query = getEm().createQuery(sbQuery.toString());
-        this.query.setParameter("idTypEntity", id);
+        this.query.setParameter("idTypEntity", idtypentity);
         List<Attribute> list = query.getResultList();
         return new ArrayList<>(list);
     }
 
+    /**
+     * Metoda nakopiruje pole Attribute <code>copyAttrs</code> do DB s novym
+     * <code>id</code> "idtypentity" BEZ duplicit (false)
+     *
+     * @param copyAttrs pole Attribute k ulozeni do DB POZOR, musi se
+     * vygenerovat nove Attiribute.id
+     * @param id nove "Attribute.idtypentity"
+     *
+     * @throws Exception
+     */
     public void pasteAttrs(ArrayList<Attribute> copyAttrs, UUID id) throws Exception {
         pasteAttrs(copyAttrs, id, false);
     }

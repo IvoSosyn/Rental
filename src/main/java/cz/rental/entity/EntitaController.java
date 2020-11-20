@@ -35,6 +35,9 @@ public class EntitaController extends JpaController {
      * @return pole vsech Entita, ktere maji Entita.idparent==parent.id
      */
     public ArrayList<Entita> getEntities(Entita parent) {
+        if (parent == null) {
+            return new ArrayList<>();
+        }
         StringBuilder sb = new StringBuilder("SELECT e FROM Entita e WHERE e.idparent");
         if (parent.getId() != null) {
             sb.append("=:idParent");
@@ -60,8 +63,16 @@ public class EntitaController extends JpaController {
      */
     public Entita getEntita(UUID id) {
         Entita entita = null;
-        this.setQuery(this.getEm().createQuery("SELECT e FROM Entita e WHERE e.id= :id"));
-        this.getQuery().setParameter("id", id);
+        StringBuilder sb = new StringBuilder("SELECT e FROM Entita e WHERE ");
+        if (id != null) {
+            sb.append("e.id=:id");
+        } else {
+            sb.append("e.id IS NULL");
+        }
+        this.query = this.getEm().createQuery(sb.toString());
+        if (id != null) {
+            this.getQuery().setParameter("id", id);
+        }
         try {
             entita = (Entita) this.getQuery().getSingleResult();
         } catch (Exception e) {
@@ -69,5 +80,4 @@ public class EntitaController extends JpaController {
         }
         return entita;
     }
-
 }
