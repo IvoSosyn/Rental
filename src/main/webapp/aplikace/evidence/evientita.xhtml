@@ -21,7 +21,7 @@
                          selectionMode="single"  >
 
                 <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelect}" update=":formAttr :formEntita:idEntitaGrowl" />
-                <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":formAttr  :formEntita:idEntitaGrowl" />
+                <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":formAttr :formEntita:idEntitaGrowl" />
 
                 <f:facet name="header">                            
                     <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
@@ -35,6 +35,11 @@
                     </f:facet>
                     <h:outputText value="#{eviEntita.getColumnValue(entita, column)}" />
                 </p:columns>
+                <f:facet name="footer">                            
+                    <div align="center">                    
+                        <p:commandButton value="Nový" actionListener="#{eviEntita.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update=" :formAttr :formEntita:idEntitaGrowl :formEntita:idEntitaTbl" />
+                    </div>
+                </f:facet>
             </p:dataTable>
         </h:form>
         <h:form id="formDialogColumns">
@@ -49,7 +54,7 @@
                         <f:facet name="sourceCaption">K výběru</f:facet>
                         <f:facet name="targetCaption">Vybrané</f:facet>
                     </p:pickList>
-                    <p:commandButton id="buttonOkColumn" value="OK"  actionListener="#{eviEntita.configureColumns()}" oncomplete="PF('dialogColumns').hide();return;" update=":formEntita" style="margin-top:5px" />
+                    <p:commandButton id="buttonOkColumn" value="OK"  actionListener="#{eviEntita.saveUserColumns()}" oncomplete="PF('dialogColumns').hide();return;" update=":formEntita" style="margin-top:5px" />
                 </h:panelGrid>
             </p:dialog>
         </h:form>

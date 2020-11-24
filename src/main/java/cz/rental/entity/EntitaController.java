@@ -71,10 +71,10 @@ public class EntitaController extends JpaController {
         }
         this.query = this.getEm().createQuery(sb.toString());
         if (id != null) {
-            this.getQuery().setParameter("id", id);
+            this.query.setParameter("id", id);
         }
         try {
-            entita = (Entita) this.getQuery().getSingleResult();
+            entita = (Entita) this.query.getSingleResult();
         } catch (Exception e) {
             System.out.println(" EntitaContoller.getEntita#e: " + e.getMessage());
         }

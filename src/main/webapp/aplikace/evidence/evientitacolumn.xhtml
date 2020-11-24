@@ -13,9 +13,9 @@
         -->
 
         <p:growl id="idColumnsGrowl" showDetail="true" skipDetailIfEqualsSummary="true"/>
-        <h:panelGrid id="displayThemes" columns="1">
-            <p:pickList id="entitiesColumns" value="#{eviEntita.columnsDualList}" var="column" itemLabel="#{column}" itemValue="#{column}" />
-            <p:commandButton id="citySubmit" value="OK" actionListener="#{eviEntita.configureColumns}" style="margin-top:5px" />
+        <h:panelGrid id="columnsGrid" columns="1">
+            <p:pickList id="columnsPickList" value="#{eviEntita.columnsDualList}" var="column" itemLabel="#{column}" itemValue="#{column}" />
+            <p:commandButton id="idColumnsSubmit" value="OK" actionListener="#{eviEntita.saveUserColumns}" style="margin-top:5px" />
         </h:panelGrid>
 
     </h:body>  

@@ -79,8 +79,7 @@ public class EviEntita implements Serializable {
 //        }
 //
         this.parentEntita = new Entita();
-//        this.parentEntita.setId(UUID.fromString("22ec3d58-67ce-4e6a-a692-c6d167f47528"));
-        this.parentEntita.setId(null);
+        this.parentEntita.setId(ucet.getAccount().getId());
         // 
         // Dohledat model Typentity s jeho definovanymi Attribute pro matici Entita
         this.typentity = ucet.getAccount().getIdmodel();
@@ -91,7 +90,7 @@ public class EviEntita implements Serializable {
         if (this.typentity == null) {
             this.typentity = new Typentity();
             this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
-            this.typentity.setPopis("945889e4-4383-480e-9d77-dafe665fd475");
+            this.typentity.setPopis("Nejvyšší entita");
         }
         this.parentEntita.setIdtypentity(this.typentity);
 
@@ -298,8 +297,14 @@ public class EviEntita implements Serializable {
         return value;
     }
 
+    /**
+     * Metoda vola dynamic Dialog pro vyber sloupcu ke zobrazeni v tabulce
+     * Evientita
+     *
+     * @return prazdny retezec
+     */
     public String viewColumns() {
-        Map<String, Object> options = new HashMap<String, Object>();
+        Map<String, Object> options = new HashMap<>();
         options.put("modal", true);
         options.put("draggable", false);
         options.put("resizable", false);
@@ -310,7 +315,7 @@ public class EviEntita implements Serializable {
         return "";
     }
 
-    public void configureColumns() {
+    public void saveUserColumns() {
         this.columns = new ArrayList(this.columnsDualList.getTarget());
         StringBuilder sb = new StringBuilder("");
         columns.forEach((String column) -> {
@@ -351,6 +356,16 @@ public class EviEntita implements Serializable {
         }
         this.selectedEntita = this.parentEntita;
         loadEntities(parentEntitaofParent, parentEntitaofParent.getIdtypentity());
+    }
+
+    public void gotoNewEntita() {
+        for (Entita entita : entities) {
+            if (entita.isNewEntity()) {
+                this.selectedEntita=entita;
+                eviAttribute.loadAttributes(this.selectedEntita, this);
+                break;
+            }            
+        }
     }
 
     /**
