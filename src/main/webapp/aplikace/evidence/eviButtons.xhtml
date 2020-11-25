@@ -11,10 +11,12 @@
             <p:fieldset legend="Následná evidence" toggleable="true" toggleSpeed="500" >
                 <p:ajax event="toggle" update=":formEntitaButtons:idEntitaGrowlButtons" />
                 <p:repeat  value="#{eviEntita.typentityChilds}"  var="typentity" >
-                    <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" update=":formEntita :formAttr :formEntitaButtons" />
+                    <p>
+                        <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" update=":formEntita :formDialogColumns :formAttr :formEntitaButtons " />
+                    </p>
                 </p:repeat>
             </p:fieldset>
-            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" update=":formEntita :formAttr :formEntitaButtons"  icon="fa fa-caret-left" />
+            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" disabled="#{eviEntita.getStackEntities().size() lt 2 }" update=":formEntita :formDialogColumns :formAttr :formEntitaButtons"  icon="fa fa-caret-left" />
         </h:form>
     </h:body>  
 </html>

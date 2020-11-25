@@ -20,8 +20,8 @@
                          selection="#{eviEntita.selectedEntita}" 
                          selectionMode="single"  >
 
-                <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelect}" update=":formAttr :formEntita:idEntitaGrowl" />
-                <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":formAttr :formEntita:idEntitaGrowl" />
+                <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelect}" update=":formAttr :formEntita:idEntitaGrowl :formDialogColumns" />
+                <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":formAttr :formEntita:idEntitaGrowl :formDialogColumns" />
 
                 <f:facet name="header">                            
                     <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />

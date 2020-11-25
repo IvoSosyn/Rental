@@ -6,13 +6,12 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:body>
-        <!--
-        <ui:composition template = "/templates/templateMain.xhtml" />	
-        ?faces-redirect=true
-        -->
         <h:form id="formAttr" >
             <p:growl id="growlAttr" showDetail="true" skipDetailIfEqualsSummary="true" />
             <p:dataTable   var="attrValue" value="#{eviAttr.values}" editable="true" editMode="cell" widgetVar="cellAttribute" >
+                <f:facet name="header">                            
+                    <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
+                </f:facet>
                 <p:column headerText="Položka" >
                     <h:outputText value="#{attrValue.attribute.attrname}: " title="#{attrValue.attribute.popis}" />
                 </p:column>
@@ -41,12 +40,10 @@
                     <!-- *********** Date -->                    
                     <p:cellEditor  rendered="#{attrValue.isRenderedAttr('D')}">
                         <f:facet name="output"> 
-                            <p:datePicker value="#{attrValue.value}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false" />
+                            <p:datePicker value="#{attrValue.value}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false" readonly="true" />
                         </f:facet>
                         <f:facet name="input">       
-                            <p:datePicker value="#{attrValue.value}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false"  >
-                                <p:ajax update="@form" />
-                            </p:datePicker>
+                            <p:datePicker value="#{attrValue.value}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false"  />
                         </f:facet>
                     </p:cellEditor>                                    
                     <!-- *********** Table(ciselnik) -->                    

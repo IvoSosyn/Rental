@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +58,8 @@ public class EviEntita implements Serializable {
     @Inject
     private EviAttribute eviAttribute;
 
+    private Stack<Entita> stackEntities = new Stack();
+    private Stack<Typentity> stackTypentities = new Stack();
     private Entita parentEntita = null;
     private Typentity typentity = null;
     private ArrayList<Entita> entities = new ArrayList<>();
@@ -113,41 +116,57 @@ public class EviEntita implements Serializable {
         }
         this.parentEntita = parent;
         this.typentity = typentity;
+        this.stackEntities.push(parent);
+        this.stackTypentities.push(typentity);
         this.entities = entitaController.getEntities(this.parentEntita);
         this.attributes = attrController.getAttributeForTypentity(this.typentity);
+        // Naselectuji 0 Entita, pokud neni jiz preddefinovana
+        if (this.selectedEntita == null && !this.entities.isEmpty()) {
+            this.selectedEntita = this.entities.get(0);
+        }
+        if (this.selectedEntita != null) {
+            eviAttribute.loadAttributes(this.selectedEntita, this);
+        }
         // Definice sloupcu tabulky Entity
-        // TO-DO: nacist z konfigurace uzivatele pro dany Typentity        
         this.columns = new ArrayList<>();
+        this.columnsSource = new ArrayList<>();
+        // Nacteni predchozihoi uzivatelskeho nastaveni
         String userColumns = this.ucet.getUzivatel().getParam(this.typentity.getId().toString(), "");
         if (!userColumns.isEmpty()) {
             this.columns.addAll(Arrays.asList(userColumns.split(";")));
         }
+        boolean emptyColumns = this.columns.isEmpty();
         // Doplnim pole pouzitelnych sloupcu o promenne z Entita
         for (String entitaColumns : new String[]{"Entita.Popis", "Entita.Platiod", "Entita.Platido"}) {
+            if (emptyColumns) {
+                this.columns.add(entitaColumns);
+            }
             if (!columns.contains(entitaColumns)) {
-                getColumnsSource().add(entitaColumns);
+                this.columnsSource.add(entitaColumns);
             }
         }
         // Doplnim pole pouzitelnych sloupcu o Attribute
         for (Attribute attr : this.attributes) {
             String column = "Attribute." + attr.getAttrname().trim();
             if (!columns.contains(column)) {
-                getColumnsSource().add(column);
+                this.columnsSource.add(column);
             }
         }
-        setColumnsDualList(new DualListModel<>(this.columnsSource, this.columns));
+        // Vytvoreni nabidky sloupcu k vyberu
+        this.columnsDualList = new DualListModel<>(this.columnsSource, this.columns);
 
+        // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
             Entita newEntita = new Entita();
             newEntita.setId(UUID.randomUUID());
             newEntita.setIdparent(parent.getId());
             newEntita.setIdtypentity(this.getTypentity());
-            newEntita.setPopis("...");
+            newEntita.setPopis("Nový záznam");
             newEntita.setNewEntity(true);
             this.entities.add(newEntita);
         }
-
+        // Child Typentity pro tlacitkovou listu
         this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
     }
 
@@ -344,27 +363,30 @@ public class EviEntita implements Serializable {
     }
 
     public void changeTypentity(Typentity typentity) {
-        loadEntities(selectedEntita, typentity);
+        Entita newParentEntita = this.selectedEntita;
+        this.selectedEntita = null;
+        loadEntities(newParentEntita, typentity);
     }
 
     public void changeTypentityBack() {
-        Entita parentEntitaofParent = entitaController.getEntita(this.parentEntita.getIdparent());
-        if (parentEntitaofParent instanceof Entita) {
-            parentEntitaofParent = new Entita();
-            parentEntitaofParent.setId(null);
-            parentEntitaofParent.setIdtypentity(this.typentity);
+        if (!this.stackEntities.empty()) {
+            // Odeberu aktuální záznam, parentEntita je selectedEntita z predchoziho pohledu
+            this.selectedEntita = this.stackEntities.pop();
+            this.stackTypentities.pop();
+            // Nactu hodnoty predchoziho zaznamu
+            if (!this.stackEntities.empty()) {
+                loadEntities(this.stackEntities.pop(), this.stackTypentities.pop());
+            }
         }
-        this.selectedEntita = this.parentEntita;
-        loadEntities(parentEntitaofParent, parentEntitaofParent.getIdtypentity());
     }
 
     public void gotoNewEntita() {
         for (Entita entita : entities) {
             if (entita.isNewEntity()) {
-                this.selectedEntita=entita;
+                this.selectedEntita = entita;
                 eviAttribute.loadAttributes(this.selectedEntita, this);
                 break;
-            }            
+            }
         }
     }
 
@@ -506,6 +528,34 @@ public class EviEntita implements Serializable {
      */
     public void setTypentityChilds(ArrayList<Typentity> typentityChilds) {
         this.typentityChilds = typentityChilds;
+    }
+
+    /**
+     * @return the stackEntities
+     */
+    public Stack<Entita> getStackEntities() {
+        return stackEntities;
+    }
+
+    /**
+     * @param stackEntities the stackEntities to set
+     */
+    public void setStackEntities(Stack<Entita> stackEntities) {
+        this.stackEntities = stackEntities;
+    }
+
+    /**
+     * @return the stackTypentities
+     */
+    public Stack<Typentity> getStackTypentities() {
+        return stackTypentities;
+    }
+
+    /**
+     * @param stackTypentities the stackTypentities to set
+     */
+    public void setStackTypentities(Stack<Typentity> stackTypentities) {
+        this.stackTypentities = stackTypentities;
     }
 
 }
