@@ -108,14 +108,6 @@ public class Evidence implements Serializable {
         return ucet.getUzivatel().getParam("ZmenaOD", Aplikace.getPlatiDo());
     }
 
-        /**
-     * @return the datumZmeny
-     */
-    public String datumZmenyAsString() {        
-        return Aplikace.getSimpleDateFormat().format(ucet.getUzivatel().getParam("ZmenaOD", Aplikace.getPlatiDo())) ;
-    }
-
-    
     /**
      * @param datumZmeny the datumZmeny to set
      */
@@ -124,4 +116,12 @@ public class Evidence implements Serializable {
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení parametru 'ZmenaOD' NEBYLA úspěšná.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(datumZmeny)));
         }
     }
+
+    /**
+     * @return the datumZmeny
+     */
+    public String datumZmenyAsString() {
+        return Aplikace.getSimpleDateFormat().format(ucet.getUzivatel().getParam("ZmenaOD", Aplikace.getZmenaOd()));
+    }
+
 }

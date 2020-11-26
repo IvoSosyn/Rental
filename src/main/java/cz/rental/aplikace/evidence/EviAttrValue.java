@@ -131,7 +131,7 @@ public class EviAttrValue {
                 ((Attrnumeric) attrValueNew).setCislo((double) this.value);
                 break;
             }
-            case 'D': {                
+            case 'D': {
                 attrValueNew = new Attrdate();
                 ((Attrdate) attrValueNew).setIdentita(this.entita.getId());
                 ((Attrdate) attrValueNew).setIdattribute(this.attribute);
@@ -147,14 +147,13 @@ public class EviAttrValue {
             attrValueNew.setPlatiod(attrValueplatiOd);
             attrValueNew.setPlatido(attrValueplatiDo);
             attrValueNew.setNewEntity(true);
-            if (this.attrController.findEntita(attrValueNew)==null) {
+            if (this.attrController.findEntita(attrValueNew) == null) {
                 this.attrController.create(attrValueNew);
                 attrValueNew.setNewEntity(false);
-            }else{
+            } else {
                 this.attrController.edit(attrValueNew);
             }
-            
-            
+
         }
     }
 
@@ -242,6 +241,10 @@ public class EviAttrValue {
 
     public boolean isRenderedAttr(String attrType) {
         return this.attribute.getAttrtype().equals(attrType.charAt(0));
+    }
+
+    public String valueAsDate() {
+        return ((this.value instanceof Date) ? Aplikace.getSimpleDateFormat().format(this.value) : "");
     }
 
     /**

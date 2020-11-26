@@ -102,13 +102,14 @@ public class EviAttribute implements Serializable {
             } else {
                 entitaController.edit(this.entita);
             }
-            if (this.source != null) {
-                this.source.reLoadEntities();
-            }
             zmenaOd = Aplikace.getSimpleDateFormat().parse(param);
             for (EviAttrValue eviAttrValue : this.values) {
                 eviAttrValue.save(zmenaOd);
             }
+            if (this.source != null) {
+                this.source.reLoadEntities();
+            }
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"OK", "Data byla úspěšně uložena."));
         } catch (Exception ex) {
             Logger.getLogger(EviAttribute.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly uloženy.", "Chyba" + ex.getMessage()));
