@@ -74,6 +74,20 @@ public class Attrtext extends EntitySuperClassNajem implements Serializable {
     }
 
     /**
+     * @return the text
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * @param text the text to set
+     */
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    /**
      * @return the edit
      */
     public Integer getEdit() {
@@ -91,19 +105,4 @@ public class Attrtext extends EntitySuperClassNajem implements Serializable {
     public String toString() {
         return "entity.Attrtext[ id=" + this.getId() + " ]";
     }
-
-    /**
-     * @return the text
-     */
-    public String getText() {
-        return text;
-    }
-
-    /**
-     * @param text the text to set
-     */
-    public void setText(String text) {
-        this.text = text;
-    }
-
 }

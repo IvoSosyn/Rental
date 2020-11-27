@@ -29,14 +29,13 @@ import org.eclipse.persistence.annotations.Converter;
 @Table(catalog = "najem", schema = "public")
 @NamedQueries({
     @NamedQuery(name = "Attribute.findAll", query = "SELECT a FROM Attribute a"),
-    @NamedQuery(name = "Attribute.findByIdTypEntity", query = "SELECT a FROM Attribute a WHERE a.idtypentity = :idTypEntity"),
-})
+    @NamedQuery(name = "Attribute.findByIdTypEntity", query = "SELECT a FROM Attribute a WHERE a.idtypentity = :idTypEntity"),})
 public class Attribute extends EntitySuperClassNajem implements Serializable, Cloneable {
 
     @Basic(optional = false)
     @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
     @Convert("uuidConverter")
-    @Column(nullable =true, columnDefinition = "UUID")
+    @Column(nullable = true, columnDefinition = "UUID")
     private UUID idtypentity;
 
     @Basic(optional = false)
@@ -44,6 +43,12 @@ public class Attribute extends EntitySuperClassNajem implements Serializable, Cl
     @Convert("uuidConverter")
     @Column(nullable = true, columnDefinition = "UUID")
     private UUID identita;
+
+    @Basic(optional = false)
+    @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
+    @Convert("uuidConverter")
+    @Column(nullable = true, columnDefinition = "UUID")
+    private UUID idmodel;
 
     @Basic(optional = true)
     @NotNull
@@ -108,6 +113,20 @@ public class Attribute extends EntitySuperClassNajem implements Serializable, Cl
 
     public void setIdentita(UUID identita) {
         this.identita = identita;
+    }
+
+    /**
+     * @return the idmodel
+     */
+    public UUID getIdmodel() {
+        return idmodel;
+    }
+
+    /**
+     * @param idmodel the idmodel to set
+     */
+    public void setIdmodel(UUID idmodel) {
+        this.idmodel = idmodel;
     }
 
     public Character getAttrtype() {

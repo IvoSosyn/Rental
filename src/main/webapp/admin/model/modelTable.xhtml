@@ -60,9 +60,11 @@
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Systém">
-                    <h:selectBooleanCheckbox value="#{attribute.attrsystem}" disabled="true" />
+                    <p:graphicImage value="images/OK15x15.png" rendered="#{attribute.attrsystem}" />
+<!--                    
+                    <h:outputText value="#{attribute.attrsystem?'S':' '}" />
+-->
                 </p:column>                    
-
                 <f:facet id="footerTableModelTable" name="footer">
                     <div  class="ui-g">
                         <div class="ui-g-12 ui-md-6 ui-lg-3">

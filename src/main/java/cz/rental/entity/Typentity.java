@@ -51,6 +51,12 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
     @Column(nullable = false, columnDefinition = "UUID")
     private UUID idparent;
 
+    @Basic(optional = false)
+    @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
+    @Convert("uuidConverter")
+    @Column(nullable = true, columnDefinition = "UUID")
+    private UUID idmodel;
+
     private Boolean attrsystem;
 
     @Size(max = 6)
@@ -82,6 +88,20 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
 
     public void setIdparent(UUID idparent) {
         this.idparent = idparent;
+    }
+
+    /**
+     * @return the idmodel
+     */
+    public UUID getIdmodel() {
+        return idmodel;
+    }
+
+    /**
+     * @param idmodel the idmodel to set
+     */
+    public void setIdmodel(UUID idmodel) {
+        this.idmodel = idmodel;
     }
 
     public Boolean getAttrsystem() {
@@ -122,6 +142,20 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
      */
     public void setEditor(Character editor) {
         this.editor = editor;
+    }
+
+    /**
+     * @return the entitaCollection
+     */
+    public Collection<Entita> getEntitaCollection() {
+        return entitaCollection;
+    }
+
+    /**
+     * @param entitaCollection the entitaCollection to set
+     */
+    public void setEntitaCollection(Collection<Entita> entitaCollection) {
+        this.entitaCollection = entitaCollection;
     }
 
     public Account getIdaccount() {

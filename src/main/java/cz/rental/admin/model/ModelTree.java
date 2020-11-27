@@ -54,7 +54,7 @@ public class ModelTree implements Serializable {
 
     @Inject
     ModelTable modelTable;
-    
+
     @Inject
     Ucet ucet;
 
@@ -388,7 +388,15 @@ public class ModelTree implements Serializable {
      */
     public void editReports() {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sestavy-Reports ... TO-DO", "Editace seznamu přidělených sestav ještě není hotova .. TO-DO");
-        FacesContext.getCurrentInstance().addMessage(null, message);;
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     *  Metoda vyexportuje cely strom Typentity i s Attributes
+     */
+    public void exportToJSON() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Export dat do JSON souboru ... TO-DO", "Export do JSON ještě není hotov .. TO-DO");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     /**

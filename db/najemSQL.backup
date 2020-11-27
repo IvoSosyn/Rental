@@ -5,7 +5,7 @@
 -- Dumped from database version 12.1
 -- Dumped by pg_dump version 12.1
 
--- Started on 2020-11-11 20:02:39
+-- Started on 2020-11-27 21:17:31
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,7 +20,7 @@ SET row_security = off;
 
 DROP DATABASE najem;
 --
--- TOC entry 3011 (class 1262 OID 42103)
+-- TOC entry 3013 (class 1262 OID 42103)
 -- Name: najem; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -43,8 +43,8 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 3012 (class 0 OID 0)
--- Dependencies: 3011
+-- TOC entry 3014 (class 0 OID 0)
+-- Dependencies: 3013
 -- Name: DATABASE najem; Type: COMMENT; Schema: -; Owner: postgres
 --
 
@@ -60,7 +60,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 
 --
--- TOC entry 3013 (class 0 OID 0)
+-- TOC entry 3015 (class 0 OID 0)
 -- Dependencies: 3
 -- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
 --
@@ -77,7 +77,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- TOC entry 3014 (class 0 OID 0)
+-- TOC entry 3016 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
 --
@@ -96,7 +96,7 @@ CREATE DOMAIN public._platido AS timestamp with time zone;
 ALTER DOMAIN public._platido OWNER TO postgres;
 
 --
--- TOC entry 3015 (class 0 OID 0)
+-- TOC entry 3017 (class 0 OID 0)
 -- Dependencies: 594
 -- Name: DOMAIN _platido; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -115,7 +115,7 @@ CREATE DOMAIN public._platiod AS timestamp with time zone;
 ALTER DOMAIN public._platiod OWNER TO postgres;
 
 --
--- TOC entry 3016 (class 0 OID 0)
+-- TOC entry 3018 (class 0 OID 0)
 -- Dependencies: 597
 -- Name: DOMAIN _platiod; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -134,7 +134,7 @@ CREATE DOMAIN public._popis AS text DEFAULT ' '::text;
 ALTER DOMAIN public._popis OWNER TO postgres;
 
 --
--- TOC entry 3017 (class 0 OID 0)
+-- TOC entry 3019 (class 0 OID 0)
 -- Dependencies: 685
 -- Name: DOMAIN _popis; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -153,7 +153,7 @@ CREATE DOMAIN public._timeinsert AS timestamp without time zone NOT NULL DEFAULT
 ALTER DOMAIN public._timeinsert OWNER TO postgres;
 
 --
--- TOC entry 3018 (class 0 OID 0)
+-- TOC entry 3020 (class 0 OID 0)
 -- Dependencies: 688
 -- Name: DOMAIN _timeinsert; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -172,7 +172,7 @@ CREATE DOMAIN public._timemodify AS timestamp without time zone NOT NULL DEFAULT
 ALTER DOMAIN public._timemodify OWNER TO postgres;
 
 --
--- TOC entry 3019 (class 0 OID 0)
+-- TOC entry 3021 (class 0 OID 0)
 -- Dependencies: 691
 -- Name: DOMAIN _timemodify; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -191,7 +191,7 @@ CREATE DOMAIN public._uzivatel AS text DEFAULT "current_user"();
 ALTER DOMAIN public._uzivatel OWNER TO postgres;
 
 --
--- TOC entry 3020 (class 0 OID 0)
+-- TOC entry 3022 (class 0 OID 0)
 -- Dependencies: 694
 -- Name: DOMAIN _uzivatel; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -220,7 +220,7 @@ $$;
 ALTER FUNCTION public.settimemodify() OWNER TO postgres;
 
 --
--- TOC entry 3021 (class 0 OID 0)
+-- TOC entry 3023 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: FUNCTION settimemodify(); Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -262,7 +262,7 @@ CREATE TABLE public.account (
 ALTER TABLE public.account OWNER TO postgres;
 
 --
--- TOC entry 3022 (class 0 OID 0)
+-- TOC entry 3024 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: TABLE account; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -271,7 +271,7 @@ COMMENT ON TABLE public.account IS 'Účet pro evidenci nemovitostí';
 
 
 --
--- TOC entry 3023 (class 0 OID 0)
+-- TOC entry 3025 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.id; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -280,7 +280,7 @@ COMMENT ON COLUMN public.account.id IS 'Identifikátor';
 
 
 --
--- TOC entry 3024 (class 0 OID 0)
+-- TOC entry 3026 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.pin; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -289,7 +289,7 @@ COMMENT ON COLUMN public.account.pin IS 'Jedinečný PIN účtu';
 
 
 --
--- TOC entry 3025 (class 0 OID 0)
+-- TOC entry 3027 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.fullname; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -298,7 +298,7 @@ COMMENT ON COLUMN public.account.fullname IS 'Plné jméno majitele účtu firmy
 
 
 --
--- TOC entry 3026 (class 0 OID 0)
+-- TOC entry 3028 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.email; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -307,7 +307,7 @@ COMMENT ON COLUMN public.account.email IS 'E-mail adresa majitele účtu';
 
 
 --
--- TOC entry 3027 (class 0 OID 0)
+-- TOC entry 3029 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.telnumber; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -316,7 +316,7 @@ COMMENT ON COLUMN public.account.telnumber IS 'Telefonní číslo majitele účt
 
 
 --
--- TOC entry 3028 (class 0 OID 0)
+-- TOC entry 3030 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.passwordsha512; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -325,7 +325,7 @@ COMMENT ON COLUMN public.account.passwordsha512 IS 'SHA512 hesla majitele účtu
 
 
 --
--- TOC entry 3029 (class 0 OID 0)
+-- TOC entry 3031 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.passwordhelp; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -334,7 +334,7 @@ COMMENT ON COLUMN public.account.passwordhelp IS 'Nápověda k heslu';
 
 
 --
--- TOC entry 3030 (class 0 OID 0)
+-- TOC entry 3032 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN account.idmodel; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -365,7 +365,7 @@ CREATE TABLE public.attrdate (
 ALTER TABLE public.attrdate OWNER TO postgres;
 
 --
--- TOC entry 3031 (class 0 OID 0)
+-- TOC entry 3033 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: TABLE attrdate; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -374,7 +374,7 @@ COMMENT ON TABLE public.attrdate IS 'Datum a čas - hodnota atributu entity';
 
 
 --
--- TOC entry 3032 (class 0 OID 0)
+-- TOC entry 3034 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: COLUMN attrdate.id; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -383,7 +383,7 @@ COMMENT ON COLUMN public.attrdate.id IS 'Hlavní identifikátor';
 
 
 --
--- TOC entry 3033 (class 0 OID 0)
+-- TOC entry 3035 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: COLUMN attrdate.identita; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -392,7 +392,7 @@ COMMENT ON COLUMN public.attrdate.identita IS 'Identifikátor nadřazeného obje
 
 
 --
--- TOC entry 3034 (class 0 OID 0)
+-- TOC entry 3036 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: COLUMN attrdate.idattribute; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -401,7 +401,7 @@ COMMENT ON COLUMN public.attrdate.idattribute IS 'Identirikátor atributu, kter�
 
 
 --
--- TOC entry 3035 (class 0 OID 0)
+-- TOC entry 3037 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: COLUMN attrdate.datumcas; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -410,7 +410,7 @@ COMMENT ON COLUMN public.attrdate.datumcas IS 'Hodnota datumu a času, které js
 
 
 --
--- TOC entry 3036 (class 0 OID 0)
+-- TOC entry 3038 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: COLUMN attrdate.edit; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -442,14 +442,15 @@ CREATE TABLE public.attribute (
     popis public._popis,
     timeinsert public._timeinsert,
     timemodify public._timemodify,
-    usermodify public._uzivatel
+    usermodify public._uzivatel,
+    idmodel uuid
 );
 
 
 ALTER TABLE public.attribute OWNER TO postgres;
 
 --
--- TOC entry 3037 (class 0 OID 0)
+-- TOC entry 3039 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: TABLE attribute; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -460,7 +461,7 @@ COMMENT ON TABLE public.attribute IS ' Vlastnost entity (domu, bytu, garáže, n
 
 
 --
--- TOC entry 3038 (class 0 OID 0)
+-- TOC entry 3040 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.idtypentity; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -469,7 +470,7 @@ COMMENT ON COLUMN public.attribute.idtypentity IS 'ID typu entity, ke která dan
 
 
 --
--- TOC entry 3039 (class 0 OID 0)
+-- TOC entry 3041 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.attrsystem; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -478,7 +479,7 @@ COMMENT ON COLUMN public.attribute.attrsystem IS 'Jedná se o systémový atribu
 
 
 --
--- TOC entry 3040 (class 0 OID 0)
+-- TOC entry 3042 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.attrname; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -487,7 +488,7 @@ COMMENT ON COLUMN public.attribute.attrname IS 'Jméno atributu pro jeho hledán
 
 
 --
--- TOC entry 3041 (class 0 OID 0)
+-- TOC entry 3043 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.attrtype; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -499,7 +500,7 @@ D=Datum';
 
 
 --
--- TOC entry 3042 (class 0 OID 0)
+-- TOC entry 3044 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.attrsize; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -508,7 +509,7 @@ COMMENT ON COLUMN public.attribute.attrsize IS 'Velikost pole pro zobrazení';
 
 
 --
--- TOC entry 3043 (class 0 OID 0)
+-- TOC entry 3045 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.attrdecimal; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -517,7 +518,7 @@ COMMENT ON COLUMN public.attribute.attrdecimal IS 'Pozice desetinné tečky u č
 
 
 --
--- TOC entry 3044 (class 0 OID 0)
+-- TOC entry 3046 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.attrparser; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -526,12 +527,22 @@ COMMENT ON COLUMN public.attribute.attrparser IS 'Odkaz na metodu, která proved
 
 
 --
--- TOC entry 3045 (class 0 OID 0)
+-- TOC entry 3047 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: COLUMN attribute.tables; Type: COMMENT; Schema: public; Owner: postgres
 --
 
 COMMENT ON COLUMN public.attribute.tables IS 'Tabulka s číselníkem';
+
+
+--
+-- TOC entry 3048 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: COLUMN attribute.idmodel; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.attribute.idmodel IS 'ID z modelu (JSON), ze kterého byl záznam vytvořen.
+Může být i NULL, pokud záznam nevznikl z modelu.';
 
 
 --
@@ -557,7 +568,7 @@ CREATE TABLE public.attrnumeric (
 ALTER TABLE public.attrnumeric OWNER TO postgres;
 
 --
--- TOC entry 3046 (class 0 OID 0)
+-- TOC entry 3049 (class 0 OID 0)
 -- Dependencies: 207
 -- Name: TABLE attrnumeric; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -566,7 +577,7 @@ COMMENT ON TABLE public.attrnumeric IS 'Číselná hodnota atributu entity';
 
 
 --
--- TOC entry 3047 (class 0 OID 0)
+-- TOC entry 3050 (class 0 OID 0)
 -- Dependencies: 207
 -- Name: COLUMN attrnumeric.edit; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -597,7 +608,7 @@ CREATE TABLE public.attrtext (
 ALTER TABLE public.attrtext OWNER TO postgres;
 
 --
--- TOC entry 3048 (class 0 OID 0)
+-- TOC entry 3051 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: TABLE attrtext; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -606,7 +617,7 @@ COMMENT ON TABLE public.attrtext IS 'Textová hodnota atributu entity';
 
 
 --
--- TOC entry 3049 (class 0 OID 0)
+-- TOC entry 3052 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: COLUMN attrtext.text; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -615,7 +626,7 @@ COMMENT ON COLUMN public.attrtext.text IS 'Libovolný řetězec jako hodnota atr
 
 
 --
--- TOC entry 3050 (class 0 OID 0)
+-- TOC entry 3053 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: COLUMN attrtext.edit; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -646,7 +657,7 @@ CREATE TABLE public.attruuid (
 ALTER TABLE public.attruuid OWNER TO postgres;
 
 --
--- TOC entry 3051 (class 0 OID 0)
+-- TOC entry 3054 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: TABLE attruuid; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -655,7 +666,7 @@ COMMENT ON TABLE public.attruuid IS 'UUID položky číselníku definovaném v a
 
 
 --
--- TOC entry 3052 (class 0 OID 0)
+-- TOC entry 3055 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: COLUMN attruuid.idtable; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -664,7 +675,7 @@ COMMENT ON COLUMN public.attruuid.idtable IS 'UUID položky z relační číseln
 
 
 --
--- TOC entry 3053 (class 0 OID 0)
+-- TOC entry 3056 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: COLUMN attruuid.edit; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -693,7 +704,7 @@ CREATE TABLE public.entita (
 ALTER TABLE public.entita OWNER TO postgres;
 
 --
--- TOC entry 3054 (class 0 OID 0)
+-- TOC entry 3057 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: TABLE entita; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -702,7 +713,7 @@ COMMENT ON TABLE public.entita IS 'Entita je základní jednotka, ke které se v
 
 
 --
--- TOC entry 3055 (class 0 OID 0)
+-- TOC entry 3058 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: COLUMN entita.idtypentity; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -711,7 +722,7 @@ COMMENT ON COLUMN public.entita.idtypentity IS 'ID na číselník typů entity (
 
 
 --
--- TOC entry 3056 (class 0 OID 0)
+-- TOC entry 3059 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: COLUMN entita.idparent; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -736,14 +747,15 @@ CREATE TABLE public.typentity (
     popis public._popis,
     timeinsert public._timeinsert,
     timemodify public._timemodify,
-    usermodify public._uzivatel
+    usermodify public._uzivatel,
+    idmodel uuid
 );
 
 
 ALTER TABLE public.typentity OWNER TO postgres;
 
 --
--- TOC entry 3057 (class 0 OID 0)
+-- TOC entry 3060 (class 0 OID 0)
 -- Dependencies: 211
 -- Name: TABLE typentity; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -752,12 +764,22 @@ COMMENT ON TABLE public.typentity IS 'Číselník typu entit (Dům, Byt, Nájemn
 
 
 --
--- TOC entry 3058 (class 0 OID 0)
+-- TOC entry 3061 (class 0 OID 0)
 -- Dependencies: 211
 -- Name: COLUMN typentity.editor; Type: COMMENT; Schema: public; Owner: postgres
 --
 
 COMMENT ON COLUMN public.typentity.editor IS 'Editace atributů ''F'' -formulář (Attribute pod sebou), ''T''-tabulka (Attribute vedle sebe v řádcích)';
+
+
+--
+-- TOC entry 3062 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: COLUMN typentity.idmodel; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.typentity.idmodel IS 'Odkaz na ID modelu, ze kterého byl uzel vytvořen.
+Může být i NULL v případě, e jej vytvořil uživatel.';
 
 
 --
@@ -788,7 +810,7 @@ CREATE TABLE public."user" (
 ALTER TABLE public."user" OWNER TO postgres;
 
 --
--- TOC entry 3059 (class 0 OID 0)
+-- TOC entry 3063 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".id; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -797,7 +819,7 @@ COMMENT ON COLUMN public."user".id IS 'ID uživatele';
 
 
 --
--- TOC entry 3060 (class 0 OID 0)
+-- TOC entry 3064 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".idaccount; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -806,7 +828,7 @@ COMMENT ON COLUMN public."user".idaccount IS 'ID účtu';
 
 
 --
--- TOC entry 3061 (class 0 OID 0)
+-- TOC entry 3065 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".fullname; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -815,7 +837,7 @@ COMMENT ON COLUMN public."user".fullname IS 'Plné jméno uživatele';
 
 
 --
--- TOC entry 3062 (class 0 OID 0)
+-- TOC entry 3066 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".email; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -824,7 +846,7 @@ COMMENT ON COLUMN public."user".email IS 'E-mail uživatele';
 
 
 --
--- TOC entry 3063 (class 0 OID 0)
+-- TOC entry 3067 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".telnumber; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -833,7 +855,7 @@ COMMENT ON COLUMN public."user".telnumber IS 'Telefonní číslo uživatele';
 
 
 --
--- TOC entry 3064 (class 0 OID 0)
+-- TOC entry 3068 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".passwordsha512; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -842,7 +864,7 @@ COMMENT ON COLUMN public."user".passwordsha512 IS 'SHA-512 hesla uživatele';
 
 
 --
--- TOC entry 3065 (class 0 OID 0)
+-- TOC entry 3069 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".passwordhelp; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -851,7 +873,7 @@ COMMENT ON COLUMN public."user".passwordhelp IS 'Nápověda k heslu uživatele';
 
 
 --
--- TOC entry 3066 (class 0 OID 0)
+-- TOC entry 3070 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".obdobiod; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -860,7 +882,7 @@ COMMENT ON COLUMN public."user".obdobiod IS 'Uživatelem zvolené období OD';
 
 
 --
--- TOC entry 3067 (class 0 OID 0)
+-- TOC entry 3071 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".obdobido; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -869,7 +891,7 @@ COMMENT ON COLUMN public."user".obdobido IS 'Uživatelem zvolené období DO';
 
 
 --
--- TOC entry 3068 (class 0 OID 0)
+-- TOC entry 3072 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN "user".zmenyod; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -903,7 +925,7 @@ CREATE TABLE public.userparam (
 ALTER TABLE public.userparam OWNER TO postgres;
 
 --
--- TOC entry 3069 (class 0 OID 0)
+-- TOC entry 3073 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: TABLE userparam; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -912,7 +934,7 @@ COMMENT ON TABLE public.userparam IS 'Tabulka uživatelských práv';
 
 
 --
--- TOC entry 3070 (class 0 OID 0)
+-- TOC entry 3074 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.id; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -921,7 +943,7 @@ COMMENT ON COLUMN public.userparam.id IS 'ID parametru';
 
 
 --
--- TOC entry 3071 (class 0 OID 0)
+-- TOC entry 3075 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.iduser; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -930,7 +952,7 @@ COMMENT ON COLUMN public.userparam.iduser IS 'ID uživatele';
 
 
 --
--- TOC entry 3072 (class 0 OID 0)
+-- TOC entry 3076 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.paramname; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -939,7 +961,7 @@ COMMENT ON COLUMN public.userparam.paramname IS 'Název parametru';
 
 
 --
--- TOC entry 3073 (class 0 OID 0)
+-- TOC entry 3077 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.tablename; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -948,7 +970,7 @@ COMMENT ON COLUMN public.userparam.tablename IS 'Název referenční tabulky';
 
 
 --
--- TOC entry 3074 (class 0 OID 0)
+-- TOC entry 3078 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.idtable; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -957,7 +979,7 @@ COMMENT ON COLUMN public.userparam.idtable IS 'ID záznamu z referenční tabulk
 
 
 --
--- TOC entry 3075 (class 0 OID 0)
+-- TOC entry 3079 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.textvalue; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -966,7 +988,7 @@ COMMENT ON COLUMN public.userparam.textvalue IS 'Hodnota typu text';
 
 
 --
--- TOC entry 3076 (class 0 OID 0)
+-- TOC entry 3080 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.numvalue; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -975,7 +997,7 @@ COMMENT ON COLUMN public.userparam.numvalue IS 'Hodnota typu Numeric';
 
 
 --
--- TOC entry 3077 (class 0 OID 0)
+-- TOC entry 3081 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: COLUMN userparam.datevalue; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -984,224 +1006,161 @@ COMMENT ON COLUMN public.userparam.datevalue IS 'Hodnota typu Datum';
 
 
 --
--- TOC entry 2996 (class 0 OID 42165)
--- Dependencies: 204
--- Data for Name: account; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 2997 (class 0 OID 42173)
--- Dependencies: 205
--- Data for Name: attrdate; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 2998 (class 0 OID 42179)
+-- TOC entry 3000 (class 0 OID 42179)
 -- Dependencies: 206
 -- Data for Name: attribute; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('a6c39470-005f-497f-99ca-0f7e2753834f', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 5, false, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 22:24:58.675', '2020-04-20 22:24:58.687521', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('7dad938c-d579-4f81-85f6-e97b1dc4eff4', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 20, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:00:26.842', '2020-04-20 22:02:31.361222', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b6a0c6aa-78f4-4109-8dfd-3a285cbc4f24', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 10, true, 'NAZEV', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Název vybavení', '2020-04-20 22:56:06.39', '2020-04-20 22:57:14.611009', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('0622a481-bd1c-487d-b2d1-86b99fa4bac8', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 10, false, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 22:24:58.675', '2020-04-20 22:24:58.689759', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('109c5e2b-b8b8-4385-86bc-4f9180234919', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 130, false, 'VYUSTENI', 'I', 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Vyústění do komína', '2020-04-20 22:17:34.708', '2020-04-20 22:19:34.9206', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c45d3f3b-ad42-4da4-8c05-20a5f333e1cc', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 34, false, 'CTVRT', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:03:28.02', '2020-04-20 22:03:36.664113', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('9096da31-c25b-4332-8baf-b94488a3d716', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 5, true, 'VYBAVENI', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Inventární číslo', '2020-04-20 22:56:06.39', '2020-04-20 22:56:38.650809', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('3db02b5a-da79-43cb-b6f5-6d7c01e1d2fb', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 5, true, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 21:58:52.536', '2020-04-20 21:59:04.841933', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('d7bb2922-ace8-4872-b2e3-0626074566ee', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 10, true, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 21:58:52.536', '2020-04-20 21:59:17.946212', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('572e8368-f996-462e-9015-f256ec123e32', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 15, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum pořízení', '2020-04-20 22:56:06.39', '2020-04-20 22:57:39.661233', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('d245d329-0054-4e22-b6b8-b727334fd7d0', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 15, true, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 21:58:52.536', '2020-04-20 21:59:29.241666', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('63110235-1b89-46fb-bbb2-0f6ebf8fd8c4', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 15, false, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 22:24:58.675', '2020-04-20 22:24:58.690983', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('df5133ad-721f-4716-9d75-6af865bd6fd0', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 19, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.691939', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e8ce63c7-8b58-4b84-83e8-a0679fcda195', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 29, true, 'NEBYT', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Nebytový prostor', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.694795', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('33f4a3bc-e520-4b30-a45f-b15dd9676d7c', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 120, true, 'M2_50', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 v 50%', '2020-04-20 22:17:08.572', '2020-04-20 22:19:08.353624', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('031d8fdd-0567-46ee-a504-72f8aaafc28d', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 25, true, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:00:26.842', '2020-04-20 22:00:47.065087', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('41fa1acb-da88-4056-b12a-ff0ba7f51ac1', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 30, true, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:00:26.842', '2020-04-20 22:00:59.153428', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c069aa3e-7133-4769-abfd-77007912c684', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 5, false, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.507641', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('847185db-2718-4540-92eb-e1d44243ccd6', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 20, false, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.692884', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('6f9b7965-e2a8-4fd3-903a-a1c30031595e', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 35, false, 'KU', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Katastrání území', '2020-04-20 22:04:09.677', '2020-04-20 22:04:37.871493', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('37db362e-de99-4576-9fba-fc95ea84c9f3', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 10, false, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.509066', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('3a253a7e-3b46-450f-8339-c7f81b9dfde1', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 25, false, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.69379', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('6990172f-8945-4ff1-9bda-57f7a3e94909', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 15, false, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.510196', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('2c709f12-bd08-43c7-8427-d0013a055bf5', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 40, false, 'LV', 'C', 8, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'List vlastnictví', '2020-04-20 22:04:09.677', '2020-04-20 22:04:14.103784', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('fa98e152-a25d-4b6f-a6f7-f5937df0b170', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 30, true, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo evidenční', '2020-04-20 21:55:32.857', '2020-04-20 21:56:30.515498', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('91d70d48-238c-4ff2-bb59-20cf09951f3e', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 25, true, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 21:55:14.375', '2020-04-20 21:56:20.515147', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b8503184-fee7-436e-8cd2-fdf3be5353bc', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 5, true, 'NAZEV', 'C', 150, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Název', '2020-04-20 21:54:54.056', '2020-04-20 21:55:02.496163', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('56c65f5f-a5c3-4885-88aa-15ce935f9063', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 10, true, 'IC', 'C', 8, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'IČ', '2020-04-20 21:54:54.056', '2020-04-20 21:55:14.385958', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('56a6038e-2f79-4d50-b488-424b10281615', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 15, true, 'DIC', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'DIČ', '2020-04-20 21:54:54.056', '2020-04-20 21:55:32.85923', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('813138e8-9caf-45a0-8d87-0f42243779a7', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 20, true, 'ULICE', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 21:55:02.515', '2020-04-20 21:56:05.99526', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('38727569-aea0-4215-90b0-ced2c1344ae7', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 35, true, 'MESTO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 21:56:05.996', '2020-04-20 21:57:02.634485', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('7b44b213-8ef8-4b59-880d-e99cf3db0d06', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 40, true, 'PSC', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 21:56:20.505', '2020-04-20 21:57:10.947576', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('586a2e03-c1bd-4d67-9e0d-a108e2b386cf', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 45, false, 'KOLAUDACE', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Kolaudace', '2020-04-20 22:05:15.105', '2020-04-20 22:06:04.366934', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('53caeb17-cefe-401b-b0bf-6753efad8f93', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 5, false, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 22:25:04.844', '2020-04-20 22:25:04.855951', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('0fa88c10-0edb-4e42-9249-652e4c1099fa', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 10, false, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 22:25:04.844', '2020-04-20 22:25:04.858016', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('40045aee-e4b3-4b6a-b922-29d87b750130', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 15, false, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 22:25:04.844', '2020-04-20 22:25:04.859804', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b0370023-3731-4311-8363-3d4715d876a6', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 19, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.861695', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('9868f262-cac6-4c7a-a508-fc2f23b9688d', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 20, false, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.863321', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('216a131e-68d5-449b-a42f-f5d63b2c9d55', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 25, false, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.864987', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('907dda32-ead0-4e21-b18e-50cd43513155', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 29, true, 'NEBYT', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Nebytový prostor', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.867111', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('796bc435-9eb1-4236-92f4-c093e1695761', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 30, false, 'PODLAZI', 'I', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Podlaží', '2020-04-20 22:27:53.774', '2020-04-20 22:27:53.782977', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('157fdefd-20c4-4805-bc23-12d5ce2f5896', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 45, false, 'M2_SKUT', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 skutečné', '2020-04-20 22:27:53.774', '2020-04-20 22:27:53.789283', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e24d4602-054d-444d-8a9f-4c8b6f86dfab', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 50, false, 'M2', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 do nájmu', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.791238', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('82207fae-2116-4de0-81b5-93a7143f96f5', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 55, false, 'M2_OTOP', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 otápěné', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.793007', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e29e9c7a-e257-4cad-b701-eb934a42a0b1', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 20, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.511222', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('df4c798d-c724-4786-a530-46b9b4a257d9', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 30, false, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.512145', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('8937afef-0827-43d7-933b-33ee5c3e5e96', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 40, false, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:14:30.512', '2020-04-20 22:14:30.513073', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('3fcba6d8-0f2f-43f4-9f57-f6873458ce17', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 50, true, 'NEBYT', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Nebytový prostor', '2020-04-20 22:20:23.548', '2020-04-20 22:22:05.312254', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('d0e087b8-da01-4fcd-9e36-4ef7ea6c909c', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 60, true, 'PODLAZI', 'I', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Podlaží', '2020-04-20 22:14:33.557', '2020-04-20 22:14:53.644113', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('974ba5ba-b47a-451b-86cc-4508042744aa', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 70, true, 'KATEGORIE', 'I', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Kategorie', '2020-04-20 22:14:33.557', '2020-04-20 22:15:13.243311', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('844bef2b-5422-4a05-8b0d-161c2e2cef6f', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 80, true, 'VELIKOST', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Velikost', '2020-04-20 22:14:33.557', '2020-04-20 22:15:59.879104', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('bdd5c846-8a8a-45ba-b27c-978800b0a705', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 90, true, 'M2_SKUT', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 skutečné', '2020-04-20 22:15:13.245', '2020-04-20 22:17:34.717192', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('f2081241-5280-4410-b5c2-11a4cf6f85f8', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 100, true, 'M2', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 do nájmu', '2020-04-20 22:14:53.639', '2020-04-20 22:17:08.570492', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('1915f81e-aa57-4185-ba27-ba36074aa96d', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 110, true, 'M2_OTOP', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 otápěné', '2020-04-20 22:15:59.876', '2020-04-20 22:18:05.420966', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('1084880a-20c4-4f35-9d10-88bfd0549b82', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 140, false, 'STA', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Přípojka antény', '2020-04-20 22:18:05.409', '2020-04-20 22:20:23.553169', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('ab22d95f-e15a-41d8-abf5-1e61cab88f1c', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 60, false, 'M2_50', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 v 50%', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.794656', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('f9c916d3-0af0-4ed0-a1ff-a3e1c5b50a76', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 65, false, 'VYUSTENI', 'I', 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Vyústění do komína', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.796641', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('9178757c-08ed-479b-969c-5c1533a046b9', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 160, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 22:19:34.921', '2020-04-20 22:21:40.304648', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('88a7e05b-67ee-466f-a862-ec84438c2b2b', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 70, false, 'STA', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Přípojka antény', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.79827', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('14c19b96-f06f-4196-a31e-885e39c5045b', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 75, false, 'VYTAH', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Výtah', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.799823', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e7a7b35b-b89d-460d-989a-4020d0bc9a78', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.801362', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('299c4b70-f674-471a-aa85-afa945c5b44e', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 5, true, 'MISTNOST', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Místnost', '2020-04-20 22:38:29.566', '2020-04-20 22:38:30.532795', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('82074429-b4a4-4f4a-b628-7e92b4af3b1c', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 200, true, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:26:34.279', '2020-04-20 23:26:34.295307', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e524e664-c5c5-41d5-b3fc-6ceaf72064e9', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 200, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:26:41.789', '2020-04-20 23:26:41.791678', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('cb41e378-f5df-4a98-8b02-c3726ea34ed9', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 5, true, 'FAKTURA', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Faktura', '2020-04-20 23:23:00.982', '2020-04-20 23:23:19.688212', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('17d32b6f-64d8-4b5b-be88-c6c1dd04701f', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 20, true, 'CENA', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Pořizovací cena', '2020-04-20 22:56:38.65', '2020-04-20 22:58:13.541287', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('d411cf7a-0d15-4d31-afcd-1fc849963648', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 25, true, 'OPOTREBENI', 'N', 6, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Roční % opotřebení', '2020-04-20 22:57:14.612', '2020-04-20 22:58:43.393919', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('d4d10c2e-25d2-405b-b071-ffd03c826ed7', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 10, true, 'DOKLAD', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Účetní doklad', '2020-04-20 23:23:00.982', '2020-04-20 23:24:38.048109', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c91ac1cc-0ed5-4c99-999b-50d17984f2f1', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 15, true, 'PRIJATO', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Přijata', '2020-04-20 23:23:00.982', '2020-04-20 23:25:07.815493', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('5e10f406-46dd-43f3-a3a1-72fe45520d93', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 10, true, 'M2_SKUT', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 skutečné', '2020-04-20 22:38:32.035', '2020-04-20 22:38:32.041887', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('42b58658-de2b-4316-aff2-6710b1f8ce6a', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 20, true, 'M2', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 do nájmu', '2020-04-20 22:38:32.041', '2020-04-20 22:38:32.043118', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c33c1fdc-9a1b-4386-8007-bec4131e6093', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 30, true, 'M2_OTOP', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 otápěné', '2020-04-20 22:38:32.041', '2020-04-20 22:38:32.044153', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('479bb2f5-1adb-48bf-8aa0-0625702cd6f2', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 40, true, 'M2_50', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 v 50%', '2020-04-20 22:38:32.041', '2020-04-20 22:38:32.045084', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c5d365d4-e162-464c-b393-eb7ce4a7e28e', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 20, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Platí OD', '2020-04-20 23:23:19.687', '2020-04-20 23:25:25.030411', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e29991d2-dd7a-4b53-ad90-38b76d95b40c', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 25, true, 'KC', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Kč', '2020-04-20 23:24:38.035', '2020-04-20 23:25:38.578456', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('2a318827-17b9-433a-a6e3-cf0e3c7321f5', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 22:39:46.074', '2020-04-20 22:39:46.08138', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('d130114c-5268-4627-a6bd-d994a17e1a99', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 30, true, 'SLUZBA', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Za službu', '2020-04-20 23:25:07.808', '2020-04-20 23:26:01.182995', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('15895fca-6f15-4172-aadb-d47e8f556981', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 30, true, 'ZIVOTNOST', 'I', 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Životnost v letech', '2020-04-20 22:57:39.653', '2020-04-20 22:59:40.244578', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('39cc10e4-3b99-4852-b571-5d55716adc67', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 16, true, 'DOKLAD', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Doklad o pořízení', '2020-04-20 22:58:43.39', '2020-04-20 23:01:25.089075', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('014dbd90-d5f9-41c1-8ded-cd3b3e62870f', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 35, true, 'MAXIMUM', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Nájem po životnosti', '2020-04-20 22:58:13.529', '2020-04-20 23:00:41.561082', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('6b995abd-edad-4a0b-bf3a-1325ca3f3378', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 5, true, 'NAZEV', 'C', 150, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Plné jméno', '2020-04-20 23:12:13.743', '2020-04-20 23:14:13.523786', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('3a3b41a9-1fd9-4a72-a0c4-5cb82f08103f', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 45, true, 'VYMER', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Výměr nájmu', '2020-04-20 22:59:40.233', '2020-04-20 23:01:33.856773', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('9c9fbcc8-d110-44b9-a74c-f2d0a9ba6e95', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:02:39.106', '2020-04-20 23:02:39.112966', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('ab6e0196-35a2-4349-b865-d3dbf9977cbf', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 45, false, 'MERIDLO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Č. měřidla', '2020-05-19 20:49:52.403', '2020-05-19 20:49:52.405377', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b1974244-13e9-4637-a049-014b086a1c13', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 30, true, 'TITUL', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (před)', '2020-04-20 23:11:29.792', '2020-04-20 23:12:04.676495', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('680c8c5e-5e17-4b4d-b2ba-46bb1faa58e1', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 20, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-05-19 20:47:50.58', '2020-05-19 20:47:50.582336', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('cd658246-e6de-4ebf-9129-3961bf60b88c', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 15, false, 'DOKLAD', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo dokladu', '2020-05-19 20:50:40.856', '2020-05-19 20:50:54.228769', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('d121bbba-a027-4474-913e-9dbcc88be494', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 5, true, 'NAZEV', 'C', 150, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Plné jméno', '2020-04-20 23:20:55.185', '2020-04-20 23:20:55.192814', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('1a5af5a2-dfe3-4fd4-adfe-1ee7e61e8f12', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 10, true, 'PRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Příjmení', '2020-04-20 23:20:55.193', '2020-04-20 23:20:55.194833', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('f36f2ea9-7ef0-419a-9e45-13c33df623e5', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 20, true, 'JMENO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Jméno', '2020-04-20 23:20:55.193', '2020-04-20 23:20:55.195701', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b9615a2a-063a-4bba-a242-6634c5637603', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 30, true, 'TITUL', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (před)', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.196575', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('2ca14e9d-0914-45cc-b048-e2ca2e5e4e76', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 40, true, 'TITULZA', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (za)', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.197356', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b9d31847-b5ba-4492-b43b-0d2949a9eeb0', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 50, true, 'RPRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné příjmení', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.198037', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('4fce4055-d6f7-4fb2-9425-b5280eba8bd8', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 60, true, 'RC', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné číslo', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.198702', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('adcd224a-b18d-41b7-a06b-90b3b5e069a8', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 70, true, 'NAROZEN', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum narození', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.199413', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('6ceec0a0-844e-4685-9996-9ec2d1dc9312', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 200, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.201626', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('36e0eae9-b25a-4ff0-a58a-48dcd8101daa', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 20, true, 'PRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Příjmení', '2020-04-20 23:11:29.792', '2020-04-20 23:11:47.116862', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b2684dfd-1130-4ab9-a946-0dc74585e402', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 25, true, 'JMENO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Jméno', '2020-04-20 23:11:29.792', '2020-04-20 23:11:55.7246', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('5f31ed10-8b95-4da1-b5a5-fc258d5a8fca', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 35, true, 'TITULZA', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (za)', '2020-04-20 23:11:55.715', '2020-04-20 23:12:33.148196', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('a9849ac8-d614-4d89-8e6c-576e5cc9fc2c', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 40, true, 'RPRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné příjmení', '2020-04-20 23:15:53.977', '2020-04-20 23:16:59.451185', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('5ea3b225-abe8-4657-9776-086af3e6fb29', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 55, true, 'RC', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné číslo', '2020-04-20 23:11:47.107', '2020-04-20 23:12:13.748441', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('41dd8275-ef76-4332-8efb-f02e1e5c3045', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 60, true, 'NAROZEN', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum narození', '2020-04-20 23:12:04.663', '2020-04-20 23:13:13.148196', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('903734ae-4043-47ed-bdbd-ccf67523596f', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 65, true, 'SMLOUVA', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Smlouva OD', '2020-04-20 23:12:33.142', '2020-04-20 23:14:58.555412', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('232d9771-32a1-4fde-b8ba-39aa37dd3e2b', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 70, false, 'REGULACE', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Regulované nájemné', '2020-04-20 23:13:13.137', '2020-04-20 23:15:13.979307', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('2f75b810-e506-481c-aa58-809732252af6', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:15:49.966', '2020-04-20 23:15:49.979813', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('cdc79174-aa6b-499f-ac7c-2db36813ba21', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 200, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:44:22.281', '2020-04-20 23:44:22.296263', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('1c01492e-f55b-437a-ae1c-1c6b196c37a3', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 30, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-05-19 20:56:00.601', '2020-05-19 20:56:00.602017', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('57b8ab96-5add-4297-ab54-8d587e267475', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 5, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum odečtu', '2020-05-19 20:56:00.594', '2020-05-19 20:56:00.595912', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('64f4e6c3-af95-44f9-ba38-dd9a4ac11c5c', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 10, true, 'ENERGIE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Druh energie', '2020-05-19 20:56:00.596', '2020-05-19 20:56:00.597425', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('23f91317-46fe-445a-b775-b06ba69b3d95', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 15, true, 'HODNOTA', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Hodnota měřidla', '2020-05-19 20:56:00.597', '2020-05-19 20:56:00.598603', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('910aa730-b750-4907-a28d-2bc337ae4403', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 20, true, 'MERIDLO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Č. měřidla', '2020-05-19 20:56:00.599', '2020-05-19 20:56:00.599832', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('a7d70cfd-7726-4472-adb0-5fc22f916fa9', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 25, true, 'POCATEK', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Počáteční stav', '2020-05-19 20:56:00.6', '2020-05-19 20:56:00.600981', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('25e7a758-4960-4d7d-a106-355b123241d7', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 5, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum odečtu', '2020-05-19 19:51:14.587', '2020-05-19 19:52:08.778246', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('2a10f7f5-a020-4bae-944a-55af785ac4e8', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 10, true, 'ENERGIE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Druh energie', '2020-05-19 19:49:10.089', '2020-05-19 19:49:10.093425', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('7503f7d0-f761-49df-825f-da2c44d40d30', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 15, true, 'HODNOTA', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Hodnota měřidla', '2020-05-19 19:59:03.129', '2020-05-19 20:00:13.286635', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b34490db-34fb-4193-a999-f59f41dc79db', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 20, true, 'MERIDLO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Č. měřidla', '2020-05-19 19:49:10.099', '2020-05-19 19:49:10.10083', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('f9f5a42b-b54e-4157-8972-e90dcef15355', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 25, true, 'POCATEK', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Počáteční stav', '2020-05-19 19:56:49.502', '2020-05-19 19:57:50.014904', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('4bde56ba-71bd-4d4e-8637-df86d9b5be85', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 30, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-05-19 19:49:10.114', '2020-05-19 19:49:10.115883', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c03d6dd9-0338-4857-bfd9-d606dfe68b14', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 155, false, 'VYTAH', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Výtah', '2020-04-20 22:19:08.343', '2020-04-20 22:21:13.84882', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('96508d01-a250-469f-a352-7cfc88a421c1', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 55, true, 'NAJEM', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Základní nájem', '2020-05-19 20:10:34.014', '2020-05-19 20:11:16.428903', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('07549154-a77f-408b-9281-a8bc9c23678a', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 56, true, 'SLUZBY', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Předpis za služby', '2020-05-19 20:10:34.014', '2020-05-19 20:10:44.708792', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('8c1e2abd-b3fe-4418-bea1-7d8c25269f6b', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 5, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum platby', '2020-05-19 20:09:41.832', '2020-05-19 20:09:51.005406', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('0d299e11-5997-46c0-bab4-4cfe4a67cc16', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 10, true, 'KC', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Platba Kč', '2020-05-19 20:09:45.161', '2020-05-19 20:09:45.162991', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e13b74f1-dc06-46a8-ae79-11c256f7678c', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 10, true, 'VS', 'I', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Variabilní symbol', '2020-05-19 20:03:07.3', '2020-05-19 20:03:36.861438', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('eb8f2021-0c7b-461a-be14-113c932bcc2d', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 15, false, 'SS', 'I', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Specifický symbol', '2020-05-19 20:03:07.3', '2020-05-19 20:04:32.57291', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('1491d18d-be21-4c35-b84a-de9517a3d2d2', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 45, false, 'NAJEM', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Základní nájem', '2020-05-19 20:16:04.334', '2020-05-19 20:16:04.337631', 'postgres');
-INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('e155155f-0c27-4454-8f4a-5099a8248a83', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 50, false, 'SLUZBY', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Předpis za služby', '2020-05-19 20:16:04.338', '2020-05-19 20:16:04.340208', 'postgres');
-
-
---
--- TOC entry 2999 (class 0 OID 42190)
--- Dependencies: 207
--- Data for Name: attrnumeric; Type: TABLE DATA; Schema: public; Owner: postgres
---
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('a6c39470-005f-497f-99ca-0f7e2753834f', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 5, false, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 22:24:58.675', '2020-04-20 22:24:58.687521', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('7dad938c-d579-4f81-85f6-e97b1dc4eff4', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 20, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:00:26.842', '2020-04-20 22:02:31.361222', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b6a0c6aa-78f4-4109-8dfd-3a285cbc4f24', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 10, true, 'NAZEV', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Název vybavení', '2020-04-20 22:56:06.39', '2020-04-20 22:57:14.611009', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('0622a481-bd1c-487d-b2d1-86b99fa4bac8', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 10, false, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 22:24:58.675', '2020-04-20 22:24:58.689759', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('109c5e2b-b8b8-4385-86bc-4f9180234919', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 130, false, 'VYUSTENI', 'I', 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Vyústění do komína', '2020-04-20 22:17:34.708', '2020-04-20 22:19:34.9206', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c45d3f3b-ad42-4da4-8c05-20a5f333e1cc', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 34, false, 'CTVRT', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:03:28.02', '2020-04-20 22:03:36.664113', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('9096da31-c25b-4332-8baf-b94488a3d716', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 5, true, 'VYBAVENI', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Inventární číslo', '2020-04-20 22:56:06.39', '2020-04-20 22:56:38.650809', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('3db02b5a-da79-43cb-b6f5-6d7c01e1d2fb', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 5, true, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 21:58:52.536', '2020-04-20 21:59:04.841933', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('d7bb2922-ace8-4872-b2e3-0626074566ee', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 10, true, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 21:58:52.536', '2020-04-20 21:59:17.946212', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('572e8368-f996-462e-9015-f256ec123e32', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 15, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum pořízení', '2020-04-20 22:56:06.39', '2020-04-20 22:57:39.661233', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('d245d329-0054-4e22-b6b8-b727334fd7d0', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 15, true, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 21:58:52.536', '2020-04-20 21:59:29.241666', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('63110235-1b89-46fb-bbb2-0f6ebf8fd8c4', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 15, false, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 22:24:58.675', '2020-04-20 22:24:58.690983', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('df5133ad-721f-4716-9d75-6af865bd6fd0', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 19, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.691939', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e8ce63c7-8b58-4b84-83e8-a0679fcda195', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 29, true, 'NEBYT', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Nebytový prostor', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.694795', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('33f4a3bc-e520-4b30-a45f-b15dd9676d7c', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 120, true, 'M2_50', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 v 50%', '2020-04-20 22:17:08.572', '2020-04-20 22:19:08.353624', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('031d8fdd-0567-46ee-a504-72f8aaafc28d', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 25, true, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:00:26.842', '2020-04-20 22:00:47.065087', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('41fa1acb-da88-4056-b12a-ff0ba7f51ac1', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 30, true, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:00:26.842', '2020-04-20 22:00:59.153428', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c069aa3e-7133-4769-abfd-77007912c684', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 5, false, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.507641', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('847185db-2718-4540-92eb-e1d44243ccd6', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 20, false, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.692884', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('6f9b7965-e2a8-4fd3-903a-a1c30031595e', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 35, false, 'KU', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Katastrání území', '2020-04-20 22:04:09.677', '2020-04-20 22:04:37.871493', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('37db362e-de99-4576-9fba-fc95ea84c9f3', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 10, false, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.509066', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('3a253a7e-3b46-450f-8339-c7f81b9dfde1', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 25, false, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:24:58.69', '2020-04-20 22:24:58.69379', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('6990172f-8945-4ff1-9bda-57f7a3e94909', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 15, false, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.510196', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('2c709f12-bd08-43c7-8427-d0013a055bf5', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 40, false, 'LV', 'C', 8, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'List vlastnictví', '2020-04-20 22:04:09.677', '2020-04-20 22:04:14.103784', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('fa98e152-a25d-4b6f-a6f7-f5937df0b170', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 30, true, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo evidenční', '2020-04-20 21:55:32.857', '2020-04-20 21:56:30.515498', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('91d70d48-238c-4ff2-bb59-20cf09951f3e', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 25, true, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 21:55:14.375', '2020-04-20 21:56:20.515147', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b8503184-fee7-436e-8cd2-fdf3be5353bc', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 5, true, 'NAZEV', 'C', 150, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Název', '2020-04-20 21:54:54.056', '2020-04-20 21:55:02.496163', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('56c65f5f-a5c3-4885-88aa-15ce935f9063', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 10, true, 'IC', 'C', 8, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'IČ', '2020-04-20 21:54:54.056', '2020-04-20 21:55:14.385958', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('56a6038e-2f79-4d50-b488-424b10281615', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 15, true, 'DIC', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'DIČ', '2020-04-20 21:54:54.056', '2020-04-20 21:55:32.85923', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('813138e8-9caf-45a0-8d87-0f42243779a7', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 20, true, 'ULICE', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 21:55:02.515', '2020-04-20 21:56:05.99526', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('38727569-aea0-4215-90b0-ced2c1344ae7', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 35, true, 'MESTO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 21:56:05.996', '2020-04-20 21:57:02.634485', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('7b44b213-8ef8-4b59-880d-e99cf3db0d06', '945889e4-4383-480e-9d77-dafe665fd475', NULL, 40, true, 'PSC', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 21:56:20.505', '2020-04-20 21:57:10.947576', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('586a2e03-c1bd-4d67-9e0d-a108e2b386cf', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 45, false, 'KOLAUDACE', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Kolaudace', '2020-04-20 22:05:15.105', '2020-04-20 22:06:04.366934', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('53caeb17-cefe-401b-b0bf-6753efad8f93', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 5, false, 'ULICE', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Ulice', '2020-04-20 22:25:04.844', '2020-04-20 22:25:04.855951', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('0fa88c10-0edb-4e42-9249-652e4c1099fa', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 10, false, 'CP', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo popisné', '2020-04-20 22:25:04.844', '2020-04-20 22:25:04.858016', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('40045aee-e4b3-4b6a-b922-29d87b750130', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 15, false, 'CE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo orientační', '2020-04-20 22:25:04.844', '2020-04-20 22:25:04.859804', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b0370023-3731-4311-8363-3d4715d876a6', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 19, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.861695', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('9868f262-cac6-4c7a-a508-fc2f23b9688d', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 20, false, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.863321', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('216a131e-68d5-449b-a42f-f5d63b2c9d55', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 25, false, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.864987', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('907dda32-ead0-4e21-b18e-50cd43513155', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 29, true, 'NEBYT', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Nebytový prostor', '2020-04-20 22:25:04.86', '2020-04-20 22:25:04.867111', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('796bc435-9eb1-4236-92f4-c093e1695761', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 30, false, 'PODLAZI', 'I', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Podlaží', '2020-04-20 22:27:53.774', '2020-04-20 22:27:53.782977', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('157fdefd-20c4-4805-bc23-12d5ce2f5896', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 45, false, 'M2_SKUT', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 skutečné', '2020-04-20 22:27:53.774', '2020-04-20 22:27:53.789283', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e24d4602-054d-444d-8a9f-4c8b6f86dfab', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 50, false, 'M2', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 do nájmu', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.791238', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('82207fae-2116-4de0-81b5-93a7143f96f5', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 55, false, 'M2_OTOP', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 otápěné', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.793007', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e29e9c7a-e257-4cad-b701-eb934a42a0b1', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 20, false, 'CTVRT', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Část obce', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.511222', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('df4c798d-c724-4786-a530-46b9b4a257d9', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 30, false, 'MESTO', 'C', 100, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Město', '2020-04-20 22:14:30.496', '2020-04-20 22:14:30.512145', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('8937afef-0827-43d7-933b-33ee5c3e5e96', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 40, false, 'PSC', 'C', 7, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'PSČ', '2020-04-20 22:14:30.512', '2020-04-20 22:14:30.513073', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('3fcba6d8-0f2f-43f4-9f57-f6873458ce17', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 50, true, 'NEBYT', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Nebytový prostor', '2020-04-20 22:20:23.548', '2020-04-20 22:22:05.312254', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('d0e087b8-da01-4fcd-9e36-4ef7ea6c909c', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 60, true, 'PODLAZI', 'I', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Podlaží', '2020-04-20 22:14:33.557', '2020-04-20 22:14:53.644113', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('974ba5ba-b47a-451b-86cc-4508042744aa', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 70, true, 'KATEGORIE', 'I', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Kategorie', '2020-04-20 22:14:33.557', '2020-04-20 22:15:13.243311', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('844bef2b-5422-4a05-8b0d-161c2e2cef6f', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 80, true, 'VELIKOST', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Velikost', '2020-04-20 22:14:33.557', '2020-04-20 22:15:59.879104', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('bdd5c846-8a8a-45ba-b27c-978800b0a705', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 90, true, 'M2_SKUT', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 skutečné', '2020-04-20 22:15:13.245', '2020-04-20 22:17:34.717192', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('f2081241-5280-4410-b5c2-11a4cf6f85f8', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 100, true, 'M2', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 do nájmu', '2020-04-20 22:14:53.639', '2020-04-20 22:17:08.570492', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('1915f81e-aa57-4185-ba27-ba36074aa96d', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 110, true, 'M2_OTOP', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 otápěné', '2020-04-20 22:15:59.876', '2020-04-20 22:18:05.420966', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('1084880a-20c4-4f35-9d10-88bfd0549b82', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 140, false, 'STA', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Přípojka antény', '2020-04-20 22:18:05.409', '2020-04-20 22:20:23.553169', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('ab22d95f-e15a-41d8-abf5-1e61cab88f1c', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 60, false, 'M2_50', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 v 50%', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.794656', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('f9c916d3-0af0-4ed0-a1ff-a3e1c5b50a76', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 65, false, 'VYUSTENI', 'I', 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Vyústění do komína', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.796641', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('9178757c-08ed-479b-969c-5c1533a046b9', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 160, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 22:19:34.921', '2020-04-20 22:21:40.304648', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('88a7e05b-67ee-466f-a862-ec84438c2b2b', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 70, false, 'STA', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Přípojka antény', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.79827', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('14c19b96-f06f-4196-a31e-885e39c5045b', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 75, false, 'VYTAH', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Výtah', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.799823', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e7a7b35b-b89d-460d-989a-4020d0bc9a78', 'b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 22:27:53.79', '2020-04-20 22:27:53.801362', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('299c4b70-f674-471a-aa85-afa945c5b44e', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 5, true, 'MISTNOST', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Místnost', '2020-04-20 22:38:29.566', '2020-04-20 22:38:30.532795', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('82074429-b4a4-4f4a-b628-7e92b4af3b1c', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 200, true, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:26:34.279', '2020-04-20 23:26:34.295307', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e524e664-c5c5-41d5-b3fc-6ceaf72064e9', '618cabf9-1138-45fb-9d70-a8cb5f191aaa', NULL, 200, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:26:41.789', '2020-04-20 23:26:41.791678', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('cb41e378-f5df-4a98-8b02-c3726ea34ed9', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 5, true, 'FAKTURA', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Faktura', '2020-04-20 23:23:00.982', '2020-04-20 23:23:19.688212', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('17d32b6f-64d8-4b5b-be88-c6c1dd04701f', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 20, true, 'CENA', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Pořizovací cena', '2020-04-20 22:56:38.65', '2020-04-20 22:58:13.541287', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('d411cf7a-0d15-4d31-afcd-1fc849963648', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 25, true, 'OPOTREBENI', 'N', 6, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Roční % opotřebení', '2020-04-20 22:57:14.612', '2020-04-20 22:58:43.393919', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('d4d10c2e-25d2-405b-b071-ffd03c826ed7', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 10, true, 'DOKLAD', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Účetní doklad', '2020-04-20 23:23:00.982', '2020-04-20 23:24:38.048109', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c91ac1cc-0ed5-4c99-999b-50d17984f2f1', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 15, true, 'PRIJATO', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Přijata', '2020-04-20 23:23:00.982', '2020-04-20 23:25:07.815493', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('5e10f406-46dd-43f3-a3a1-72fe45520d93', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 10, true, 'M2_SKUT', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 skutečné', '2020-04-20 22:38:32.035', '2020-04-20 22:38:32.041887', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('42b58658-de2b-4316-aff2-6710b1f8ce6a', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 20, true, 'M2', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 do nájmu', '2020-04-20 22:38:32.041', '2020-04-20 22:38:32.043118', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c33c1fdc-9a1b-4386-8007-bec4131e6093', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 30, true, 'M2_OTOP', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 otápěné', '2020-04-20 22:38:32.041', '2020-04-20 22:38:32.044153', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('479bb2f5-1adb-48bf-8aa0-0625702cd6f2', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 40, true, 'M2_50', 'N', 7, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'M2 v 50%', '2020-04-20 22:38:32.041', '2020-04-20 22:38:32.045084', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c5d365d4-e162-464c-b393-eb7ce4a7e28e', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 20, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Platí OD', '2020-04-20 23:23:19.687', '2020-04-20 23:25:25.030411', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e29991d2-dd7a-4b53-ad90-38b76d95b40c', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 25, true, 'KC', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Kč', '2020-04-20 23:24:38.035', '2020-04-20 23:25:38.578456', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('2a318827-17b9-433a-a6e3-cf0e3c7321f5', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 22:39:46.074', '2020-04-20 22:39:46.08138', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('d130114c-5268-4627-a6bd-d994a17e1a99', '1cccbae4-4183-4426-9514-99dea63f8d72', NULL, 30, true, 'SLUZBA', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Za službu', '2020-04-20 23:25:07.808', '2020-04-20 23:26:01.182995', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('15895fca-6f15-4172-aadb-d47e8f556981', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 30, true, 'ZIVOTNOST', 'I', 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Životnost v letech', '2020-04-20 22:57:39.653', '2020-04-20 22:59:40.244578', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('39cc10e4-3b99-4852-b571-5d55716adc67', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 16, true, 'DOKLAD', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Doklad o pořízení', '2020-04-20 22:58:43.39', '2020-04-20 23:01:25.089075', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('014dbd90-d5f9-41c1-8ded-cd3b3e62870f', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 35, true, 'MAXIMUM', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Nájem po životnosti', '2020-04-20 22:58:13.529', '2020-04-20 23:00:41.561082', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('6b995abd-edad-4a0b-bf3a-1325ca3f3378', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 5, true, 'NAZEV', 'C', 150, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Plné jméno', '2020-04-20 23:12:13.743', '2020-04-20 23:14:13.523786', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('3a3b41a9-1fd9-4a72-a0c4-5cb82f08103f', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 45, true, 'VYMER', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Výměr nájmu', '2020-04-20 22:59:40.233', '2020-04-20 23:01:33.856773', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('9c9fbcc8-d110-44b9-a74c-f2d0a9ba6e95', '0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:02:39.106', '2020-04-20 23:02:39.112966', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('ab6e0196-35a2-4349-b865-d3dbf9977cbf', 'c630414e-ddbb-4803-8a77-acbcebf4ad9d', NULL, 45, false, 'MERIDLO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Č. měřidla', '2020-05-19 20:49:52.403', '2020-05-19 20:49:52.405377', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b1974244-13e9-4637-a049-014b086a1c13', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 30, true, 'TITUL', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (před)', '2020-04-20 23:11:29.792', '2020-04-20 23:12:04.676495', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('680c8c5e-5e17-4b4d-b2ba-46bb1faa58e1', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 20, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-05-19 20:47:50.58', '2020-05-19 20:47:50.582336', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('cd658246-e6de-4ebf-9129-3961bf60b88c', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 15, false, 'DOKLAD', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Číslo dokladu', '2020-05-19 20:50:40.856', '2020-05-19 20:50:54.228769', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('d121bbba-a027-4474-913e-9dbcc88be494', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 5, true, 'NAZEV', 'C', 150, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Plné jméno', '2020-04-20 23:20:55.185', '2020-04-20 23:20:55.192814', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('1a5af5a2-dfe3-4fd4-adfe-1ee7e61e8f12', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 10, true, 'PRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Příjmení', '2020-04-20 23:20:55.193', '2020-04-20 23:20:55.194833', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('f36f2ea9-7ef0-419a-9e45-13c33df623e5', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 20, true, 'JMENO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Jméno', '2020-04-20 23:20:55.193', '2020-04-20 23:20:55.195701', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b9615a2a-063a-4bba-a242-6634c5637603', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 30, true, 'TITUL', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (před)', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.196575', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('2ca14e9d-0914-45cc-b048-e2ca2e5e4e76', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 40, true, 'TITULZA', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (za)', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.197356', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b9d31847-b5ba-4492-b43b-0d2949a9eeb0', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 50, true, 'RPRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné příjmení', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.198037', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('4fce4055-d6f7-4fb2-9425-b5280eba8bd8', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 60, true, 'RC', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné číslo', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.198702', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('adcd224a-b18d-41b7-a06b-90b3b5e069a8', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 70, true, 'NAROZEN', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum narození', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.199413', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('6ceec0a0-844e-4685-9996-9ec2d1dc9312', '4abe75d6-2f46-44fe-a7fd-845f139f6a1f', NULL, 200, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:20:55.195', '2020-04-20 23:20:55.201626', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('36e0eae9-b25a-4ff0-a58a-48dcd8101daa', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 20, true, 'PRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Příjmení', '2020-04-20 23:11:29.792', '2020-04-20 23:11:47.116862', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b2684dfd-1130-4ab9-a946-0dc74585e402', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 25, true, 'JMENO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Jméno', '2020-04-20 23:11:29.792', '2020-04-20 23:11:55.7246', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('5f31ed10-8b95-4da1-b5a5-fc258d5a8fca', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 35, true, 'TITULZA', 'C', 20, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Titul (za)', '2020-04-20 23:11:55.715', '2020-04-20 23:12:33.148196', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('a9849ac8-d614-4d89-8e6c-576e5cc9fc2c', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 40, true, 'RPRIJMENI', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné příjmení', '2020-04-20 23:15:53.977', '2020-04-20 23:16:59.451185', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('5ea3b225-abe8-4657-9776-086af3e6fb29', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 55, true, 'RC', 'C', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Rodné číslo', '2020-04-20 23:11:47.107', '2020-04-20 23:12:13.748441', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('41dd8275-ef76-4332-8efb-f02e1e5c3045', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 60, true, 'NAROZEN', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum narození', '2020-04-20 23:12:04.663', '2020-04-20 23:13:13.148196', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('903734ae-4043-47ed-bdbd-ccf67523596f', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 65, true, 'SMLOUVA', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Smlouva OD', '2020-04-20 23:12:33.142', '2020-04-20 23:14:58.555412', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('232d9771-32a1-4fde-b8ba-39aa37dd3e2b', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 70, false, 'REGULACE', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Regulované nájemné', '2020-04-20 23:13:13.137', '2020-04-20 23:15:13.979307', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('2f75b810-e506-481c-aa58-809732252af6', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 80, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:15:49.966', '2020-04-20 23:15:49.979813', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('cdc79174-aa6b-499f-ac7c-2db36813ba21', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, 200, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-04-20 23:44:22.281', '2020-04-20 23:44:22.296263', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('1c01492e-f55b-437a-ae1c-1c6b196c37a3', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 30, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-05-19 20:56:00.601', '2020-05-19 20:56:00.602017', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('57b8ab96-5add-4297-ab54-8d587e267475', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 5, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum odečtu', '2020-05-19 20:56:00.594', '2020-05-19 20:56:00.595912', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('64f4e6c3-af95-44f9-ba38-dd9a4ac11c5c', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 10, true, 'ENERGIE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Druh energie', '2020-05-19 20:56:00.596', '2020-05-19 20:56:00.597425', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('23f91317-46fe-445a-b775-b06ba69b3d95', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 15, true, 'HODNOTA', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Hodnota měřidla', '2020-05-19 20:56:00.597', '2020-05-19 20:56:00.598603', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('910aa730-b750-4907-a28d-2bc337ae4403', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 20, true, 'MERIDLO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Č. měřidla', '2020-05-19 20:56:00.599', '2020-05-19 20:56:00.599832', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('a7d70cfd-7726-4472-adb0-5fc22f916fa9', '9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', NULL, 25, true, 'POCATEK', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Počáteční stav', '2020-05-19 20:56:00.6', '2020-05-19 20:56:00.600981', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('25e7a758-4960-4d7d-a106-355b123241d7', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 5, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum odečtu', '2020-05-19 19:51:14.587', '2020-05-19 19:52:08.778246', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('2a10f7f5-a020-4bae-944a-55af785ac4e8', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 10, true, 'ENERGIE', 'C', 6, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Druh energie', '2020-05-19 19:49:10.089', '2020-05-19 19:49:10.093425', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('7503f7d0-f761-49df-825f-da2c44d40d30', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 15, true, 'HODNOTA', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Hodnota měřidla', '2020-05-19 19:59:03.129', '2020-05-19 20:00:13.286635', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b34490db-34fb-4193-a999-f59f41dc79db', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 20, true, 'MERIDLO', 'C', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Č. měřidla', '2020-05-19 19:49:10.099', '2020-05-19 19:49:10.10083', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('f9f5a42b-b54e-4157-8972-e90dcef15355', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 25, true, 'POCATEK', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Počáteční stav', '2020-05-19 19:56:49.502', '2020-05-19 19:57:50.014904', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('4bde56ba-71bd-4d4e-8637-df86d9b5be85', '61b278e0-5a42-45bc-b58d-f061ed28d065', NULL, 30, false, 'POZN', 'C', 200, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Poznámka', '2020-05-19 19:49:10.114', '2020-05-19 19:49:10.115883', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c03d6dd9-0338-4857-bfd9-d606dfe68b14', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 155, false, 'VYTAH', 'L', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Výtah', '2020-04-20 22:19:08.343', '2020-04-20 22:21:13.84882', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('96508d01-a250-469f-a352-7cfc88a421c1', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 55, true, 'NAJEM', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Základní nájem', '2020-05-19 20:10:34.014', '2020-05-19 20:11:16.428903', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('07549154-a77f-408b-9281-a8bc9c23678a', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, 56, true, 'SLUZBY', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Předpis za služby', '2020-05-19 20:10:34.014', '2020-05-19 20:10:44.708792', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('8c1e2abd-b3fe-4418-bea1-7d8c25269f6b', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 5, true, 'DATUM', 'D', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Datum platby', '2020-05-19 20:09:41.832', '2020-05-19 20:09:51.005406', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('0d299e11-5997-46c0-bab4-4cfe4a67cc16', '1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', NULL, 10, true, 'KC', 'N', 10, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Platba Kč', '2020-05-19 20:09:45.161', '2020-05-19 20:09:45.162991', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e13b74f1-dc06-46a8-ae79-11c256f7678c', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 10, true, 'VS', 'I', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Variabilní symbol', '2020-05-19 20:03:07.3', '2020-05-19 20:03:36.861438', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('eb8f2021-0c7b-461a-be14-113c932bcc2d', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 15, false, 'SS', 'I', 10, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'Specifický symbol', '2020-05-19 20:03:07.3', '2020-05-19 20:04:32.57291', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('1491d18d-be21-4c35-b84a-de9517a3d2d2', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 45, false, 'NAJEM', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Základní nájem', '2020-05-19 20:16:04.334', '2020-05-19 20:16:04.337631', 'postgres', NULL);
+INSERT INTO public.attribute (id, idtypentity, identita, poradi, attrsystem, attrname, attrtype, attrsize, attrdecimal, attrparser, attrmask, script, tables, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('e155155f-0c27-4454-8f4a-5099a8248a83', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, 50, false, 'SLUZBY', 'N', 15, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Předpis za služby', '2020-05-19 20:16:04.338', '2020-05-19 20:16:04.340208', 'postgres', NULL);
 
 
 
 --
--- TOC entry 3000 (class 0 OID 42196)
--- Dependencies: 208
--- Data for Name: attrtext; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3001 (class 0 OID 42203)
--- Dependencies: 209
--- Data for Name: attruuid; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3002 (class 0 OID 42209)
--- Dependencies: 210
--- Data for Name: entita; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3003 (class 0 OID 42215)
+-- TOC entry 3005 (class 0 OID 42215)
 -- Dependencies: 211
 -- Data for Name: typentity; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('cac1b920-6b4f-4d2c-8308-86fc3fef5ec3', NULL, NULL, true, 'DEFAULT   ', 'F', NULL, NULL, 'Základní(default)', '2020-01-22 23:04:13.348499', '2020-01-22 23:04:13.348499', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('945889e4-4383-480e-9d77-dafe665fd475', 'cac1b920-6b4f-4d2c-8308-86fc3fef5ec3', NULL, false, 'M         ', 'F', NULL, NULL, 'Majitel', '2020-01-23 13:40:37.611578', '2020-01-23 13:40:37.611578', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', '945889e4-4383-480e-9d77-dafe665fd475', NULL, false, 'D         ', 'F', NULL, NULL, 'Dům', '2020-01-22 23:04:13.352239', '2020-01-22 23:04:13.352239', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('aa4a226a-4bcb-41b0-b290-a97487e33a22', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'B         ', 'F', NULL, NULL, 'Byt', '2020-01-22 23:04:13.353859', '2020-01-22 23:04:13.353859', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'K         ', 'F', NULL, NULL, 'Komerční prostor', '2020-01-22 23:04:13.359707', '2020-01-22 23:04:13.359707', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'OD        ', 'T', NULL, NULL, 'Odečty - dům', '2020-05-19 20:55:38.583', '2020-05-19 20:55:38.588174', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('1cccbae4-4183-4426-9514-99dea63f8d72', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'F         ', 'F', NULL, NULL, 'Faktura - daňový doklad', '2020-01-23 13:40:37.611578', '2020-01-23 13:40:37.611578', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('618cabf9-1138-45fb-9d70-a8cb5f191aaa', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'G         ', 'F', NULL, NULL, 'Garáž', '2020-01-22 23:04:13.357988', '2020-01-22 23:04:13.357988', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'V         ', 'F', NULL, NULL, 'Vybavení bytu', '2020-04-20 22:56:03.276', '2020-04-20 22:56:03.285009', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('61b278e0-5a42-45bc-b58d-f061ed28d065', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'OB        ', 'T', NULL, NULL, 'Odečty - byt', '2020-05-19 19:48:36.111', '2020-05-19 19:48:36.11921', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c33fe6f0-41fb-4902-8f3c-bb4c2995675f', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'N         ', 'F', NULL, NULL, 'Najemnik', '2020-01-22 23:04:13.355268', '2020-01-22 23:04:13.355268', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('c630414e-ddbb-4803-8a77-acbcebf4ad9d', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'P         ', 'F', NULL, NULL, 'Plochy', '2020-04-20 22:38:11.967', '2020-04-20 22:38:11.96895', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, false, 'PL        ', 'T', NULL, NULL, 'Platby', '2020-05-19 20:09:28.075', '2020-05-19 20:09:28.076976', 'postgres');
-INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify) VALUES ('4abe75d6-2f46-44fe-a7fd-845f139f6a1f', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, false, 'S         ', 'F', NULL, NULL, 'Spolubydlící', '2020-01-22 23:04:13.356617', '2020-01-22 23:04:13.356617', 'postgres');
-
-
---
--- TOC entry 3004 (class 0 OID 42223)
--- Dependencies: 212
--- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3005 (class 0 OID 42230)
--- Dependencies: 213
--- Data for Name: userparam; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('cac1b920-6b4f-4d2c-8308-86fc3fef5ec3', NULL, NULL, true, 'DEFAULT   ', 'F', NULL, NULL, 'Základní(default)', '2020-01-22 23:04:13.348499', '2020-01-22 23:04:13.348499', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('945889e4-4383-480e-9d77-dafe665fd475', 'cac1b920-6b4f-4d2c-8308-86fc3fef5ec3', NULL, false, 'M         ', 'F', NULL, NULL, 'Majitel', '2020-01-23 13:40:37.611578', '2020-01-23 13:40:37.611578', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', '945889e4-4383-480e-9d77-dafe665fd475', NULL, false, 'D         ', 'F', NULL, NULL, 'Dům', '2020-01-22 23:04:13.352239', '2020-01-22 23:04:13.352239', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('aa4a226a-4bcb-41b0-b290-a97487e33a22', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'B         ', 'F', NULL, NULL, 'Byt', '2020-01-22 23:04:13.353859', '2020-01-22 23:04:13.353859', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('b41e0e74-0f34-4dd3-9c09-17ce48db4ae4', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'K         ', 'F', NULL, NULL, 'Komerční prostor', '2020-01-22 23:04:13.359707', '2020-01-22 23:04:13.359707', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('9d1ac744-84d3-4e5a-a2bc-ada5cb1a3b50', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'OD        ', 'T', NULL, NULL, 'Odečty - dům', '2020-05-19 20:55:38.583', '2020-05-19 20:55:38.588174', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('1cccbae4-4183-4426-9514-99dea63f8d72', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'F         ', 'F', NULL, NULL, 'Faktura - daňový doklad', '2020-01-23 13:40:37.611578', '2020-01-23 13:40:37.611578', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('618cabf9-1138-45fb-9d70-a8cb5f191aaa', '50ed88b1-8dbb-4f05-88dd-6b3961b7c43c', NULL, false, 'G         ', 'F', NULL, NULL, 'Garáž', '2020-01-22 23:04:13.357988', '2020-01-22 23:04:13.357988', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('0e6b2ee6-81f0-44f3-ae37-3aef6e4e4200', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'V         ', 'F', NULL, NULL, 'Vybavení bytu', '2020-04-20 22:56:03.276', '2020-04-20 22:56:03.285009', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('61b278e0-5a42-45bc-b58d-f061ed28d065', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'OB        ', 'T', NULL, NULL, 'Odečty - byt', '2020-05-19 19:48:36.111', '2020-05-19 19:48:36.11921', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c33fe6f0-41fb-4902-8f3c-bb4c2995675f', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'N         ', 'F', NULL, NULL, 'Najemnik', '2020-01-22 23:04:13.355268', '2020-01-22 23:04:13.355268', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('c630414e-ddbb-4803-8a77-acbcebf4ad9d', 'aa4a226a-4bcb-41b0-b290-a97487e33a22', NULL, false, 'P         ', 'F', NULL, NULL, 'Plochy', '2020-04-20 22:38:11.967', '2020-04-20 22:38:11.96895', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('1ae4fba7-cf68-40b2-a7fe-5dfc9ef51b95', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, false, 'PL        ', 'T', NULL, NULL, 'Platby', '2020-05-19 20:09:28.075', '2020-05-19 20:09:28.076976', 'postgres', NULL);
+INSERT INTO public.typentity (id, idparent, idaccount, attrsystem, typentity, editor, platiod, platido, popis, timeinsert, timemodify, usermodify, idmodel) VALUES ('4abe75d6-2f46-44fe-a7fd-845f139f6a1f', 'c33fe6f0-41fb-4902-8f3c-bb4c2995675f', NULL, false, 'S         ', 'F', NULL, NULL, 'Spolubydlící', '2020-01-22 23:04:13.356617', '2020-01-22 23:04:13.356617', 'postgres', NULL);
 
 
 --
@@ -1214,7 +1173,7 @@ ALTER TABLE ONLY public.attrdate
 
 
 --
--- TOC entry 2826 (class 2606 OID 42239)
+-- TOC entry 2827 (class 2606 OID 42239)
 -- Name: attrnumeric AttrNumeric_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1223,7 +1182,7 @@ ALTER TABLE ONLY public.attrnumeric
 
 
 --
--- TOC entry 2830 (class 2606 OID 42241)
+-- TOC entry 2831 (class 2606 OID 42241)
 -- Name: attrtext AttrText_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1232,7 +1191,7 @@ ALTER TABLE ONLY public.attrtext
 
 
 --
--- TOC entry 2835 (class 2606 OID 42243)
+-- TOC entry 2836 (class 2606 OID 42243)
 -- Name: attruuid AttrUUID_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1241,7 +1200,7 @@ ALTER TABLE ONLY public.attruuid
 
 
 --
--- TOC entry 2822 (class 2606 OID 42245)
+-- TOC entry 2823 (class 2606 OID 42245)
 -- Name: attribute Attribute_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1250,7 +1209,7 @@ ALTER TABLE ONLY public.attribute
 
 
 --
--- TOC entry 2839 (class 2606 OID 42247)
+-- TOC entry 2840 (class 2606 OID 42247)
 -- Name: entita Entita_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1259,7 +1218,7 @@ ALTER TABLE ONLY public.entita
 
 
 --
--- TOC entry 2843 (class 2606 OID 42249)
+-- TOC entry 2845 (class 2606 OID 42249)
 -- Name: typentity TypEntity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1277,7 +1236,7 @@ ALTER TABLE ONLY public.account
 
 
 --
--- TOC entry 2848 (class 2606 OID 42253)
+-- TOC entry 2850 (class 2606 OID 42253)
 -- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1286,7 +1245,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- TOC entry 2851 (class 2606 OID 42255)
+-- TOC entry 2853 (class 2606 OID 42255)
 -- Name: userparam userparam_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1311,7 +1270,7 @@ CREATE INDEX "AttrDate_IdEntita-IDX" ON public.attrdate USING btree (identita, p
 
 
 --
--- TOC entry 2823 (class 1259 OID 42258)
+-- TOC entry 2824 (class 1259 OID 42258)
 -- Name: AttrNumeric_IdAttribute-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1319,7 +1278,7 @@ CREATE INDEX "AttrNumeric_IdAttribute-IDX" ON public.attrnumeric USING btree (id
 
 
 --
--- TOC entry 2824 (class 1259 OID 42259)
+-- TOC entry 2825 (class 1259 OID 42259)
 -- Name: AttrNumeric_IdEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1327,7 +1286,7 @@ CREATE INDEX "AttrNumeric_IdEntita-IDX" ON public.attrnumeric USING btree (ident
 
 
 --
--- TOC entry 2827 (class 1259 OID 42260)
+-- TOC entry 2828 (class 1259 OID 42260)
 -- Name: AttrText_IdAttribute-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1335,7 +1294,7 @@ CREATE INDEX "AttrText_IdAttribute-IDX" ON public.attrtext USING btree (idattrib
 
 
 --
--- TOC entry 2828 (class 1259 OID 42261)
+-- TOC entry 2829 (class 1259 OID 42261)
 -- Name: AttrText_IdEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1343,7 +1302,7 @@ CREATE INDEX "AttrText_IdEntita-IDX" ON public.attrtext USING btree (identita, p
 
 
 --
--- TOC entry 2831 (class 1259 OID 42262)
+-- TOC entry 2832 (class 1259 OID 42262)
 -- Name: AttrUUID_IdAttribute-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1351,7 +1310,7 @@ CREATE INDEX "AttrUUID_IdAttribute-IDX" ON public.attruuid USING btree (idattrib
 
 
 --
--- TOC entry 2832 (class 1259 OID 42263)
+-- TOC entry 2833 (class 1259 OID 42263)
 -- Name: AttrUUID_IdEntita-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1359,7 +1318,7 @@ CREATE INDEX "AttrUUID_IdEntita-IDX" ON public.attruuid USING btree (identita);
 
 
 --
--- TOC entry 2833 (class 1259 OID 42264)
+-- TOC entry 2834 (class 1259 OID 42264)
 -- Name: AttrUUID_IdTable-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1375,7 +1334,7 @@ CREATE INDEX "Attribute_attrName-idx" ON public.attribute USING btree (attrname 
 
 
 --
--- TOC entry 3078 (class 0 OID 0)
+-- TOC entry 3082 (class 0 OID 0)
 -- Dependencies: 2817
 -- Name: INDEX "Attribute_attrName-idx"; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1392,7 +1351,24 @@ CREATE INDEX "Attribute_idEntita-IDX" ON public.attribute USING btree (identita)
 
 
 --
--- TOC entry 2819 (class 1259 OID 42267)
+-- TOC entry 2819 (class 1259 OID 42336)
+-- Name: Attribute_idModel-IDX; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "Attribute_idModel-IDX" ON public.attribute USING btree (idmodel);
+
+
+--
+-- TOC entry 3083 (class 0 OID 0)
+-- Dependencies: 2819
+-- Name: INDEX "Attribute_idModel-IDX"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON INDEX public."Attribute_idModel-IDX" IS 'Index nad ID modelu, ze kterého byl záznam vytvořen.';
+
+
+--
+-- TOC entry 2820 (class 1259 OID 42267)
 -- Name: Attribute_idTypEntity-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1400,7 +1376,7 @@ CREATE INDEX "Attribute_idTypEntity-IDX" ON public.attribute USING btree (idtype
 
 
 --
--- TOC entry 2820 (class 1259 OID 42268)
+-- TOC entry 2821 (class 1259 OID 42268)
 -- Name: Attribute_idTypEntity_attrSystem_poradi-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1408,8 +1384,8 @@ CREATE INDEX "Attribute_idTypEntity_attrSystem_poradi-IDX" ON public.attribute U
 
 
 --
--- TOC entry 3079 (class 0 OID 0)
--- Dependencies: 2820
+-- TOC entry 3084 (class 0 OID 0)
+-- Dependencies: 2821
 -- Name: INDEX "Attribute_idTypEntity_attrSystem_poradi-IDX"; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1418,7 +1394,7 @@ COMMENT ON INDEX public."Attribute_idTypEntity_attrSystem_poradi-IDX" IS 'Index 
 
 
 --
--- TOC entry 2836 (class 1259 OID 42269)
+-- TOC entry 2837 (class 1259 OID 42269)
 -- Name: Entita_idParent-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1426,7 +1402,7 @@ CREATE INDEX "Entita_idParent-IDX" ON public.entita USING btree (idparent);
 
 
 --
--- TOC entry 2837 (class 1259 OID 42270)
+-- TOC entry 2838 (class 1259 OID 42270)
 -- Name: Entita_idTypEntity-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1434,7 +1410,7 @@ CREATE INDEX "Entita_idTypEntity-IDX" ON public.entita USING btree (idtypentity)
 
 
 --
--- TOC entry 2849 (class 1259 OID 42271)
+-- TOC entry 2851 (class 1259 OID 42271)
 -- Name: IDX_userparam_idUser_paramName; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1442,7 +1418,7 @@ CREATE INDEX "IDX_userparam_idUser_paramName" ON public.userparam USING btree (i
 
 
 --
--- TOC entry 2840 (class 1259 OID 42272)
+-- TOC entry 2841 (class 1259 OID 42272)
 -- Name: TypEntity_idAccount-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1450,7 +1426,24 @@ CREATE INDEX "TypEntity_idAccount-IDX" ON public.typentity USING btree (idaccoun
 
 
 --
--- TOC entry 2841 (class 1259 OID 42273)
+-- TOC entry 2842 (class 1259 OID 42335)
+-- Name: TypEntity_idModel-IDX; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "TypEntity_idModel-IDX" ON public.typentity USING btree (idmodel);
+
+
+--
+-- TOC entry 3085 (class 0 OID 0)
+-- Dependencies: 2842
+-- Name: INDEX "TypEntity_idModel-IDX"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON INDEX public."TypEntity_idModel-IDX" IS 'Index nad ID modelu, ze kterého byly záznamy vytvořeny';
+
+
+--
+-- TOC entry 2843 (class 1259 OID 42273)
 -- Name: TypEntity_idParent-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1458,7 +1451,7 @@ CREATE INDEX "TypEntity_idParent-IDX" ON public.typentity USING btree (idparent)
 
 
 --
--- TOC entry 2844 (class 1259 OID 42274)
+-- TOC entry 2846 (class 1259 OID 42274)
 -- Name: TypEntity_typEntity-IDX; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1474,7 +1467,7 @@ CREATE INDEX "accountPIN_Email" ON public.account USING btree (pin, email);
 
 
 --
--- TOC entry 3080 (class 0 OID 0)
+-- TOC entry 3086 (class 0 OID 0)
 -- Dependencies: 2809
 -- Name: INDEX "accountPIN_Email"; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -1491,7 +1484,7 @@ CREATE INDEX "fki_FK_account_idTypentity" ON public.account USING btree (idmodel
 
 
 --
--- TOC entry 2845 (class 1259 OID 42277)
+-- TOC entry 2847 (class 1259 OID 42277)
 -- Name: fki_FK_user_idAccount; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1499,7 +1492,7 @@ CREATE INDEX "fki_FK_user_idAccount" ON public."user" USING btree (idaccount);
 
 
 --
--- TOC entry 2846 (class 1259 OID 42278)
+-- TOC entry 2848 (class 1259 OID 42278)
 -- Name: userAccount_Email; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1507,7 +1500,7 @@ CREATE INDEX "userAccount_Email" ON public."user" USING btree (idaccount, email)
 
 
 --
--- TOC entry 2861 (class 2620 OID 42279)
+-- TOC entry 2863 (class 2620 OID 42279)
 -- Name: account AccountInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1515,7 +1508,7 @@ CREATE TRIGGER "AccountInsert" BEFORE INSERT ON public.account FOR EACH ROW EXEC
 
 
 --
--- TOC entry 2862 (class 2620 OID 42280)
+-- TOC entry 2864 (class 2620 OID 42280)
 -- Name: attrdate AttrDateInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1523,8 +1516,8 @@ CREATE TRIGGER "AttrDateInsert" BEFORE INSERT ON public.attrdate FOR EACH ROW EX
 
 
 --
--- TOC entry 3081 (class 0 OID 0)
--- Dependencies: 2862
+-- TOC entry 3087 (class 0 OID 0)
+-- Dependencies: 2864
 -- Name: TRIGGER "AttrDateInsert" ON attrdate; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1532,7 +1525,7 @@ COMMENT ON TRIGGER "AttrDateInsert" ON public.attrdate IS 'Trigger po přidání
 
 
 --
--- TOC entry 2864 (class 2620 OID 42281)
+-- TOC entry 2866 (class 2620 OID 42281)
 -- Name: attrnumeric AttrNumericInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1540,8 +1533,8 @@ CREATE TRIGGER "AttrNumericInsert" BEFORE INSERT ON public.attrnumeric FOR EACH 
 
 
 --
--- TOC entry 3082 (class 0 OID 0)
--- Dependencies: 2864
+-- TOC entry 3088 (class 0 OID 0)
+-- Dependencies: 2866
 -- Name: TRIGGER "AttrNumericInsert" ON attrnumeric; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1549,7 +1542,7 @@ COMMENT ON TRIGGER "AttrNumericInsert" ON public.attrnumeric IS 'Trigger po při
 
 
 --
--- TOC entry 2865 (class 2620 OID 42282)
+-- TOC entry 2867 (class 2620 OID 42282)
 -- Name: attrtext AttrTextInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1557,8 +1550,8 @@ CREATE TRIGGER "AttrTextInsert" BEFORE INSERT ON public.attrtext FOR EACH ROW EX
 
 
 --
--- TOC entry 3083 (class 0 OID 0)
--- Dependencies: 2865
+-- TOC entry 3089 (class 0 OID 0)
+-- Dependencies: 2867
 -- Name: TRIGGER "AttrTextInsert" ON attrtext; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1566,7 +1559,7 @@ COMMENT ON TRIGGER "AttrTextInsert" ON public.attrtext IS 'Trigger po přidání
 
 
 --
--- TOC entry 2866 (class 2620 OID 42283)
+-- TOC entry 2868 (class 2620 OID 42283)
 -- Name: attruuid AttrUUIDInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1574,8 +1567,8 @@ CREATE TRIGGER "AttrUUIDInsert" BEFORE INSERT ON public.attruuid FOR EACH ROW EX
 
 
 --
--- TOC entry 3084 (class 0 OID 0)
--- Dependencies: 2866
+-- TOC entry 3090 (class 0 OID 0)
+-- Dependencies: 2868
 -- Name: TRIGGER "AttrUUIDInsert" ON attruuid; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1583,7 +1576,7 @@ COMMENT ON TRIGGER "AttrUUIDInsert" ON public.attruuid IS 'Trigger po přidání
 
 
 --
--- TOC entry 2863 (class 2620 OID 42284)
+-- TOC entry 2865 (class 2620 OID 42284)
 -- Name: attribute AttributeInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1591,7 +1584,7 @@ CREATE TRIGGER "AttributeInsert" BEFORE INSERT ON public.attribute FOR EACH ROW 
 
 
 --
--- TOC entry 2867 (class 2620 OID 42285)
+-- TOC entry 2869 (class 2620 OID 42285)
 -- Name: typentity TypEntityInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1599,8 +1592,8 @@ CREATE TRIGGER "TypEntityInsert" BEFORE INSERT ON public.typentity FOR EACH ROW 
 
 
 --
--- TOC entry 3085 (class 0 OID 0)
--- Dependencies: 2867
+-- TOC entry 3091 (class 0 OID 0)
+-- Dependencies: 2869
 -- Name: TRIGGER "TypEntityInsert" ON typentity; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1608,7 +1601,7 @@ COMMENT ON TRIGGER "TypEntityInsert" ON public.typentity IS 'Trigger nad přidá
 
 
 --
--- TOC entry 2868 (class 2620 OID 42287)
+-- TOC entry 2870 (class 2620 OID 42287)
 -- Name: user UserInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1616,7 +1609,7 @@ CREATE TRIGGER "UserInsert" BEFORE INSERT ON public."user" FOR EACH ROW EXECUTE 
 
 
 --
--- TOC entry 2869 (class 2620 OID 42334)
+-- TOC entry 2871 (class 2620 OID 42334)
 -- Name: userparam UserParamInsert; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -1624,8 +1617,8 @@ CREATE TRIGGER "UserParamInsert" BEFORE INSERT ON public.userparam FOR EACH ROW 
 
 
 --
--- TOC entry 3086 (class 0 OID 0)
--- Dependencies: 2869
+-- TOC entry 3092 (class 0 OID 0)
+-- Dependencies: 2871
 -- Name: TRIGGER "UserParamInsert" ON userparam; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1633,7 +1626,7 @@ COMMENT ON TRIGGER "UserParamInsert" ON public.userparam IS 'Insert do uživatel
 
 
 --
--- TOC entry 2853 (class 2606 OID 42288)
+-- TOC entry 2855 (class 2606 OID 42288)
 -- Name: attrdate AttrDate_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1642,8 +1635,8 @@ ALTER TABLE ONLY public.attrdate
 
 
 --
--- TOC entry 3087 (class 0 OID 0)
--- Dependencies: 2853
+-- TOC entry 3093 (class 0 OID 0)
+-- Dependencies: 2855
 -- Name: CONSTRAINT "AttrDate_Attribute-FK" ON attrdate; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1651,7 +1644,7 @@ COMMENT ON CONSTRAINT "AttrDate_Attribute-FK" ON public.attrdate IS 'Odkaz na ta
 
 
 --
--- TOC entry 2854 (class 2606 OID 42293)
+-- TOC entry 2856 (class 2606 OID 42293)
 -- Name: attrnumeric AttrNumeric_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1660,8 +1653,8 @@ ALTER TABLE ONLY public.attrnumeric
 
 
 --
--- TOC entry 3088 (class 0 OID 0)
--- Dependencies: 2854
+-- TOC entry 3094 (class 0 OID 0)
+-- Dependencies: 2856
 -- Name: CONSTRAINT "AttrNumeric_Attribute-FK" ON attrnumeric; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1669,7 +1662,7 @@ COMMENT ON CONSTRAINT "AttrNumeric_Attribute-FK" ON public.attrnumeric IS 'Odkaz
 
 
 --
--- TOC entry 2855 (class 2606 OID 42298)
+-- TOC entry 2857 (class 2606 OID 42298)
 -- Name: attrtext AttrText_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1678,8 +1671,8 @@ ALTER TABLE ONLY public.attrtext
 
 
 --
--- TOC entry 3089 (class 0 OID 0)
--- Dependencies: 2855
+-- TOC entry 3095 (class 0 OID 0)
+-- Dependencies: 2857
 -- Name: CONSTRAINT "AttrText_Attribute-FK" ON attrtext; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1687,7 +1680,7 @@ COMMENT ON CONSTRAINT "AttrText_Attribute-FK" ON public.attrtext IS 'Odkaz na ta
 
 
 --
--- TOC entry 2856 (class 2606 OID 42303)
+-- TOC entry 2858 (class 2606 OID 42303)
 -- Name: attruuid AttrUUID_Attribute-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1696,8 +1689,8 @@ ALTER TABLE ONLY public.attruuid
 
 
 --
--- TOC entry 3090 (class 0 OID 0)
--- Dependencies: 2856
+-- TOC entry 3096 (class 0 OID 0)
+-- Dependencies: 2858
 -- Name: CONSTRAINT "AttrUUID_Attribute-FK" ON attruuid; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1705,7 +1698,7 @@ COMMENT ON CONSTRAINT "AttrUUID_Attribute-FK" ON public.attruuid IS 'Odkaz na ta
 
 
 --
--- TOC entry 2857 (class 2606 OID 42308)
+-- TOC entry 2859 (class 2606 OID 42308)
 -- Name: entita Entita_TypEntity-FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1714,7 +1707,7 @@ ALTER TABLE ONLY public.entita
 
 
 --
--- TOC entry 2852 (class 2606 OID 42313)
+-- TOC entry 2854 (class 2606 OID 42313)
 -- Name: account FK_account_idTypentity; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1723,8 +1716,8 @@ ALTER TABLE ONLY public.account
 
 
 --
--- TOC entry 3091 (class 0 OID 0)
--- Dependencies: 2852
+-- TOC entry 3097 (class 0 OID 0)
+-- Dependencies: 2854
 -- Name: CONSTRAINT "FK_account_idTypentity" ON account; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1732,7 +1725,7 @@ COMMENT ON CONSTRAINT "FK_account_idTypentity" ON public.account IS 'Index na ID
 
 
 --
--- TOC entry 2858 (class 2606 OID 42318)
+-- TOC entry 2860 (class 2606 OID 42318)
 -- Name: typentity FK_typentity_idAccount; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1741,8 +1734,8 @@ ALTER TABLE ONLY public.typentity
 
 
 --
--- TOC entry 3092 (class 0 OID 0)
--- Dependencies: 2858
+-- TOC entry 3098 (class 0 OID 0)
+-- Dependencies: 2860
 -- Name: CONSTRAINT "FK_typentity_idAccount" ON typentity; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1750,7 +1743,7 @@ COMMENT ON CONSTRAINT "FK_typentity_idAccount" ON public.typentity IS 'FK na ID 
 
 
 --
--- TOC entry 2859 (class 2606 OID 42323)
+-- TOC entry 2861 (class 2606 OID 42323)
 -- Name: user FK_user_idAccount; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1759,8 +1752,8 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- TOC entry 3093 (class 0 OID 0)
--- Dependencies: 2859
+-- TOC entry 3099 (class 0 OID 0)
+-- Dependencies: 2861
 -- Name: CONSTRAINT "FK_user_idAccount" ON "user"; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -1768,7 +1761,7 @@ COMMENT ON CONSTRAINT "FK_user_idAccount" ON public."user" IS 'FK na ID Account 
 
 
 --
--- TOC entry 2860 (class 2606 OID 42328)
+-- TOC entry 2862 (class 2606 OID 42328)
 -- Name: userparam FK_userparam_idUser; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1777,15 +1770,15 @@ ALTER TABLE ONLY public.userparam
 
 
 --
--- TOC entry 3094 (class 0 OID 0)
--- Dependencies: 2860
+-- TOC entry 3100 (class 0 OID 0)
+-- Dependencies: 2862
 -- Name: CONSTRAINT "FK_userparam_idUser" ON userparam; Type: COMMENT; Schema: public; Owner: postgres
 --
 
 COMMENT ON CONSTRAINT "FK_userparam_idUser" ON public.userparam IS 'FK na ID uživatele - právo nemůže být bez uživatele';
 
 
--- Completed on 2020-11-11 20:02:48
+-- Completed on 2020-11-27 21:17:36
 
 --
 -- PostgreSQL database dump complete

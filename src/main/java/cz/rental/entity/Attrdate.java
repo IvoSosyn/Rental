@@ -83,11 +83,6 @@ public class Attrdate extends EntitySuperClassNajem implements Serializable {
         this.idattribute = idattribute;
     }
 
-    @Override
-    public String toString() {
-        return "entity.Attrdate[ id=" + this.getId() + " ]";
-    }
-
     /**
      * @return the edit
      */
@@ -101,4 +96,9 @@ public class Attrdate extends EntitySuperClassNajem implements Serializable {
     public void setEdit(Integer edit) {
         this.edit = edit;
     }
+    @Override
+    public String toString() {
+        return "entity.Attrdate[ id=" + this.getId() + " ]";
+    }
+
 }

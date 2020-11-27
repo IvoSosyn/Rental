@@ -8,7 +8,6 @@ package cz.rental.aplikace;
 import cz.rental.entity.Account;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
-import cz.rental.utils.Aplikace;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
