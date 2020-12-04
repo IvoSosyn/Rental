@@ -122,7 +122,7 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
 
     @Override
     public String toString() {
-        return typentity + "-" + this.getPopis();
+        return this.typentity + "-" + this.getPopis();
     }
 
     @Override

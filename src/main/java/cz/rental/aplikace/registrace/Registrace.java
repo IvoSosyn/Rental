@@ -16,14 +16,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.PrimeFacesContext;
@@ -38,6 +41,9 @@ public class Registrace implements Serializable {
 
     static final long serialVersionUID = 42L;
 
+    @EJB
+    cz.rental.entity.TypentityController typentityController;
+
     @Inject
     private Ucet ucet;
 
@@ -46,6 +52,9 @@ public class Registrace implements Serializable {
 
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
+
+    private ArrayList<Typentity> models = new ArrayList<>(10);
+    private Typentity selectedModel = null;
 
     @PostConstruct
     public void init() {
@@ -87,10 +96,11 @@ public class Registrace implements Serializable {
         // TO-OD: pozor na praci v siti, melo by to nasledovat pred ulozenim do DB
         this.ucet.changePin(null);
         // Sablona - model
-        Typentity typentity = new Typentity();
-        typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
-        this.ucet.getAccount().setIdmodel((Typentity) this.ucet.getAccController().findEntita(typentity));
-
+//        Typentity typentity = new Typentity();
+//        typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
+//        this.ucet.getAccount().setIdmodel((Typentity) this.ucet.getAccController().findEntita(typentity));
+        // Nacist vsechny sablony, ktere jsou k dispozici ro vyber
+        this.readModels();
         // Novy uzivatel - stejny jako registrator
         this.ucet.getUzivatel().getUser().setIdaccount(this.ucet.getAccount());
         this.ucet.getUzivatel().getUser().setFullname(this.ucet.getAccount().getFullname());
@@ -169,6 +179,27 @@ public class Registrace implements Serializable {
 
     public boolean isButtonEnable() {
         return !FacesContext.getCurrentInstance().isValidationFailed();
+    }
+
+    /**
+     * Metoda nacte vsechny modely(sablony) kde je Typentity.Idparen=null a
+     * nastavi vybrany Typentity 1. '0'-tou vetu v poli Models, pokud jeste neni
+     * zalozen v Accout 2. Typentity, ktery je vybran v Account
+     *
+     */
+    private void readModels() {
+        this.models = typentityController.getRootTypEntity();
+        if (this.ucet.getAccount().getIdmodel() instanceof Typentity) {
+            this.selectedModel = (Typentity) this.typentityController.findEntita(this.ucet.getAccount().getIdmodel());
+        } else if (!this.models.isEmpty()) {
+            this.selectedModel = this.models.get(0);
+        }
+    }
+
+    public void selectModel(ValueChangeEvent valueChangeEvents) {
+        this.selectedModel = (Typentity) valueChangeEvents.getNewValue();
+        this.ucet.getAccount().setIdmodel(selectedModel);
+        //PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(" Není dosud implementováno.","Není dosud implementováno."));
     }
 
     /**
@@ -352,5 +383,33 @@ public class Registrace implements Serializable {
      */
     public void setUcet(Ucet ucet) {
         this.ucet = ucet;
+    }
+
+    /**
+     * @return the models
+     */
+    public ArrayList<Typentity> getModels() {
+        return models;
+    }
+
+    /**
+     * @param models the models to set
+     */
+    public void setModels(ArrayList<Typentity> models) {
+        this.models = models;
+    }
+
+    /**
+     * @return the selectedModel
+     */
+    public Typentity getSelectedModel() {
+        return selectedModel;
+    }
+
+    /**
+     * @param selectedModel the selectedModel to set
+     */
+    public void setSelectedModel(Typentity selectedModel) {
+        this.selectedModel = selectedModel;
     }
 }
