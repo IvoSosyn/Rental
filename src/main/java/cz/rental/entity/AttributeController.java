@@ -278,16 +278,16 @@ public class AttributeController extends JpaController {
         List<Attribute> attributes = query.getResultList();
         for (Attribute attr : attributes) {
             // Najit pro konkretni Attribute ze source odpovidajici kopii Attribute v target 
-            this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntityTarget AND a.idmodel= :idTypEntitySource AND a.identita IS NULL");
-            this.query.setParameter("idTypEntitySource", source.getId());
+            this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntityTarget AND a.idmodel= :idAttributeSource AND a.identita IS NULL");
             this.query.setParameter("idTypEntityTarget", target.getId());
+            this.query.setParameter("idAttributeSource", attr.getId());
             try {
                 attrNew = (Attribute) this.query.getSingleResult();
             } catch (NoResultException en) {
                 attrNew = (Attribute) attr.clone();
                 attrNew.setId(UUID.randomUUID());
                 attrNew.setIdtypentity(target.getId());
-                attrNew.setIdmodel(source.getId());
+                attrNew.setIdmodel(attr.getId());
             }
             if (this.findEntita(attrNew) instanceof Attribute) {
                 this.edit(attrNew);

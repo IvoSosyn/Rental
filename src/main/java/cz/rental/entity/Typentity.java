@@ -58,8 +58,8 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
 
     private Boolean attrsystem;
 
-    @Size(max = 6)
-    @Column(length = 6)
+    @Size(max = 10)
+    @Column(length = 10)
     private String typentity;
 
     @Basic(optional = false)

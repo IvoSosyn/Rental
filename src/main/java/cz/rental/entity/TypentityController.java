@@ -199,7 +199,7 @@ public class TypentityController extends JpaController {
         Typentity target = (Typentity) source.clone();
         target.setId(idAccount);
         target.setIdmodel(source.getId());
-        target.setTypentity("Ucet");
+        target.setTypentity("Account");
         target.setPopis("Model for account ID: " + idAccount.toString());
         if (!(this.findEntita(target) instanceof Typentity)) {
             this.create(target);
