@@ -253,4 +253,8 @@ public class AttributeController extends JpaController {
         }
         return new ArrayList<>(queryValue.getResultList());
     }
+
+    void copyAttr(Typentity model, Typentity target) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

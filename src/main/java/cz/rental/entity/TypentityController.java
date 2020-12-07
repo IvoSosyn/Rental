@@ -11,12 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -30,10 +32,13 @@ import org.primefaces.model.TreeNode;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class TypentityController extends JpaController {
 
-    private Query query = null;
+    @EJB
+    AttributeController attrControler;
 
     @Inject
     Ucet ucet;
+
+    private Query query = null;
 
     @PostConstruct
     public void init() {
@@ -137,7 +142,7 @@ public class TypentityController extends JpaController {
         try {
             typentity = (Typentity) this.getQuery().getSingleResult();
         } catch (Exception e) {
-            System.out.println(" TypentityContoller.getTypentity#e: "+e.getMessage());
+            System.out.println(" TypentityContoller.getTypentity#e: " + e.getMessage());
         }
         return typentity;
     }
@@ -169,7 +174,63 @@ public class TypentityController extends JpaController {
     public ArrayList<Typentity> getTypentityChilds(Typentity typentity) {
         this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :id"));
         this.getQuery().setParameter("id", typentity.getId());
-        return new ArrayList<Typentity>(this.getQuery().getResultList());
+        return new ArrayList<>(this.getQuery().getResultList());
     }
 
+    /**
+     * Metoda vytvori novy Tree pro konkretni zadane ID vlastnika (bude dosazeno
+     * do Typentity.id) jako 'root' ID modelu do Typentity.idmodel bude dosazeno
+     * 'model.id', aby se pozdeji mohlo testovat, z ceho to vzniklo a pripadne
+     * provest UpDate
+     *
+     * @param model - Typentity modelu(sablony) od ktereho se zacne kopie smerem
+     * dolu po vetvich
+     * @param idParent - ID vlastnika Treee
+     * @throws CloneNotSupportedException
+     * @throws Exception
+     */
+    public void copyTypentity(Typentity model, UUID idParent) throws CloneNotSupportedException, Exception {
+        Typentity target = (Typentity) model.clone();
+        target.setId(idParent);
+        target.setIdmodel(model.getId());
+        if (!(this.findEntita(target) instanceof Typentity)) {
+            this.create(target);
+        } else {
+            this.edit(target);
+        }
+        attrControler.copyAttr(model, target);
+        copyTypentityChilds(model, idParent);
+    }
+
+    /**
+     * Pruchod vsemi polozkami 'children' pro Typentity.idparent a
+     * zalozeni(aktualizaci) jejich kopii pro nove idParent
+     *
+     * @param model - polozka modelu(sablony)
+     * @param idParent - id rodice, ktere bude dosazeno do noveho zaznamu
+     */
+    private void copyTypentityChilds(Typentity model, UUID idParent) throws CloneNotSupportedException, Exception {
+        Typentity childrenNew;
+        ArrayList<Typentity> childs = getTypentityChilds(model);
+        for (Typentity children : childs) {
+            this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent = :idParent AND t.idmodel = :idModel "));
+            this.getQuery().setParameter("idParent", idParent);
+            this.getQuery().setParameter("idModel", model.getId());
+            try {
+                childrenNew = (Typentity) this.getQuery().getSingleResult();
+            } catch (NoResultException nEx) {
+                childrenNew = (Typentity) children.clone();
+                childrenNew.setId(UUID.randomUUID());
+                childrenNew.setIdparent(idParent);
+                childrenNew.setIdmodel(model.getId());
+            }
+            if (!(this.findEntita(childrenNew) instanceof Typentity)) {
+                this.create(childrenNew);
+            } else {
+                this.edit(childrenNew);
+            }
+            attrControler.copyAttr(model, childrenNew);
+            copyTypentityChilds(model, childrenNew.getId());
+        }
+    }
 }

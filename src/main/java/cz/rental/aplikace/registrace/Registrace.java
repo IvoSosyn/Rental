@@ -242,6 +242,14 @@ public class Registrace implements Serializable {
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage()));
             isOk = false;
         }
+        // Kopie modelu(sablony)
+        try {            
+            this.typentityController.copyTypentity(this.ucet.getAccount().getIdmodel(),this.ucet.getAccount().getId());
+        } catch (Exception ex) {
+            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání modelu(šablony) účtu. Opakujte později.", ex.getMessage()));
+            isOk = false;
+        }
         // Zaloz adresare k uctu a vstupni 'index.xhtml'
         try {
             this.createAccountDir();
