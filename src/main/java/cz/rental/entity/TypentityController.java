@@ -183,54 +183,62 @@ public class TypentityController extends JpaController {
      * 'model.id', aby se pozdeji mohlo testovat, z ceho to vzniklo a pripadne
      * provest UpDate
      *
-     * @param model - Typentity modelu(sablony) od ktereho se zacne kopie smerem
+     * @param source - Typentity modelu(sablony) od ktereho se zacne kopie smerem
      * dolu po vetvich
-     * @param idParent - ID vlastnika Treee
+     * @param idAccount - ID uctu-vlastnika Treee
      * @throws CloneNotSupportedException
      * @throws Exception
      */
-    public void copyTypentity(Typentity model, UUID idParent) throws CloneNotSupportedException, Exception {
-        Typentity target = (Typentity) model.clone();
-        target.setId(idParent);
-        target.setIdmodel(model.getId());
+    public void copyTypentity(Typentity source, UUID idAccount) throws CloneNotSupportedException, Exception {
+        if (source == null) {
+            throw new Exception("Vzorový model(šablona) pro vytvoření modelu(šablony) účtu je prázdná.");
+        }
+        if (idAccount == null) {
+            throw new Exception("Identifikátor účtu je prázdný, nelze pro něj vytvořit model(šablonu).");
+        }
+        Typentity target = (Typentity) source.clone();
+        target.setId(idAccount);
+        target.setIdmodel(source.getId());
+        target.setTypentity("Ucet");
+        target.setPopis("Model for account ID: " + idAccount.toString());
         if (!(this.findEntita(target) instanceof Typentity)) {
             this.create(target);
         } else {
             this.edit(target);
         }
-        attrControler.copyAttr(model, target);
-        copyTypentityChilds(model, idParent);
+        attrControler.copyAttr(source, target);
+        copyTypentityChilds(source, idAccount);
     }
 
     /**
      * Pruchod vsemi polozkami 'children' pro Typentity.idparent a
      * zalozeni(aktualizaci) jejich kopii pro nove idParent
      *
-     * @param model - polozka modelu(sablony)
+     * @param source - polozka modelu(sablony)
      * @param idParent - id rodice, ktere bude dosazeno do noveho zaznamu
      */
-    private void copyTypentityChilds(Typentity model, UUID idParent) throws CloneNotSupportedException, Exception {
+    private void copyTypentityChilds(Typentity source, UUID idParent) throws CloneNotSupportedException, Exception {
         Typentity childrenNew;
-        ArrayList<Typentity> childs = getTypentityChilds(model);
+        ArrayList<Typentity> childs = getTypentityChilds(source);
         for (Typentity children : childs) {
             this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent = :idParent AND t.idmodel = :idModel "));
             this.getQuery().setParameter("idParent", idParent);
-            this.getQuery().setParameter("idModel", model.getId());
+            this.getQuery().setParameter("idModel", source.getId());
             try {
                 childrenNew = (Typentity) this.getQuery().getSingleResult();
             } catch (NoResultException nEx) {
                 childrenNew = (Typentity) children.clone();
                 childrenNew.setId(UUID.randomUUID());
                 childrenNew.setIdparent(idParent);
-                childrenNew.setIdmodel(model.getId());
+                childrenNew.setIdmodel(source.getId());
             }
             if (!(this.findEntita(childrenNew) instanceof Typentity)) {
                 this.create(childrenNew);
             } else {
                 this.edit(childrenNew);
             }
-            attrControler.copyAttr(model, childrenNew);
-            copyTypentityChilds(model, childrenNew.getId());
+            attrControler.copyAttr(children, childrenNew);
+            copyTypentityChilds(children, childrenNew.getId());
         }
     }
 }

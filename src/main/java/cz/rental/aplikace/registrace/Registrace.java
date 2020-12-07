@@ -218,6 +218,10 @@ public class Registrace implements Serializable {
         return "Heslo NENÍ definované";
     }
 
+    /**
+     * Metoda zalozi ucet a pro nej model (sablonu) a pracovni adresare
+     * @return webova stranka nasledujici po uspesne nebo neuspesne registraci
+     */
     public String createAccount() {
         boolean isOk = true;
         // Uloz ucet do DB
@@ -244,6 +248,7 @@ public class Registrace implements Serializable {
         }
         // Kopie modelu(sablony)
         try {            
+            this.ucet.getAccount().setIdmodel(this.selectedModel);
             this.typentityController.copyTypentity(this.ucet.getAccount().getIdmodel(),this.ucet.getAccount().getId());
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);

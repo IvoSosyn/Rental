@@ -47,8 +47,7 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
     @Basic(optional = false)
     @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
     @Convert("uuidConverter")
-    @NotNull
-    @Column(nullable = false, columnDefinition = "UUID")
+    @Column(nullable = true, columnDefinition = "UUID")
     private UUID idparent;
 
     @Basic(optional = false)

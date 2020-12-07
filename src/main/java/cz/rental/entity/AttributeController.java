@@ -18,6 +18,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -254,7 +255,46 @@ public class AttributeController extends JpaController {
         return new ArrayList<>(queryValue.getResultList());
     }
 
-    void copyAttr(Typentity model, Typentity target) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Metoda vytvori|aktualizuje údaje Attribute modelu(sablony) 'target' podle
+     * vzoru 'source'
+     *
+     * @param source
+     * @param target
+     * @throws CloneNotSupportedException
+     * @throws Exception
+     */
+    public void copyAttr(Typentity source, Typentity target) throws CloneNotSupportedException, Exception {
+        if (source == null) {
+            throw new Exception("Vzorový model(šablona) pro vytvoření atributů modelu(šablony) účtu je prázdná.");
+        }
+        if (target == null) {
+            throw new Exception("Model(šablona) účtu je prázdná, nemohu vytvořit kopii atributů uzlu.");
+        }
+        Attribute attrNew;
+        // Nacte pole pro vsechny Attribute source modelu
+        this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntitySource AND a.identita IS NULL");
+        this.query.setParameter("idTypEntitySource", source.getId());
+        List<Attribute> attributes = query.getResultList();
+        for (Attribute attr : attributes) {
+            // Najit pro konkretni Attribute ze source odpovidajici kopii Attribute v target 
+            this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntityTarget AND a.idmodel= :idTypEntitySource AND a.identita IS NULL");
+            this.query.setParameter("idTypEntitySource", source.getId());
+            this.query.setParameter("idTypEntityTarget", target.getId());
+            try {
+                attrNew = (Attribute) this.query.getSingleResult();
+            } catch (NoResultException en) {
+                attrNew = (Attribute) attr.clone();
+                attrNew.setId(UUID.randomUUID());
+                attrNew.setIdtypentity(target.getId());
+                attrNew.setIdmodel(source.getId());
+            }
+            if (this.findEntita(attrNew) instanceof Attribute) {
+                this.edit(attrNew);
+            } else {
+                this.create(attrNew);
+            }
+        }
+
     }
 }
