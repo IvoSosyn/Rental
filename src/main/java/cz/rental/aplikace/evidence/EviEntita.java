@@ -84,8 +84,8 @@ public class EviEntita implements Serializable {
         this.parentEntita = new Entita();
         this.parentEntita.setId(ucet.getAccount().getId());
         // 
-        // Dohledat model Typentity s jeho definovanymi Attribute pro matici Entita
-        this.typentity = ucet.getAccount().getIdmodel();
+        // Dohledat vrcholovy model(sablonu) Typentity( s jeho definovanymi Attribute) pro pole Entita uctu
+        this.typentity = typentityController.getTypentity(ucet.getAccount().getId());
         if (this.typentity != null && this.typentity.getIdparent() == null) {
             // V pripade vrcholove Typentity najdu nejblizsi dalsi
             this.typentity = typentityController.getTypentityForParentID(this.typentity.getId());
