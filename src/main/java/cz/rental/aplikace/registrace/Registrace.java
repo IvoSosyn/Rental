@@ -54,7 +54,7 @@ public class Registrace implements Serializable {
     private String accountDir = null;
 
     private ArrayList<Typentity> models = new ArrayList<>(10);
-    private Typentity selectedModel = null;
+//    private Typentity selectedModel = null;
 
     @PostConstruct
     public void init() {
@@ -190,15 +190,16 @@ public class Registrace implements Serializable {
     private void readModels() {
         this.models = typentityController.getRootTypEntity();
         if (this.ucet.getAccount().getIdmodel() instanceof Typentity) {
-            this.selectedModel = (Typentity) this.typentityController.findEntita(this.ucet.getAccount().getIdmodel());
+//            this.selectedModel = (Typentity) this.typentityController.findEntita(this.ucet.getAccount().getIdmodel());
         } else if (!this.models.isEmpty()) {
-            this.selectedModel = this.models.get(0);
+//            this.selectedModel = this.models.get(0);
+            this.ucet.getAccount().setIdmodel(this.models.get(0));
         }
     }
 
-    public void selectModel(ValueChangeEvent valueChangeEvents) {
-        this.selectedModel = (Typentity) valueChangeEvents.getNewValue();
-        this.ucet.getAccount().setIdmodel(selectedModel);
+    public void changeModel(ValueChangeEvent valueChangeEvents) {
+//        this.selectedModel = (Typentity) valueChangeEvents.getNewValue();
+//        this.ucet.getAccount().setIdmodel(selectedModel);
         //PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(" Není dosud implementováno.","Není dosud implementováno."));
     }
 
@@ -227,7 +228,7 @@ public class Registrace implements Serializable {
         boolean isOk = true;
         // Uloz ucet do DB
         try {
-            this.ucet.getAccount().setIdmodel(this.selectedModel);
+//            this.ucet.getAccount().setIdmodel(this.selectedModel);
             this.ucet.saveAccount();
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
@@ -413,17 +414,17 @@ public class Registrace implements Serializable {
         this.models = models;
     }
 
-    /**
-     * @return the selectedModel
-     */
-    public Typentity getSelectedModel() {
-        return selectedModel;
-    }
-
-    /**
-     * @param selectedModel the selectedModel to set
-     */
-    public void setSelectedModel(Typentity selectedModel) {
-        this.selectedModel = selectedModel;
-    }
+//    /**
+//     * @return the selectedModel
+//     */
+//    public Typentity getSelectedModel() {
+//        return selectedModel;
+//    }
+//
+//    /**
+//     * @param selectedModel the selectedModel to set
+//     */
+//    public void setSelectedModel(Typentity selectedModel) {
+//        this.selectedModel = selectedModel;
+//    }
 }

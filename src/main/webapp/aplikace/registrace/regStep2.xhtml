@@ -10,7 +10,7 @@
                 <p>Výběr šablony pro zpracování dat.</p>
             </f:facet>
             <h:panelGroup>
-                <p:selectOneMenu id="reg2SelOneMenu" label="Model(Šablona)" value="#{registrace.selectedModel}" var="typEntity" converter="omnifaces.SelectItemsConverter" valueChangeListener="#{registrace.selectModel}"  required="true" >
+                <p:selectOneMenu id="reg2SelOneMenu" label="Model(Šablona)" value="#{registrace.ucet.account.idmodel}" var="typEntity" converter="omnifaces.SelectItemsConverter" valueChangeListener="#{registrace.changeModel}"  required="true" >
                     <f:selectItem itemLabel="Vyberte ..." noSelectionOption="true" />
                     <f:selectItems value="#{registrace.models}" var="typEntity" itemLabel="#{typEntity}" itemValue="#{typEntity}" />
                     <p:column>
@@ -20,8 +20,10 @@
                 </p:selectOneMenu>
                 <p:commandButton value="Detail" ajax="true" />
             </h:panelGroup>
-            <p:inputTextarea id="reg2InputTextAreaInfo" value="#{registrace.selectedModel.popis}" readonly="true"  rows="3" cols="33"/>
-            <p:inputTextarea id="reg2InputTextAreaPopis" value="#{registrace.selectedModel.popis}" readonly="true"  rows="3" cols="33"/>
+            <h:panelGroup>
+                <p:inputTextarea id="reg2InputTextAreaInfo" value="#{registrace.ucet.account.idmodel.popis}" readonly="true"  rows="3" cols="33"/>
+                <p:inputTextarea id="reg2InputTextAreaPopis" value="#{registrace.ucet.account.idmodel.popis}" readonly="true"  rows="3" cols="33"/>
+            </h:panelGroup>
         </p:panelGrid>
     </h:form>
 </html>

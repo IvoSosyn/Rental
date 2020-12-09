@@ -57,7 +57,7 @@ public class TypentityController extends JpaController {
      * @return pole s prave 1 nejvyssim "root" prvkem
      */
     public ArrayList<Typentity> getRootTypEntity() {
-        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL"));
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL AND t.idmodel IS NULL "));
         ArrayList<Typentity> list = new ArrayList(this.getQuery().getResultList());
         return list;
     }
