@@ -49,7 +49,6 @@ public class EviAttribute implements Serializable {
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<EviAttrValue> values = new ArrayList<>();
-
     private Dialog dialog;
 
     @PostConstruct
@@ -109,7 +108,7 @@ public class EviAttribute implements Serializable {
             if (this.source != null) {
                 this.source.reLoadEntities();
             }
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"OK", "Data byla úspěšně uložena."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Data byla úspěšně uložena."));
         } catch (Exception ex) {
             Logger.getLogger(EviAttribute.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly uloženy.", "Chyba" + ex.getMessage()));

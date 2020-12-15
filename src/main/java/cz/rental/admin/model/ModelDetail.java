@@ -78,7 +78,7 @@ public class ModelDetail implements Serializable {
 //            System.out.println("ModelDetail.onRowSelect mdv.getAttribute().getPopis()=" + mdv.getAttribute().getPopis());
 //        } catch (NamingException ex) {
 //        }
-        setAttribute(attrLocal);
+        this.attribute =attrLocal;
     }
 
     public void onRowUnselect(UnselectEvent event) {
@@ -112,6 +112,8 @@ public class ModelDetail implements Serializable {
     public void attrtypeChange() {
         if (!(this.attribute instanceof Attribute)) {
 
+        }else if (this.attribute.getAttrtype().compareTo('C') == 0) {
+            this.attribute.setAttrdecimal(BigInteger.valueOf(0));
         } else if (this.attribute.getAttrtype().compareTo('D') == 0) {
             this.attribute.setAttrsize(BigInteger.valueOf(10));
             this.attribute.setAttrdecimal(BigInteger.valueOf(0));

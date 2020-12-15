@@ -214,6 +214,10 @@ public class ModelTable implements Serializable {
         selectedAttrs.add(this.selectedAttr);
     }
 
+    public void cancelAttribute() {
+        modelDetail.setAttribute(this.selectedAttr);
+    }
+
     /**
      * Metoda testuje, zda-li ma uzivatel prava pridavat zaznam
      *

@@ -17,8 +17,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 /**
  *
@@ -29,7 +27,7 @@ import javax.naming.NamingException;
 public class ModelDetailValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
-    /// @Inject
+    //@Inject
     ModelDetail modelDetail;
     private Attribute attribute;
 
@@ -42,20 +40,35 @@ public class ModelDetailValidator implements Validator, Serializable {
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         FacesMessage msg = null;
+        ValueExpression vex1
+                = context.getApplication().getExpressionFactory()
+                        .createValueExpression(context.getELContext(),
+                                "#{modelDetail}", ModelDetail.class);
+        modelDetail = (ModelDetail) vex1.getValue(context.getELContext());
 
-        try {
-            modelDetail = (ModelDetail) InitialContext.doLookup("java:module/ModelDetail");
-            this.setAttribute(modelDetail.getAttribute());
-//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getId()=" + modelDetail.getAttribute().getId());
-//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPoradi()=" + modelDetail.getAttribute().getPoradi());
-//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getAttrname()=" + modelDetail.getAttribute().getAttrname());
-//            System.out.println("*ModelDetailValidator.validate  modelDetail.getAttribute().getPopis()=" + modelDetail.getAttribute().getPopis());
-//            System.out.println("*ModelDetailValidator.validate                                  value=" + value);
-
-        } catch (NamingException ex) {
-            msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se najít modul 'ModelDetail'. ");
-        }
-
+        /**
+         * *********
+         * try { modelDetail = (ModelDetail)
+         * InitialContext.doLookup("java:module/ModelDetail");
+         * this.setAttribute(modelDetail.getAttribute()); //
+         * System.out.println("*ModelDetailValidator.validate
+         * modelDetail.getAttribute().getId()=" +
+         * modelDetail.getAttribute().getId()); //
+         * System.out.println("*ModelDetailValidator.validate
+         * modelDetail.getAttribute().getPoradi()=" +
+         * modelDetail.getAttribute().getPoradi()); //
+         * System.out.println("*ModelDetailValidator.validate
+         * modelDetail.getAttribute().getAttrname()=" +
+         * modelDetail.getAttribute().getAttrname()); //
+         * System.out.println("*ModelDetailValidator.validate
+         * modelDetail.getAttribute().getPopis()=" +
+         * modelDetail.getAttribute().getPopis()); //
+         * System.out.println("*ModelDetailValidator.validate value=" + value);
+         *
+         * } catch (NamingException ex) { msg = new FacesMessage("System
+         * failed", "Systémová chyba, nepodařilo se najít modul 'ModelDetail'.
+         * "); } *************************
+         */
         if (msg != null) {
             System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
         } else if (component == null) {

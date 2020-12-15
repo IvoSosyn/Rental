@@ -344,5 +344,4 @@ public class EviAttrValue {
     public void setValuePlatiDo(Date valuePlatiDo) {
         this.valuePlatiDo = valuePlatiDo;
     }
-
 }
