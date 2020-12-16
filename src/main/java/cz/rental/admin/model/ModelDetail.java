@@ -80,7 +80,6 @@ public class ModelDetail implements Serializable {
 //        } catch (NamingException ex) {
 //        }
         this.attribute = attrLocal;
-        resetUIComponents();
     }
 
     public void resetUIComponents() {

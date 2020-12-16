@@ -53,7 +53,7 @@
                 <p:message id="attrsizeMsg" for="@previous"/>
 
                 <p:outputLabel value="Počet desetinných míst:" for="@next" />
-                <p:spinner id="attrdecimal" value="#{modelDetail.attribute.attrdecimal}" placeholder="0 ... 2"  min="0" max="2" decimalPlaces="0" requiredMessage="Povinná hodnota, hodnota položky 0 ... 2." validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}" >
+                <p:spinner id="attrdecimal" value="#{modelDetail.attribute.attrdecimal}" placeholder="0 ... 2"  min="0" max="2" decimalPlaces="0" requiredMessage="Povinná hodnota, hodnota položky 0 ... 2." validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                     <p:ajax update="attrdecimalMsg" event="blur"/>
                 </p:spinner>
                 <p:message id="attrdecimalMsg" for="@previous" />
@@ -102,11 +102,11 @@
 
                 <f:facet name="footer">                        
                     <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelTable.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isEditable()}" />
-                    <p:commandButton id="cancelButton" value="Přeruš" type="reset" ajax="false" actionListener="#{modelTable.cancelAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-cancel" disabled="#{!modelDetail.isEditable()}" >
-                    </p:commandButton>
                 </f:facet>
-
             </p:panelGrid>
+        </h:form>
+        <h:form>
+            <p:commandButton id="cancelButton" value="Přeruš" type="reset" ajax="false" actionListener="#{modelTable.cancelAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-cancel"  />
         </h:form>
     </ui:composition>
 </html>

@@ -89,11 +89,11 @@ public class ModelDetailValidator implements Validator, Serializable {
         } else if (component.getClientId().contains("popis")) {
         } else if (component.getClientId().contains("attrtype")) {
         } else if (component.getClientId().contains("attrsize")) {
-            if (value == null || ((java.math.BigInteger) value).doubleValue() < 1) {
+            if (value != null && ((java.math.BigInteger) value).intValue() < 1) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
             }
         } else if (component.getClientId().contains("attrdecimal")) {
-            if (value == null || ((java.math.BigInteger) value).doubleValue() < 0) {
+            if (value != null && ((java.math.BigInteger) value).intValue() < 0) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 0.");
             }
         } else if (component.getClientId().contains("attrparser")) {
