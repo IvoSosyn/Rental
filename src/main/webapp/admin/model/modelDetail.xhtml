@@ -102,7 +102,8 @@
 
                 <f:facet name="footer">                        
                     <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelTable.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isEditable()}" />
-                    <p:commandButton id="cancelButton" value="Přeruš" type="reset" ajax="false" actionListener="#{modelTable.cancelAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-cancel" disabled="#{!modelDetail.isEditable()}" />
+                    <p:commandButton id="cancelButton" value="Přeruš" type="reset" ajax="false" actionListener="#{modelTable.cancelAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-cancel" disabled="#{!modelDetail.isEditable()}" >
+                    </p:commandButton>
                 </f:facet>
 
             </p:panelGrid>

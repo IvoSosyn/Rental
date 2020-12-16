@@ -216,6 +216,7 @@ public class ModelTable implements Serializable {
 
     public void cancelAttribute() {
         modelDetail.setAttribute(this.selectedAttr);
+        modelDetail.resetUIComponents();
     }
 
     /**

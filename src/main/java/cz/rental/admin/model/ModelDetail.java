@@ -11,6 +11,7 @@ import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -78,7 +79,28 @@ public class ModelDetail implements Serializable {
 //            System.out.println("ModelDetail.onRowSelect mdv.getAttribute().getPopis()=" + mdv.getAttribute().getPopis());
 //        } catch (NamingException ex) {
 //        }
-        this.attribute =attrLocal;
+        this.attribute = attrLocal;
+        resetUIComponents();
+    }
+
+    public void resetUIComponents() {
+        ArrayList<String> idUiChildren = new ArrayList<String>();
+        getIDChildren(FacesContext.getCurrentInstance().getViewRoot(), idUiChildren);
+        FacesContext.getCurrentInstance().getViewRoot().resetValues(FacesContext.getCurrentInstance(), idUiChildren);
+    }
+
+    private void getIDChildren(UIComponent uIComponentParent, ArrayList<String> idUiChildren) {
+        List<UIComponent> uiChildren = uIComponentParent.getChildren();
+        for (UIComponent uIComponent : uiChildren) {
+            System.out.println("===========uIComponent.getId():"+uIComponent.getId());
+            System.out.println(" uIComponent.getRendererType():"+uIComponent.getRendererType());
+            System.out.println("       uIComponent.getFamily():"+uIComponent.getFamily());
+            idUiChildren.add(uIComponent.getId());
+            if (uIComponent.getChildCount() > 0) {
+                getIDChildren(uIComponent, idUiChildren);
+            }
+        }
+
     }
 
     public void onRowUnselect(UnselectEvent event) {
@@ -112,7 +134,7 @@ public class ModelDetail implements Serializable {
     public void attrtypeChange() {
         if (!(this.attribute instanceof Attribute)) {
 
-        }else if (this.attribute.getAttrtype().compareTo('C') == 0) {
+        } else if (this.attribute.getAttrtype().compareTo('C') == 0) {
             this.attribute.setAttrdecimal(BigInteger.valueOf(0));
         } else if (this.attribute.getAttrtype().compareTo('D') == 0) {
             this.attribute.setAttrsize(BigInteger.valueOf(10));
