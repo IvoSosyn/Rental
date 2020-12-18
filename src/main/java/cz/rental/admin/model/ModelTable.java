@@ -45,6 +45,7 @@ public class ModelTable implements Serializable {
     private ArrayList<Attribute> selectedAttrs = new ArrayList<>();
     private ArrayList<Attribute> copyAttrs = new ArrayList<>();
     Attribute selectedAttr = null;
+    Attribute beforeEditAttr = null;
 
     @EJB
     cz.rental.entity.AttributeController controller;
@@ -212,11 +213,6 @@ public class ModelTable implements Serializable {
         loadAttributesForTypentity(this.typentity);
         selectedAttrs = new ArrayList<>();
         selectedAttrs.add(this.selectedAttr);
-    }
-
-    public void cancelAttribute() {
-        modelDetail.setAttribute(this.selectedAttr);
-        modelDetail.resetUIComponents();
     }
 
     /**

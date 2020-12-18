@@ -5,19 +5,13 @@
  */
 package cz.rental.admin.model;
 
-import cz.rental.entity.Attribute;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.el.ValueExpression;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.validator.MultiFieldValidator;
 
@@ -41,6 +35,12 @@ public class ModelDetailMultipleValidator implements MultiFieldValidator, Serial
     public boolean validateValues(FacesContext context, List<UIInput> components, List<Object> values) {
         boolean isValidate = true;
         FacesMessage msg = null;
+        for (UIInput component : components) {
+            if (!component.isValid()) {
+                msg=new FacesMessage("Chyba položky:",component.getValidatorMessage());
+                break;
+            }
+        }
         if (msg != null) {
             System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
         }

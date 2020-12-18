@@ -26,7 +26,7 @@
                                 <f:selectItems value="#{modelTree.models}" var="model" itemLabel="#{model.popis}" itemValue="#{model}" />                                
                             </p:selectOneMenu>
                         </f:facet>
-                        <p:tree id="modelTree" value="#{modelTree.root}" var="treeNode"  selectionMode="single"
+                        <p:tree id="modelTree" value="#{modelTree.rootNode}" var="treeNode"  selectionMode="single"
                                 selection="#{modelTree.selectedNode}" draggable="true" droppable="true" dropCopyNode="true" >
                             <p:ajax event="dragdrop" listener="#{modelTree.onDragDrop}" 
                                     update=":formModelTree :formModelTreeDetail :formModelTable :formModelDetail  :formModelTree:modelTreeMenu :formModelTreeDetail:gridDetail :formModelTree:addTypentity :formModelTree:delTypentity :formModelTree:copyTypentity :formModelTree:pasteTypentity :formModelTree:editReports :formModelTree:exportModelTree :formModelTree:messages" >

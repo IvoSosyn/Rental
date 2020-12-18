@@ -41,14 +41,14 @@ public class ModelTree implements Serializable {
     private Typentity typentityRoot = null;
     private ArrayList<Typentity> models = null;
     private Typentity typentity = null;
-    private TreeNode root = null;
+    private TreeNode rootNode = null;
     private TreeNode selectedNode = null;
     private TreeNode copyNode = null;
 
     int poradi = 0;
 
     @EJB
-    cz.rental.entity.TypentityController controller;
+    cz.rental.entity.TypentityController typEntitycontroller;
     @EJB
     cz.rental.entity.AttrController attrController;
 
@@ -83,23 +83,25 @@ public class ModelTree implements Serializable {
     }
 
     /**
-     * Hlavni metoda plnici "Tree" jednotlivými "TreeNode", kde v
-     * TreeNode.getData() je ulozena konkretni instance "Typentity" na zaklade
-     * rodicovskeho UUID "Typentity.idparent"
+     * Hlavni metoda plnici "Tree" jednotlivými "TreeNode" V TreeNode.getData()
+     * je ulozena konkretni instance "Typentity" na zaklade rodicovskeho UUID
+     * "Typentity.idparent"
      */
     public void fillTreeNodes() {
         if (this.typentityRoot == null) {
-            this.models = controller.getCatalogTypEntity();
-            if (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
-                boolean added = this.models.addAll(controller.getRootTypEntity());
-
+            this.models = new ArrayList<>();
+            this.typentityRoot = typEntitycontroller.getTypentity(ucet.getAccount().getId());
+            if (this.typentityRoot != null) {
+                this.models.add(this.typentityRoot);
             }
-            if (!models.isEmpty()) {
-                // TO-DO: dodelat vyber nastaveneho modelu podle naposledy vybraneho nebo jakou ma uzivatel firmu
+            if (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
+                boolean added = this.models.addAll(typEntitycontroller.getRootTypEntity());
+            }
+            if (this.typentityRoot == null && !models.isEmpty()) {
                 this.typentityRoot = models.get(0);
             }
         }
-        setRoot(controller.fillTreeNodes(this.typentityRoot));
+        this.rootNode = typEntitycontroller.fillTreeNodes(this.typentityRoot);
         modelTable.onNodeUnselect(null);
     }
 
@@ -136,7 +138,7 @@ public class ModelTree implements Serializable {
                 return;
             }
             this.attrController.deleteAllTypentityId(typEntityDel.getId());
-            this.controller.destroy(typEntityDel);
+            this.typEntitycontroller.destroy(typEntityDel);
             for (TreeNode treeNode : selectedNode.getChildren()) {
                 deleteFromDb(treeNode);
             }
@@ -164,8 +166,8 @@ public class ModelTree implements Serializable {
         try {
             if (this.typentity.isNewEntity()) {
                 // Ulozit do DB
-                controller.create(this.typentity);
-                this.typentity = (Typentity) controller.findEntita(this.typentity);
+                typEntitycontroller.create(this.typentity);
+                this.typentity = (Typentity) typEntitycontroller.findEntita(this.typentity);
                 this.typentity.setNewEntity(false);
                 TreeNode trn = new DefaultTreeNode(this.typentity);
                 trn.setSelected(true);
@@ -174,7 +176,7 @@ public class ModelTree implements Serializable {
                 this.setSelectedNode(trn);
                 modelTable.loadAttributesForTypentity(this.getTypentity());
             } else {
-                controller.edit(this.typentity);
+                typEntitycontroller.edit(this.typentity);
             }
             openAllParent(this.selectedNode);
         } catch (Exception ex) {
@@ -202,7 +204,7 @@ public class ModelTree implements Serializable {
         System.out.println(" get 'typEntity.id' " + FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("typEntity.id"));
         try {
             // Ulozit do DB
-            controller.edit(this.typentity);
+            typEntitycontroller.edit(this.typentity);
         } catch (Exception ex) {
             Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Záznam NEuložen !", "Uložení změny záznamu " + e + " bylo NEúspěšné ! Postup opakujte později.");
@@ -303,7 +305,7 @@ public class ModelTree implements Serializable {
         } else {
             drag.setIdparent(drop.getId());
             // Ulozit do DB
-            controller.edit(drag);
+            typEntitycontroller.edit(drag);
             this.setSelectedNode(dragNode);
         }
         this.getSelectedNode().setSelected(true);
@@ -349,10 +351,10 @@ public class ModelTree implements Serializable {
      * kopie atriribute
      */
     private TreeNode pasteNode(TreeNode node, TreeNode nodeParent, int parentIndex) throws Exception {
-        Typentity typEntityNew = controller.cloneTypentity((Typentity) node.getData());
+        Typentity typEntityNew = typEntitycontroller.cloneTypentity((Typentity) node.getData());
         typEntityNew.setIdparent(((Typentity) nodeParent.getData()).getId());
         typEntityNew.setAttrsystem(false);
-        controller.create(typEntityNew);
+        typEntitycontroller.create(typEntityNew);
         typEntityNew.setNewEntity(false);
         attrController.cloneAttribute((Typentity) node.getData(), typEntityNew);
 
@@ -392,7 +394,7 @@ public class ModelTree implements Serializable {
     }
 
     /**
-     *  Metoda vyexportuje cely strom Typentity i s Attributes
+     * Metoda vyexportuje cely strom Typentity i s Attributes
      */
     public void exportToJSON() {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Export dat do JSON souboru ... TO-DO", "Export do JSON ještě není hotov .. TO-DO");
@@ -400,17 +402,17 @@ public class ModelTree implements Serializable {
     }
 
     /**
-     * @return the root
+     * @return the rootNode
      */
-    public TreeNode getRoot() {
-        return root;
+    public TreeNode getRootNode() {
+        return rootNode;
     }
 
     /**
-     * @param root the root to set
+     * @param rootNode the rootNode to set
      */
-    public void setRoot(TreeNode root) {
-        this.root = root;
+    public void setRootNode(TreeNode rootNode) {
+        this.rootNode = rootNode;
     }
 
     /**

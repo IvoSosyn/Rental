@@ -12,11 +12,15 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
@@ -34,6 +38,7 @@ public class ModelDetail implements Serializable {
     static final long serialVersionUID = 42L;
 
     private Attribute attribute = null;
+    private Attribute beforeEditAttr = null;
     ArrayList<Character> editabelAttrsize;
     ArrayList<Character> editabelAttrdecimal;
 
@@ -42,6 +47,8 @@ public class ModelDetail implements Serializable {
 
     @Inject
     Ucet ucet;
+
+    ArrayList<String> uiiComponents = new ArrayList<>();
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -53,6 +60,12 @@ public class ModelDetail implements Serializable {
 //        } catch (NamingException ex) {
 //            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
 //        }        
+        UIComponent uiGrid = FacesContext.getCurrentInstance().getViewRoot().findComponent("formModelDetail:gridModelDetail");
+        for (UIComponent uic : uiGrid.getChildren()) {
+            if (uic instanceof UIInput) {
+                this.uiiComponents.add(uic.getClientId());
+            }
+        }
 
         editabelAttrsize = new ArrayList<>();
         editabelAttrsize.add('C');
@@ -79,27 +92,12 @@ public class ModelDetail implements Serializable {
 //            System.out.println("ModelDetail.onRowSelect mdv.getAttribute().getPopis()=" + mdv.getAttribute().getPopis());
 //        } catch (NamingException ex) {
 //        }
-        this.attribute = attrLocal;
-    }
-
-    public void resetUIComponents() {
-        ArrayList<String> idUiChildren = new ArrayList<String>();
-        getIDChildren(FacesContext.getCurrentInstance().getViewRoot(), idUiChildren);
-        FacesContext.getCurrentInstance().getViewRoot().resetValues(FacesContext.getCurrentInstance(), idUiChildren);
-    }
-
-    private void getIDChildren(UIComponent uIComponentParent, ArrayList<String> idUiChildren) {
-        List<UIComponent> uiChildren = uIComponentParent.getChildren();
-        for (UIComponent uIComponent : uiChildren) {
-            System.out.println("===========uIComponent.getId():"+uIComponent.getId());
-            System.out.println(" uIComponent.getRendererType():"+uIComponent.getRendererType());
-            System.out.println("       uIComponent.getFamily():"+uIComponent.getFamily());
-            idUiChildren.add(uIComponent.getId());
-            if (uIComponent.getChildCount() > 0) {
-                getIDChildren(uIComponent, idUiChildren);
-            }
+        try {
+            this.attribute = (Attribute) attrLocal.clone();
+            this.beforeEditAttr = (Attribute) attrLocal.clone();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(ModelDetail.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void onRowUnselect(UnselectEvent event) {
@@ -108,8 +106,8 @@ public class ModelDetail implements Serializable {
     }
 
     public Boolean isEditable() {
-        boolean isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
+        boolean isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
         if (!(this.attribute instanceof Attribute)) {
             isEditable = false;
         }
@@ -126,8 +124,28 @@ public class ModelDetail implements Serializable {
         if (isEditable && this.attribute.getAttrsystem() != null && this.attribute.getAttrsystem()) {
             isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
         }
-
         return isEditable;
+    }
+
+    public Boolean isButtonSaveEnable() {
+        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
+        for (String idUIcomponent : this.uiiComponents) {
+            UIInput uii = (UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent(idUIcomponent);
+            if (!(isEnable = uii.isValid())) {
+                break;
+            }
+        }
+        return isEnable;
+    }
+
+    /**
+     * Vrati puvodni hodnoty Attribute a provede reset vstupnich polozek
+     *
+     * @param event
+     */
+    public void resetAttributes(ActionEvent event) {
+        this.attribute = this.beforeEditAttr;
+        FacesContext.getCurrentInstance().getViewRoot().resetValues(FacesContext.getCurrentInstance(),uiiComponents);
     }
 
     public void attrtypeChange() {

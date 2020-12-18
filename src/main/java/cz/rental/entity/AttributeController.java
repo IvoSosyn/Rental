@@ -57,7 +57,7 @@ public class AttributeController extends JpaController {
         if (this.typentity == null) {
             return new ArrayList<>();
         }
-        this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntity AND a.identita IS NULL ORDER BY a.poradi");
+        this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity=:idTypEntity ORDER BY a.poradi");
         this.query.setParameter("idTypEntity", this.typentity.getId());
 //        this.query.setParameter("PlatiOD", platiOd);
 //        this.query.setParameter("PlatiDO", platiDo);

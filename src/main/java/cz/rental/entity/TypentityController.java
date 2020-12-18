@@ -63,24 +63,6 @@ public class TypentityController extends JpaController {
     }
 
     /**
-     * Najde vsechny potomky katalogu tj. vsechny modely(sablony)
-     *
-     * @return
-     */
-    public ArrayList<Typentity> getCatalogTypEntity() {
-        Typentity modelTypentity;
-        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.typentity='CATALOG'"));
-        ArrayList<Typentity> list = new ArrayList(this.getQuery().getResultList());
-        if (!list.isEmpty()) {
-            modelTypentity = list.get(0);
-            this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent=:idParent "));
-            this.getQuery().setParameter("idParent", modelTypentity.getId());
-            list = new ArrayList(this.getQuery().getResultList());
-        }
-        return list;
-    }
-
-    /**
      * Metoda vygeneruje "Tree" zavisloti a naplni jednotlive "TreeNode" datovou
      * hodnotou "Typentity", provaze je mezi sebou=parent<>child na zaklade
      * definice z DB
@@ -92,6 +74,9 @@ public class TypentityController extends JpaController {
      */
     public TreeNode fillTreeNodes(Typentity typEntityRoot) {
         TreeNode root = new DefaultTreeNode("Root", null);
+        if (typEntityRoot == null) {
+            return root;
+        }
         this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent"));
         this.getQuery().setParameter("idParent", typEntityRoot.getId());
         List<Typentity> list = this.getQuery().getResultList();
@@ -183,8 +168,8 @@ public class TypentityController extends JpaController {
      * 'model.id', aby se pozdeji mohlo testovat, z ceho to vzniklo a pripadne
      * provest UpDate
      *
-     * @param source - Typentity modelu(sablony) od ktereho se zacne kopie smerem
-     * dolu po vetvich
+     * @param source - Typentity modelu(sablony) od ktereho se zacne kopie
+     * smerem dolu po vetvich
      * @param idAccount - ID uctu-vlastnika Treee
      * @throws CloneNotSupportedException
      * @throws Exception

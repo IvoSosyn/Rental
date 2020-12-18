@@ -40,11 +40,11 @@ public class ModelDetailValidator implements Validator, Serializable {
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         FacesMessage msg = null;
-        ValueExpression vex1
+        ValueExpression vex
                 = context.getApplication().getExpressionFactory()
                         .createValueExpression(context.getELContext(),
                                 "#{modelDetail}", ModelDetail.class);
-        modelDetail = (ModelDetail) vex1.getValue(context.getELContext());
+        modelDetail = (ModelDetail) vex.getValue(context.getELContext());
 
         /**
          * *********
@@ -74,12 +74,14 @@ public class ModelDetailValidator implements Validator, Serializable {
         } else if (component == null) {
             System.out.println(" Neznámá komponenta: ");
             msg = new FacesMessage("System failed", "Systémová chyba, neznámá komponenta. ");
+        } else if (value == null) {
+            // Nothing to control
         } else if (component.getClientId().contains("poradi")) {
-            if (value == null || (Integer) value < 1) {
+            if ((Integer) value < 1) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
             }
         } else if (component.getClientId().contains("attrname")) {
-            if (value == null || value.toString().trim().length() < 2) {
+            if (value.toString().trim().length() < 2) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být kratší než 2 znaky.");
             } else if (value.toString().contains("test")) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí mít hodnotu 'test'.");
@@ -89,11 +91,11 @@ public class ModelDetailValidator implements Validator, Serializable {
         } else if (component.getClientId().contains("popis")) {
         } else if (component.getClientId().contains("attrtype")) {
         } else if (component.getClientId().contains("attrsize")) {
-            if (value != null && ((java.math.BigInteger) value).intValue() < 1) {
+            if (((java.math.BigInteger) value).intValue() < 1) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 1.");
             }
         } else if (component.getClientId().contains("attrdecimal")) {
-            if (value != null && ((java.math.BigInteger) value).intValue() < 0) {
+            if (((java.math.BigInteger) value).intValue() < 0) {
                 msg = new FacesMessage("Validation failed", "Položka nesmí být menší než 0.");
             }
         } else if (component.getClientId().contains("attrparser")) {
@@ -101,21 +103,19 @@ public class ModelDetailValidator implements Validator, Serializable {
         } else if (component.getClientId().contains("script")) {
         } else if (component.getClientId().contains("tables")) {
         } else if (component.getClientId().contains("platiod")) {
-            ValueExpression vex
-                    = context.getApplication().getExpressionFactory()
-                            .createValueExpression(context.getELContext(),
-                                    "#{modelDetail.attribute.platido}", Date.class);
+            vex = context.getApplication().getExpressionFactory()
+                    .createValueExpression(context.getELContext(),
+                            "#{modelDetail.attribute.platido}", Date.class);
             Date platiDo = (Date) vex.getValue(context.getELContext());
-            if (value != null && platiDo != null && platiDo.before((Date) value)) {
+            if (platiDo != null && platiDo.before((Date) value)) {
                 attribute.setPlatido((Date) value);
             }
         } else if (component.getClientId().contains("platido")) {
-            ValueExpression vex
-                    = context.getApplication().getExpressionFactory()
-                            .createValueExpression(context.getELContext(),
-                                    "#{modelDetail.attribute.platiod}", Date.class);
+            vex = context.getApplication().getExpressionFactory()
+                    .createValueExpression(context.getELContext(),
+                            "#{modelDetail.attribute.platiod}", Date.class);
             Date platiOd = (Date) vex.getValue(context.getELContext());
-            if (value != null && platiOd != null && platiOd.after((Date) value)) {
+            if (platiOd != null && platiOd.after((Date) value)) {
                 attribute.setPlatiod((Date) value);
             }
         }
