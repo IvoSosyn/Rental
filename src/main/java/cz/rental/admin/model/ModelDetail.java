@@ -60,6 +60,10 @@ public class ModelDetail implements Serializable {
 //        } catch (NamingException ex) {
 //            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
 //        }        
+
+        /**
+         * Nacist ID editacnich komponent formulare s detailem Attribute k pozdejsi validaci a resetu techto polozek
+         */
         UIComponent uiGrid = FacesContext.getCurrentInstance().getViewRoot().findComponent("formModelDetail:gridModelDetail");
         for (UIComponent uic : uiGrid.getChildren()) {
             if (uic instanceof UIInput) {
@@ -105,6 +109,10 @@ public class ModelDetail implements Serializable {
         setAttribute(null);
     }
 
+    /**
+     * Test na moznost editace polozek foemulare detailu Attribute
+     * @return je|neni mozne polozku editovat
+     */
     public Boolean isEditable() {
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         boolean isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
@@ -127,6 +135,10 @@ public class ModelDetail implements Serializable {
         return isEditable;
     }
 
+    /**
+     * Test povoleni ulozit detail Attribute do DB
+     * @return je|neni mozne Attribute ulozit do DB
+     */
     public Boolean isButtonSaveEnable() {
         boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
         for (String idUIcomponent : this.uiiComponents) {
@@ -141,7 +153,7 @@ public class ModelDetail implements Serializable {
     /**
      * Vrati puvodni hodnoty Attribute a provede reset vstupnich polozek
      *
-     * @param event
+     * @param event 
      */
     public void resetAttributes(ActionEvent event) {
         this.attribute = this.beforeEditAttr;
