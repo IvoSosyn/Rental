@@ -72,6 +72,8 @@ public class EviAttrValue {
                         break;
                     }
                     case 'L': {
+                        value = (((Attrnumeric) attrValue).getCislo())!=0;
+                        break;
                     }
                     case 'N': {
                     }
@@ -121,6 +123,11 @@ public class EviAttrValue {
                 break;
             }
             case 'L': {
+                attrValueNew = new Attrnumeric();
+                ((Attrnumeric) attrValueNew).setIdentita(this.entita.getId());
+                ((Attrnumeric) attrValueNew).setIdattribute(this.attribute);
+                ((Attrnumeric) attrValueNew).setCislo((Boolean) this.value ? 1.0 : 0.0);
+                break;
             }
             case 'N': {
             }
@@ -128,7 +135,7 @@ public class EviAttrValue {
                 attrValueNew = new Attrnumeric();
                 ((Attrnumeric) attrValueNew).setIdentita(this.entita.getId());
                 ((Attrnumeric) attrValueNew).setIdattribute(this.attribute);
-                ((Attrnumeric) attrValueNew).setCislo((double) this.value);
+                ((Attrnumeric) attrValueNew).setCislo((this.value instanceof String)?Double.parseDouble((String) this.value):(double) this.value);
                 break;
             }
             case 'D': {
@@ -179,6 +186,8 @@ public class EviAttrValue {
                     break;
                 }
                 case 'L': {
+                    size = 1;
+                    break;
                 }
                 case 'N': {
                 }
@@ -212,12 +221,16 @@ public class EviAttrValue {
         } else {
             switch (attribute.getAttrtype()) {
                 case 'T': {
+                    decimal = 0;
+                    break;
                 }
                 case 'C': {
                     decimal = 0;
                     break;
                 }
                 case 'L': {
+                    decimal = 0;
+                    break;
                 }
                 case 'N': {
                     decimal = 2;

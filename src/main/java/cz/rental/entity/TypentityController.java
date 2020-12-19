@@ -163,36 +163,36 @@ public class TypentityController extends JpaController {
     }
 
     /**
-     * Metoda vytvori novy Tree pro konkretni zadane ID vlastnika (bude dosazeno
+     * Metoda vytvori novy Tree pro konkretni zadane ID vlastnika-(bude dosazeno
      * do Typentity.id) jako 'root' ID modelu do Typentity.idmodel bude dosazeno
      * 'model.id', aby se pozdeji mohlo testovat, z ceho to vzniklo a pripadne
      * provest UpDate
      *
      * @param source - Typentity modelu(sablony) od ktereho se zacne kopie
      * smerem dolu po vetvich
-     * @param idAccount - ID uctu-vlastnika Treee
+     * @param account - ucet vlastnika noveho modelu (sablony) Tree
      * @throws CloneNotSupportedException
      * @throws Exception
      */
-    public void copyTypentity(Typentity source, UUID idAccount) throws CloneNotSupportedException, Exception {
+    public void copyTypentity(Typentity source, Account account) throws CloneNotSupportedException, Exception {
         if (source == null) {
             throw new Exception("Vzorový model(šablona) pro vytvoření modelu(šablony) účtu je prázdná.");
         }
-        if (idAccount == null) {
+        if (account == null) {
             throw new Exception("Identifikátor účtu je prázdný, nelze pro něj vytvořit model(šablonu).");
         }
         Typentity target = (Typentity) source.clone();
-        target.setId(idAccount);
+        target.setId(account.getId());
         target.setIdmodel(source.getId());
         target.setTypentity("Account");
-        target.setPopis("Model for account ID: " + idAccount.toString());
+        target.setPopis("Model pro : " + account.getFullname().trim());
         if (!(this.findEntita(target) instanceof Typentity)) {
             this.create(target);
         } else {
             this.edit(target);
         }
         attrControler.copyAttr(source, target);
-        copyTypentityChilds(source, idAccount);
+        copyTypentityChilds(source, account.getId());
     }
 
     /**
@@ -208,14 +208,14 @@ public class TypentityController extends JpaController {
         for (Typentity children : childs) {
             this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent = :idParent AND t.idmodel = :idModel "));
             this.getQuery().setParameter("idParent", idParent);
-            this.getQuery().setParameter("idModel", source.getId());
+            this.getQuery().setParameter("idModel", children.getId());
             try {
                 childrenNew = (Typentity) this.getQuery().getSingleResult();
             } catch (NoResultException nEx) {
                 childrenNew = (Typentity) children.clone();
                 childrenNew.setId(UUID.randomUUID());
                 childrenNew.setIdparent(idParent);
-                childrenNew.setIdmodel(source.getId());
+                childrenNew.setIdmodel(children.getId());
             }
             if (!(this.findEntita(childrenNew) instanceof Typentity)) {
                 this.create(childrenNew);
