@@ -251,7 +251,7 @@ public class Registrace implements Serializable {
         }
         // Kopie modelu(sablony)
         try {
-            this.typentityController.copyTypentity(this.ucet.getAccount().getIdmodel(), this.ucet.getAccount().getId());
+            this.typentityController.copyTypentity(this.ucet.getAccount().getIdmodel(), this.ucet.getAccount());
         } catch (Exception ex) {
             Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání modelu(šablony) účtu. Opakujte později.", ex.getMessage()));
