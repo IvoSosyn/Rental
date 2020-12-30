@@ -333,7 +333,7 @@ public class Registrace implements Serializable {
             pw.println("<h:form  id=\"idCustomer\" >");
             pw.println("<p:panelGrid columns=\"3\" >");
             pw.println("<f:facet name=\"header\">");
-            pw.println("<p>Účet ID=" + this.ucet.getAccount().getId() + "</p>");
+            pw.println("<p>Ucet ID=" + this.ucet.getAccount().getId() + "</p>");
             pw.println("</f:facet>");
             pw.println("<div> Konfigurace dat účtu </div>");
             pw.println("</p:panelGrid>");
