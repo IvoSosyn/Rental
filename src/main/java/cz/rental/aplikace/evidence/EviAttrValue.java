@@ -72,7 +72,7 @@ public class EviAttrValue {
                         break;
                     }
                     case 'L': {
-                        value = (((Attrnumeric) attrValue).getCislo())!=0;
+                        value = (((Attrnumeric) attrValue).getCislo()) != 0;
                         break;
                     }
                     case 'N': {
@@ -135,7 +135,14 @@ public class EviAttrValue {
                 attrValueNew = new Attrnumeric();
                 ((Attrnumeric) attrValueNew).setIdentita(this.entita.getId());
                 ((Attrnumeric) attrValueNew).setIdattribute(this.attribute);
-                ((Attrnumeric) attrValueNew).setCislo((this.value instanceof String)?Double.parseDouble((String) this.value):(double) this.value);
+                if (this.value instanceof String) {
+                    this.value = Double.parseDouble((String) this.value);
+                }
+                if (this.value != null) {
+                    ((Attrnumeric) attrValueNew).setCislo((double) this.value);
+                } else {
+                    ((Attrnumeric) attrValueNew).setCislo(null);
+                }
                 break;
             }
             case 'D': {

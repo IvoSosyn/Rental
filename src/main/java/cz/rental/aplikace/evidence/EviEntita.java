@@ -59,7 +59,6 @@ public class EviEntita implements Serializable {
     private EviAttribute eviAttribute;
 
     private Stack<Entita> stackEntities = new Stack();
-    private Stack<Typentity> stackTypentities = new Stack();
     private Entita parentEntita = null;
     private Typentity typentity = null;
     private ArrayList<Entita> entities = new ArrayList<>();
@@ -97,17 +96,22 @@ public class EviEntita implements Serializable {
         }
         this.parentEntita.setIdtypentity(this.typentity);
 
-        // Nacist matici Entita pro Typentita a null jako parent entitu-nema predka  
+        // Zahajovaci nastaveni:
+        // Nacist matici Entita pro nevyssi entitu, ktera je umele vytvorena z identifikace uctu a jako parent entitu ma hodnotu 'null' - nema predka   
+        // Typentita je prevzata z vybraneho modelu uctu
+        this.stackEntities.push(this.parentEntita);
         loadEntities(this.parentEntita, this.typentity);
     }
 
     /**
      * Metoda 1. nacte vsechny instance "Entita" pro Entita.idparent==parent.id,
      * pole Attribute pro parametr "typentity" 2. prida nove instance "Entita"
-     * do pole "entities"
+     * do pole "entities" - vytvori matici tlacitek k dalsimu pouziti v
+     * 'eviButtons.xml'
      *
      *
-     * @param parent
+     * @param parent - Entita(uyel), pro kerou se vybere matice nejblizsich
+     * podrizenych entit
      * @param typentity
      */
     public void loadEntities(Entita parent, Typentity typentity) {
@@ -116,45 +120,8 @@ public class EviEntita implements Serializable {
         }
         this.parentEntita = parent;
         this.typentity = typentity;
-        this.stackEntities.push(parent);
-        this.stackTypentities.push(typentity);
         this.entities = entitaController.getEntities(this.parentEntita);
         this.attributes = attrController.getAttributeForTypentity(this.typentity);
-        // Naselectuji 0 Entita, pokud neni jiz preddefinovana
-        if (this.selectedEntita == null && !this.entities.isEmpty()) {
-            this.selectedEntita = this.entities.get(0);
-        }
-        if (this.selectedEntita != null) {
-            eviAttribute.loadAttributes(this.selectedEntita, this);
-        }
-        // Definice sloupcu tabulky Entity
-        this.columns = new ArrayList<>();
-        this.columnsSource = new ArrayList<>();
-        // Nacteni predchozihoi uzivatelskeho nastaveni
-        String userColumns = this.ucet.getUzivatel().getParam(this.typentity.getId().toString(), "");
-        if (!userColumns.isEmpty()) {
-            this.columns.addAll(Arrays.asList(userColumns.split(";")));
-        }
-        boolean emptyColumns = this.columns.isEmpty();
-        // Doplnim pole pouzitelnych sloupcu o promenne z Entita
-        for (String entitaColumns : new String[]{"Entita.Popis", "Entita.Platiod", "Entita.Platido"}) {
-            if (emptyColumns) {
-                this.columns.add(entitaColumns);
-            }
-            if (!columns.contains(entitaColumns)) {
-                this.columnsSource.add(entitaColumns);
-            }
-        }
-        // Doplnim pole pouzitelnych sloupcu o Attribute
-        for (Attribute attr : this.attributes) {
-            String column = "Attribute." + attr.getAttrname().trim();
-            if (!columns.contains(column)) {
-                this.columnsSource.add(column);
-            }
-        }
-        // Vytvoreni nabidky sloupcu k vyberu
-        this.columnsDualList = new DualListModel<>(this.columnsSource, this.columns);
-
         // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
@@ -166,6 +133,14 @@ public class EviEntita implements Serializable {
             newEntita.setNewEntity(true);
             this.entities.add(newEntita);
         }
+        // Naselectuji 0-tou Entita, pokud neni jiz preddefinovana
+        if (this.selectedEntita == null) {
+            this.selectedEntita = this.entities.get(0);
+        }
+        // Nacist hodnoty Attribute 
+        eviAttribute.loadAttributes(this.selectedEntita, this);
+        // Definice sloupcu tabulky Entity
+        this.columnsForEntitaTable();
         // Child Typentity pro tlacitkovou listu
         this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
     }
@@ -317,6 +292,41 @@ public class EviEntita implements Serializable {
     }
 
     /**
+     * Metoda naplni matici pouzitelnych sloupcu pro tabulku "evientita.xml" z
+     * poli Typentity a jeste z jeho prvku Attribute pro pozdejsi vyuziti v
+     * dialogu vyberu zobrazovanych slopcu
+     */
+    private void columnsForEntitaTable() {
+        // Definice sloupcu tabulky Entity
+        this.columns = new ArrayList<>();
+        this.columnsSource = new ArrayList<>();
+        // Nacteni predchozihoi uzivatelskeho nastaveni
+        String userColumns = this.ucet.getUzivatel().getParam(this.typentity.getId().toString(), "");
+        if (!userColumns.isEmpty()) {
+            this.columns.addAll(Arrays.asList(userColumns.split(";")));
+        }
+        boolean emptyColumns = this.columns.isEmpty();
+        // Doplnim pole pouzitelnych sloupcu o promenne z Entita
+        for (String entitaColumns : new String[]{"Entita.Popis", "Entita.Platiod", "Entita.Platido"}) {
+            if (emptyColumns) {
+                this.columns.add(entitaColumns);
+            }
+            if (!columns.contains(entitaColumns)) {
+                this.columnsSource.add(entitaColumns);
+            }
+        }
+        // Doplnim pole pouzitelnych sloupcu o Attribute
+        for (Attribute attr : this.attributes) {
+            String column = "Attribute." + attr.getAttrname().trim();
+            if (!columns.contains(column)) {
+                this.columnsSource.add(column);
+            }
+        }
+        // Vytvoreni nabidky sloupcu k vyberu
+        this.columnsDualList = new DualListModel<>(this.columnsSource, this.columns);
+    }
+
+    /**
      * Metoda vola dynamic Dialog pro vyber sloupcu ke zobrazeni v tabulce
      * Evientita
      *
@@ -362,20 +372,33 @@ public class EviEntita implements Serializable {
 
     }
 
+    /**
+     * Metoda naplni naplni tento beans novymi hodnotami pro novy Typentity
+     *
+     * @param typentity - pozadovany Typentity, pro ktery se naplni tento beans
+     * (matice a promenne)
+     */
     public void changeTypentity(Typentity typentity) {
         Entita newParentEntita = this.selectedEntita;
         this.selectedEntita = null;
+        this.stackEntities.push(newParentEntita);
         loadEntities(newParentEntita, typentity);
     }
 
+    /**
+     * Metoda provede krok zpet a naplni tento beans hodnotami vyssi urovne
+     * Typentity ze zasobniku Entit
+     */
     public void changeTypentityBack() {
         if (!this.stackEntities.empty()) {
-            // Odeberu aktuální záznam, parentEntita je selectedEntita z predchoziho pohledu
+            // Odeberu aktuální záznam, selectedEntita je parentEntita z predchoziho pohledu
             this.selectedEntita = this.stackEntities.pop();
-            this.stackTypentities.pop();
+            this.typentity = this.selectedEntita.getIdtypentity();
+            // Otestovat, zda se jedna o ulozenou Entita, a pokud ne, tak vracim null
+            this.selectedEntita = entitaController.getEntita(this.selectedEntita.getId());
             // Nactu hodnoty predchoziho zaznamu
             if (!this.stackEntities.empty()) {
-                loadEntities(this.stackEntities.pop(), this.stackTypentities.pop());
+                loadEntities(this.stackEntities.lastElement(), this.typentity);
             }
         }
     }
@@ -542,20 +565,6 @@ public class EviEntita implements Serializable {
      */
     public void setStackEntities(Stack<Entita> stackEntities) {
         this.stackEntities = stackEntities;
-    }
-
-    /**
-     * @return the stackTypentities
-     */
-    public Stack<Typentity> getStackTypentities() {
-        return stackTypentities;
-    }
-
-    /**
-     * @param stackTypentities the stackTypentities to set
-     */
-    public void setStackTypentities(Stack<Typentity> stackTypentities) {
-        this.stackTypentities = stackTypentities;
     }
 
 }
