@@ -91,7 +91,6 @@ public class Ucet implements Serializable {
     public void editPassword() {
         Map<String, Object> options = new HashMap<>();
         options.put("modal", true);
-        options.put("modal", true);
         options.put("draggable", true);
         options.put("resizable", true);
         options.put("width", 1000);

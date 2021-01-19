@@ -17,6 +17,8 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +31,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 import org.primefaces.context.PrimeFacesContext;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 /**
  *
@@ -55,6 +60,8 @@ public class Registrace implements Serializable {
 
     private ArrayList<Typentity> models = new ArrayList<>(10);
 //    private Typentity selectedModel = null;
+
+    private TreeNode modelTreeNode = new DefaultTreeNode("Start");
 
     @PostConstruct
     public void init() {
@@ -194,6 +201,36 @@ public class Registrace implements Serializable {
         } else if (!this.models.isEmpty()) {
 //            this.selectedModel = this.models.get(0);
             this.ucet.getAccount().setIdmodel(this.models.get(0));
+        }
+    }
+
+    /**
+     * Metoda zobrazi nahled na model pomoci TreeTable tridy
+     */
+    public void showModel() {
+        Map<String, Object> options = new HashMap<>();
+
+        if (this.ucet.getAccount().getIdmodel() instanceof Typentity) {
+            options.put("modal", false);
+            options.put("minimizable", false);
+            options.put("maximizable", false);
+            options.put("draggable", true);
+            options.put("resizable", true);
+            options.put("width", 1000);
+            options.put("height", 350);
+            options.put("contentWidth", 1000);
+            options.put("contentHeight", 350);
+            options.put("closeOnEscape", true);
+            options.put("fitViewport", true);
+            options.put("responsive", true);
+            this.modelTreeNode = new DefaultTreeNode(this.ucet.getAccount().getIdmodel());
+            TreeNode treeNode1 = new DefaultTreeNode("Level 1.", "1. level", this.modelTreeNode);
+            TreeNode treeNode2 = new DefaultTreeNode("Level 2.", "2. level", this.modelTreeNode);
+            TreeNode treeNode11 = new DefaultTreeNode("1.1 level", treeNode1);
+            TreeNode treeNode21 = new DefaultTreeNode("2.1 level", treeNode2);
+            PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/modelTreeTable.xhtml", options, null);
+        } else {
+            PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Nebyl vybrán žádný model (šablona), není co zobrazit."));
         }
     }
 
@@ -427,4 +464,17 @@ public class Registrace implements Serializable {
 //    public void setSelectedModel(Typentity selectedModel) {
 //        this.selectedModel = selectedModel;
 //    }
+    /**
+     * @return the modelTreeNode
+     */
+    public TreeNode getModelTreeNode() {
+        return modelTreeNode;
+    }
+
+    /**
+     * @param modelTreeNode the modelTreeNode to set
+     */
+    public void setModelTreeNode(TreeNode modelTreeNode) {
+        this.modelTreeNode = modelTreeNode;
+    }
 }
