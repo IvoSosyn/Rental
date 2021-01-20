@@ -8,6 +8,7 @@ package cz.rental.entity;
 import cz.rental.aplikace.Ucet;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
@@ -39,6 +40,7 @@ public class TypentityController extends JpaController {
     Ucet ucet;
 
     private Query query = null;
+    private HashMap<String, Query> queries = null;
 
     @PostConstruct
     public void init() {
@@ -105,6 +107,14 @@ public class TypentityController extends JpaController {
                 addNode(top, (Typentity) typEntity);
             }
         }
+    }
+
+    public TreeNode fillTreeNodesWithAttr(Typentity typentity) {
+        queries = new HashMap<String, Query>(4);
+        queries.put("Typentity", this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)"));
+        queries.put("Attribute", this.getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntity AND a.identita IS NULL  AND (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD)"));
+
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Typentity cloneTypentity(Typentity typentity) throws CloneNotSupportedException {
@@ -226,4 +236,5 @@ public class TypentityController extends JpaController {
             copyTypentityChilds(children, childrenNew.getId());
         }
     }
+
 }
