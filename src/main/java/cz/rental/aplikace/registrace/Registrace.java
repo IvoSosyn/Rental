@@ -223,11 +223,14 @@ public class Registrace implements Serializable {
             options.put("closeOnEscape", true);
             options.put("fitViewport", true);
             options.put("responsive", true);
-            this.modelTreeNode = new DefaultTreeNode(this.ucet.getAccount().getIdmodel());
-            TreeNode treeNode1 = new DefaultTreeNode("Level 1.", "1. level", this.modelTreeNode);
-            TreeNode treeNode2 = new DefaultTreeNode("Level 2.", "2. level", this.modelTreeNode);
-            TreeNode treeNode11 = new DefaultTreeNode("1.1 level", treeNode1);
-            TreeNode treeNode21 = new DefaultTreeNode("2.1 level", treeNode2);
+            this.modelTreeNode = new DefaultTreeNode("Root");
+            TreeNode treeNodeRoot = new DefaultTreeNode("root",this.ucet.getAccount().getIdmodel(), this.modelTreeNode);
+            TreeNode treeNode1 = new DefaultTreeNode("Typentity", "1. level", treeNodeRoot);
+            TreeNode treeNode2 = new DefaultTreeNode("Typentity", "2. level", treeNodeRoot);
+            TreeNode treeNode11 = new DefaultTreeNode("Numeric","1.1 level", treeNode1);
+            TreeNode treeNode21 = new DefaultTreeNode("Character","2.1 level", treeNode2);
+
+            //this.modelTreeNode = this.typentityController.fillTreeNodesWithAttr(this.ucet.getAccount().getIdmodel());
             PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/modelTreeTable.xhtml", options, null);
         } else {
             PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Nebyl vybrán žádný model (šablona), není co zobrazit."));
