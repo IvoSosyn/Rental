@@ -9,6 +9,7 @@ import cz.rental.aplikace.Ucet;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
@@ -69,52 +70,34 @@ public class TypentityController extends JpaController {
      * hodnotou "Typentity", provaze je mezi sebou=parent<>child na zaklade
      * definice z DB
      *
-     * @param typEntityRoot - nejvyssi vybrany Typentity, od ktereho se zacne
-     * plnit "Tree", nemusi to byt nutne "Root", muze to zacit z kterekoliv
-     * vetve
+     * @param typentity - nejvyssi vybrany Typentity, od ktereho se zacne plnit
+     * "Tree", nemusi to byt nutne "Root", muze to zacit z kterekoliv vetve
      * @return strom slozeny z "TreeNode" s hodnotami "TypEntity"
      */
-    public TreeNode fillTreeNodes(Typentity typEntityRoot) {
-        TreeNode root = new DefaultTreeNode("Root", null);
-        if (typEntityRoot == null) {
-            return root;
-        }
-        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent"));
-        this.getQuery().setParameter("idParent", typEntityRoot.getId());
-        List<Typentity> list = this.getQuery().getResultList();
-        if (!list.isEmpty()) {
-            for (Typentity typEntity : list) {
-                TreeNode top = new DefaultTreeNode(typEntity, root);
-                addNode(top, typEntity);
-            }
-        } else {
-        }
-        // WildFly si dela management spojeni sam - vyhodi chybu
-        // this.em.close();
-        return root;
+    public TreeNode fillTreeNodes(Typentity typentity) {
+        TreeNode treeNode = new DefaultTreeNode("root");
+        queries = new HashMap<String, Query>(2);
+        queries.put("Typentity", this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)"));
+        addNode(treeNode, typentity);
+        return treeNode;
     }
 
-    private void addNode(TreeNode parent, Typentity typEntityParent) {
+    private void addNode(TreeNode treeNodeParent, Typentity typEntityParent) {
+        TreeNode treeNodeTypentity;
         // Zmenim obsah cyklickeho dotazu
-        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)"));
+        this.setQuery(queries.get("Typentity"));
         this.getQuery().setParameter("idParent", typEntityParent.getId());
         this.getQuery().setParameter("PlatiOD", Aplikace.getPlatiOd());
         this.getQuery().setParameter("PlatiDO", Aplikace.getPlatiDo());
-        List list = this.getQuery().getResultList();
+        List<Typentity> list = this.getQuery().getResultList();
         if (!list.isEmpty()) {
-            for (Object typEntity : list) {
-                TreeNode top = new DefaultTreeNode(typEntity, parent);
-                addNode(top, (Typentity) typEntity);
+            for (Typentity typEntity : list) {
+                treeNodeTypentity = new DefaultTreeNode( typEntity, treeNodeParent);
+
+                // Rekursivni volani nad vnorenou urovni
+                addNode(treeNodeTypentity, typEntity);
             }
         }
-    }
-
-    public TreeNode fillTreeNodesWithAttr(Typentity typentity) {
-        queries = new HashMap<String, Query>(4);
-        queries.put("Typentity", this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParent AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)"));
-        queries.put("Attribute", this.getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntity AND a.identita IS NULL  AND (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD)"));
-
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Typentity cloneTypentity(Typentity typentity) throws CloneNotSupportedException {

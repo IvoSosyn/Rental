@@ -18,7 +18,7 @@
                     </p:column>
                     <f:ajax render="reg2InputTextAreaPopis" />
                 </p:selectOneMenu>
-                <p:commandButton value="Detail" ajax="true" actionListener="#{registrace.showModel()}" />
+                <p:commandButton value="Detail" ajax="true" actionListener="#{registrace.showModel()}" icon="fa fa-info-circle" />
             </h:panelGroup>
             <h:panelGroup>
                 <p:inputTextarea id="reg2InputTextAreaInfo" value="#{registrace.ucet.account.idmodel.popis}" readonly="true"  rows="3" cols="33"/>
