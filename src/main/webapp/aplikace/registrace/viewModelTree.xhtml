@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui"       
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Model(Šablona)</title>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/all.min-jsf.css" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/v4-shims.min-jsf.css" />
+        <h:outputStylesheet name="/css/jsfcrud.css"/>
+        <h:outputScript name="/js/jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+        <h:form  id="formViewModelTree" >
+            <p:panelGrid styleClass="ui-noborder" >
+                <p:row>
+                    <p:column rowspan="2">
+                        <p:panel>
+                            <f:facet name="header">
+                                Evidenční uzly
+                            </f:facet>                        
+                            <p:tree value="#{viewModelTree.treeNode}" var="treeNode" selectionMode="single" >
+                                <p:ajax event="select"  listener="#{viewModelTree.onNodeSelect}" update=":formViewModelTree:tableViewModelTreeAttr" >
+                                    <f:attribute name="treeNode" value="#{treeNode}" />
+                                </p:ajax>
+                                <p:treeNode expandedIcon="pi pi-folder-open" collapsedIcon="pi pi-folder">
+                                    <h:outputText value="#{treeNode}"/>
+                                </p:treeNode>
+                            </p:tree>
+                        </p:panel>
+                    </p:column>
+                    <p:column >
+                        <p:dataTable id="tableViewModelTreeAttr" var="attribute" 
+                                     value="#{viewModelTree.attributes}" 
+                                     selectionMode="multiple" 
+                                     selection="#{viewModelTree.selectedAttrs}" 
+                                     rowKey="#{attribute.id}"
+                                     style="margin-bottom:0;width:350px; "  
+                                     resizableColumns="true" 
+                                     resizeMode="expand" 
+                                     scrollable="true" >
+                            <f:facet name="header">
+                                Položky
+                            </f:facet>   
+                            <p:column headerText="Pořadí">
+                                <h:outputText value="#{attribute.poradi}"  />
+                            </p:column>                    
+                            <p:column headerText="Název">
+                                <h:outputText value="#{attribute.attrname}" />
+                            </p:column>
+                            <p:column headerText="Popis">
+                                <h:outputText value="#{attribute.popis}" />
+                            </p:column>
+                            <p:column headerText="Systém">
+                                <p:graphicImage value="/images/OK15x15.png" rendered="#{attribute.attrsystem}" />
+                            </p:column> 
+                        </p:dataTable>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:commandButton value="Zpět" actionListener="#{viewModelTree.closeModelTreeTable()}" icon="fa fa-mail-reply" style="text-align:left;" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+    </h:body>
+</html>
