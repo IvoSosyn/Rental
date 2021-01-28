@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Prikaz_k_jizde" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="684e3845-d173-4e13-bede-531e954a84ea">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Cesta"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Rezervace" uuid="97b46cb6-7604-49e8-a58f-daf8fff34cf9">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Cesta-Rezervace"/>
+		<queryString language="json">
+			<![CDATA[REZERVACE]]>
+		</queryString>
+		<field name="rezervace-UUID" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-UUID"/>
+			<fieldDescription><![CDATA[rezervace-UUID]]></fieldDescription>
+		</field>
+		<field name="rezervace-platiod" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-platiod"/>
+			<fieldDescription><![CDATA[rezervace-platiod]]></fieldDescription>
+		</field>
+		<field name="rezervace-platido" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-platido"/>
+			<fieldDescription><![CDATA[rezervace-platido]]></fieldDescription>
+		</field>
+		<field name="rezervace-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-popis"/>
+			<fieldDescription><![CDATA[rezervace-popis]]></fieldDescription>
+		</field>
+		<field name="rezervace-komentar" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-komentar"/>
+			<fieldDescription><![CDATA[rezervace-komentar]]></fieldDescription>
+		</field>
+		<field name="rezervace-zdroj-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-zdroj-popis"/>
+			<fieldDescription><![CDATA[rezervace-zdroj-popis]]></fieldDescription>
+		</field>
+		<field name="rezervace-zdroj-komentar" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-zdroj-komentar"/>
+			<fieldDescription><![CDATA[rezervace-zdroj-komentar]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-stav" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-stav"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-stav]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-uroven" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-uroven"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-uroven]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-popis"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-popis]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-komentar" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-komentar"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-komentar]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-platiod" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-platiod"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-platiod]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-platido" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-platido"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-platido]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-osoba-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-osoba-popis"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-osoba-popis]]></fieldDescription>
+		</field>
+		<field name="rezervace-schvaleni-osoba-komentar" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="rezervace-schvaleni-osoba-komentar"/>
+			<fieldDescription><![CDATA[rezervace-schvaleni-osoba-komentar]]></fieldDescription>
+		</field>
+		<group name="rezervace-platiod">
+			<groupExpression><![CDATA[$F{rezervace-platiod}]]></groupExpression>
+		</group>
+		<group name="rezervace-platido">
+			<groupExpression><![CDATA[$F{rezervace-platido}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="Ucastnici" uuid="c4beccac-dd4d-4afa-977a-e2b8c5ea014a">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Cesta-Ucastnik"/>
+		<queryString language="json">
+			<![CDATA[UCASTNICI]]>
+		</queryString>
+		<field name="ucastnik-UUID" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-UUID"/>
+			<fieldDescription><![CDATA[ucastnik-UUID]]></fieldDescription>
+		</field>
+		<field name="ucastnik-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-popis"/>
+			<fieldDescription><![CDATA[ucastnik-popis]]></fieldDescription>
+		</field>
+		<field name="ucastnik-platiod" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-platiod"/>
+			<fieldDescription><![CDATA[ucastnik-platiod]]></fieldDescription>
+		</field>
+		<field name="ucastnik-platido" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-platido"/>
+			<fieldDescription><![CDATA[ucastnik-platido]]></fieldDescription>
+		</field>
+		<field name="ucastnik-osoba-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-osoba-popis"/>
+			<fieldDescription><![CDATA[ucastnik-osoba-popis]]></fieldDescription>
+		</field>
+		<field name="ucastnik-osoba-komentar" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-osoba-komentar"/>
+			<fieldDescription><![CDATA[ucastnik-osoba-komentar]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-stav" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-stav"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-stav]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-uroven" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-uroven"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-uroven]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-popis"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-popis]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-komentar" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-komentar"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-komentar]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-platiod" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-platiod"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-platiod]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-platido" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-platido"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-platido]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-osoba-popis" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-osoba-popis"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-osoba-popis]]></fieldDescription>
+		</field>
+		<field name="ucastnik-schvaleni-osoba-komentar" class="java.lang.String">
+			<property name="net.sf.jasperreports.json.field.expression" value="ucastnik-schvaleni-osoba-komentar"/>
+			<fieldDescription><![CDATA[ucastnik-schvaleni-osoba-komentar]]></fieldDescription>
+		</field>
+		<group name="ucastnik-platiod">
+			<groupExpression><![CDATA[$F{ucastnik-platiod}]]></groupExpression>
+		</group>
+	</subDataset>
+	<queryString language="json">
+		<![CDATA[]]>
+	</queryString>
+	<field name="cesta-UUID" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-UUID"/>
+		<fieldDescription><![CDATA[cesta-UUID]]></fieldDescription>
+	</field>
+	<field name="cesta-komentar" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-komentar"/>
+		<fieldDescription><![CDATA[cesta-komentar]]></fieldDescription>
+	</field>
+	<field name="cesta-popis" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-popis"/>
+		<fieldDescription><![CDATA[cesta-popis]]></fieldDescription>
+	</field>
+	<field name="cesta-zaloha" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-zaloha"/>
+		<fieldDescription><![CDATA[cesta-zaloha]]></fieldDescription>
+	</field>
+	<field name="cesta-platiod" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-platiod"/>
+		<fieldDescription><![CDATA[cesta-platiod]]></fieldDescription>
+	</field>
+	<field name="cesta-platido" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-platido"/>
+		<fieldDescription><![CDATA[cesta-platido]]></fieldDescription>
+	</field>
+	<field name="cesta-osoba-popis" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-osoba-popis"/>
+		<fieldDescription><![CDATA[cesta-osoba-popis]]></fieldDescription>
+	</field>
+	<field name="cesta-osoba-komentar" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="cesta-osoba-komentar"/>
+		<fieldDescription><![CDATA[cesta-osoba-komentar]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="ContainerBottom" x="180" y="0" width="310" height="70" uuid="061faaac-4c66-48e8-8b62-b66e45434dad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Crimson" size="36" isBold="true" pdfFontName="" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Příkaz k jízdě]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="80" width="802" height="1" uuid="c718a8e8-303b-4b3c-a56d-2df011734905"/>
+			</line>
+			<staticText>
+				<reportElement x="490" y="33" width="51" height="20" uuid="d46a5494-c0f4-4a78-a223-ef653c3187a1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Číslo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="550" y="26" width="251" height="35" uuid="5f5d6f4d-ff6a-4eda-9ea1-f9a54209a9c2"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cesta-UUID}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="101" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="70" width="230" height="30" uuid="c55260f4-2a8f-4336-b61b-a9769bec27f4"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cesta-osoba-popis}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="21" width="220" height="79" uuid="69a3ea95-a9ca-41c0-b12b-11c476a18553"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cesta-popis}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="50" width="90" height="21" uuid="096b431c-42f3-4500-982e-12896164a5b1"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true" pdfFontName="Courier" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Organizátor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="40" height="20" uuid="7a29e2c3-5eff-443c-8b37-517c6c8947b7"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[Popis:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="40" height="20" uuid="71c99c3f-5723-4a9c-9b8a-2fb8f4566bd4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Účel:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="450" y="21" width="350" height="79" uuid="b07590cf-d574-45fb-8f16-2e25936828f3"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cesta-komentar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="31" height="23" uuid="c543d36b-2242-4eae-be54-a1a8222f3ff7"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Od:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="27" width="31" height="23" uuid="3f021076-4a6c-4277-9b74-d77c431e496e"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Do:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="30" y="0" width="180" height="26" uuid="bca0ca00-8df2-4bc3-a442-c87e0da2b335"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cesta-platiod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="30" y="27" width="180" height="22" uuid="3e86f3fd-1f7d-4bdf-b44d-e9d422b5cd9b"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cesta-platido}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="261">
+			<componentElement>
+				<reportElement x="1" y="0" width="800" height="110" uuid="838dc27f-3fe5-42a2-85e4-7fdb681a4d39">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Rezervace" uuid="344a6207-455b-4c53-97c7-f6630d14b368">
+						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("REZERVACE")]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="54" uuid="10e190f4-2504-471b-87ba-7661f9de0d6d">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="adfff5b3-5436-4783-83fe-e6f85e2a5436"/>
+								<text><![CDATA[rezervace-UUID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="54" height="30" uuid="d516e9f0-65b6-4c74-b633-0e51306eca5b"/>
+								<textFieldExpression><![CDATA[$F{rezervace-UUID}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="152412b6-13ae-4d73-a99b-bc28b848097f">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="7f92dc33-c5d2-4fe5-9516-8af425965207"/>
+								<text><![CDATA[rezervace-platiod]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="dd4c9c73-1ec9-4c9a-b2cc-d5975b33e3ea"/>
+								<textFieldExpression><![CDATA[$F{rezervace-platiod}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="33e61843-3915-444d-9f6a-3b96b58afa78">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="0164adc4-7adb-4e1f-9e61-d4c6f7491e95"/>
+								<text><![CDATA[rezervace-platido]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="54" height="30" uuid="3fd1a298-cd55-4fa5-9246-d2cc2382ef7f"/>
+								<textFieldExpression><![CDATA[$F{rezervace-platido}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="6daa98ce-04dd-457f-bdb2-79e4b83fe88b">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="4fa8f906-a97d-4178-a0b8-a8d9404cd761"/>
+								<text><![CDATA[rezervace-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="794250ea-64a4-47a8-8dd6-d0f6e3025763"/>
+								<textFieldExpression><![CDATA[$F{rezervace-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="2b7dc2e5-a890-4774-b098-3ba66965a1f9">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="2b68dd08-5232-444b-95a1-d14583d9ccc9"/>
+								<text><![CDATA[rezervace-schvaleni-osoba-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="54" height="30" uuid="c43a4506-d4dc-4c81-a691-0bcc1cc18e6a"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-osoba-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="534cdf6e-8252-4a4b-a382-267c074a038e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="84e4c94c-42e6-4476-8039-8c419aa41b77"/>
+								<text><![CDATA[rezervace-komentar]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="4d993da1-2833-41a1-b160-997d08ccd894"/>
+								<textFieldExpression><![CDATA[$F{rezervace-komentar}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="c3adbd80-9d62-4d57-b450-6eb4f9372920">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="35c17cf8-91a0-439a-8ed9-c8cfc410c5a6"/>
+								<text><![CDATA[rezervace-schvaleni-platido]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="54" height="30" uuid="26f8b4e2-070c-49fc-910a-5070ab819fe3"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-platido}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="a7e5ccea-ec58-43cf-adc9-6262a8d9b9dc">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="9556a96e-ae80-4ead-a735-ab0b549a3875"/>
+								<text><![CDATA[rezervace-zdroj-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="e64bb0bf-b290-461d-a44e-b89c02535ac1"/>
+								<textFieldExpression><![CDATA[$F{rezervace-zdroj-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="521b33e9-0662-4552-abac-a1cdce1d37d6">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column9"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="7b22914b-92f5-4565-88f9-d674b38b3bcb"/>
+								<text><![CDATA[rezervace-schvaleni-platiod]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="93a0a0e7-6c99-4fe6-ae19-bf6caf74d4f2"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-platiod}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="9c9baa94-a93a-42a9-b40f-90a766ece771">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column10"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="8e26338b-d030-4b0d-a313-99d7db170420"/>
+								<text><![CDATA[rezervace-zdroj-komentar]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="b7396741-8613-42ef-93e5-9aa77d6fda4d"/>
+								<textFieldExpression><![CDATA[$F{rezervace-zdroj-komentar}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="8d95eec3-ac9d-4c39-855a-6243846b50ea">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column11"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="21ab2465-c059-48fc-b080-47f657ad61af"/>
+								<text><![CDATA[rezervace-schvaleni-komentar]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="681f2f1f-cbd8-4b73-98ca-7c64a77632fb"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-komentar}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="07714b63-780e-4307-ae12-d4e0c3463267">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column12"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="711ce82f-fcc6-48ee-a586-9ba30be064f5"/>
+								<text><![CDATA[rezervace-schvaleni-stav]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="6f1d3f12-bfc2-429b-9d2d-c6ade6f5165f"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-stav}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="bf20a261-42e9-484b-aafc-1e9e3ba20b48">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column13"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="b4865bfb-0c55-4fd9-9c0d-53a569cbb42c"/>
+								<text><![CDATA[rezervace-schvaleni-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="99a1f784-3921-49c7-911a-fb0a3558dd5d"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="8039c75b-0d4f-4cd9-b4db-d4625eeb79e6">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column14"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="c1087a91-27ac-49b1-8ff3-fc3bacf80872"/>
+								<text><![CDATA[rezervace-schvaleni-uroven]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="54" height="30" uuid="9a3ca82c-cb7a-4a67-b1ac-51038b6f64ab"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-uroven}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="1b0f445d-5a5f-41fc-8fae-b30925cf27ff">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column15"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="8b8c8240-4973-4ba1-b147-15df1a2f7ce7"/>
+								<text><![CDATA[rezervace-schvaleni-osoba-komentar]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="53" height="30" uuid="c1e92fc9-0428-4e4f-9fb7-1d61f24c86c3"/>
+								<textFieldExpression><![CDATA[$F{rezervace-schvaleni-osoba-komentar}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement x="1" y="110" width="800" height="110" uuid="449d9aae-823d-4adf-8984-d72323739aa4">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 1_TD"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Ucastnici" uuid="b4eeb25b-cc40-4d0b-b803-236a9f3b37c8">
+						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("UCASTNICI")]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="39" uuid="e05dc6ff-26be-4b38-894e-d30ed24d8c0d">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="39" height="30" uuid="168b1988-f662-444c-94ba-371b79a4ce59"/>
+								<text><![CDATA[*]]></text>
+							</staticText>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="57" uuid="1e8e79db-09ac-47e2-a825-67bcf0336d41">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="57" height="30" uuid="64734b18-4bf0-4c05-aa9e-0b92cf7938c6"/>
+								<text><![CDATA[ucastnik-UUID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="57" height="30" uuid="bab2fed7-83c9-4c29-827b-da3c2266575d"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-UUID}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="57" uuid="97d4ba73-847c-43ef-9d8f-7d35a023a537">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="57" height="30" uuid="4098a726-7485-4671-8c75-613d032d8c39"/>
+								<text><![CDATA[ucastnik-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="57" height="30" uuid="e96c2ddf-c3d7-43f6-b867-5326c0f0a839"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="57" uuid="a64b0992-da99-43cb-9f7b-acf5e233770b">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="57" height="30" uuid="61a9d352-6ae5-4bf0-bd70-d3bbf99a29b6"/>
+								<text><![CDATA[ucastnik-platiod]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="57" height="30" uuid="4df39f64-fd79-4d6f-8efb-aa6f328d165f"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-platiod}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="56" uuid="6668b61f-9af2-414a-a20e-04240dd6f87b">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="56" height="30" uuid="96cc4276-a958-4bae-8a41-56dc807db8e9"/>
+								<text><![CDATA[ucastnik-platido]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="56" height="30" uuid="d830d45d-0a76-4e02-9138-f9212f8970f0"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-platido}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="e57b8229-4f08-4450-9f89-2751bbcfa4aa">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" uuid="3449b587-3785-42aa-b12a-de109a6d0fb1"/>
+								<text><![CDATA[ucastnik-osoba-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="55" height="30" uuid="39830dda-bb1f-417b-a051-7bb146a67d0c"/>
+								<textElement>
+									<font fontName="Arial"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ucastnik-osoba-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="ab8f0a04-7a36-4452-9861-7ac81ed523de">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" uuid="ef242bc1-a8d9-45d8-83e5-5d309ef39522"/>
+								<text><![CDATA[ucastnik-osoba-komentar]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="55" height="30" uuid="aeb0b74b-ce91-4973-9eb4-0d296eef802b"/>
+								<textElement>
+									<font fontName="Arial"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ucastnik-osoba-komentar}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="30f60020-101e-4e93-a2a0-02d1739753e2">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="7825886a-c28b-4637-8a81-eee636c80cd2"/>
+								<text><![CDATA[ucastnik-schvaleni-stav]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="54" height="30" uuid="12ed764a-d95d-42a9-ad95-3018194c760a"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-stav}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="a4af2b40-4b5c-408c-9512-02b63b17ab9c">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column9"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="a6972e83-ae76-49f7-ac37-5d60c7632399"/>
+								<text><![CDATA[ucastnik-schvaleni-uroven]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="54" height="30" uuid="f39fd99c-fbec-4324-8dcc-aab97c3923fc"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-uroven}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="013980ba-8d9b-480a-97d7-0863df060804">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column10"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="c0e904d7-7109-452e-87c7-71b9b27073af"/>
+								<text><![CDATA[ucastnik-schvaleni-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="54" height="30" uuid="3f2308cb-0bf7-40fc-9154-1a24766e7d76"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="96f5d768-7aed-439e-86ee-1bf28dc30ace">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column11"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="54" height="30" uuid="1a38c19d-ed67-42c5-ac50-31b8faf10215"/>
+								<text><![CDATA[ucastnik-schvaleni-komentar]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="54" height="30" uuid="5091705a-ca93-4cbf-8dd5-b6468c43f951"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-komentar}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="f88f2928-f13a-4485-bf80-f8dfc6e84383">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column12"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="938e43f4-fcc8-4b00-b1d0-ea8ce151adb2"/>
+								<text><![CDATA[ucastnik-schvaleni-platiod]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="53" height="30" uuid="a7569dfc-4840-4e2d-8b55-8ea9ca0d1ca4"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-platiod}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="53" uuid="3a10abfb-78d4-4ef8-b8ad-4a315fb1f304">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column13"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="53" height="30" uuid="c0c9c1b9-48b9-4bc2-84d8-370adaaa12cf"/>
+								<text><![CDATA[ucastnik-schvaleni-platido]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="53" height="30" uuid="7d41ff25-7def-4186-8102-6da054189219"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-platido}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="51" uuid="678dcbc1-bdb4-4d5f-9575-f44270f446b6">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column14"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="51" height="30" uuid="0057bc7e-3d87-4642-b8dc-9d06ddd40d6b"/>
+								<text><![CDATA[ucastnik-schvaleni-osoba-popis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="51" height="30" uuid="cf824897-d3bb-49d4-9edd-c44ae3819ae1"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-osoba-popis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="51" uuid="e6045265-737e-47c7-882f-7e32b74bd29f">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column15"/>
+						<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="51" height="30" uuid="f4105d54-0fe7-4fbe-9e8f-57d5ca3da779"/>
+								<text><![CDATA[ucastnik-schvaleni-osoba-komentar]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="51" height="30" uuid="5966a313-9b9f-4150-9d77-f254f4bd033a"/>
+								<textFieldExpression><![CDATA[$F{ucastnik-schvaleni-osoba-komentar}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

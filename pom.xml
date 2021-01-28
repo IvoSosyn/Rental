@@ -68,10 +68,18 @@
         </dependency>
 
         <dependency>
-            <groupId>jasperreports</groupId>
+            <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>3.5.3</version>
+            <version>6.16.0</version>
         </dependency>
+
+<dependency>
+    <groupId>local.jasperFontOverrides</groupId>
+    <artifactId>local.jasperFontOverrides</artifactId>
+    <version>1.0</version>
+    <scope>system</scope>
+    <systemPath>E:\NetBeansProjects\Rental\src\main\webapp\fonts\tnr-crimson-rental.jar</systemPath>
+</dependency>
 
     </dependencies>
 

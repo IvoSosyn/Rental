@@ -1,0 +1,64 @@
+{
+   "cesta-UUID" : "f461e926-5f0a-4bfb-ad6d-ed63e4351e16",
+   "cesta-komentar" : "ČčŇňěščřžýáíé Informatici MSK - schůzka",
+   "cesta-popis" : "Ostrava",
+   "cesta-zaloha" : 1000.0,
+   "cesta-platiod" : "20.04.2018 07:00",
+   "cesta-platido" : "25.04.2018 05:00",
+   "cesta-osoba-popis" : "ANONYMOUS",
+   "cesta-osoba-komentar" : "",
+   "UCASTNICI" : [
+      {
+         "ucastnik-UUID" : "8ebc57ea-8a84-4773-ad2a-e7e66c4a7807",
+         "ucastnik-popis" : "Ridic",
+         "ucastnik-platiod" : "01.01.2018 12:00",
+         "ucastnik-platido" : "01.01.2100 12:00",
+         "ucastnik-osoba-popis" : "ANONYMOUS",
+         "ucastnik-osoba-komentar" : "",
+         "ucastnik-schvaleni-stav" : 0,
+         "ucastnik-schvaleni-uroven" : 0,
+         "ucastnik-schvaleni-popis" : " ",
+         "ucastnik-schvaleni-komentar" : "Pred zpracovanim",
+         "ucastnik-schvaleni-platiod" : " ",
+         "ucastnik-schvaleni-platido" : " ",
+         "ucastnik-schvaleni-osoba-popis" : " ",
+         "ucastnik-schvaleni-osoba-komentar" : " "
+      },
+      {
+         "ucastnik-UUID" : "17811039-c655-406e-90c4-b0ab1992145e",
+         "ucastnik-popis" : "Spolujezdec",
+         "ucastnik-platiod" : "20.04.2018 07:00",
+         "ucastnik-platido" : "25.04.2018 05:00",
+         "ucastnik-osoba-popis" : "Bazakas Nikolas",
+         "ucastnik-osoba-komentar" : "",
+         "ucastnik-schvaleni-stav" : 1,
+         "ucastnik-schvaleni-uroven" : 2,
+         "ucastnik-schvaleni-popis" : " Mon Apr 23 12:23:59 CEST 2018",
+         "ucastnik-schvaleni-komentar" : "Schvaleni: ANONYMOUS",
+         "ucastnik-schvaleni-platiod" : "23.04.2018 12:23",
+         "ucastnik-schvaleni-platido" : "23.04.2018 12:23",
+         "ucastnik-schvaleni-osoba-popis" : "ANONYMOUS",
+         "ucastnik-schvaleni-osoba-komentar" : ""
+      }
+   ],
+   "REZERVACE" : [
+      {
+         "rezervace-UUID" : "ac08cacc-d4ac-43cc-824d-0e1a7a670f7b",
+         "rezervace-platiod" : "20.04.2018 07:00",
+         "rezervace-platido" : "25.04.2018 05:00",
+         "rezervace-popis" : "",
+         "rezervace-komentar" : "",
+         "rezervace-zdroj-popis" : "Skoda Felicia",
+         "rezervace-zdroj-komentar" : "Skoda Felicia\n(nema dalnicni znamku)",
+         "rezervace-schvaleni-stav" : 0,
+         "rezervace-schvaleni-uroven" : 0,
+         "rezervace-schvaleni-popis" : " ",
+         "rezervace-schvaleni-komentar" : " ",
+         "rezervace-schvaleni-spz" : "7T8 2409",
+         "rezervace-schvaleni-platiod" : " ",
+         "rezervace-schvaleni-platido" : " ",
+         "rezervace-schvaleni-osoba-popis" : " ",
+         "rezervace-schvaleni-osoba-komentar" : " "
+      }
+   ]
+}

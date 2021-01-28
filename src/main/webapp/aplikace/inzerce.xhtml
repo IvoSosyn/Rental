@@ -8,7 +8,8 @@
         <h:form id="formInzerce"   >
             <p:growl id="growlInzerce" showDetail="true" />
             <p:panel id="panelInzerce" header="Volné jednotky k pronájmu:" >                
-                <p:outputLabel value=" Žádná jednotka není nyní k pronájmu. "/>                
+                <p:outputLabel value=" Žádná jednotka není nyní k pronájmu. "/>
+                <p:commandButton id="jsonTest" value="Test JSON" action="#{login.actionTestJSON()}" />                
             </p:panel>
         </h:form>
     </h:body>  

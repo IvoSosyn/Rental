@@ -9,8 +9,19 @@ import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
+import cz.rental.utils.JasperReports;
 import cz.rental.utils.SHA512;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -18,6 +29,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.sf.jasperreports.engine.JRException;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
@@ -82,7 +94,7 @@ public class Login implements Serializable {
     public String actionLogin() {
         Account acc = accController.getAccountForPinAndEmail(this.pin, this.email);
         User usr = userController.getUserForAccount(acc, email, SHA512.getSHA512(this.password));
-        if (acc instanceof Account && usr instanceof User ) {
+        if (acc instanceof Account && usr instanceof User) {
 //            PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo je OK."));
             this.ucet.setAccount(acc);
             this.ucet.getUzivatel().setUser(usr);
@@ -107,6 +119,38 @@ public class Login implements Serializable {
 
     public void valueFromDynamicDialog(SelectEvent event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(event.getObject().toString()));
+    }
+
+    public void actionTestJSON() {
+        JasperReports jr = new JasperReports();
+        try {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File(FacesContext.getCurrentInstance().getExternalContext().getResource("/fonts/tnr-crimson/TTF/Crimson-Roman.ttf").toURI()));
+            GraphicsEnvironment ge
+                    = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(font);
+            for (String fonta : ge.getAvailableFontFamilyNames()) {
+                System.out.println(fonta);
+            }
+//String jrxmlURI = Thread.currentThread().getContextClassLoader().getResource("/reports/Cesta.jrxml").getPath();
+//            String jsonURI = Thread.currentThread().getContextClassLoader().getResource("/reports/CestaVzor.json").getPath();
+            String jrxmlURI = FacesContext.getCurrentInstance().getExternalContext().getResource("/reports/Cesta.jrxml").getPath();
+            String jsonURI = FacesContext.getCurrentInstance().getExternalContext().getResource("/reports/CestaVzor.json").getPath();
+
+            jrxmlURI = "C:\\Program Files\\wildfly-20.0.0.Final\\standalone\\deployments\\Rental-Develop.war\\reports\\Cesta.jrxml";
+            jsonURI = "C:\\Program Files\\wildfly-20.0.0.Final\\standalone\\deployments\\Rental-Develop.war\\reports\\CestaVzor.json";
+
+            jr.runJasperReports(new File(jrxmlURI), new File(jsonURI), "C:\\temp\\testCesta.pdf");
+        } catch (FileNotFoundException | JRException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FontFormatException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
