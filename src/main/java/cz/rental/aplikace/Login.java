@@ -132,24 +132,17 @@ public class Login implements Serializable {
             for (String fonta : ge.getAvailableFontFamilyNames()) {
                 System.out.println(fonta);
             }
-//String jrxmlURI = Thread.currentThread().getContextClassLoader().getResource("/reports/Cesta.jrxml").getPath();
-//            String jsonURI = Thread.currentThread().getContextClassLoader().getResource("/reports/CestaVzor.json").getPath();
             URI jrxmlURI = FacesContext.getCurrentInstance().getExternalContext().getResource("/reports/Cesta.jrxml").toURI();
             URI jsonURI = FacesContext.getCurrentInstance().getExternalContext().getResource("/reports/CestaVzor.json").toURI();
 
             // jrxmlURI = "C:\\Program Files\\wildfly-20.0.0.Final\\standalone\\deployments\\Rental-Develop.war\\reports\\Cesta.jrxml";
             // jsonURI = "C:\\Program Files\\wildfly-20.0.0.Final\\standalone\\deployments\\Rental-Develop.war\\reports\\CestaVzor.json";
-
             jr.runJasperReports(new File(jrxmlURI), new File(jsonURI), "C:\\temp\\testCesta.pdf");
-        } catch (FileNotFoundException | JRException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (JRException | MalformedURLException | URISyntaxException | FileNotFoundException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FontFormatException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
