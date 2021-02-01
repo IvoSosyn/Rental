@@ -73,14 +73,15 @@
             <version>6.16.0</version>
         </dependency>
 
-<dependency>
-    <groupId>local.jasperFontOverrides</groupId>
-    <artifactId>local.jasperFontOverrides</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>E:\NetBeansProjects\Rental\src\main\webapp\fonts\tnr-crimson-rental.jar</systemPath>
-</dependency>
+    <dependency>
+            <groupId>Fonts</groupId>
+            <artifactId>Rental-Fonts</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}\src\main\webapp\fonts\Crimson-Rental.jar</systemPath>    
+        </dependency>
 
+    
     </dependencies>
 
     <build>
@@ -118,7 +119,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${endorsed.dir}</outputDirectory>
-                            <silent>true</silent>
+                            <silent>false</silent>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>javax</groupId>
@@ -126,11 +127,45 @@
                                     <version>${jakartaee}</version>
                                     <type>jar</type>
                                 </artifactItem>
-                            </artifactItems>
+                            </artifactItems>                            
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            
+             <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-antrun-plugin</artifactId>
+		<version>1.7</version>
+		<executions>
+		    <execution>
+		    <phase>validate</phase>
+		    <goals><goal>run</goal></goals>
+		    <configuration>
+			<target>
+			    <echo>basedir: ${basedir}</echo>
+			    <echo>version: ${version}</echo>
+			    <echo>project.basedir: ${project.basedir}</echo>
+			    <echo>project.baseUri: ${project.baseUri}</echo>
+			    <echo>project.version: ${project.version}</echo>
+			    <echo>project.groupId: ${project.groupId}</echo>
+			    <echo>project.artifactId: ${project.artifactId}</echo>
+			    <echo>project.name: ${project.name}</echo>
+			    <echo>project.description: ${project.description}</echo>
+			    <echo>project.build.sourceDirectory: ${project.build.sourceDirectory}</echo>
+			    <echo>project.build.scriptSourceDirectory: ${project.build.scriptSourceDirectory}</echo>
+			    <echo>project.build.testSourceDirectory: ${project.build.testSourceDirectory}</echo>
+			    <echo>project.build.outputDirectory: ${project.build.outputDirectory}</echo>
+			    <echo>project.build.testOutputDirectory: ${project.build.testOutputDirectory}</echo>
+			    <echo>project.build.directory: ${project.build.directory}</echo>
+			</target>
+		    </configuration>
+		    </execution>
+		</executions>
+	    </plugin>
+            
+            
+            
         </plugins>
     </build>
 </project>
