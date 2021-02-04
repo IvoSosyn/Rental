@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Prikaz_k_jizde" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="684e3845-d173-4e13-bede-531e954a84ea">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Cesta"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Rental - cesta"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -236,7 +236,7 @@
 			<staticText>
 				<reportElement stretchType="ContainerBottom" x="180" y="0" width="310" height="70" uuid="061faaac-4c66-48e8-8b62-b66e45434dad"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Crimson" size="36" isBold="true" pdfFontName="" pdfEncoding=""/>
+					<font fontName="Crimson-Rental" size="36" isBold="false" pdfFontName="" pdfEncoding=""/>
 				</textElement>
 				<text><![CDATA[Příkaz k jízdě]]></text>
 			</staticText>
@@ -246,7 +246,7 @@
 			<staticText>
 				<reportElement x="490" y="33" width="51" height="20" uuid="d46a5494-c0f4-4a78-a223-ef653c3187a1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Crimson" size="12"/>
+					<font fontName="Crimson-Rental" size="12"/>
 				</textElement>
 				<text><![CDATA[Číslo:]]></text>
 			</staticText>
@@ -262,70 +262,70 @@
 			<textField>
 				<reportElement x="0" y="70" width="230" height="30" uuid="c55260f4-2a8f-4336-b61b-a9769bec27f4"/>
 				<textElement>
-					<font fontName="Crimson" size="12"/>
+					<font fontName="Crimson-Rental" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cesta-osoba-popis}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="230" y="21" width="220" height="79" uuid="69a3ea95-a9ca-41c0-b12b-11c476a18553"/>
 				<textElement>
-					<font fontName="Crimson" size="12"/>
+					<font fontName="Crimson-Rental" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cesta-popis}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="50" width="90" height="21" uuid="096b431c-42f3-4500-982e-12896164a5b1"/>
 				<textElement>
-					<font fontName="Crimson" size="14" isBold="true" pdfFontName="Crimson" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<font fontName="Crimson-Rental" size="14" isBold="false" pdfFontName="Crimson-Rental" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Organizátor:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="230" y="0" width="40" height="20" uuid="7a29e2c3-5eff-443c-8b37-517c6c8947b7"/>
 				<textElement>
-					<font fontName="Crimson" size="14"/>
+					<font fontName="Crimson-Rental" size="14"/>
 				</textElement>
 				<text><![CDATA[Popis:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="450" y="0" width="40" height="20" uuid="71c99c3f-5723-4a9c-9b8a-2fb8f4566bd4"/>
 				<textElement>
-					<font fontName="Times New Roman" size="14" pdfFontName="Crimson" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<font fontName="Crimson-Rental" size="14" pdfFontName="Crimson-Rental" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Účel:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="450" y="21" width="350" height="79" uuid="b07590cf-d574-45fb-8f16-2e25936828f3"/>
 				<textElement>
-					<font fontName="Crimson" size="12"/>
+					<font fontName="Crimson-Rental" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cesta-komentar}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="31" height="23" uuid="c543d36b-2242-4eae-be54-a1a8222f3ff7"/>
 				<textElement>
-					<font fontName="Crimson" size="14" isBold="true"/>
+					<font fontName="Crimson-Rental" size="14" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Od:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="27" width="31" height="23" uuid="3f021076-4a6c-4277-9b74-d77c431e496e"/>
 				<textElement>
-					<font fontName="Crimson" size="14" isBold="true"/>
+					<font fontName="Crimson-Rental" size="14" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Do:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="30" y="0" width="180" height="26" uuid="bca0ca00-8df2-4bc3-a442-c87e0da2b335"/>
 				<textElement>
-					<font fontName="Crimson" size="12"/>
+					<font fontName="Crimson-Rental" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cesta-platiod}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="30" y="27" width="180" height="22" uuid="3e86f3fd-1f7d-4bdf-b44d-e9d422b5cd9b"/>
 				<textElement>
-					<font fontName="Crimson" size="12"/>
+					<font fontName="Crimson-Rental" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cesta-platido}]]></textFieldExpression>
 			</textField>
@@ -669,7 +669,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="55" height="30" uuid="39830dda-bb1f-417b-a051-7bb146a67d0c"/>
 								<textElement>
-									<font fontName="Crimson"/>
+									<font fontName="Crimson-Rental"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{ucastnik-osoba-popis}]]></textFieldExpression>
 							</textField>
@@ -687,7 +687,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="55" height="30" uuid="aeb0b74b-ce91-4973-9eb4-0d296eef802b"/>
 								<textElement>
-									<font fontName="Crimson"/>
+									<font fontName="Crimson-Rental"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{ucastnik-osoba-komentar}]]></textFieldExpression>
 							</textField>

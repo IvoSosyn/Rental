@@ -75,3 +75,13 @@ responsive        | false | Boolean | In responsive mode, dialog adjusts itself 
 focus             | null  | String  | Defines which component to apply focus by search expression. 
 onShow            | null  | String  | Client side callback to execute when dialog is displayed. 
 onHide            | null  | String  | Client side callback to execute when dialog is hidden.
+
+Vzory RTF pro tisky
+===================
+http://rtftemplate.sourceforge.net/
+https://github.com/ullenboom/jrtf
+
+Vzory DOCX pro tisky
+===================
+https://poi.apache.org/index.html
+https://www.docx4java.org/trac/docx4j
