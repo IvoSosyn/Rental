@@ -73,7 +73,7 @@
             <version>6.16.0</version>
         </dependency>
 
-    <dependency>
+        <dependency>
             <groupId>Fonts</groupId>
             <artifactId>Rental-Fonts</artifactId>
             <version>1.0</version>
