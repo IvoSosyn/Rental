@@ -23,8 +23,8 @@
                     <ui:include src="#{registrace.includeRegPanel()}" />
                 </h:panelGroup>
                 <h:form id="idNavigationForm" >
-                    <p:commandButton value="Zpět" action="#{registrace.backRegPanel()}" disabled="#{!registrace.isBackEnable()}" rendered="#{registrace.isBackRendered()}" update="@all"/>
-                    <p:commandButton value="Další" action="#{registrace.nextRegPanel()}" disabled="#{!registrace.isNextEnable()}" rendered="#{registrace.isNextRendered()}" update="@all" />
+                    <p:commandButton value="Zpět" action="#{registrace.backRegPanel()}" disabled="#{!registrace.isBackEnable()}" rendered="#{registrace.isBackRendered()}" update="@all" styleClass="rounded-button" />
+                    <p:commandButton value="Další" action="#{registrace.nextRegPanel()}" disabled="#{!registrace.isNextEnable()}" rendered="#{registrace.isNextRendered()}" update="@all" styleClass="rounded-button" />
                 </h:form>
             </ui:define>
         </ui:composition>

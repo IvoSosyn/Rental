@@ -17,26 +17,22 @@
 
     <h:body>
         <p:growl id="growl" showDetail="true" life="7000" />
-
-        <p:layout fullPage="true">
-            <p:layoutUnit position="north" size="50">
+        <div class="ui-fluid">
+            <div class="p-field">
                 <ui:insert name="header">
                     <ui:include src="/templates/header.xhtml"/>
                 </ui:insert>
-            </p:layoutUnit>
-
-            <p:layoutUnit position="center" size="50" >
+            </div>
+            <div class="p-field">     
                 <ui:insert name="contens">
                     <ui:include src="/templates/contens.xhtml"/>
                 </ui:insert>
-            </p:layoutUnit>
-
-            <p:layoutUnit position="south" size="20">
+            </div>
+            <div class="p-field">     
                 <ui:insert name="footer" >
                     <ui:include src="/templates/footer.xhtml"/>
                 </ui:insert>
-            </p:layoutUnit>
-        </p:layout>
-
+            </div>
+        </div>
     </h:body>
 </html>

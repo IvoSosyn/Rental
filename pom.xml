@@ -17,6 +17,7 @@
     </properties>
     
     <dependencies>
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -32,7 +33,7 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>8.0</version>
+            <version>10.0.0-RC1</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
@@ -78,7 +79,7 @@
             <artifactId>Rental-Fonts</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}\src\main\webapp\fonts\Crimson-Rental.jar</systemPath>    
+            <systemPath>${project.basedir}/src/main/webapp/fonts/Crimson-Rental.jar</systemPath>    
         </dependency>
 
     

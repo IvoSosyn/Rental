@@ -26,7 +26,7 @@
                 <f:facet name="header">                            
                     <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
                     <div align="right">                    
-                        <p:commandButton value="Sloupce" onclick="PF('dialogColumns').show();return;" icon="fa fa-columns" ajax="true" />
+                        <p:commandButton value="Sloupce" onclick="PF('dialogColumns').show();return;" icon="fa fa-columns" ajax="true" styleClass="rounded-button" />
                     </div>
                 </f:facet>
                 <p:columns  value="#{eviEntita.columns}" var="column" >
@@ -37,7 +37,7 @@
                 </p:columns>
                 <f:facet name="footer">                            
                     <div align="center">                    
-                        <p:commandButton value="Nový" actionListener="#{eviEntita.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update=" :formAttr :formEntitaButtons :formEntita:idEntitaGrowl :formEntita:idEntitaTbl" />
+                        <p:commandButton value="Nový" actionListener="#{eviEntita.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update=" :formAttr :formEntitaButtons :formEntita:idEntitaGrowl :formEntita:idEntitaTbl" styleClass="rounded-button"  />
                     </div>
                 </f:facet>
             </p:dataTable>
@@ -54,7 +54,7 @@
                         <f:facet name="sourceCaption">K výběru</f:facet>
                         <f:facet name="targetCaption">Vybrané</f:facet>
                     </p:pickList>
-                    <p:commandButton id="buttonOkColumn" value="OK"  actionListener="#{eviEntita.saveUserColumns()}" oncomplete="PF('dialogColumns').hide();return;" update=":formEntita" style="margin-top:5px" />
+                    <p:commandButton id="buttonOkColumn" value="OK"  actionListener="#{eviEntita.saveUserColumns()}" oncomplete="PF('dialogColumns').hide();return;" update=":formEntita" style="margin-top:5px" styleClass="rounded-button"  />
                 </h:panelGrid>
             </p:dialog>
         </h:form>

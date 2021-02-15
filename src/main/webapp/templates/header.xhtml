@@ -5,12 +5,12 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition > 
-            <p:layout>
-                <p:layoutUnit position="west" size="90" style="align-content: center">
+        <ui:composition>
+            <div class="p-grid">
+                <div class="p-col-1 p-md-1 p-lg-1">
                     <p:graphicImage  value="/images/grand-properties-rental-property-and-management.png" alt="Pronájmy" width="80"/>
-                </p:layoutUnit>
-                <p:layoutUnit position="center">
+                </div>
+                <div class="p-col-10 p-md-10 p-lg-10">
                     <h:form id="FormMenu" >
                         <p:menubar >
                             <p:submenu label="Nemovitosti" icon="fa fa-road">
@@ -38,9 +38,9 @@
                                 </p:submenu>
                             </p:submenu>               
                         </p:menubar>
-                    </h:form>
-                </p:layoutUnit>
-                <p:layoutUnit position="east" size="90" style="align-content: center">
+                    </h:form>                    
+                </div>
+                <div class="p-col-1 p-md-1 p-lg-1">
                     <h:form>                       
                         <p:commandButton id="dynaButton" value="Nápověda" type="button" icon="pi pi-home" style="align-self: center"/>
                         <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
@@ -57,8 +57,8 @@
                             </p:submenu>
                         </p:menu>
                     </h:form>
-                </p:layoutUnit>
-            </p:layout>
+                </div>
+            </div>
         </ui:composition>	
     </h:body>
 </html>

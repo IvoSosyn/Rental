@@ -80,14 +80,14 @@
                                 <p:message id="loginPassMsg" for="@previous" />                                                           
                             </div>
                             <div class="ui-g-2">
-                                <p:commandButton id="loginPassHelp" value="Zapomněli jste heslo?" actionListener="#{login.actionPassHelp()}" update="growlLogin" process="@this" ajax="true" />
+                                <p:commandButton id="loginPassHelp" value="Zapomněli jste heslo?" actionListener="#{login.actionPassHelp()}" update="growlLogin" process="@this" ajax="true" styleClass="rounded-button"  />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <p:commandButton id="loginSubmit" value="Přihlásit" action="#{login.actionLogin()}" >
+                    <p:commandButton id="loginSubmit" value="Přihlásit" action="#{login.actionLogin()}" styleClass="rounded-button"  >
                         <p:ajax update="loginSubmitMsg growlLogin" />
                     </p:commandButton>
                     <p:message id="loginSubmitMsg" for="@previous" />                                                           

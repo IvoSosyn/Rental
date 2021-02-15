@@ -101,6 +101,7 @@ public class ModelTree implements Serializable {
                 this.typentityRoot = models.get(0);
             }
         }
+        this.typentity = new Typentity();
         this.rootNode = typEntitycontroller.fillTreeNodes(this.typentityRoot);
         modelTable.onNodeUnselect(null);
     }

@@ -11,7 +11,6 @@ import cz.rental.entity.Attribute;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -62,7 +61,8 @@ public class ModelDetail implements Serializable {
 //        }        
 
         /**
-         * Nacist ID editacnich komponent formulare s detailem Attribute k pozdejsi validaci a resetu techto polozek
+         * Nacist ID editacnich komponent formulare s detailem Attribute k
+         * pozdejsi validaci a resetu techto polozek
          */
         UIComponent uiGrid = FacesContext.getCurrentInstance().getViewRoot().findComponent("formModelDetail:gridModelDetail");
         for (UIComponent uic : uiGrid.getChildren()) {
@@ -77,6 +77,7 @@ public class ModelDetail implements Serializable {
         editabelAttrsize.add('I');
         editabelAttrdecimal = new ArrayList<>();
         editabelAttrdecimal.add('N');
+        attribute = new Attribute();
         System.out.println(" ModelDetail.init()");
     }
 
@@ -111,6 +112,7 @@ public class ModelDetail implements Serializable {
 
     /**
      * Test na moznost editace polozek foemulare detailu Attribute
+     *
      * @return je|neni mozne polozku editovat
      */
     public Boolean isEditable() {
@@ -137,6 +139,7 @@ public class ModelDetail implements Serializable {
 
     /**
      * Test povoleni ulozit detail Attribute do DB
+     *
      * @return je|neni mozne Attribute ulozit do DB
      */
     public Boolean isButtonSaveEnable() {
@@ -153,11 +156,11 @@ public class ModelDetail implements Serializable {
     /**
      * Vrati puvodni hodnoty Attribute a provede reset vstupnich polozek
      *
-     * @param event 
+     * @param event
      */
     public void resetAttributes(ActionEvent event) {
         this.attribute = this.beforeEditAttr;
-        FacesContext.getCurrentInstance().getViewRoot().resetValues(FacesContext.getCurrentInstance(),uiiComponents);
+        FacesContext.getCurrentInstance().getViewRoot().resetValues(FacesContext.getCurrentInstance(), uiiComponents);
     }
 
     public void attrtypeChange() {
