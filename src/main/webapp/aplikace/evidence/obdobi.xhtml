@@ -8,21 +8,22 @@
     <h:body>
         <h:form id="formPlatnost"  >
             <p:growl id="growlPlatnost" showDetail="true" />
-            <div class="ui-g">
-                <div class="ui-g-10 ui-md-8 ui-lg-8">
-                    <p:outputLabel title="Zpracovávané období OD: " for="@next" >Období OD: </p:outputLabel>
+            <div class="p-grid">
+                <div class="p-col-4">
+                    <p:outputLabel value="Období OD:" title="Zpracovávané období OD: " for="@next" />
                     <p:datePicker id="ucetPlatiOD" value="#{evidence.platiOd}" valueChangeListener="#{evidence.handleDateChange}" onchange="submit();" validator="obdobiValidator" converter="obdobiConverter"  converterMessage="Nesprávný format datumu." locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" immediate="true" >
                         <p:ajax event="dateSelect" listener="#{evidence.handleDateSelect}" update="ucetPlatiDO growlPlatnost" />
                         <p:ajax update="ucetPlatiDO" />
                     </p:datePicker>
-
-                    <p:outputLabel title="Zpracovávané období DO" for="@next" > DO: </p:outputLabel>
+                </div>
+                <div class="p-col-4">
+                    <p:outputLabel value="DO:" title="Zpracovávané období DO" for="@next" />
                     <p:datePicker  id="ucetPlatiDO" value="#{evidence.platiDo}" valueChangeListener="#{evidence.handleDateChange}" onchange="submit();" validator="obdobiValidator" converter="obdobiConverter" converterMessage="Nesprávný format datumu." locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" >
                         <p:ajax event="dateSelect" listener="#{evidence.handleDateSelect}" update="ucetPlatiOD growlPlatnost" />
                     </p:datePicker>
                 </div>
-                <div class="ui-g-2 ui-md-4 ui-lg-4">
-                    <p:outputLabel title="Změny platnosti zápisů k datu OD" for="@next" > Změny údajů OD: </p:outputLabel>
+                <div class="p-col-3 p-offset-1">
+                    <p:outputLabel value=" Změny údajů OD: " title="Změny platnosti zápisů k datu OD" for="@next" />
                     <p:datePicker id="ucetZmenaOD" value="#{evidence.datumZmeny}" valueChangeListener="#{evidence.handleDateChange}" onchange="submit();" validator="obdobiValidator" converter="obdobiConverter" converterMessage="Nesprávný format datumu." locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" >
                         <p:ajax event="dateSelect" listener="#{evidence.handleDateSelect}"  update="growlPlatnost" />
                     </p:datePicker>            
