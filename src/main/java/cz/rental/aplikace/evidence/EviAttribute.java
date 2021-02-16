@@ -24,8 +24,6 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces.Dialog;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -62,10 +60,8 @@ public class EviAttribute implements Serializable {
      * Metoda nacte vsechny Attribute pro Entita a naplni pole "values"
      *
      * @param entita zaznam, pro ktery nacitam Attribute
-     * @param source zaznam, jehoz matice Entita se ma aktualizovat
      */
-    public void loadAttributes(Entita entita, EviEntita source) {
-        this.source = source;
+    public void loadAttributes(Entita entita) {
         if (entita == null) {
             attributes = new ArrayList<>();
             return;
@@ -81,6 +77,17 @@ public class EviAttribute implements Serializable {
             // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
             boolean add = this.values.add(new EviAttrValue(this.attrController, this.entita, attr, null, null));
         }
+    }
+
+    /**
+     * Metoda nacte vsechny Attribute pro Entita a naplni pole "values"
+     *
+     * @param entita zaznam, pro ktery nacitam Attribute
+     * @param source zaznam, jehoz matice Entita se ma aktualizovat
+     */
+    public void loadAttributes(Entita entita, EviEntita source) {
+        this.source = source;
+        loadAttributes(entita);
     }
 
     /**
@@ -118,20 +125,6 @@ public class EviAttribute implements Serializable {
         }
     }
 
-    public void onRowSelect(SelectEvent event) {
-//        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-    }
-
-    public void onRowUnselect(UnselectEvent event) {
-//        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-    }
-
-    public void gotoNewAttrValue(){
-    
-    }
-    
     /**
      * @return the attributes
      */
