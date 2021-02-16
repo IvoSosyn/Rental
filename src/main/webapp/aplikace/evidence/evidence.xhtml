@@ -13,13 +13,13 @@
                 <div class="ui-g">
                     <div class="ui-g-4 ui-md-4 ui-lg-4">
                         <ui:include src="/aplikace/evidence/evientita.xhtml"/>
-                        <p:divider align="left" type="dashed">
-                            <b>*</b>
-                        </p:divider>
+                        <p:divider align="left" type="solid" />
                         <ui:include src="/aplikace/evidence/eviButtons.xhtml"/>
                     </div>                    
                     <div class="ui-g-8 ui-md-8 ui-lg-8">
-                        <ui:include src="/aplikace/evidence/eviattr.xhtml"/>
+                        <h:panelGroup id="idEviAttrPanel">
+                            <ui:include src="#{eviEntita.includeEviAttrPanel()}"/>
+                        </h:panelGroup>
                     </div>                    
                 </div>
             </ui:define>

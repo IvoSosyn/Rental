@@ -24,6 +24,8 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces.Dialog;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -49,6 +51,7 @@ public class EviAttribute implements Serializable {
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<EviAttrValue> values = new ArrayList<>();
+    private EviAttrValue selectedAttrValue = null;
     private Dialog dialog;
 
     @PostConstruct
@@ -115,6 +118,20 @@ public class EviAttribute implements Serializable {
         }
     }
 
+    public void onRowSelect(SelectEvent event) {
+//        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+//        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+    }
+
+    public void gotoNewAttrValue(){
+    
+    }
+    
     /**
      * @return the attributes
      */
@@ -225,6 +242,20 @@ public class EviAttribute implements Serializable {
      */
     public void setDialog(Dialog dialog) {
         this.dialog = dialog;
+    }
+
+    /**
+     * @return the selectedAttrValue
+     */
+    public EviAttrValue getSelectedAttrValue() {
+        return selectedAttrValue;
+    }
+
+    /**
+     * @param selectedAttrValue the selectedAttrValue to set
+     */
+    public void setSelectedAttrValue(EviAttrValue selectedAttrValue) {
+        this.selectedAttrValue = selectedAttrValue;
     }
 
 }

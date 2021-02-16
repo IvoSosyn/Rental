@@ -45,6 +45,8 @@ public class EviEntita implements Serializable {
     static final long serialVersionUID = 42L;
 
     static final int COUNT_ENTITA_NEW = 1;
+    private static final String XHTML_EVIATTR_FILE = "/aplikace/evidence/";
+
     @EJB
     cz.rental.entity.TypentityController typentityController;
     @EJB
@@ -340,7 +342,7 @@ public class EviEntita implements Serializable {
         options.put("contentHeight", 320);
 
         this.dialog = PrimeFaces.current().dialog();
-        this.dialog.openDynamic("/aplikace/evidence/evientitacolumn", options, null);
+        this.dialog.openDynamic(XHTML_EVIATTR_FILE+"evientitacolumn", options, null);
         return "";
     }
 
@@ -413,6 +415,11 @@ public class EviEntita implements Serializable {
         }
     }
 
+    public String includeEviAttrPanel(){
+        String includePath=XHTML_EVIATTR_FILE+(this.getTypentity()!=null && this.getTypentity().getEditor()=='T'?"t":"f")+"-eviattr.xhtml";
+        return includePath ;
+    }
+    
     /**
      * @return the ucet
      */
