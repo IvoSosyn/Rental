@@ -342,7 +342,7 @@ public class EviEntita implements Serializable {
         options.put("contentHeight", 320);
 
         this.dialog = PrimeFaces.current().dialog();
-        this.dialog.openDynamic(XHTML_EVIATTR_FILE+"evientitacolumn", options, null);
+        this.dialog.openDynamic(XHTML_EVIATTR_FILE + "evientitacolumn", options, null);
         return "";
     }
 
@@ -415,11 +415,16 @@ public class EviEntita implements Serializable {
         }
     }
 
-    public String includeEviAttrPanel(){
-        String includePath=XHTML_EVIATTR_FILE+(this.getTypentity()!=null && this.getTypentity().getEditor()=='T'?"t":"f")+"-eviattr.xhtml";
-        return includePath ;
+    public String includeEviPanel() {
+        String includePath;
+        if (this.getTypentity() != null && this.getTypentity().getEditor() == 'T') {
+            includePath = XHTML_EVIATTR_FILE +"eviEntitaTbl.xhtml";
+        } else {
+            includePath = XHTML_EVIATTR_FILE+"eviAttr.xhtml";
+        }
+        return includePath;
     }
-    
+
     /**
      * @return the ucet
      */

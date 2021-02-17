@@ -7,16 +7,16 @@
 
     <h:body>
         <h:form id="formEntitaButtons" >
+            <p:divider align="left" type="solid" >
+                <b>Následná evidence</b>
+            </p:divider>
             <p:growl id="idEntitaGrowlButtons" showDetail="true" skipDetailIfEqualsSummary="true"/>
-            <p:fieldset legend="Následná evidence" toggleable="true" toggleSpeed="500" >
-                <p:ajax event="toggle" update=":formEntitaButtons:idEntitaGrowlButtons" />
-                <p:repeat  value="#{eviEntita.typentityChilds}"  var="typentity" >
-                    <div>
-                        <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" disabled="#{eviEntita.selectedEntita.newEntity}" update=":formEntita :formDialogColumns :formEntitaButtons :idEviAttrPanel" />
-                    </div>
-                </p:repeat>
-            </p:fieldset>
-            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" disabled="#{eviEntita.stackEntities.size() lt 2 }" update=":formEntita :formDialogColumns :formEntitaButtons :idEviAttrPanel"  icon="fa fa-caret-left" />
+            <p:repeat  value="#{eviEntita.typentityChilds}"  var="typentity" >
+                <div>
+                    <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" disabled="#{eviEntita.selectedEntita.newEntity}" update=":formEntita :formDialogColumns :formEntitaButtons :idEviGroup" />
+                </div>
+            </p:repeat>
+            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" disabled="#{eviEntita.stackEntities.size() lt 2 }" update=":formEntita :formDialogColumns :formEntitaButtons :idEviGroup"  icon="fa fa-caret-left" />
         </h:form>
     </h:body>  
 </html>

@@ -37,7 +37,6 @@ public class EviEntitaTbl implements Serializable {
     static final long serialVersionUID = 42L;
 
     static final int COUNT_ENTITA_NEW = 1;
-    private static final String XHTML_EVIATTR_FILE = "/aplikace/evidence/";
 
     @EJB
     cz.rental.entity.TypentityController typentityController;
@@ -89,12 +88,6 @@ public class EviEntitaTbl implements Serializable {
             this.typentity.setPopis("Nejvyšší entita");
         }
         this.parentEntita.setIdtypentity(this.typentity);
-
-        // Zahajovaci nastaveni:
-        // Nacist matici Entita pro nevyssi entitu, ktera je umele vytvorena z identifikace uctu a jako parent entitu ma hodnotu 'null' - nema predka   
-        // Typentita je prevzata z vybraneho modelu uctu
-        this.stackEntities.push(this.parentEntita);
-        loadEntities(this.parentEntita, this.typentity);
     }
 
     /**
