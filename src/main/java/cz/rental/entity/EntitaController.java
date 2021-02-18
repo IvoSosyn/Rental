@@ -35,19 +35,26 @@ public class EntitaController extends JpaController {
      * @return pole vsech Entita, ktere maji Entita.idparent==parent.id
      */
     public ArrayList<Entita> getEntities(Entita parent) {
-        if (parent == null) {
-            return new ArrayList<>();
-        }
+        return getEntities(parent, null);
+    }
+
+    public ArrayList<Entita> getEntities(Entita parent, Typentity typentity) {
         StringBuilder sb = new StringBuilder("SELECT e FROM Entita e WHERE e.idparent");
-        if (parent.getId() != null) {
+        if (parent instanceof Entita && parent.getId() != null) {
             sb.append("=:idParent");
         } else {
             sb.append(" IS NULL");
+        }
+        if (typentity instanceof Typentity) {
+            sb.append(" AND idtypentity =:typentity");
         }
         sb.append(" AND (e.platiod IS NULL OR e.platiod <= :PlatiDO) AND (e.platido IS NULL OR e.platido >= :PlatiOD)");
         this.query = this.getEm().createQuery(sb.toString());
         if (parent.getId() != null) {
             this.query.setParameter("idParent", parent.getId());
+        }
+        if (typentity instanceof Typentity) {
+            this.query.setParameter("typentity", typentity);
         }
         this.query.setParameter("PlatiOD", Aplikace.getPlatiOd());
         this.query.setParameter("PlatiDO", Aplikace.getPlatiDo());

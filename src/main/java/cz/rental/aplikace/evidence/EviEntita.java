@@ -142,12 +142,12 @@ public class EviEntita implements Serializable {
         }
         // Nacist stredovy panel, bud formular nebo tabulku
         if (this.typentity.getEditor() == 'T') {
-            this.eviTable.loadEntities(this.selectedEntita, this.typentity);
+            this.eviTable.loadTable(this.selectedEntita, this.typentity);
         } else {
             // Naplnit pole Attribute pro zadany typ entity
             this.attributes = attrController.getAttributeForTypentity(this.typentity);
             // Nacist hodnoty Attribute 
-            this.eviForm.loadAttributes(this.selectedEntita, this);
+            this.eviForm.loadForm(this.selectedEntita, this);
         }
         // Definice sloupcu tabulky Entity
         this.columnsForEntitaTable();
@@ -372,13 +372,13 @@ public class EviEntita implements Serializable {
     public void onRowSelect(SelectEvent event) {
 //        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviForm.loadAttributes(((Entita) event.getObject()), this);
+        eviForm.loadForm(((Entita) event.getObject()), this);
     }
 
     public void onRowUnselect(UnselectEvent event) {
 //        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviForm.loadAttributes(null, this);
+        eviForm.loadForm(null, this);
 
     }
 
@@ -417,7 +417,7 @@ public class EviEntita implements Serializable {
         for (Entita entita : entities) {
             if (entita.isNewEntity()) {
                 this.selectedEntita = entita;
-                eviForm.loadAttributes(this.selectedEntita, this);
+                eviForm.loadForm(this.selectedEntita, this);
                 break;
             }
         }

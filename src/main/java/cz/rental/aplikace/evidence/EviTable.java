@@ -101,7 +101,7 @@ public class EviTable implements Serializable {
      * podrizenych entit
      * @param typentity
      */
-    public void loadEntities(Entita parent, Typentity typentity) {
+    public void loadTable(Entita parent, Typentity typentity) {
         if (typentity == null || parent == null) {
             return;
         }
@@ -134,7 +134,7 @@ public class EviTable implements Serializable {
      * Metoda pro opakovane nacteni matice Entita slouzi k aktualizaci
      */
     public void reLoadEntities() {
-        loadEntities(this.parentEntita, this.typentity);
+        loadTable(this.parentEntita, this.typentity);
     }
 
     public void columnsSelect() {

@@ -85,7 +85,7 @@ public class EviForm implements Serializable {
      * @param entita zaznam, pro ktery nacitam Attribute
      * @param source zaznam, jehoz matice Entita se ma aktualizovat
      */
-    public void loadAttributes(Entita entita, EviEntita source) {
+    public void loadForm(Entita entita, EviEntita source) {
         this.source = source;
         loadAttributes(entita);
     }
