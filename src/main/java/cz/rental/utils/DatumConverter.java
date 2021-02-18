@@ -23,7 +23,7 @@ import javax.faces.convert.FacesConverter;
  *
  * @author ivo
  */
-@FacesConverter("obdobiConverter")
+@FacesConverter("datumConverter")
 @SessionScoped
 public class DatumConverter implements Converter, Serializable {
 
