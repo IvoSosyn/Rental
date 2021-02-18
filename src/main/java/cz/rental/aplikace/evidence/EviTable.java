@@ -30,9 +30,9 @@ import org.primefaces.model.DualListModel;
  *
  * @author ivo
  */
-@Named(value = "eviEntitaTbl")
+@Named(value = "eviTable")
 @SessionScoped
-public class EviEntitaTbl implements Serializable {
+public class EviTable implements Serializable {
 
     static final long serialVersionUID = 42L;
 
@@ -49,7 +49,7 @@ public class EviEntitaTbl implements Serializable {
     private Ucet ucet;
 
     @Inject
-    private EviAttribute eviAttribute;
+    private EviForm eviAttribute;
 
     private Stack<Entita> stackEntities = new Stack();
     private Entita parentEntita = null;
@@ -110,7 +110,7 @@ public class EviEntitaTbl implements Serializable {
         this.entities = entitaController.getEntities(this.parentEntita);
         this.attributes = attrController.getAttributeForTypentity(this.typentity);
         // Pridani radku nove zaznamu Entita
-        for (int i = 0; i < EviEntitaTbl.COUNT_ENTITA_NEW; i++) {
+        for (int i = 0; i < EviTable.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
             Entita newEntita = new Entita();
             newEntita.setId(UUID.randomUUID());
@@ -174,7 +174,7 @@ public class EviEntitaTbl implements Serializable {
         Object obj = attrController.getAttrValue(entita, attribute, (Date) null, (Date) null);
         if (obj != null) {
             value = obj.toString();
-        } 
+        }
         return value;
     }
 
@@ -316,14 +316,14 @@ public class EviEntitaTbl implements Serializable {
     /**
      * @return the eviAttribute
      */
-    public EviAttribute getEviAttribute() {
+    public EviForm getEviAttribute() {
         return eviAttribute;
     }
 
     /**
      * @param eviAttribute the eviAttribute to set
      */
-    public void setEviAttribute(EviAttribute eviAttribute) {
+    public void setEviAttribute(EviForm eviAttribute) {
         this.eviAttribute = eviAttribute;
     }
 

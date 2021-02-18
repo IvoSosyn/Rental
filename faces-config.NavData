@@ -3,7 +3,7 @@
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
         <Node id="aplikace/login.xhtml" x="-233" y="135" zoom="true"/>
-        <Node id="aplikace/evidence/eviattr.xhtml" x="-159" y="487" zoom="true"/>
+        <Node id="aplikace/evidence/eviForm.xhtml" x="-159" y="487" zoom="true"/>
         <Node id="admin/model/modelTable.xhtml" x="515" y="86" zoom="true"/>
         <Node id="templates/templateMain.xhtml" x="127" y="50" zoom="true"/>
         <Node id="templates/contens.xhtml" x="150" y="117" zoom="true"/>

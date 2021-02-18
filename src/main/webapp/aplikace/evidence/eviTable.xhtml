@@ -10,27 +10,27 @@
         <h:form id="formEntitaTbl" >
             <p:dataTable id="idEntitaTblChild" 
                          var="entita" 
-                         value="#{eviEntitaTbl.entities}" 
+                         value="#{eviTable.entities}" 
                          widgetVar="eviEntitaChild" 
                          rowKey="#{entita.id}"
-                         selection="#{eviEntitaTbl.selectedEntita}" 
+                         selection="#{eviTable.selectedEntita}" 
                          selectionMode="single"  >
 
-                <p:ajax event="rowSelect" listener="#{eviEntitaTbl.onRowSelect}" update="@form" />
-                <p:ajax event="rowUnselect" listener="#{eviEntitaTbl.onRowUnselect}" update="@form" />
+                <p:ajax event="rowSelect" listener="#{eviTable.onRowSelect}" update="@form" />
+                <p:ajax event="rowUnselect" listener="#{eviTable.onRowUnselect}" update="@form" />
 
                 <f:facet name="header">                            
                     <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
                 </f:facet>
-                <p:columns  value="#{eviEntitaTbl.attributes}" var="attr" >
+                <p:columns  value="#{eviTable.attributes}" var="attr" >
                     <f:facet name="header">
-                        <h:outputText value="#{eviEntitaTbl.getColumnHeader(entita, attr)}" />
+                        <h:outputText value="#{eviTable.getColumnHeader(entita, attr)}" />
                     </f:facet>
-                    <h:outputText value="#{eviEntitaTbl.getColumnValue(entita, attr)}" />
+                    <h:outputText value="#{eviTable.getColumnValue(entita, attr)}" />
                 </p:columns>
                 <f:facet name="footer">                            
                     <div align="center">                    
-                        <p:commandButton value="Nový" actionListener="#{eviEntitaTbl.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update="@form"  />
+                        <p:commandButton value="Nový" actionListener="#{eviTable.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update="@form"  />
                     </div>
                 </f:facet>
             </p:dataTable>        

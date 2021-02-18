@@ -29,9 +29,9 @@ import org.primefaces.PrimeFaces.Dialog;
  *
  * @author ivo
  */
-@Named(value = "eviAttr")
+@Named(value = "eviForm")
 @SessionScoped
-public class EviAttribute implements Serializable {
+public class EviForm implements Serializable {
 
     private static long serialVersionUID = 42L;
 
@@ -120,7 +120,7 @@ public class EviAttribute implements Serializable {
             }
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Data byla úspěšně uložena."));
         } catch (Exception ex) {
-            Logger.getLogger(EviAttribute.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EviForm.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly uloženy.", "Chyba" + ex.getMessage()));
         }
     }
