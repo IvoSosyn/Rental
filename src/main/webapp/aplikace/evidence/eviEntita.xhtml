@@ -20,8 +20,8 @@
                          selection="#{eviEntita.selectedEntita}" 
                          selectionMode="single"  >
 
-                <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelect}" update=":ideviFormPanel :formEntitaButtons :formEntita:idEntitaGrowl :formDialogColumns" />
-                <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":ideviFormPanel :formEntitaButtons :formEntita:idEntitaGrowl :formDialogColumns" />
+                <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelect}" update=":idEviGroup :formEntitaButtons :formEntita:idEntitaGrowl :formDialogColumns" />
+                <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":idEviGroup :formEntitaButtons :formEntita:idEntitaGrowl :formDialogColumns" />
 
                 <f:facet name="header">                            
                     <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
@@ -37,7 +37,7 @@
                 </p:columns>
                 <f:facet name="footer">                            
                     <div align="center">                    
-                        <p:commandButton value="Nový" actionListener="#{eviEntita.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update=" :ideviFormPanel :formEntitaButtons :formEntita:idEntitaGrowl :formEntita:idEntitaTbl" styleClass="rounded-button"  />
+                        <p:commandButton value="Nový" actionListener="#{eviEntita.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update=" :idEviGroup :formEntitaButtons :formEntita:idEntitaGrowl :formEntita:idEntitaTbl" styleClass="rounded-button"  />
                     </div>
                 </f:facet>
             </p:dataTable>
