@@ -60,7 +60,7 @@ public class EviEntita implements Serializable {
     @Inject
     private EviForm eviForm;
     @Inject
-    private EviForm eviTable;
+    private EviTable eviTable;
 
     private Stack<Entita> stackEntities = new Stack();
     private Entita parentEntita = null;
@@ -125,7 +125,6 @@ public class EviEntita implements Serializable {
         this.parentEntita = parent;
         this.typentity = typentity;
         this.entities = entitaController.getEntities(this.parentEntita);
-        this.attributes = attrController.getAttributeForTypentity(this.typentity);
         // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
@@ -141,8 +140,15 @@ public class EviEntita implements Serializable {
         if (this.selectedEntita == null) {
             this.selectedEntita = this.entities.get(0);
         }
-        // Nacist hodnoty Attribute 
-        eviForm.loadAttributes(this.selectedEntita, this);
+        // Nacist stredovy panel, bud formular nebo tabulku
+        if (this.typentity.getEditor() == 'T') {
+            this.eviTable.loadEntities(this.selectedEntita, this.typentity);
+        } else {
+            // Naplnit pole Attribute pro zadany typ entity
+            this.attributes = attrController.getAttributeForTypentity(this.typentity);
+            // Nacist hodnoty Attribute 
+            this.eviForm.loadAttributes(this.selectedEntita, this);
+        }
         // Definice sloupcu tabulky Entity
         this.columnsForEntitaTable();
         // Child Typentity pro tlacitkovou listu
@@ -420,9 +426,9 @@ public class EviEntita implements Serializable {
     public String includeEviPanel() {
         String includePath;
         if (this.getTypentity() != null && this.getTypentity().getEditor() == 'T') {
-            includePath = XHTML_EVIATTR_FILE +"eviTable.xhtml";
+            includePath = XHTML_EVIATTR_FILE + "eviTable.xhtml";
         } else {
-            includePath = XHTML_EVIATTR_FILE+"eviForm.xhtml";
+            includePath = XHTML_EVIATTR_FILE + "eviForm.xhtml";
         }
         return includePath;
     }
@@ -543,7 +549,7 @@ public class EviEntita implements Serializable {
      * @return the eviForm
      */
     public EviForm getEviForm() {
-        return eviForm;
+        return this.eviForm;
     }
 
     /**
@@ -551,6 +557,20 @@ public class EviEntita implements Serializable {
      */
     public void setEviForm(EviForm eviForm) {
         this.eviForm = eviForm;
+    }
+
+    /**
+     * @return the eviTable
+     */
+    public EviTable getEviTable() {
+        return this.eviTable;
+    }
+
+    /**
+     * @param eviTable the eviTable to set
+     */
+    public void setEviTable(EviTable eviTable) {
+        this.eviTable = eviTable;
     }
 
     /**
@@ -571,7 +591,7 @@ public class EviEntita implements Serializable {
      * @return the stackEntities
      */
     public Stack<Entita> getStackEntities() {
-        return stackEntities;
+        return this.stackEntities;
     }
 
     /**
@@ -579,20 +599,6 @@ public class EviEntita implements Serializable {
      */
     public void setStackEntities(Stack<Entita> stackEntities) {
         this.stackEntities = stackEntities;
-    }
-
-    /**
-     * @return the eviTable
-     */
-    public EviForm getEviTable() {
-        return eviTable;
-    }
-
-    /**
-     * @param eviTable the eviTable to set
-     */
-    public void setEviTable(EviForm eviTable) {
-        this.eviTable = eviTable;
     }
 
 }
