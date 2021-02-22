@@ -63,6 +63,7 @@ public class EviEntita implements Serializable {
     private EviTable eviTable;
 
     private Stack<Entita> stackEntities = new Stack();
+    private Stack<StackEvi> stackEvi = new Stack();
     private Entita parentEntita = null;
     private Typentity typentity = null;
     private ArrayList<Entita> entities = new ArrayList<>();
@@ -104,6 +105,7 @@ public class EviEntita implements Serializable {
         // Nacist matici Entita pro nevyssi entitu, ktera je umele vytvorena z identifikace uctu a jako parent entitu ma hodnotu 'null' - nema predka   
         // Typentita je prevzata z vybraneho modelu uctu
         this.stackEntities.push(this.parentEntita);
+        this.stackEvi.push(new StackEvi(parentEntita, null, typentity, 'T', parentEntita, null, typentity, typentity.getEditor()));
         loadEntities(this.parentEntita, this.typentity);
     }
 
@@ -122,8 +124,8 @@ public class EviEntita implements Serializable {
         if (typentity == null || parent == null) {
             return;
         }
-        this.parentEntita = parent;
-        this.typentity = typentity;
+        this.parentEntita = stackEvi.lastElement().getParentEntita();
+        this.typentity = stackEvi.lastElement().getParentTypEntity();
         this.entities = entitaController.getEntities(this.parentEntita);
         // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
@@ -140,10 +142,16 @@ public class EviEntita implements Serializable {
         if (this.selectedEntita == null) {
             this.selectedEntita = this.entities.get(0);
         }
+        stackEvi.lastElement().setParentSelectedEntita(this.selectedEntita);
         // Nacist stredovy panel, bud formular nebo tabulku
-        if (this.typentity.getEditor() == 'T') {
-            this.eviTable.loadTable(this.selectedEntita, this.typentity);
+        if (stackEvi.lastElement().getChildEditMode() == 'T') {
+            this.eviTable.loadTable(stackEvi.lastElement().getChildEntita(), stackEvi.lastElement().getChildTypEntity());
+            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
+                stackEvi.lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
+            }
         } else {
+            stackEvi.lastElement().setChildEntita(this.selectedEntita);
+            stackEvi.lastElement().setChildSelectedEntita(this.selectedEntita);
             // Naplnit pole Attribute pro zadany typ entity
             this.attributes = attrController.getAttributeForTypentity(this.typentity);
             // Nacist hodnoty Attribute 
@@ -372,14 +380,27 @@ public class EviEntita implements Serializable {
     public void onRowSelect(SelectEvent event) {
 //        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviForm.loadForm(((Entita) event.getObject()), this);
+        Entita selectedEnti = (Entita) event.getObject();
+
+        stackEvi.lastElement().setParentSelectedEntita(selectedEnti);
+        stackEvi.lastElement().setChildEntita(selectedEnti);
+        // Nacist stredovy panel, bud formular nebo tabulku
+        if (stackEvi.lastElement().getChildEditMode() == 'T') {
+            this.eviTable.loadTable(stackEvi.lastElement().getChildEntita(), stackEvi.lastElement().getChildTypEntity());
+            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
+                stackEvi.lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
+            }
+        } else {
+            stackEvi.lastElement().setChildSelectedEntita(selectedEnti);
+            this.eviForm.loadForm(selectedEnti, this);
+        }
+
     }
 
     public void onRowUnselect(UnselectEvent event) {
 //        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviForm.loadForm(null, this);
-
+ //       eviForm.loadForm(null, this);
     }
 
     /**
@@ -601,4 +622,144 @@ public class EviEntita implements Serializable {
         this.stackEntities = stackEntities;
     }
 
+    /**
+     * =========================================================================
+     * Interni trida pro ukladani urovni vnoreni do stromu Entita
+     *
+     */
+    class StackEvi {
+
+        private Entita parentEntita = null;
+        private Entita parentSelectedEntita = null;
+        private Typentity parentTypEntity = null;
+        private Character parentEditMode = 'T';
+        private Entita childEntita = null;
+        private Entita childSelectedEntita = null;
+        private Typentity childTypEntity = null;
+        private Character childEditMode = 'F';
+
+        public StackEvi(Entita parentEntita, Entita parentSelectedEntita, Typentity parentTypEntity, Character parentEditMode, Entita childEntita, Entita childSelectedEntita, Typentity childTypEntity, Character childEditMode) {
+            this.parentEntita = parentEntita;
+            this.parentSelectedEntita = parentSelectedEntita;
+            this.parentTypEntity = parentTypEntity;
+            this.parentEditMode = parentEditMode;
+            this.childEntita = childEntita;
+            this.childSelectedEntita = childSelectedEntita;
+            this.childTypEntity = childTypEntity;
+            this.childEditMode = childEditMode;
+        }
+
+        /**
+         * @return the parentEntita
+         */
+        public Entita getParentEntita() {
+            return parentEntita;
+        }
+
+        /**
+         * @param parentEntita the parentEntita to set
+         */
+        public void setParentEntita(Entita parentEntita) {
+            this.parentEntita = parentEntita;
+        }
+
+        /**
+         * @return the parentTypEntity
+         */
+        public Typentity getParentTypEntity() {
+            return parentTypEntity;
+        }
+
+        /**
+         * @param parentTypEntity the parentTypEntity to set
+         */
+        public void setParentTypEntity(Typentity parentTypEntity) {
+            this.parentTypEntity = parentTypEntity;
+        }
+
+        /**
+         * @return the parentEditMode
+         */
+        public Character getParentEditMode() {
+            return parentEditMode;
+        }
+
+        /**
+         * @param parentEditMode the parentEditMode to set
+         */
+        public void setParentEditMode(Character parentEditMode) {
+            this.parentEditMode = parentEditMode;
+        }
+
+        /**
+         * @return the childEntita
+         */
+        public Entita getChildEntita() {
+            return childEntita;
+        }
+
+        /**
+         * @param childEntita the childEntita to set
+         */
+        public void setChildEntita(Entita childEntita) {
+            this.childEntita = childEntita;
+        }
+
+        /**
+         * @return the childTypEntity
+         */
+        public Typentity getChildTypEntity() {
+            return childTypEntity;
+        }
+
+        /**
+         * @param childTypEntity the childTypEntity to set
+         */
+        public void setChildTypEntity(Typentity childTypEntity) {
+            this.childTypEntity = childTypEntity;
+        }
+
+        /**
+         * @return the childEditMode
+         */
+        public Character getChildEditMode() {
+            return childEditMode;
+        }
+
+        /**
+         * @param childEditMode the childEditMode to set
+         */
+        public void setChildEditMode(Character childEditMode) {
+            this.childEditMode = childEditMode;
+        }
+
+        /**
+         * @return the parentSelectedEntita
+         */
+        public Entita getParentSelectedEntita() {
+            return parentSelectedEntita;
+        }
+
+        /**
+         * @param parentSelectedEntita the parentSelectedEntita to set
+         */
+        public void setParentSelectedEntita(Entita parentSelectedEntita) {
+            this.parentSelectedEntita = parentSelectedEntita;
+        }
+
+        /**
+         * @return the childSelectedEntita
+         */
+        public Entita getChildSelectedEntita() {
+            return childSelectedEntita;
+        }
+
+        /**
+         * @param childSelectedEntita the childSelectedEntita to set
+         */
+        public void setChildSelectedEntita(Entita childSelectedEntita) {
+            this.childSelectedEntita = childSelectedEntita;
+        }
+
+    }
 }
