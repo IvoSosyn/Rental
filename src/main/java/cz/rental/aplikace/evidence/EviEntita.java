@@ -105,8 +105,8 @@ public class EviEntita implements Serializable {
         // Nacist matici Entita pro nevyssi entitu, ktera je umele vytvorena z identifikace uctu a jako parent entitu ma hodnotu 'null' - nema predka   
         // Typentita je prevzata z vybraneho modelu uctu
         this.stackEntities.push(this.parentEntita);
-        this.stackEvi.push(new StackEvi(parentEntita, null, typentity, 'T', parentEntita, null, typentity, typentity.getEditor()));
-        loadEntities(this.parentEntita, this.typentity);
+        this.getStackEvi().push(new StackEvi(parentEntita, null, typentity, 'T', parentEntita, null, typentity, typentity.getEditor()));
+        loadEntities();
     }
 
     /**
@@ -116,23 +116,17 @@ public class EviEntita implements Serializable {
      * 'eviButtons.xml'
      *
      *
-     * @param parent - Entita(uzel), pro kerou se vybere matice nejblizsich
-     * podrizenych entit
-     * @param typentity
      */
-    public void loadEntities(Entita parent, Typentity typentity) {
-        if (typentity == null || parent == null) {
-            return;
-        }
-        this.parentEntita = stackEvi.lastElement().getParentEntita();
-        this.typentity = stackEvi.lastElement().getParentTypEntity();
-        this.entities = entitaController.getEntities(this.parentEntita);
+    public void loadEntities() {
+        this.parentEntita = getStackEvi().lastElement().getParentEntita();
+        this.typentity = getStackEvi().lastElement().getParentTypEntity();
+        this.entities = entitaController.getEntities(this.parentEntita, this.typentity);
         // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
             Entita newEntita = new Entita();
             newEntita.setId(UUID.randomUUID());
-            newEntita.setIdparent(parent.getId());
+            newEntita.setIdparent(this.parentEntita.getId());
             newEntita.setIdtypentity(this.getTypentity());
             newEntita.setPopis("Nový záznam");
             newEntita.setNewEntity(true);
@@ -142,32 +136,105 @@ public class EviEntita implements Serializable {
         if (this.selectedEntita == null) {
             this.selectedEntita = this.entities.get(0);
         }
-        stackEvi.lastElement().setParentSelectedEntita(this.selectedEntita);
-        // Nacist stredovy panel, bud formular nebo tabulku
-        if (stackEvi.lastElement().getChildEditMode() == 'T') {
-            this.eviTable.loadTable(stackEvi.lastElement().getChildEntita(), stackEvi.lastElement().getChildTypEntity());
-            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
-                stackEvi.lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
-            }
-        } else {
-            stackEvi.lastElement().setChildEntita(this.selectedEntita);
-            stackEvi.lastElement().setChildSelectedEntita(this.selectedEntita);
-            // Naplnit pole Attribute pro zadany typ entity
-            this.attributes = attrController.getAttributeForTypentity(this.typentity);
-            // Nacist hodnoty Attribute 
-            this.eviForm.loadForm(this.selectedEntita, this);
-        }
+        getStackEvi().lastElement().setParentSelectedEntita(this.selectedEntita);
+        // Naplnit pole Attribute pro zadany typ entity
+        this.attributes = attrController.getAttributeForTypentity(this.typentity);
         // Definice sloupcu tabulky Entity
         this.columnsForEntitaTable();
         // Child Typentity pro tlacitkovou listu
         this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
+        // Nacist stredovy panel, bud formular nebo tabulku
+        if (getStackEvi().lastElement().getChildEditMode() == 'T') {
+            this.eviTable.loadTable(getStackEvi().lastElement().getChildEntita(), getStackEvi().lastElement().getChildTypEntity());
+            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
+                getStackEvi().lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
+            }
+        } else {
+            getStackEvi().lastElement().setChildEntita(this.selectedEntita);
+            getStackEvi().lastElement().setChildSelectedEntita(this.selectedEntita);
+            // Nacist hodnoty Attribute 
+            this.eviForm.loadForm(this.selectedEntita, this);
+        }
+
     }
 
     /**
      * Metoda pro opakovane nacteni matice Entita slouzi k aktualizaci
      */
     public void reLoadEntities() {
-        loadEntities(this.parentEntita, this.typentity);
+        loadEntities();
+    }
+
+    public void onRowSelect(SelectEvent event) {
+//        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+        Entita selectedEnti = (Entita) event.getObject();
+
+        getStackEvi().lastElement().setParentSelectedEntita(selectedEnti);
+        getStackEvi().lastElement().setChildEntita(selectedEnti);
+        // Nacist stredovy panel, bud formular nebo tabulku
+        if (getStackEvi().lastElement().getChildEditMode() == 'T') {
+            this.eviTable.loadTable(getStackEvi().lastElement().getChildEntita(), getStackEvi().lastElement().getChildTypEntity());
+            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
+                getStackEvi().lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
+            }
+        } else {
+            getStackEvi().lastElement().setChildSelectedEntita(selectedEnti);
+            this.eviForm.loadForm(selectedEnti, this);
+        }
+
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+//        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+        //       eviForm.loadForm(null, this);
+    }
+
+    /**
+     * Metoda naplni naplni tento beans novymi hodnotami pro novy Typentity
+     *
+     * @param typentity - pozadovany Typentity, pro ktery se naplni tento beans
+     * (matice a promenne)
+     */
+    public void changeTypentity(Typentity typentity) {
+        this.getStackEvi().push(new StackEvi(this.getStackEvi().lastElement().getChildEntita(), this.getStackEvi().lastElement().getChildSelectedEntita(), this.getStackEvi().lastElement().getChildTypEntity(), this.getStackEvi().lastElement().getChildEditMode(), this.getStackEvi().lastElement().getChildSelectedEntita(), null, typentity, typentity.getEditor()));
+        loadEntities();
+    }
+
+    /**
+     * Metoda provede krok zpet a naplni tento beans hodnotami vyssi urovne
+     * Typentity ze zasobniku Entit
+     */
+    public void changeTypentityBack() {
+        if (!this.stackEvi.empty() && this.getStackEvi().size() > 1) {
+            // Odeberu aktuální záznam
+            StackEvi stackEviLast = this.getStackEvi().pop();
+        }
+        loadEntities();
+    }
+
+    public void gotoNewEntita() {
+        for (Entita entita : entities) {
+            if (entita.isNewEntity()) {
+                this.getStackEvi().lastElement().setParentSelectedEntita(entita);
+                if (this.getStackEvi().lastElement().getChildEditMode() == 'F') {
+                    this.getStackEvi().lastElement().setChildSelectedEntita(entita);
+                }
+                loadEntities();
+                break;
+            }
+        }
+    }
+
+    public String includeEviPanel() {
+        String includePath;
+        if (this.getTypentity() != null && this.getTypentity().getEditor() == 'T') {
+            includePath = XHTML_EVIATTR_FILE + "eviTable.xhtml";
+        } else {
+            includePath = XHTML_EVIATTR_FILE + "eviForm.xhtml";
+        }
+        return includePath;
     }
 
     public void columnsSelect() {
@@ -375,83 +442,6 @@ public class EviEntita implements Serializable {
             this.ucet.getUzivatel().setParam(this.typentity.getId().toString(), sb.toString());
         }
         //        this.dialog.closeDynamic(this.columnsDualList.getTarget());
-    }
-
-    public void onRowSelect(SelectEvent event) {
-//        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        Entita selectedEnti = (Entita) event.getObject();
-
-        stackEvi.lastElement().setParentSelectedEntita(selectedEnti);
-        stackEvi.lastElement().setChildEntita(selectedEnti);
-        // Nacist stredovy panel, bud formular nebo tabulku
-        if (stackEvi.lastElement().getChildEditMode() == 'T') {
-            this.eviTable.loadTable(stackEvi.lastElement().getChildEntita(), stackEvi.lastElement().getChildTypEntity());
-            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
-                stackEvi.lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
-            }
-        } else {
-            stackEvi.lastElement().setChildSelectedEntita(selectedEnti);
-            this.eviForm.loadForm(selectedEnti, this);
-        }
-
-    }
-
-    public void onRowUnselect(UnselectEvent event) {
-//        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
- //       eviForm.loadForm(null, this);
-    }
-
-    /**
-     * Metoda naplni naplni tento beans novymi hodnotami pro novy Typentity
-     *
-     * @param typentity - pozadovany Typentity, pro ktery se naplni tento beans
-     * (matice a promenne)
-     */
-    public void changeTypentity(Typentity typentity) {
-        Entita newParentEntita = this.selectedEntita;
-        this.selectedEntita = null;
-        this.stackEntities.push(newParentEntita);
-        loadEntities(newParentEntita, typentity);
-    }
-
-    /**
-     * Metoda provede krok zpet a naplni tento beans hodnotami vyssi urovne
-     * Typentity ze zasobniku Entit
-     */
-    public void changeTypentityBack() {
-        if (!this.stackEntities.empty()) {
-            // Odeberu aktuální záznam, selectedEntita je parentEntita z predchoziho pohledu
-            this.selectedEntita = this.stackEntities.pop();
-            this.typentity = this.selectedEntita.getIdtypentity();
-            // Otestovat, zda se jedna o ulozenou Entita, a pokud ne, tak vracim null
-            this.selectedEntita = entitaController.getEntita(this.selectedEntita.getId());
-            // Nactu hodnoty predchoziho zaznamu
-            if (!this.stackEntities.empty()) {
-                loadEntities(this.stackEntities.lastElement(), this.typentity);
-            }
-        }
-    }
-
-    public void gotoNewEntita() {
-        for (Entita entita : entities) {
-            if (entita.isNewEntity()) {
-                this.selectedEntita = entita;
-                eviForm.loadForm(this.selectedEntita, this);
-                break;
-            }
-        }
-    }
-
-    public String includeEviPanel() {
-        String includePath;
-        if (this.getTypentity() != null && this.getTypentity().getEditor() == 'T') {
-            includePath = XHTML_EVIATTR_FILE + "eviTable.xhtml";
-        } else {
-            includePath = XHTML_EVIATTR_FILE + "eviForm.xhtml";
-        }
-        return includePath;
     }
 
     /**
@@ -761,5 +751,19 @@ public class EviEntita implements Serializable {
             this.childSelectedEntita = childSelectedEntita;
         }
 
+    }
+
+    /**
+     * @return the stackEvi
+     */
+    public Stack<StackEvi> getStackEvi() {
+        return stackEvi;
+    }
+
+    /**
+     * @param stackEvi the stackEvi to set
+     */
+    public void setStackEvi(Stack<StackEvi> stackEvi) {
+        this.stackEvi = stackEvi;
     }
 }

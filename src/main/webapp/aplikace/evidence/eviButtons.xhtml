@@ -16,7 +16,7 @@
                     <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" disabled="#{eviEntita.selectedEntita.newEntity}" update=":formEntita :formDialogColumns :formEntitaButtons :idEviGroup" />
                 </div>
             </p:repeat>
-            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" disabled="#{eviEntita.stackEntities.size() lt 2 }" update=":formEntita :formDialogColumns :formEntitaButtons :idEviGroup"  icon="fa fa-caret-left" />
+            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" disabled="#{eviEntita.stackEvi.size() lt 2 }" update=":formEntita :formDialogColumns :formEntitaButtons :idEviGroup"  icon="fa fa-caret-left" styleClass="rounded-button" />
         </h:form>
     </h:body>  
 </html>

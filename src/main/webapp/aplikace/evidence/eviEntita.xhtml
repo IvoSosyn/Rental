@@ -23,10 +23,14 @@
                 <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelect}" update=":idEviGroup :formEntitaButtons :formEntita:idEntitaGrowl :formDialogColumns" />
                 <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselect}" update=":idEviGroup :formEntitaButtons :formEntita:idEntitaGrowl :formDialogColumns" />
 
-                <f:facet name="header">                            
-                    <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
-                    <div align="right">                    
-                        <p:commandButton value="Sloupce" onclick="PF('dialogColumns').show();return;" icon="fa fa-columns" ajax="true" styleClass="rounded-button" />
+                <f:facet name="header">   
+                    <div class="p-d-flex p-jc-between  p-ai-center">
+                        <div>
+                            <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />                            
+                        </div>
+                        <div>
+                            <p:commandButton value="Sloupce" onclick="PF('dialogColumns').show();return;" icon="fa fa-columns" ajax="true" styleClass="rounded-button" />                            
+                        </div>
                     </div>
                 </f:facet>
                 <p:columns  value="#{eviEntita.columns}" var="column" >

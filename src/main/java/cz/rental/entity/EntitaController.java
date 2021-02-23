@@ -46,7 +46,7 @@ public class EntitaController extends JpaController {
             sb.append(" IS NULL");
         }
         if (typentity instanceof Typentity) {
-            sb.append(" AND idtypentity =:typentity");
+            sb.append(" AND e.idtypentity =:typentity");
         }
         sb.append(" AND (e.platiod IS NULL OR e.platiod <= :PlatiDO) AND (e.platido IS NULL OR e.platido >= :PlatiOD)");
         this.query = this.getEm().createQuery(sb.toString());
