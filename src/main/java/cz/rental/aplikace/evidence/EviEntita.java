@@ -118,8 +118,9 @@ public class EviEntita implements Serializable {
      *
      */
     public void loadEntities() {
-        this.parentEntita = getStackEvi().lastElement().getParentEntita();
-        this.typentity = getStackEvi().lastElement().getParentTypEntity();
+        this.parentEntita = this.stackEvi.lastElement().getParentEntita();
+        this.typentity = this.stackEvi.lastElement().getParentTypEntity();
+        this.selectedEntita = this.stackEvi.lastElement().getParentSelectedEntita();
         this.entities = entitaController.getEntities(this.parentEntita, this.typentity);
         // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviEntita.COUNT_ENTITA_NEW; i++) {
@@ -135,9 +136,9 @@ public class EviEntita implements Serializable {
         // Naselectuji 0-tou Entita, pokud neni jiz preddefinovana
         if (this.selectedEntita == null) {
             this.selectedEntita = this.entities.get(0);
+            this.stackEvi.lastElement().setParentSelectedEntita(this.selectedEntita);
         }
-        getStackEvi().lastElement().setParentSelectedEntita(this.selectedEntita);
-        getStackEvi().lastElement().setChildEntita(this.selectedEntita);
+        this.stackEvi.lastElement().setChildEntita(this.selectedEntita);
 
         // Naplnit pole Attribute pro zadany typ entity
         this.attributes = attrController.getAttributeForTypentity(this.typentity);
@@ -147,10 +148,10 @@ public class EviEntita implements Serializable {
         this.typentityChilds = typentityController.getTypentityChilds(this.typentity);
 
         // Nacist panel s vlastni evidenci, bud formular 'F' nebo tabulku 'T'
-        if (getStackEvi().lastElement().getChildEditMode() == 'T') {
-            this.eviTable.loadTable(getStackEvi().lastElement().getChildEntita(), getStackEvi().lastElement().getChildTypEntity());
+        if (this.stackEvi.lastElement().getChildEditMode() == 'T') {
+            this.eviTable.loadTable(this.stackEvi.lastElement().getChildEntita(), this.stackEvi.lastElement().getChildTypEntity());
         } else {
-            getStackEvi().lastElement().setChildSelectedEntita(this.selectedEntita);
+            this.stackEvi.lastElement().setChildSelectedEntita(this.selectedEntita);
             // Nacist hodnoty Attribute 
             this.eviForm.loadForm(this.selectedEntita, this);
         }
@@ -172,7 +173,7 @@ public class EviEntita implements Serializable {
         this.stackEvi.lastElement().setChildEntita(selectedParentEntita);
         // Nacist stredovy panel, bud formular nebo tabulku
         if (this.stackEvi.lastElement().getChildEditMode() == 'T') {
-            this.eviTable.loadTable(this.stackEvi.lastElement().getChildEntita(), this.stackEvi.lastElement().getChildTypEntity());
+            this.eviTable.loadTable(selectedParentEntita, selectedParentEntita.getIdtypentity());
         } else {
             this.stackEvi.lastElement().setChildSelectedEntita(selectedParentEntita);
             this.eviForm.loadForm(selectedParentEntita, this);
@@ -194,12 +195,15 @@ public class EviEntita implements Serializable {
      */
     public void changeTypentity(Typentity typentity) {
         if (typentity.getEditor() == 'T') {
-            this.getStackEvi().push(new StackEvi(this.selectedEntita, this.selectedEntita,this.selectedEntita.getIdtypentity(),this.selectedEntita.getIdtypentity().getEditor(), this.selectedEntita, null, typentity, typentity.getEditor()));
+            this.stackEvi.push(new StackEvi(
+                    this.parentEntita,this.selectedEntita, this.selectedEntita.getIdtypentity(), this.selectedEntita.getIdtypentity().getEditor(),
+                    this.selectedEntita, null, typentity, typentity.getEditor()));
         } else {
-            this.getStackEvi().push(new StackEvi(this.selectedEntita,this.selectedEntita,typentity,typentity.getEditor(), null,null, typentity, typentity.getEditor()));
-            loadEntities();
+            this.stackEvi.push(new StackEvi(
+                    this.selectedEntita, null, typentity, typentity.getEditor(),
+                    null, null, typentity, typentity.getEditor()));
         }
-
+        loadEntities();
     }
 
     /**
@@ -207,21 +211,28 @@ public class EviEntita implements Serializable {
      * Typentity ze zasobniku Entit
      */
     public void changeTypentityBack() {
-        if (!this.stackEvi.empty() && this.getStackEvi().size() > 1) {
+        if (!this.stackEvi.empty() && this.stackEvi.size() > 1) {
             // Odeberu aktuální záznam
-            StackEvi stackEviLast = this.getStackEvi().pop();
+            StackEvi stackEviLast = this.stackEvi.pop();
+            // Vygeneruji vsechny komponenty parents + childs + buttons
+            loadEntities();
         }
-        loadEntities();
     }
 
     public void gotoNewEntita() {
         for (Entita entita : entities) {
             if (entita.isNewEntity()) {
-                this.getStackEvi().lastElement().setParentSelectedEntita(entita);
-                if (this.getStackEvi().lastElement().getChildEditMode() == 'F') {
-                    this.getStackEvi().lastElement().setChildSelectedEntita(entita);
+                this.selectedEntita = entita;
+                this.stackEvi.lastElement().setParentSelectedEntita(entita);
+                this.stackEvi.lastElement().setChildEntita(entita);
+                // Nacist panel s vlastni evidenci, bud formular 'F' nebo tabulku 'T'
+                if (this.stackEvi.lastElement().getChildEditMode() == 'T') {
+                    this.eviTable.loadTable(this.stackEvi.lastElement().getChildEntita(), this.stackEvi.lastElement().getChildTypEntity());
+                } else {
+                    this.stackEvi.lastElement().setChildSelectedEntita(entita);
+                    // Nacist hodnoty Attribute 
+                    this.eviForm.loadForm(this.selectedEntita, this);
                 }
-                loadEntities();
                 break;
             }
         }
@@ -229,7 +240,7 @@ public class EviEntita implements Serializable {
 
     public String includeEviPanel() {
         String includePath;
-        if (this.getTypentity() != null && this.getTypentity().getEditor() == 'T') {
+        if (this.stackEvi.lastElement()!= null && this.stackEvi.lastElement().getChildEditMode() == 'T') {
             includePath = XHTML_EVIATTR_FILE + "eviTable.xhtml";
         } else {
             includePath = XHTML_EVIATTR_FILE + "eviForm.xhtml";
