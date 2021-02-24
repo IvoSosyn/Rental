@@ -62,7 +62,6 @@ public class EviEntita implements Serializable {
     @Inject
     private EviTable eviTable;
 
-    private Stack<Entita> stackEntities = new Stack();
     private Stack<StackEvi> stackEvi = new Stack();
     private Entita parentEntita = null;
     private Typentity typentity = null;
@@ -104,7 +103,6 @@ public class EviEntita implements Serializable {
         // Zahajovaci nastaveni:
         // Nacist matici Entita pro nevyssi entitu, ktera je umele vytvorena z identifikace uctu a jako parent entitu ma hodnotu 'null' - nema predka   
         // Typentita je prevzata z vybraneho modelu uctu
-        this.stackEntities.push(this.parentEntita);
         this.getStackEvi().push(new StackEvi(parentEntita, null, typentity, 'T', parentEntita, null, typentity, typentity.getEditor()));
         loadEntities();
     }
@@ -609,19 +607,6 @@ public class EviEntita implements Serializable {
         this.typentityChilds = typentityChilds;
     }
 
-    /**
-     * @return the stackEntities
-     */
-    public Stack<Entita> getStackEntities() {
-        return this.stackEntities;
-    }
-
-    /**
-     * @param stackEntities the stackEntities to set
-     */
-    public void setStackEntities(Stack<Entita> stackEntities) {
-        this.stackEntities = stackEntities;
-    }
 
     /**
      * =========================================================================
