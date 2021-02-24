@@ -137,25 +137,23 @@ public class EviEntita implements Serializable {
             this.selectedEntita = this.entities.get(0);
         }
         getStackEvi().lastElement().setParentSelectedEntita(this.selectedEntita);
+        getStackEvi().lastElement().setChildEntita(this.selectedEntita);
+
         // Naplnit pole Attribute pro zadany typ entity
         this.attributes = attrController.getAttributeForTypentity(this.typentity);
         // Definice sloupcu tabulky Entity
         this.columnsForEntitaTable();
-        // Child Typentity pro tlacitkovou listu
-        this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
-        // Nacist stredovy panel, bud formular nebo tabulku
+        // Child Typentity pro tlacitkovy panel
+        this.typentityChilds = typentityController.getTypentityChilds(this.typentity);
+
+        // Nacist panel s vlastni evidenci, bud formular 'F' nebo tabulku 'T'
         if (getStackEvi().lastElement().getChildEditMode() == 'T') {
             this.eviTable.loadTable(getStackEvi().lastElement().getChildEntita(), getStackEvi().lastElement().getChildTypEntity());
-            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
-                getStackEvi().lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
-            }
         } else {
-            getStackEvi().lastElement().setChildEntita(this.selectedEntita);
             getStackEvi().lastElement().setChildSelectedEntita(this.selectedEntita);
             // Nacist hodnoty Attribute 
             this.eviForm.loadForm(this.selectedEntita, this);
         }
-
     }
 
     /**
@@ -168,19 +166,16 @@ public class EviEntita implements Serializable {
     public void onRowSelect(SelectEvent event) {
 //        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        Entita selectedEnti = (Entita) event.getObject();
+        Entita selectedParentEntita = (Entita) event.getObject();
 
-        getStackEvi().lastElement().setParentSelectedEntita(selectedEnti);
-        getStackEvi().lastElement().setChildEntita(selectedEnti);
+        this.stackEvi.lastElement().setParentSelectedEntita(selectedParentEntita);
+        this.stackEvi.lastElement().setChildEntita(selectedParentEntita);
         // Nacist stredovy panel, bud formular nebo tabulku
-        if (getStackEvi().lastElement().getChildEditMode() == 'T') {
-            this.eviTable.loadTable(getStackEvi().lastElement().getChildEntita(), getStackEvi().lastElement().getChildTypEntity());
-            if (this.eviTable.getEntities() instanceof ArrayList && !this.eviTable.getEntities().isEmpty()) {
-                getStackEvi().lastElement().setChildSelectedEntita(this.eviTable.getEntities().get(0));
-            }
+        if (this.stackEvi.lastElement().getChildEditMode() == 'T') {
+            this.eviTable.loadTable(this.stackEvi.lastElement().getChildEntita(), this.stackEvi.lastElement().getChildTypEntity());
         } else {
-            getStackEvi().lastElement().setChildSelectedEntita(selectedEnti);
-            this.eviForm.loadForm(selectedEnti, this);
+            this.stackEvi.lastElement().setChildSelectedEntita(selectedParentEntita);
+            this.eviForm.loadForm(selectedParentEntita, this);
         }
 
     }
@@ -198,8 +193,13 @@ public class EviEntita implements Serializable {
      * (matice a promenne)
      */
     public void changeTypentity(Typentity typentity) {
-        this.getStackEvi().push(new StackEvi(this.getStackEvi().lastElement().getChildEntita(), this.getStackEvi().lastElement().getChildSelectedEntita(), this.getStackEvi().lastElement().getChildTypEntity(), this.getStackEvi().lastElement().getChildEditMode(), this.getStackEvi().lastElement().getChildSelectedEntita(), null, typentity, typentity.getEditor()));
-        loadEntities();
+        if (typentity.getEditor() == 'T') {
+            this.getStackEvi().push(new StackEvi(this.selectedEntita, this.selectedEntita,this.selectedEntita.getIdtypentity(),this.selectedEntita.getIdtypentity().getEditor(), this.selectedEntita, null, typentity, typentity.getEditor()));
+        } else {
+            this.getStackEvi().push(new StackEvi(this.selectedEntita,this.selectedEntita,typentity,typentity.getEditor(), null,null, typentity, typentity.getEditor()));
+            loadEntities();
+        }
+
     }
 
     /**
