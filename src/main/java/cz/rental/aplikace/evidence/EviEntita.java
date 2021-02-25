@@ -103,7 +103,7 @@ public class EviEntita implements Serializable {
         // Zahajovaci nastaveni:
         // Nacist matici Entita pro nevyssi entitu, ktera je umele vytvorena z identifikace uctu a jako parent entitu ma hodnotu 'null' - nema predka   
         // Typentita je prevzata z vybraneho modelu uctu
-        this.getStackEvi().push(new StackEvi(parentEntita, null, typentity, 'T', parentEntita, null, typentity, typentity.getEditor()));
+        this.getStackEvi().push(new StackEvi(parentEntita, null, typentity, parentEntita, null, typentity));
         loadEntities();
     }
 
@@ -146,7 +146,7 @@ public class EviEntita implements Serializable {
         this.typentityChilds = typentityController.getTypentityChilds(this.typentity);
 
         // Nacist panel s vlastni evidenci, bud formular 'F' nebo tabulku 'T'
-        if (this.stackEvi.lastElement().getChildEditMode() == 'T') {
+        if (this.stackEvi.lastElement().getChildTypEntity().getEditor() == 'T') {
             this.eviTable.loadTable(this.stackEvi.lastElement().getChildEntita(), this.stackEvi.lastElement().getChildTypEntity());
         } else {
             this.stackEvi.lastElement().setChildSelectedEntita(this.selectedEntita);
@@ -170,7 +170,7 @@ public class EviEntita implements Serializable {
         this.stackEvi.lastElement().setParentSelectedEntita(selectedParentEntita);
         this.stackEvi.lastElement().setChildEntita(selectedParentEntita);
         // Nacist stredovy panel, bud formular nebo tabulku
-        if (this.stackEvi.lastElement().getChildEditMode() == 'T') {
+        if (this.stackEvi.lastElement().getChildTypEntity().getEditor() == 'T') {
             this.eviTable.loadTable(selectedParentEntita, selectedParentEntita.getIdtypentity());
         } else {
             this.stackEvi.lastElement().setChildSelectedEntita(selectedParentEntita);
@@ -188,18 +188,30 @@ public class EviEntita implements Serializable {
     /**
      * Metoda naplni naplni tento beans novymi hodnotami pro novy Typentity
      *
-     * @param typentity - pozadovany Typentity, pro ktery se naplni tento beans
+     * @param newTypentity - pozadovany Typentity, pro ktery se naplni tento beans
      * (matice a promenne)
      */
-    public void changeTypentity(Typentity typentity) {
-        if (typentity.getEditor() == 'T') {
+    public void changeTypentity(Typentity newTypentity) {
+        if (newTypentity.getEditor() == 'T') {
             this.stackEvi.push(new StackEvi(
-                    this.parentEntita,this.selectedEntita, this.selectedEntita.getIdtypentity(), this.selectedEntita.getIdtypentity().getEditor(),
-                    this.selectedEntita, null, typentity, typentity.getEditor()));
+                    this.parentEntita,this.selectedEntita, this.selectedEntita.getIdtypentity(),
+                    this.selectedEntita, null, newTypentity));
         } else {
             this.stackEvi.push(new StackEvi(
-                    this.selectedEntita, null, typentity, typentity.getEditor(),
-                    null, null, typentity, typentity.getEditor()));
+                    this.selectedEntita, null, newTypentity,
+                    this.selectedEntita, null, newTypentity));
+        }
+        loadEntities();
+    }
+    public void changeTypentityTable(Entita newEntitaParent,Entita newSelectedEntita,Typentity newTypentity) {
+        if (newTypentity.getEditor() == 'T') {
+            this.stackEvi.push(new StackEvi(
+                    newEntitaParent,newSelectedEntita, newEntitaParent.getIdtypentity(),
+                    newSelectedEntita, null, newTypentity));
+        } else {
+            this.stackEvi.push(new StackEvi(
+                    newEntitaParent, null, newTypentity,
+                    newEntitaParent, null, newTypentity));
         }
         loadEntities();
     }
@@ -224,7 +236,7 @@ public class EviEntita implements Serializable {
                 this.stackEvi.lastElement().setParentSelectedEntita(entita);
                 this.stackEvi.lastElement().setChildEntita(entita);
                 // Nacist panel s vlastni evidenci, bud formular 'F' nebo tabulku 'T'
-                if (this.stackEvi.lastElement().getChildEditMode() == 'T') {
+                if (this.stackEvi.lastElement().getChildTypEntity().getEditor()== 'T') {
                     this.eviTable.loadTable(this.stackEvi.lastElement().getChildEntita(), this.stackEvi.lastElement().getChildTypEntity());
                 } else {
                     this.stackEvi.lastElement().setChildSelectedEntita(entita);
@@ -234,11 +246,12 @@ public class EviEntita implements Serializable {
                 break;
             }
         }
+        System.out.println("gotoNewEntita()");
     }
 
     public String includeEviPanel() {
         String includePath;
-        if (this.stackEvi.lastElement()!= null && this.stackEvi.lastElement().getChildEditMode() == 'T') {
+        if (this.stackEvi.lastElement()!= null && this.stackEvi.lastElement().getChildTypEntity().getEditor() == 'T') {
             includePath = XHTML_EVIATTR_FILE + "eviTable.xhtml";
         } else {
             includePath = XHTML_EVIATTR_FILE + "eviForm.xhtml";
@@ -247,7 +260,7 @@ public class EviEntita implements Serializable {
     }
 
     public void columnsSelect() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Dosud neimplementovano", "Dosud neimplementovano"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Dosud neimplementováno", "Dosud neimplementováno"));
     }
 
     /**
@@ -607,7 +620,19 @@ public class EviEntita implements Serializable {
         this.typentityChilds = typentityChilds;
     }
 
+    /**
+     * @return the stackEvi
+     */
+    public Stack<StackEvi> getStackEvi() {
+        return stackEvi;
+    }
 
+    /**
+     * @param stackEvi the stackEvi to set
+     */
+    public void setStackEvi(Stack<StackEvi> stackEvi) {
+        this.stackEvi = stackEvi;
+    }
     /**
      * =========================================================================
      * Interni trida pro ukladani urovni vnoreni do stromu Entita
@@ -618,21 +643,17 @@ public class EviEntita implements Serializable {
         private Entita parentEntita = null;
         private Entita parentSelectedEntita = null;
         private Typentity parentTypEntity = null;
-        private Character parentEditMode = 'T';
         private Entita childEntita = null;
         private Entita childSelectedEntita = null;
         private Typentity childTypEntity = null;
-        private Character childEditMode = 'F';
 
-        public StackEvi(Entita parentEntita, Entita parentSelectedEntita, Typentity parentTypEntity, Character parentEditMode, Entita childEntita, Entita childSelectedEntita, Typentity childTypEntity, Character childEditMode) {
+        public StackEvi(Entita parentEntita, Entita parentSelectedEntita, Typentity parentTypEntity,  Entita childEntita, Entita childSelectedEntita, Typentity childTypEntity) {
             this.parentEntita = parentEntita;
             this.parentSelectedEntita = parentSelectedEntita;
             this.parentTypEntity = parentTypEntity;
-            this.parentEditMode = parentEditMode;
             this.childEntita = childEntita;
             this.childSelectedEntita = childSelectedEntita;
             this.childTypEntity = childTypEntity;
-            this.childEditMode = childEditMode;
         }
 
         /**
@@ -664,20 +685,6 @@ public class EviEntita implements Serializable {
         }
 
         /**
-         * @return the parentEditMode
-         */
-        public Character getParentEditMode() {
-            return parentEditMode;
-        }
-
-        /**
-         * @param parentEditMode the parentEditMode to set
-         */
-        public void setParentEditMode(Character parentEditMode) {
-            this.parentEditMode = parentEditMode;
-        }
-
-        /**
          * @return the childEntita
          */
         public Entita getChildEntita() {
@@ -703,20 +710,6 @@ public class EviEntita implements Serializable {
          */
         public void setChildTypEntity(Typentity childTypEntity) {
             this.childTypEntity = childTypEntity;
-        }
-
-        /**
-         * @return the childEditMode
-         */
-        public Character getChildEditMode() {
-            return childEditMode;
-        }
-
-        /**
-         * @param childEditMode the childEditMode to set
-         */
-        public void setChildEditMode(Character childEditMode) {
-            this.childEditMode = childEditMode;
         }
 
         /**
@@ -749,17 +742,4 @@ public class EviEntita implements Serializable {
 
     }
 
-    /**
-     * @return the stackEvi
-     */
-    public Stack<StackEvi> getStackEvi() {
-        return stackEvi;
-    }
-
-    /**
-     * @param stackEvi the stackEvi to set
-     */
-    public void setStackEvi(Stack<StackEvi> stackEvi) {
-        this.stackEvi = stackEvi;
-    }
 }

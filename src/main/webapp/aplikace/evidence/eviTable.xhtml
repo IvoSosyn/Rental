@@ -20,7 +20,7 @@
                 <p:ajax event="rowUnselect" listener="#{eviTable.onRowUnselect}" update="@form" />
 
                 <f:facet name="header">                            
-                    <p:outputLabel value="#{eviEntita.typentity.typentity}-#{eviEntita.typentity.popis} :" />
+                    <p:outputLabel value="#{eviTable.typentity.typentity}-#{eviTable.typentity.popis} :" />
                 </f:facet>
                 <p:columns  value="#{eviTable.attributes}" var="attr" >
                     <f:facet name="header">

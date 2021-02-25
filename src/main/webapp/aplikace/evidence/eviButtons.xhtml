@@ -13,10 +13,10 @@
             <p:growl id="idEntitaGrowlButtons" showDetail="true" skipDetailIfEqualsSummary="true"/>
             <p:repeat  value="#{eviEntita.typentityChilds}"  var="typentity" >
                 <div>
-                    <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" disabled="#{eviEntita.selectedEntita.newEntity}" update=":formEntita :formDialogColumns :formEntitaButtons :idEviGroup" />
+                    <p:commandButton label="#{typentity.popis}" value="#{typentity.popis}" actionListener="#{eviEntita.changeTypentity(typentity)}" disabled="#{eviEntita.selectedEntita.newEntity}" update=":formEntita :formDialogColumns :formEntitaButtons :eviGroupChild" />
                 </div>
             </p:repeat>
-            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" disabled="#{eviEntita.stackEvi.size() lt 2 }" update=":formEntita :formDialogColumns :formEntitaButtons :idEviGroup"  icon="fa fa-caret-left" styleClass="rounded-button" />
+            <p:commandButton label="Zpět" value="Zpět" actionListener="#{eviEntita.changeTypentityBack()}" disabled="#{eviEntita.stackEvi.size() lt 2 }" update=":formEntita :formDialogColumns :formEntitaButtons :eviGroupChild"  icon="fa fa-caret-left" styleClass="rounded-button" />
         </h:form>
     </h:body>  
 </html>

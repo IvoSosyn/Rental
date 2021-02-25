@@ -13,19 +13,21 @@
                     <p:outputLabel value="Období OD:" title="Zpracovávané období OD: " for="@next" />
                     <p:datePicker id="ucetPlatiOD" value="#{evidence.platiOd}" valueChangeListener="#{evidence.handleDateChange}" onchange="submit();" validator="obdobiValidator" converter="datumConverter"  converterMessage="Nesprávný format datumu." locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false" immediate="true" >
                         <p:ajax event="dateSelect" listener="#{evidence.handleDateSelect}" update="ucetPlatiDO growlObdobi" />
-                        <p:ajax update="ucetPlatiDO" />
+                        <p:ajax update="@all" />
                     </p:datePicker>
                 </div>
                 <div class="p-col-4">
                     <p:outputLabel value="DO:" title="Zpracovávané období DO" for="@next" />
                     <p:datePicker  id="ucetPlatiDO" value="#{evidence.platiDo}" valueChangeListener="#{evidence.handleDateChange}" onchange="submit();" validator="obdobiValidator" converter="datumConverter" converterMessage="Nesprávný format datumu." locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" >
                         <p:ajax event="dateSelect" listener="#{evidence.handleDateSelect}" update="ucetPlatiOD growlObdobi" />
+                        <p:ajax update="@all" />
                     </p:datePicker>
                 </div>
                 <div class="p-col-3 p-offset-1">
                     <p:outputLabel value=" Změny údajů OD: " title="Změny platnosti zápisů k datu OD" for="@next" />
                     <p:datePicker id="ucetZmenaOD" value="#{evidence.datumZmeny}" valueChangeListener="#{evidence.handleDateChange}" onchange="submit();" validator="obdobiValidator" converter="datumConverter" converterMessage="Nesprávný format datumu." locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" >
                         <p:ajax event="dateSelect" listener="#{evidence.handleDateSelect}"  update="growlObdobi" />
+                        <p:ajax update="@all" />
                     </p:datePicker>            
                 </div>
             </div>
