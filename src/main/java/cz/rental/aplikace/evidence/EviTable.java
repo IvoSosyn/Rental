@@ -12,7 +12,6 @@ import cz.rental.entity.Typentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Stack;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -51,7 +50,6 @@ public class EviTable implements Serializable {
     @Inject
     private EviForm eviAttribute;
 
-    private Stack<Entita> stackEntities = new Stack();
     private Entita parentEntita = null;
     private Typentity typentity = null;
     private ArrayList<Entita> entities = new ArrayList<>();
@@ -66,28 +64,6 @@ public class EviTable implements Serializable {
 
     @PostConstruct
     public void init() {
-//        try {
-//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Ucet");
-//            user = (User) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-        this.parentEntita = new Entita();
-        this.parentEntita.setId(ucet.getAccount().getId());
-        // 
-        // Dohledat vrcholovy model(sablonu) Typentity( s jeho definovanymi Attribute) pro pole Entita uctu
-        this.typentity = typentityController.getTypentity(ucet.getAccount().getId());
-        if (this.typentity != null && this.typentity.getIdparent() == null) {
-            // V pripade vrcholove Typentity najdu nejblizsi dalsi
-            this.typentity = typentityController.getTypentityForParentID(this.typentity.getId());
-        }
-        if (this.typentity == null) {
-            this.typentity = new Typentity();
-            this.typentity.setId(UUID.fromString("945889e4-4383-480e-9d77-dafe665fd475"));
-            this.typentity.setPopis("Nejvyšší entita");
-        }
-        this.parentEntita.setIdtypentity(this.typentity);
     }
 
     /**
@@ -102,13 +78,15 @@ public class EviTable implements Serializable {
      * @param typentity
      */
     public void loadTable(Entita parent, Typentity typentity) {
-        if (typentity == null || parent == null) {
+        if (parent == null || typentity == null) {
             return;
+        }
+        if (this.attributes.isEmpty() || !this.typentity.equals(typentity)) {
+            this.attributes = attrController.getAttributeForTypentity(typentity);
         }
         this.parentEntita = parent;
         this.typentity = typentity;
-        this.entities = entitaController.getEntities(this.parentEntita);
-        this.attributes = attrController.getAttributeForTypentity(this.typentity);
+        this.entities = entitaController.getEntities(parent);
         // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviTable.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
@@ -339,20 +317,6 @@ public class EviTable implements Serializable {
      */
     public void setTypentityChilds(ArrayList<Typentity> typentityChilds) {
         this.typentityChilds = typentityChilds;
-    }
-
-    /**
-     * @return the stackEntities
-     */
-    public Stack<Entita> getStackEntities() {
-        return stackEntities;
-    }
-
-    /**
-     * @param stackEntities the stackEntities to set
-     */
-    public void setStackEntities(Stack<Entita> stackEntities) {
-        this.stackEntities = stackEntities;
     }
 
 }
