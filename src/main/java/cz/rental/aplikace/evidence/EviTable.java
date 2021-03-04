@@ -10,9 +10,14 @@ import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -81,8 +86,9 @@ public class EviTable implements Serializable {
         if (parent == null || typentity == null) {
             return;
         }
-        if (this.attributes.isEmpty() || !this.typentity.equals(typentity)) {
+        if (this.attributes.isEmpty() || this.typentity == null || !this.typentity.equals(typentity)) {
             this.attributes = attrController.getAttributeForTypentity(typentity);
+            this.columnsForEntitaTable(typentity);
         }
         this.parentEntita = parent;
         this.typentity = typentity;
@@ -103,7 +109,7 @@ public class EviTable implements Serializable {
             this.selectedEntita = this.entities.get(0);
         }
         // Nacist hodnoty Attribute 
-        eviAttribute.loadAttributes(this.selectedEntita);
+        eviAttribute.loadAttrValue(this.selectedEntita);
         // Child Typentity pro tlacitkovou listu
         this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
     }
@@ -120,17 +126,111 @@ public class EviTable implements Serializable {
     }
 
     /**
+     * Metoda naplni matici pouzitelnych sloupcu pro tabulku "eviTable.xml" z
+     * poli Typentity a jeste z jeho prvku Attribute pro pozdejsi vyuziti v
+     * dialogu vyberu zobrazovanych slopcu
+     */
+    private void columnsForEntitaTable(Typentity typentity) {
+        // Definice sloupcu tabulky Entity
+        this.columns = new ArrayList<>();
+        this.columnsSource = new ArrayList<>();
+        // Nacteni predchoziho uzivatelskeho nastaveni
+        String userColumns = this.ucet.getUzivatel().getParam(typentity.getId().toString(), "");
+        if (!userColumns.isEmpty()) {
+            this.columns.addAll(Arrays.asList(userColumns.split(";")));
+        }
+        boolean emptyColumns = this.columns.isEmpty();
+        // Doplnim pole pouzitelnych sloupcu o promenne z Entita
+        for (String entitaColumns : new String[]{"Entita.Popis", "Entita.Platiod", "Entita.Platido"}) {
+            if (emptyColumns) {
+                this.columns.add(entitaColumns);
+            }
+            if (!columns.contains(entitaColumns)) {
+                this.columnsSource.add(entitaColumns);
+            }
+        }
+        // Doplnim pole pouzitelnych sloupcu o Attribute
+        for (Attribute attr : this.attributes) {
+            String column = "Attribute." + attr.getAttrname().trim();
+            if (!columns.contains(column)) {
+                this.columnsSource.add(column);
+            }
+        }
+        // Vytvoreni nabidky sloupcu k vyberu
+        this.columnsDualList = new DualListModel<>(this.columnsSource, this.columns);
+    }
+
+    public void saveUserColumns() {
+        this.columns = new ArrayList(this.columnsDualList.getTarget());
+        StringBuilder sb = new StringBuilder("");
+        columns.forEach((String column) -> {
+            if (sb.length() > 0) {
+                sb.append(";");
+            }
+            sb.append(column);
+        });
+        if (sb.length() > 0) {
+            this.ucet.getUzivatel().setParam(this.typentity.getId().toString(), sb.toString());
+        }
+        //        this.dialog.closeDynamic(this.columnsDualList.getTarget());
+    }
+
+    /**
      * Metoda pro nadpis sloupcu tabulky prehledu Entit pro nasledny vyber
      * detailu
      *
      * @param entita instance Entity, pro kterou hledam nadpis z Attributa.popis
      * tabulky z nazvu pole Typentity nebo nazvu pole Entita
-     * @param attribute Polozka sloupce
+     * @param column ve tvaru "Tabulka.pole" napr. "Entita.poznamka" nebo
+     * "Attribute.prijemni"
      * @return hodnotu bud z relacnich tabulek pro Attribute.popis nebo z
      * Entita.metoda nebo z pole Typentity.metoda
      */
-    public String getColumnHeader(Entita entita, Attribute attribute) {
-        return (attribute instanceof Attribute ? attribute.getPopis() : "?");
+    public String getColumnHeader(Entita entita, String column) {
+        String table = "Entita";
+        String field = "popis";
+        String value = column;
+        String[] tableField;
+        if (column == null || column.isEmpty()) {
+            column = "Entita.popis";
+        }
+        tableField = column.split("\\.");
+        switch (tableField.length) {
+            case 0: {
+                break;
+            }
+            case 1: {
+                field = tableField[0];
+                break;
+            }
+            case 2: {
+                table = tableField[0];
+                field = tableField[1];
+                break;
+            }
+            default:
+        }
+        // Pokud se jedna o hodnotu Attribute je potreba dohledaat v DB
+        if (table.equalsIgnoreCase("Attribute")) {
+            value = column;
+            if (this.getAttributes() != null) {
+                for (Attribute attr : this.getAttributes()) {
+                    if (attr.getAttrname().trim().equalsIgnoreCase(field.trim())) {
+                        value = attr.getPopis();
+                        break;
+                    }
+                }
+            }
+        }
+        // Pokud se jedna o tabulku "Typentity" metoda vrati hodnotu pole z  instance Entita
+        if (table.equalsIgnoreCase("Typentity")) {
+            value = column;
+        }
+        // Pokud se jedna o tabulku "Entita" metoda vrati hodnotu pole z  instance Entita
+        if (table.equalsIgnoreCase("Entita")) {
+            value = column;
+        }
+        return value;
     }
 
     /**
@@ -139,19 +239,73 @@ public class EviTable implements Serializable {
      * @param entita instance Entity, pro kterou hledam hodnotu bud z jejiho
      * pole nebo z Attributa tabulky a jejich relacnich hodnot nebo z pole
      * Typentity
-     * @param attribute Attribute pro ktery hledame hodnotu
+     * @param column ve tvaru "Tabulka.pole" napr. Entita.poznamka nebo
+     * Attribute.prijemni
      * @return hodnotu bud z relacnich tabulek pro Attribute nebo z
      * Entita.get[metoda] nebo z pole Typentity.get[metoda]
      */
-    public String getColumnValue(Entita entita, Attribute attribute) {
+    public String getColumnValue(Entita entita, String column) {
+        String table = "Attribute";
+        String field = "popis";
         String value = "";
-        if (entita == null || entita.getIdtypentity() == null || attribute == null) {
-            return value;
+        Typentity tpe = null;
+        String[] tableField;
+        if (entita == null || entita.getIdtypentity() == null) {
+            return "";
         }
-
-        Object obj = attrController.getAttrValue(entita, attribute, (Date) null, (Date) null);
-        if (obj != null) {
-            value = obj.toString();
+        tpe = entita.getIdtypentity();
+        if (column == null || column.isEmpty()) {
+            column = "Attribute.popis";
+        }
+        tableField = column.split("\\.");
+        switch (tableField.length) {
+            case 0: {
+                break;
+            }
+            case 1: {
+                field = tableField[0];
+                break;
+            }
+            case 2: {
+                table = tableField[0];
+                field = tableField[1];
+                break;
+            }
+            default:
+        }
+        // Pokud se jedna o hodnotu Attribute je potreba dohledaat v DB
+        if (table.equalsIgnoreCase("Attribute") && this.getAttributes() != null) {
+            for (Attribute attr : this.getAttributes()) {
+                if (attr.getAttrname().trim().equalsIgnoreCase(field.trim())) {
+                    //TO-DO: najit hodnotu v DB pro vybranou Attribute a Typentity
+                    Object obj = attr.getPopis();
+                    obj = attrController.getAttrValue(entita, attr, (Date) null, (Date) null);
+                    if (obj != null) {
+                        value = obj.toString();
+                    }
+                    ///
+                    break;
+                }
+            }
+        }
+        // Pokud se jedna o tabulku "Typentity" metoda vrati hodnotu pole z  instance Entita
+        if (table.equalsIgnoreCase("Typentity")) {
+            Method method;
+            try {
+                method = tpe.getClass().getMethod("get" + field, new Class[]{});
+                value = method.invoke(tpe, new Object[]{}).toString();
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        // Pokud se jedna o tabulku "Entita" metoda vrati hodnotu pole z  instance Entita
+        if (table.equalsIgnoreCase("Entita")) {
+            try {
+                Method method = tpe.getClass().getMethod("get" + field, new Class[]{});
+                value = (String) method.invoke(entita, new Object[]{});
+            } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
+                Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return value;
     }
@@ -159,13 +313,13 @@ public class EviTable implements Serializable {
     public void onRowSelect(SelectEvent event) {
 //        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviAttribute.loadAttributes(((Entita) event.getObject()));
+        eviAttribute.loadAttrValue(((Entita) event.getObject()));
     }
 
     public void onRowUnselect(UnselectEvent event) {
 //        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviAttribute.loadAttributes(null);
+        eviAttribute.loadAttrValue(null);
 
     }
 
@@ -173,7 +327,7 @@ public class EviTable implements Serializable {
         for (Entita entita : entities) {
             if (entita.isNewEntity()) {
                 this.selectedEntita = entita;
-                eviAttribute.loadAttributes(this.selectedEntita);
+                eviAttribute.loadAttrValue(this.selectedEntita);
                 break;
             }
         }

@@ -61,7 +61,7 @@ public class EviForm implements Serializable {
      *
      * @param entita zaznam, pro ktery nacitam Attribute
      */
-    public void loadAttributes(Entita entita) {
+    public void loadAttrValue(Entita entita) {
         if (entita == null) {
             attributes = new ArrayList<>();
             return;
@@ -87,7 +87,7 @@ public class EviForm implements Serializable {
      */
     public void loadForm(Entita entita, EviEntita source) {
         this.source = source;
-        loadAttributes(entita);
+        loadAttrValue(entita);
     }
 
     /**

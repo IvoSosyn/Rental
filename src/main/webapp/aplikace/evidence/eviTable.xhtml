@@ -13,6 +13,10 @@
                          value="#{eviTable.entities}" 
                          widgetVar="eviEntitaChild" 
                          rowKey="#{entita.id}"
+                         scrollable="true"
+                         liveResize="true"
+                         resizableColumns="true"
+                         resizeMode="expand"
                          selection="#{eviTable.selectedEntita}" 
                          selectionMode="single"  >
 
@@ -20,21 +24,43 @@
                 <p:ajax event="rowUnselect" listener="#{eviTable.onRowUnselect}" update="@form" />
 
                 <f:facet name="header">                            
-                    <p:outputLabel value="#{eviTable.typentity.typentity}-#{eviTable.typentity.popis} :" />
+                    <div class="p-d-flex p-jc-between  p-ai-center">
+                        <div>
+                            <p:outputLabel value="#{eviTable.typentity.typentity}-#{eviTable.typentity.popis} :" />
+                        </div>
+                        <div>
+                            <p:commandButton value="Sloupce" onclick="PF('dialogColumnsTbl').show();return;" icon="fa fa-columns" ajax="true" styleClass="rounded-button" />
+                        </div>
+                    </div>
                 </f:facet>
-                <p:columns  value="#{eviTable.attributes}" var="attr" >
+                <p:columns  value="#{eviTable.columns}" var="column" >
                     <f:facet name="header">
-                        <h:outputText value="#{eviTable.getColumnHeader(entita, attr)}" />
+                        <h:outputText value="#{eviTable.getColumnHeader(entita, column)}" />
                     </f:facet>
-                    <h:outputText value="#{eviTable.getColumnValue(entita, attr)}" />
+                    <h:outputText value="#{eviTable.getColumnValue(entita, column)}" />
                 </p:columns>
                 <f:facet name="footer">                            
                     <div align="center">                    
-                        <p:commandButton value="Nový" actionListener="#{eviTable.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update="@form"  />
+                        <p:commandButton value="Nový" actionListener="#{eviTable.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update="@form"  styleClass="rounded-button" />
                     </div>
                 </f:facet>
             </p:dataTable>        
         </h:form>
+        <h:form id="formDialogColumnsTbl">
+            <p:dialog id="dialogColumnsTbl"  widgetVar="dialogColumnsTbl" modal="false" header="Vyberte si z následující tabulky sloupce k zobrazení:" >
+                <p:growl id="growlColumnsTbl" showDetail="true" skipDetailIfEqualsSummary="true"/>
+                <h:panelGrid id="panelGridColumnsTbl" columns="1">
+                    <h:panelGrid id="panelGridCommentTbl">
+                        <p>Myší (Drag&amp;Drop) si můžete vybrat sloupce přetažením z leva do prava</p>                    
+                        <p>nebo pořadí sloupců přetážením položky nahoru nebo dolů</p>                    
+                    </h:panelGrid>
+                    <p:pickList id="pickListColumnsTbl" value="#{eviTable.columnsDualList}" var="column" itemLabel="#{column}" itemValue="#{column}" showTargetControls="true" responsive="true" >
+                        <f:facet name="sourceCaption">K výběru</f:facet>
+                        <f:facet name="targetCaption">Vybrané</f:facet>
+                    </p:pickList>
+                    <p:commandButton id="buttonOkColumn" value="OK"  actionListener="#{eviTable.saveUserColumns()}" oncomplete="PF('dialogColumnsTbl').hide();return;" update=":formEntitaTbl" style="margin-top:5px" styleClass="rounded-button" />
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
     </h:body>  
 </html>
-

@@ -171,7 +171,7 @@ public class EviEntita implements Serializable {
         this.stackEvi.lastElement().setChildEntita(selectedParentEntita);
         // Nacist stredovy panel, bud formular nebo tabulku
         if (this.stackEvi.lastElement().getChildTypEntity().getEditor() == 'T') {
-            this.eviTable.loadTable(selectedParentEntita, selectedParentEntita.getIdtypentity());
+            this.eviTable.loadTable(selectedParentEntita, this.stackEvi.lastElement().getChildTypEntity());
         } else {
             this.stackEvi.lastElement().setChildSelectedEntita(selectedParentEntita);
             this.eviForm.loadForm(selectedParentEntita, this);

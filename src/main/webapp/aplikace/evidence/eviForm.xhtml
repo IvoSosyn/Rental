@@ -30,7 +30,7 @@
                 <!-- *********** Table(ciselnik) -->                    
                 <p:inputText id="tValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('T')}"  value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}"  size="#{attrValue.attrSize}"  title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" />
                 <f:facet name="footer">                        
-                    <p:commandButton id="buttonSaveAttrValue" value="Ulož" actionListener="#{eviForm.saveAttributes}" ajax="true"  icon="fa fa-save" update=":formAttr:growlAttr :formEntita" >
+                    <p:commandButton id="buttonSaveAttrValue" value="Ulož" actionListener="#{eviForm.saveAttributes}" ajax="true"  icon="fa fa-save" update=":formAttr:growlAttr :formEntita"  styleClass="rounded-button" >
                         <f:param name="zmenaOD" value="#{evidence.datumZmenyAsString()}" />
                     </p:commandButton>
                 </f:facet>
