@@ -23,7 +23,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.PrimeFaces.Dialog;
 
 /**
  *
@@ -49,8 +48,6 @@ public class EviForm implements Serializable {
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<EviAttrValue> values = new ArrayList<>();
-    private EviAttrValue selectedAttrValue = null;
-    private Dialog dialog;
 
     @PostConstruct
     public void init() {
@@ -62,16 +59,19 @@ public class EviForm implements Serializable {
      * @param entita zaznam, pro ktery nacitam Attribute
      */
     public void loadAttrValue(Entita entita) {
-        if (entita == null) {
+        if (entita == null || entita.getIdtypentity() == null) {
             attributes = new ArrayList<>();
+            values = new ArrayList<>();
             return;
         }
-        this.entita = entita;
         /**
          * TO-DO: Zohlednit PlatiOd a PlatiDo sablony ve vyberu dat Attribute,
          * aby se vybraly pouze platne v danem obdobi
          */
-        this.attributes = getAttrController().getAttributeForTypentity(entita.getIdtypentity());
+        if (this.attributes.isEmpty() || this.entita == null || !this.entita.getIdtypentity().equals(entita.getIdtypentity())) {
+            this.attributes = getAttrController().getAttributeForTypentity(entita.getIdtypentity());
+        }
+        this.entita = entita;
         this.values = new ArrayList<>(this.attributes.size());
         for (Attribute attr : this.getAttributes()) {
             // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
@@ -91,9 +91,9 @@ public class EviForm implements Serializable {
     }
 
     /**
-     * Metoda ulozi vsechny hodnty do DB
+     * Metoda ulozi vsechny hodnoty do DB
      *
-     * @param event udalost, ktera vyvolala ulozeni
+     * @param event udalost, ktera vyvolala ulozeni - zatim se nevyuziva
      */
     public void saveAttributes(ActionEvent event) {
 
@@ -113,7 +113,7 @@ public class EviForm implements Serializable {
             }
             zmenaOd = Aplikace.getSimpleDateFormat().parse(param);
             for (EviAttrValue eviAttrValue : this.values) {
-                eviAttrValue.save(zmenaOd);
+                eviAttrValue.saveAllValues(zmenaOd);
             }
             if (this.source != null) {
                 this.source.reLoadEntities();
@@ -168,34 +168,6 @@ public class EviForm implements Serializable {
     }
 
     /**
-     * @return the serialVersionUID
-     */
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    /**
-     * @param aSerialVersionUID the serialVersionUID to set
-     */
-    public static void setSerialVersionUID(long aSerialVersionUID) {
-        serialVersionUID = aSerialVersionUID;
-    }
-
-    /**
-     * @return the COUNT_ENTITA_NEW
-     */
-    public static int getCOUNT_ENTITA_NEW() {
-        return COUNT_ENTITA_NEW;
-    }
-
-    /**
-     * @param aCOUNT_ENTITA_NEW the COUNT_ENTITA_NEW to set
-     */
-    public static void setCOUNT_ENTITA_NEW(int aCOUNT_ENTITA_NEW) {
-        COUNT_ENTITA_NEW = aCOUNT_ENTITA_NEW;
-    }
-
-    /**
      * @return the attrController
      */
     public cz.rental.entity.AttributeController getAttrController() {
@@ -221,34 +193,6 @@ public class EviForm implements Serializable {
      */
     public void setUcet(Ucet account) {
         this.ucet = account;
-    }
-
-    /**
-     * @return the dialog
-     */
-    public Dialog getDialog() {
-        return dialog;
-    }
-
-    /**
-     * @param dialog the dialog to set
-     */
-    public void setDialog(Dialog dialog) {
-        this.dialog = dialog;
-    }
-
-    /**
-     * @return the selectedAttrValue
-     */
-    public EviAttrValue getSelectedAttrValue() {
-        return selectedAttrValue;
-    }
-
-    /**
-     * @param selectedAttrValue the selectedAttrValue to set
-     */
-    public void setSelectedAttrValue(EviAttrValue selectedAttrValue) {
-        this.selectedAttrValue = selectedAttrValue;
     }
 
 }

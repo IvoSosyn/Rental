@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"          
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:body>
+          <ui:composition template = "/templates/templateRental.xhtml">	
+            <ui:define name="contens">
+                <h:form id="formTblEdit" >
+                    <p:growl id="growlTblEdit" showDetail="true" skipDetailIfEqualsSummary="true" />
+                    <p:dataGrid id="dataGridTblEdit" value="#{eviTable.values}" columns="2" var="attrValue" >
+                        <f:facet name="header">                            
+                            <p:outputLabel value="#{eviTable.typentity.typentity}-#{eviTable.typentity.popis} :" />
+                        </f:facet>
+                        <!-- Polozka *** -->                    
+                        <p:outputLabel value="#{attrValue.attribute.popis}: " title="#{attrValue.attribute.attrname}"  for="@next" />
+                        <!-- Hodnota *** -->                    
+                        <!-- *********** String -->                    
+                        <p:inputText id="cValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('C')}" value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" />
+                        <!-- *********** Integer -->                    
+                        <p:inputNumber id="iValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('I')}" value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" />
+
+                        <!-- *********** Double -->                    
+                        <p:inputNumber id="nValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('N')}"  value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" />
+                        <!-- *********** Boolean -->                    
+                        <p:selectBooleanCheckbox id="lValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('L')}" value="#{attrValue.value}" disabled="false"  />
+                        <!-- *********** Date -->                    
+                        <p:datePicker id="dValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('D')}" value="#{attrValue.value}" converter="datumConverter" size="#{attrValue.attrSize}" locale="cs_CZ" monthNavigator="true" yearNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false" />
+                        <!-- *********** Table(ciselnik) -->                    
+                        <p:inputText id="tValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('T')}"  value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}"  size="#{attrValue.attrSize}"  title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" />
+                        <f:facet name="footer">                        
+                            <p:commandButton id="buttonSaveAttrValue" value="Ulož a konec" actionListener="#{eviTable.saveAttrAndEnd}" ajax="true"  icon="fa fa-save" styleClass="rounded-button" >
+                                <f:param name="zmenaOD" value="#{evidence.datumZmenyAsString()}" />
+                            </p:commandButton>
+                            <p:commandButton id="buttonSaveAttrValueAndAdd" value="Ulož a nový" actionListener="#{eviTable.saveAttrAndAdd}" ajax="true"  icon="fa fa-save" styleClass="rounded-button" update=":formTblEdit" >
+                                <f:param name="zmenaOD" value="#{evidence.datumZmenyAsString()}" />
+                            </p:commandButton>
+                        </f:facet>
+                    </p:dataGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>  
+</html>
+

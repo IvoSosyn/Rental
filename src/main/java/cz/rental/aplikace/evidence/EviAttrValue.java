@@ -93,7 +93,20 @@ public class EviAttrValue {
         }
     }
 
-    void save(Date zmenaOd) throws Exception {
+    /**
+     * *
+     * Metoda vymaze všechny hodnoty this.attrValues pro this.entita z DB
+     */
+    public void removeAllValues() throws Exception {
+        for (EntitySuperClassNajem attrValue : attrValues) {
+            if ((this.platiOd == null || attrValue.getPlatido() == null || attrValue.getPlatido().after(this.platiOd))
+                    && (this.platiDo == null || attrValue.getPlatiod() == null || attrValue.getPlatiod().before(this.platiDo))) {
+                this.attrController.destroy(attrValue);
+            }
+        }
+    }
+
+    void saveAllValues(Date zmenaOd) throws Exception {
         EntitySuperClassNajem attrValueNew = null;
         Date attrValueplatiOd = zmenaOd;
         Date attrValueplatiDo = null;
@@ -179,7 +192,7 @@ public class EviAttrValue {
      */
     public Integer getAttrSize() {
         int size = 10;
-        System.out.println("getAttrSize() Attribute: " + attribute.getPopis() + "/" + attribute.getAttrname() + "/" + attribute.getAttrtype() + "/" + attribute.getAttrsize() + "/" + attribute.getAttrdecimal() + "/" + value);
+        // System.out.println("getAttrSize() Attribute: " + attribute.getPopis() + "/" + attribute.getAttrname() + "/" + attribute.getAttrtype() + "/" + attribute.getAttrsize() + "/" + attribute.getAttrdecimal() + "/" + value);
         if (this.attribute.getAttrsize() instanceof BigInteger) {
             size = this.attribute.getAttrsize().intValue();
         } else {
@@ -211,7 +224,7 @@ public class EviAttrValue {
                 }
             }
         }
-        System.out.println("   getAttrSize() size: " + size);
+        // System.out.println("   getAttrSize() size: " + size);
         return size;
     }
 

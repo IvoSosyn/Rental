@@ -8,20 +8,25 @@
 
     <h:body>
         <h:form id="formEntitaTbl" >
+            <p:growl id="idEntitaTblGrowl" showDetail="true" skipDetailIfEqualsSummary="true"/>
             <p:dataTable id="idEntitaTblChild" 
                          var="entita" 
                          value="#{eviTable.entities}" 
                          widgetVar="eviEntitaChild" 
                          rowKey="#{entita.id}"
                          scrollable="true"
+                         scrollRows="15"
+                         virtualScroll="true" 
+                         scrollHeight="600" 
+                         rows="15"
                          liveResize="true"
                          resizableColumns="true"
                          resizeMode="expand"
                          selection="#{eviTable.selectedEntita}" 
                          selectionMode="single"  >
 
-                <p:ajax event="rowSelect" listener="#{eviTable.onRowSelect}" update="@form" />
-                <p:ajax event="rowUnselect" listener="#{eviTable.onRowUnselect}" update="@form" />
+                <p:ajax event="rowSelect" listener="#{eviEntita.onRowSelectTbl}" update="@form" />
+                <p:ajax event="rowUnselect" listener="#{eviEntita.onRowUnselectTbl}" update="@form" />
 
                 <f:facet name="header">                            
                     <div class="p-d-flex p-jc-between  p-ai-center">
@@ -37,15 +42,26 @@
                     <f:facet name="header">
                         <h:outputText value="#{eviTable.getColumnHeader(entita, column)}" />
                     </f:facet>
-                    <h:outputText value="#{eviTable.getColumnValue(entita, column)}" />
+                    <h:outputText value="#{eviTable.getColumnValue(entita, column)}"  />
                 </p:columns>
+                <p:column>
+                    <p:commandButton id="idEditTbl" actionListener="#{eviTable.editEntita(entita)}" icon="pi pi-pencil" styleClass="rounded-button ui-button-flat" update="@form" >
+                        <p:ajax event="dialogReturn" update="@form"/>
+                    </p:commandButton>
+                </p:column>
+                <p:column>
+                    <p:commandButton id="idDelTbl" actionListener="#{eviTable.removeEntita(entita)}" icon="pi pi-trash" styleClass="rounded-button ui-button-flat" update="@form" />
+                </p:column>
                 <f:facet name="footer">                            
                     <div align="center">                    
-                        <p:commandButton value="Nový" actionListener="#{eviTable.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update="@form"  styleClass="rounded-button" />
+                        <p:commandButton value="Nový" actionListener="#{eviTable.gotoNewEntita()}" icon="fa fa-plus" ajax="true" update="@form"  styleClass="rounded-button" >
+                            <p:ajax event="dialogReturn" update="@form"/>
+                        </p:commandButton>
                     </div>
                 </f:facet>
             </p:dataTable>        
         </h:form>
+        <!-- Dialog pro vyber sloupcu -->
         <h:form id="formDialogColumnsTbl">
             <p:dialog id="dialogColumnsTbl"  widgetVar="dialogColumnsTbl" modal="false" header="Vyberte si z následující tabulky sloupce k zobrazení:" >
                 <p:growl id="growlColumnsTbl" showDetail="true" skipDetailIfEqualsSummary="true"/>

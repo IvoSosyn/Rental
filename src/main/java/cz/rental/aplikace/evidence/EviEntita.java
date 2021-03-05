@@ -41,27 +41,27 @@ import org.primefaces.model.DualListModel;
 @Named(value = "eviEntita")
 @SessionScoped
 public class EviEntita implements Serializable {
-
+    
     static final long serialVersionUID = 42L;
-
+    
     static final int COUNT_ENTITA_NEW = 1;
     private static final String XHTML_EVIATTR_FILE = "/aplikace/evidence/";
-
+    
     @EJB
     cz.rental.entity.TypentityController typentityController;
     @EJB
     cz.rental.entity.EntitaController entitaController;
     @EJB
     cz.rental.entity.AttributeController attrController;
-
+    
     @Inject
     private Ucet ucet;
-
+    
     @Inject
     private EviForm eviForm;
     @Inject
     private EviTable eviTable;
-
+    
     private Stack<StackEvi> stackEvi = new Stack();
     private Entita parentEntita = null;
     private Typentity typentity = null;
@@ -70,11 +70,11 @@ public class EviEntita implements Serializable {
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<String> columns = new ArrayList<>();
     private ArrayList<Typentity> typentityChilds = new ArrayList<>();
-
+    
     private Dialog dialog;
     private ArrayList<String> columnsSource = new ArrayList<>();
     private DualListModel<String> columnsDualList;
-
+    
     @PostConstruct
     public void init() {
 //        try {
@@ -161,12 +161,12 @@ public class EviEntita implements Serializable {
     public void reLoadEntities() {
         loadEntities();
     }
-
+    
     public void onRowSelect(SelectEvent event) {
 //        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
         Entita selectedParentEntita = (Entita) event.getObject();
-
+        
         this.stackEvi.lastElement().setParentSelectedEntita(selectedParentEntita);
         this.stackEvi.lastElement().setChildEntita(selectedParentEntita);
         // Nacist stredovy panel, bud formular nebo tabulku
@@ -176,25 +176,41 @@ public class EviEntita implements Serializable {
             this.stackEvi.lastElement().setChildSelectedEntita(selectedParentEntita);
             this.eviForm.loadForm(selectedParentEntita, this);
         }
-
+        
     }
-
+    
     public void onRowUnselect(UnselectEvent event) {
 //        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
         //       eviForm.loadForm(null, this);
     }
+    
+    public void onRowSelectTbl(SelectEvent event) {
+//        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+        this.stackEvi.lastElement().setChildEntita((Entita) event.getObject());
+        this.eviTable.onRowSelect(event);
+    }
+    
+    public void onRowUnselectTbl(UnselectEvent event) {
+//        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
+        //       eviForm.loadForm(null, this);
+        this.stackEvi.lastElement().setChildEntita(null);
+        this.eviTable.onRowUnselect(event);
+        
+    }
 
     /**
      * Metoda naplni naplni tento beans novymi hodnotami pro novy Typentity
      *
-     * @param newTypentity - pozadovany Typentity, pro ktery se naplni tento beans
-     * (matice a promenne)
+     * @param newTypentity - pozadovany Typentity, pro ktery se naplni tento
+     * beans (matice a promenne)
      */
     public void changeTypentity(Typentity newTypentity) {
         if (newTypentity.getEditor() == 'T') {
             this.stackEvi.push(new StackEvi(
-                    this.parentEntita,this.selectedEntita, this.selectedEntita.getIdtypentity(),
+                    this.parentEntita, this.selectedEntita, this.selectedEntita.getIdtypentity(),
                     this.selectedEntita, null, newTypentity));
         } else {
             this.stackEvi.push(new StackEvi(
@@ -203,10 +219,11 @@ public class EviEntita implements Serializable {
         }
         loadEntities();
     }
-    public void changeTypentityTable(Entita newEntitaParent,Entita newSelectedEntita,Typentity newTypentity) {
+    
+    public void changeTypentityTable(Entita newEntitaParent, Entita newSelectedEntita, Typentity newTypentity) {
         if (newTypentity.getEditor() == 'T') {
             this.stackEvi.push(new StackEvi(
-                    newEntitaParent,newSelectedEntita, newEntitaParent.getIdtypentity(),
+                    newEntitaParent, newSelectedEntita, newEntitaParent.getIdtypentity(),
                     newSelectedEntita, null, newTypentity));
         } else {
             this.stackEvi.push(new StackEvi(
@@ -228,7 +245,7 @@ public class EviEntita implements Serializable {
             loadEntities();
         }
     }
-
+    
     public void gotoNewEntita() {
         for (Entita entita : entities) {
             if (entita.isNewEntity()) {
@@ -236,7 +253,7 @@ public class EviEntita implements Serializable {
                 this.stackEvi.lastElement().setParentSelectedEntita(entita);
                 this.stackEvi.lastElement().setChildEntita(entita);
                 // Nacist panel s vlastni evidenci, bud formular 'F' nebo tabulku 'T'
-                if (this.stackEvi.lastElement().getChildTypEntity().getEditor()== 'T') {
+                if (this.stackEvi.lastElement().getChildTypEntity().getEditor() == 'T') {
                     this.eviTable.loadTable(this.stackEvi.lastElement().getChildEntita(), this.stackEvi.lastElement().getChildTypEntity());
                 } else {
                     this.stackEvi.lastElement().setChildSelectedEntita(entita);
@@ -248,17 +265,17 @@ public class EviEntita implements Serializable {
         }
         System.out.println("gotoNewEntita()");
     }
-
+    
     public String includeEviPanel() {
         String includePath;
-        if (this.stackEvi.lastElement()!= null && this.stackEvi.lastElement().getChildTypEntity().getEditor() == 'T') {
+        if (this.stackEvi.lastElement() != null && this.stackEvi.lastElement().getChildTypEntity().getEditor() == 'T') {
             includePath = XHTML_EVIATTR_FILE + "eviTable.xhtml";
         } else {
             includePath = XHTML_EVIATTR_FILE + "eviForm.xhtml";
         }
         return includePath;
     }
-
+    
     public void columnsSelect() {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Dosud neimplementováno", "Dosud neimplementováno"));
     }
@@ -445,12 +462,12 @@ public class EviEntita implements Serializable {
         options.put("draggable", false);
         options.put("resizable", false);
         options.put("contentHeight", 320);
-
+        
         this.dialog = PrimeFaces.current().dialog();
         this.dialog.openDynamic(XHTML_EVIATTR_FILE + "evientitacolumn", options, null);
         return "";
     }
-
+    
     public void saveUserColumns() {
         this.columns = new ArrayList(this.columnsDualList.getTarget());
         StringBuilder sb = new StringBuilder("");
@@ -633,21 +650,22 @@ public class EviEntita implements Serializable {
     public void setStackEvi(Stack<StackEvi> stackEvi) {
         this.stackEvi = stackEvi;
     }
+
     /**
      * =========================================================================
      * Interni trida pro ukladani urovni vnoreni do stromu Entita
      *
      */
     class StackEvi {
-
+        
         private Entita parentEntita = null;
         private Entita parentSelectedEntita = null;
         private Typentity parentTypEntity = null;
         private Entita childEntita = null;
         private Entita childSelectedEntita = null;
         private Typentity childTypEntity = null;
-
-        public StackEvi(Entita parentEntita, Entita parentSelectedEntita, Typentity parentTypEntity,  Entita childEntita, Entita childSelectedEntita, Typentity childTypEntity) {
+        
+        public StackEvi(Entita parentEntita, Entita parentSelectedEntita, Typentity parentTypEntity, Entita childEntita, Entita childSelectedEntita, Typentity childTypEntity) {
             this.parentEntita = parentEntita;
             this.parentSelectedEntita = parentSelectedEntita;
             this.parentTypEntity = parentTypEntity;
@@ -739,7 +757,7 @@ public class EviEntita implements Serializable {
         public void setChildSelectedEntita(Entita childSelectedEntita) {
             this.childSelectedEntita = childSelectedEntita;
         }
-
+        
     }
-
+    
 }

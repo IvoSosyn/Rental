@@ -9,12 +9,15 @@ import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
+import cz.rental.utils.Aplikace;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +26,10 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 import org.primefaces.PrimeFaces.Dialog;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -53,7 +58,7 @@ public class EviTable implements Serializable {
     private Ucet ucet;
 
     @Inject
-    private EviForm eviAttribute;
+    private EviForm eviForm;
 
     private Entita parentEntita = null;
     private Typentity typentity = null;
@@ -109,7 +114,7 @@ public class EviTable implements Serializable {
             this.selectedEntita = this.entities.get(0);
         }
         // Nacist hodnoty Attribute 
-        eviAttribute.loadAttrValue(this.selectedEntita);
+        eviForm.loadAttrValue(this.selectedEntita);
         // Child Typentity pro tlacitkovou listu
         this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
     }
@@ -244,10 +249,10 @@ public class EviTable implements Serializable {
      * @return hodnotu bud z relacnich tabulek pro Attribute nebo z
      * Entita.get[metoda] nebo z pole Typentity.get[metoda]
      */
-    public String getColumnValue(Entita entita, String column) {
+    public Object getColumnValue(Entita entita, String column) {
         String table = "Attribute";
         String field = "popis";
-        String value = "";
+        Object value = "";
         Typentity tpe = null;
         String[] tableField;
         if (entita == null || entita.getIdtypentity() == null) {
@@ -281,7 +286,8 @@ public class EviTable implements Serializable {
                     Object obj = attr.getPopis();
                     obj = attrController.getAttrValue(entita, attr, (Date) null, (Date) null);
                     if (obj != null) {
-                        value = obj.toString();
+                        //value = obj.toString();
+                        value = obj;
                     }
                     ///
                     break;
@@ -293,7 +299,8 @@ public class EviTable implements Serializable {
             Method method;
             try {
                 method = tpe.getClass().getMethod("get" + field, new Class[]{});
-                value = method.invoke(tpe, new Object[]{}).toString();
+                //value = method.invoke(tpe, new Object[]{}).toString();
+                value = method.invoke(tpe, new Object[]{});
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -302,7 +309,8 @@ public class EviTable implements Serializable {
         if (table.equalsIgnoreCase("Entita")) {
             try {
                 Method method = tpe.getClass().getMethod("get" + field, new Class[]{});
-                value = (String) method.invoke(entita, new Object[]{});
+                // value = (String) method.invoke(entita, new Object[]{});
+                value =  method.invoke(entita, new Object[]{});
             } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
                 Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -313,13 +321,15 @@ public class EviTable implements Serializable {
     public void onRowSelect(SelectEvent event) {
 //        System.out.println("EviEntita.onRowSelect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowSelect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviAttribute.loadAttrValue(((Entita) event.getObject()));
+        this.selectedEntita = (Entita) event.getObject();
+        eviForm.loadAttrValue(this.selectedEntita);
     }
 
     public void onRowUnselect(UnselectEvent event) {
 //        System.out.println("EviEntita.onRowUnselect  event.getObject()=" + event.getObject());
 //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("EviEntita.onRowUnselect - dosud neimplementováno", ((Entita)event.getObject()).getPopis()));
-        eviAttribute.loadAttrValue(null);
+        this.selectedEntita = null;
+        eviForm.loadAttrValue(this.selectedEntita);
 
     }
 
@@ -327,10 +337,129 @@ public class EviTable implements Serializable {
         for (Entita entita : entities) {
             if (entita.isNewEntity()) {
                 this.selectedEntita = entita;
-                eviAttribute.loadAttrValue(this.selectedEntita);
+                eviForm.loadAttrValue(this.selectedEntita);
                 break;
             }
         }
+        if (this.selectedEntita instanceof Entita && this.selectedEntita.isNewEntity()) {
+            editEntita(this.selectedEntita);
+        }
+    }
+
+    public void editEntita(Entita entita) {
+        if (entita == null) {
+            return;
+        }
+        this.selectedEntita = entita;
+        eviForm.loadAttrValue(entita);
+
+        Map<String, Object> options = new HashMap<>();
+        options.put("modal", true);
+        options.put("draggable", false);
+        options.put("resizable", true);
+        options.put("contentHeight", 800);
+
+        this.dialog = PrimeFaces.current().dialog();
+        this.dialog.openDynamic("/aplikace/evidence/eviTableEdit.xhtml", options, null);
+    }
+
+    /**
+     * Metody vymaze vsechny hodnoty Attribute parametru "entita" a pak vymaze i
+     * samotnou Entita danou parametem "entita"
+     *
+     * @param entita Entita ke smazani
+     */
+    public void removeEntita(Entita entita) {
+        if (entita == null || entita.isNewEntity()) {
+            return;
+        }        
+        for (EviAttrValue attrValue : this.eviForm.getValues()) {
+            try {
+                // Vymazat uplne vsechno s ohledem na plati OD-DO
+                attrValue.removeAllValues();
+            } catch (Exception ex) {
+                Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly vymazány.", "Chyba" + ex.getMessage()));
+                return;
+            }
+        }
+        try {
+            entitaController.destroy(this.selectedEntita);
+        } catch (Exception ex) {
+            Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly vymazány.", "Chyba" + ex.getMessage()));
+            return;
+        }
+        reLoadEntities();
+    }
+
+    /**
+     * Metoda ulozi vsechny hodnoty do DB
+     *
+     * @param event udalost, ktera vyvolala ulozeni
+     */
+    public void saveAttributes(ActionEvent event) throws Exception {
+        Date zmenaOd = new Date();
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String param = params.get("zmenaOD");
+        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Metoda saveAttrValues(ActionEvent event) neni zatim immplementovana", "ActionEvent event" + event.getSource()));
+        //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Metoda saveAttrValues(ActionEvent event) neni zatim immplementovana", "ActionEvent event" + event.getSource()));
+        try {
+            // Nejdriv ulozim zmeny do DB vety Entita
+            if (entitaController.findEntita(this.selectedEntita) == null) {
+                entitaController.create(this.selectedEntita);
+                this.selectedEntita.setNewEntity(false);
+
+            } else {
+                entitaController.edit(this.selectedEntita);
+            }
+            zmenaOd = Aplikace.getSimpleDateFormat().parse(param);
+            for (EviAttrValue eviAttrValue : this.eviForm.getValues()) {
+                eviAttrValue.saveAllValues(zmenaOd);
+            }
+            reLoadEntities();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Data byla úspěšně uložena."));
+        } catch (Exception ex) {
+            Logger.getLogger(EviForm.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly uloženy.", "Chyba" + ex.getMessage()));
+            throw ex;
+        }
+    }
+
+    /**
+     * Metoda ulozi vsechny hodnoty do DB a vytvori novy zaznam, ktery predlozi
+     * k editaci
+     *
+     * @param event udalost, ktera vyvolala ulozeni
+     */
+    public void saveAttrAndAdd(ActionEvent event) {
+        try {
+            saveAttributes(event);
+            for (Entita entita : entities) {
+                if (entita.isNewEntity()) {
+                    this.selectedEntita = entita;
+                    eviForm.loadAttrValue(entita);
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+            this.dialog.closeDynamic(null);
+        }
+    }
+
+    /**
+     * Metoda ulozi vsechny hodnoty do DB a ukonci DynamicDialog
+     *
+     * @param event udalost, ktera vyvolala ulozeni
+     */
+    public void saveAttrAndEnd(ActionEvent event) {
+        try {
+            saveAttributes(event);
+        } catch (Exception ex) {
+            Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.dialog.closeDynamic(null);
     }
 
     /**
@@ -446,17 +575,17 @@ public class EviTable implements Serializable {
     }
 
     /**
-     * @return the eviAttribute
+     * @return the eviForm
      */
-    public EviForm getEviAttribute() {
-        return eviAttribute;
+    public EviForm getEviForm() {
+        return eviForm;
     }
 
     /**
-     * @param eviAttribute the eviAttribute to set
+     * @param eviForm the eviForm to set
      */
-    public void setEviAttribute(EviForm eviAttribute) {
-        this.eviAttribute = eviAttribute;
+    public void setEviForm(EviForm eviForm) {
+        this.eviForm = eviForm;
     }
 
     /**
@@ -471,6 +600,20 @@ public class EviTable implements Serializable {
      */
     public void setTypentityChilds(ArrayList<Typentity> typentityChilds) {
         this.typentityChilds = typentityChilds;
+    }
+
+    /**
+     * @return the values
+     */
+    public ArrayList<EviAttrValue> getValues() {
+        return eviForm.getValues();
+    }
+
+    /**
+     * @param values the values to set
+     */
+    public void setValues(ArrayList<EviAttrValue> values) {
+        this.eviForm.setValues(values);
     }
 
 }
