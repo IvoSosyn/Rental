@@ -36,8 +36,8 @@ public class ModelDetail implements Serializable {
 
     static final long serialVersionUID = 42L;
 
-    private Attribute attribute = null;
-    private Attribute beforeEditAttr = null;
+    private Attribute attribute = new Attribute();
+    private Attribute beforeEditAttr = new Attribute();
     ArrayList<Character> editabelAttrsize;
     ArrayList<Character> editabelAttrdecimal;
 
@@ -107,7 +107,7 @@ public class ModelDetail implements Serializable {
 
     public void onRowUnselect(UnselectEvent event) {
         System.out.println("ModelDetail.onRowUnselect  event.getObject()=" + event.getObject());
-        setAttribute(null);
+        this.attribute = new Attribute();
     }
 
     /**
@@ -201,6 +201,9 @@ public class ModelDetail implements Serializable {
      * @return the attribute
      */
     public Attribute getAttribute() {
+        if (this.attribute instanceof Attribute) {
+            this.attribute = new Attribute();
+        }
         return this.attribute;
     }
 

@@ -100,7 +100,7 @@ public class UserController extends JpaController {
             try {
                 userParam = (Userparam) this.query.getSingleResult();
             } catch (NoResultException | NonUniqueResultException | QueryTimeoutException e) {
-                System.out.println(" UserController.getUserParam("+paramName+",default:"+defaultValue+") chyba:" + e.getMessage());
+                //System.out.println(" UserController.getUserParam("+paramName+",default:"+defaultValue+") chyba:" + e.getMessage());
             }
             if (userParam instanceof Userparam) {
                 if (defaultValue instanceof Date) {
@@ -135,7 +135,7 @@ public class UserController extends JpaController {
             try {
                 userParam = (Userparam) this.query.getSingleResult();
             } catch (NoResultException | NonUniqueResultException | QueryTimeoutException e) {
-                System.out.println(" UserController.setUserParam("+paramName+",value:"+value+") chyba:" + e.getMessage());
+                // System.out.println(" UserController.setUserParam("+paramName+",value:"+value+") chyba:" + e.getMessage());
             }
             if (!(userParam instanceof Userparam)) {
                 userParam = new Userparam();

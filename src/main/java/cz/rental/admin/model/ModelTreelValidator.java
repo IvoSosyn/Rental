@@ -17,8 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 
 /**
  *
@@ -29,7 +28,7 @@ import javax.naming.NamingException;
 public class ModelTreelValidator implements Validator, Serializable {
 
     static final long serialVersionUID = 42L;
-    /// @Inject
+    @Inject
     ModelTree modelTree;
     private Typentity typentity;
 
@@ -43,17 +42,17 @@ public class ModelTreelValidator implements Validator, Serializable {
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         FacesMessage msg = null;
 
-        try {
-            modelTree = (ModelTree) InitialContext.doLookup("java:module/ModelTree");
-            this.setTypentity(modelTree.getTypentity());
-            System.out.println("*ModelTreeValidator.validate  modelTree.getAttribute().getId()=" + modelTree.getTypentity().getId());
-            System.out.println("*ModelTreeValidator.validate  modelTree.getAttribute().getAttrname()=" + modelTree.getTypentity().getTypentity());
-            System.out.println("*ModelTreeValidator.validate  modelTree.getAttribute().getPopis()=" + modelTree.getTypentity().getPopis());
-            System.out.println("*ModelTreeValidator.validate                                  value=" + value);
-
-        } catch (NamingException ex) {
-            msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se najít modul 'ModelTree'. ");
-        }
+//        try {
+//            modelTree = (ModelTree) InitialContext.doLookup("java:module/ModelTree");
+//            this.setTypentity(modelTree.getTypentity());
+//            System.out.println("*ModelTreeValidator.validate  modelTree.getAttribute().getId()=" + modelTree.getTypentity().getId());
+//            System.out.println("*ModelTreeValidator.validate  modelTree.getAttribute().getAttrname()=" + modelTree.getTypentity().getTypentity());
+//            System.out.println("*ModelTreeValidator.validate  modelTree.getAttribute().getPopis()=" + modelTree.getTypentity().getPopis());
+//            System.out.println("*ModelTreeValidator.validate                                  value=" + value);
+//
+//        } catch (NamingException ex) {
+//            msg = new FacesMessage("System failed", "Systémová chyba, nepodařilo se najít modul 'ModelTree'. ");
+//        }
 
         if (msg != null) {
             System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
