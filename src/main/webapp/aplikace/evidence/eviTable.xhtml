@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      >
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:body>
         <h:form id="formEntitaTbl" >
@@ -12,8 +12,8 @@
             <p:dataTable id="idEntitaTblChild" 
                          var="entita" 
                          value="#{eviTable.entities}" 
-                         widgetVar="eviEntitaChild" 
                          rowKey="#{entita.id}"
+                         widgetVar="eviEntitaChild" 
                          scrollable="true"
                          scrollRows="15"
                          virtualScroll="true" 
@@ -38,11 +38,20 @@
                         </div>
                     </div>
                 </f:facet>
-                <p:columns  value="#{eviTable.columns}" var="column" >
+
+                <p:columns  value="#{eviTable.eviHeaders}" var="eviHeader" >
                     <f:facet name="header">
-                        <h:outputText value="#{eviTable.getColumnHeader(entita, column)}" />
+                        <h:outputText value="#{eviHeader.header}" />
                     </f:facet>
-                    <h:outputText value="#{eviTable.getColumnValue(entita, column)}"  />
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type== 67}" />
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type== 78}" />
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type== 73}" />
+                        <p:graphicImage value="/images/OK15x15.png" rendered="#{eviHeader.type==76 and eviTable.getColumnValue(eviHeader,entita)>0.0 }" />
+                        <h:outputText value=" " rendered="#{eviHeader.type==76 and eviTable.getColumnValue(eviHeader,entita)==0.0 }" />
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type==68}" >
+                            <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+                        </h:outputText>
+
                 </p:columns>
                 <p:column>
                     <p:commandButton id="idEditTbl" actionListener="#{eviTable.editEntita(entita)}" icon="pi pi-pencil" styleClass="rounded-button ui-button-flat" update="@form" >
