@@ -6,6 +6,7 @@
 package cz.rental.aplikace.evidence;
 
 import cz.rental.aplikace.Ucet;
+import cz.rental.aplikace.evidence.eviTable.EviHeader;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
@@ -66,7 +67,9 @@ public class EviTable implements Serializable {
     private Entita selectedEntita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<String> columns = new ArrayList<>();
+    private ArrayList<EviHeader> eviHeaders = new ArrayList<>();
     private ArrayList<Typentity> typentityChilds = new ArrayList<>();
+    private int loadRows = 0;
 
     private Dialog dialog;
     private ArrayList<String> columnsSource = new ArrayList<>();
@@ -77,10 +80,13 @@ public class EviTable implements Serializable {
     }
 
     /**
-     * Metoda 1. nacte vsechny instance "Entita" pro Entita.idparent==parent.id,
-     * pole Attribute pro parametr "typentity" 2. prida nove instance "Entita"
-     * do pole "entities" - vytvori matici tlacitek k dalsimu pouziti v
-     * 'eviButtons.xml'
+     * Metoda 
+     * 1. nacte vsechny instance "Entita" pro Entita.idparent==parent.id a Entita.typentity=typentity
+     * 2. nacte pole Attribute pro parametr "typentity" 
+     * 3. prida nove instance "Entita" do pole "entities" 
+     * 4. vytvori matici tlacitek k dalsimu pouziti v 'eviButtons.xml'
+     * 5. naplni sloupce EviHeaders pro tabulku
+     * 6. naplni matici hodnot pro kazdou "Entita" z matice "this.entities" do pole hodnot "EviHeaders.values" v matici sloupcu
      *
      *
      * @param parent - Entita(uzel), pro kerou se vybere matice nejblizsich
@@ -93,11 +99,12 @@ public class EviTable implements Serializable {
         }
         if (this.attributes.isEmpty() || this.typentity == null || !this.typentity.equals(typentity)) {
             this.attributes = attrController.getAttributeForTypentity(typentity);
+            this.loadRows = 1;
             this.columnsForEntitaTable(typentity);
         }
         this.parentEntita = parent;
         this.typentity = typentity;
-        this.entities = entitaController.getEntities(parent);
+        this.entities = entitaController.getEntities(parent,typentity);
         // Pridani radku nove zaznamu Entita
         for (int i = 0; i < EviTable.COUNT_ENTITA_NEW; i++) {
             // Nova Entita
@@ -113,16 +120,73 @@ public class EviTable implements Serializable {
         if (this.selectedEntita == null) {
             this.selectedEntita = this.entities.get(0);
         }
-        // Nacist hodnoty Attribute 
-        eviForm.loadAttrValue(this.selectedEntita);
+        // Nacist hodnoty sloupcu z this.eviHeaders
+        //eviForm.loadAttrValue(this.selectedEntita);
+        this.loadRows();
+
         // Child Typentity pro tlacitkovou listu
         this.setTypentityChilds(typentityController.getTypentityChilds(this.typentity));
+    }
+
+    /**
+     * Metoda nacte hodnoty pro klic Entita do poli "values" sloupcu EviHeaders
+     */
+    private void loadRows() {
+        this.loadRows = 0;
+        Runnable loadHeadersValues = new Runnable() {
+            Object value;
+            Method method;
+            HashMap<Entita, Object> tempHashMap;
+
+            @Override
+            public void run() {
+                for (EviHeader header : eviHeaders) {
+                    if (loadRows != 0) {
+                        break;
+                    }
+                    // Nachystat novou prazdnou matici pro hodnoty
+                    tempHashMap = new HashMap<>(entities.size());
+                    for (Entita entita : entities) {
+                        if (loadRows != 0) {
+                            break;
+                        }
+                        value = null;
+                        if (header.getAttribute() instanceof Attribute) {
+                            value = attrController.getAttrValue(entita, header.getAttribute(), null, null);
+                        } else if (header.getTable().equalsIgnoreCase("Entita")) {
+                            try {
+                                method = entita.getClass().getMethod("get" + header.getField(), new Class[]{});
+                                value = method.invoke(entita, new Object[]{});
+                            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                                Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else if (header.getTable().equalsIgnoreCase("Typentity")) {
+                            try {
+                                method = entita.getIdtypentity().getClass().getMethod("get" + header.getField(), new Class[]{});
+                                value = method.invoke(entita, new Object[]{});
+                            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                                Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        // Ulozit do zasobniku k pozdejsimu vlozeni do sloupce
+                        tempHashMap.put(entita, value);
+                    }
+                    if (loadRows == 0) {
+                        // Ulozit hodnoty do sloupce
+                        header.setEntitaValues(tempHashMap);
+                    }
+                }
+            }
+        };
+        loadHeadersValues.run();
     }
 
     /**
      * Metoda pro opakovane nacteni matice Entita slouzi k aktualizaci
      */
     public void reLoadEntities() {
+        // Zastavit nacitani radku
+        this.loadRows = 1;
         loadTable(this.parentEntita, this.typentity);
     }
 
@@ -139,6 +203,7 @@ public class EviTable implements Serializable {
         // Definice sloupcu tabulky Entity
         this.columns = new ArrayList<>();
         this.columnsSource = new ArrayList<>();
+        this.eviHeaders = new ArrayList<>();
         // Nacteni predchoziho uzivatelskeho nastaveni
         String userColumns = this.ucet.getUzivatel().getParam(typentity.getId().toString(), "");
         if (!userColumns.isEmpty()) {
@@ -152,6 +217,8 @@ public class EviTable implements Serializable {
             }
             if (!columns.contains(entitaColumns)) {
                 this.columnsSource.add(entitaColumns);
+            } else {
+                this.eviHeaders.add(new EviHeader(entitaColumns, entitaColumns, null));
             }
         }
         // Doplnim pole pouzitelnych sloupcu o Attribute
@@ -159,13 +226,21 @@ public class EviTable implements Serializable {
             String column = "Attribute." + attr.getAttrname().trim();
             if (!columns.contains(column)) {
                 this.columnsSource.add(column);
+            } else {
+                this.eviHeaders.add(new EviHeader(column, attr.getPopis(), attr));
             }
         }
         // Vytvoreni nabidky sloupcu k vyberu
         this.columnsDualList = new DualListModel<>(this.columnsSource, this.columns);
     }
 
+    /**
+     * Metoda ulozi vybrane sloupce do uzivatelskeho nastaveni do DB - nacte
+     * znovu sloupce matice <code>this.eviHeaders</code> a provede znovu nacteni
+     * dat <code>this.loadRows()</code>
+     */
     public void saveUserColumns() {
+        this.loadRows = 1;
         this.columns = new ArrayList(this.columnsDualList.getTarget());
         StringBuilder sb = new StringBuilder("");
         columns.forEach((String column) -> {
@@ -177,64 +252,35 @@ public class EviTable implements Serializable {
         if (sb.length() > 0) {
             this.ucet.getUzivatel().setParam(this.typentity.getId().toString(), sb.toString());
         }
+        this.eviHeaders = new ArrayList<>();
+        for (String column : this.columns) {
+            if (column.contains("Attribute.")) {
+                for (Attribute attr : this.attributes) {
+                    if (column.contains("Attribute." + attr.getAttrname().trim())) {
+                        this.eviHeaders.add(new EviHeader(column, attr.getPopis(), null));
+                        break;
+                    }
+                }
+            } else {
+                this.eviHeaders.add(new EviHeader(column, column, null));
+            }
+        }
+        //        reLoadEntities();
+        loadRows();
         //        this.dialog.closeDynamic(this.columnsDualList.getTarget());
     }
 
     /**
-     * Metoda pro nadpis sloupcu tabulky prehledu Entit pro nasledny vyber
-     * detailu
+     * Metoda vybere z matice hodnot Entit odpovidajici hodnotu pro zadany
+     * sloupec
      *
-     * @param entita instance Entity, pro kterou hledam nadpis z Attributa.popis
-     * tabulky z nazvu pole Typentity nebo nazvu pole Entita
-     * @param column ve tvaru "Tabulka.pole" napr. "Entita.poznamka" nebo
-     * "Attribute.prijemni"
-     * @return hodnotu bud z relacnich tabulek pro Attribute.popis nebo z
-     * Entita.metoda nebo z pole Typentity.metoda
+     * @param eviHeader - sloupec, pro ktery pozaduji hodnotu
+     * @param entita - Entita pro kterou hledam hodnotu
+     * @return
      */
-    public String getColumnHeader(Entita entita, String column) {
-        String table = "Entita";
-        String field = "popis";
-        String value = column;
-        String[] tableField;
-        if (column == null || column.isEmpty()) {
-            column = "Entita.popis";
-        }
-        tableField = column.split("\\.");
-        switch (tableField.length) {
-            case 0: {
-                break;
-            }
-            case 1: {
-                field = tableField[0];
-                break;
-            }
-            case 2: {
-                table = tableField[0];
-                field = tableField[1];
-                break;
-            }
-            default:
-        }
-        // Pokud se jedna o hodnotu Attribute je potreba dohledaat v DB
-        if (table.equalsIgnoreCase("Attribute")) {
-            value = column;
-            if (this.getAttributes() != null) {
-                for (Attribute attr : this.getAttributes()) {
-                    if (attr.getAttrname().trim().equalsIgnoreCase(field.trim())) {
-                        value = attr.getPopis();
-                        break;
-                    }
-                }
-            }
-        }
-        // Pokud se jedna o tabulku "Typentity" metoda vrati hodnotu pole z  instance Entita
-        if (table.equalsIgnoreCase("Typentity")) {
-            value = column;
-        }
-        // Pokud se jedna o tabulku "Entita" metoda vrati hodnotu pole z  instance Entita
-        if (table.equalsIgnoreCase("Entita")) {
-            value = column;
-        }
+    public Object getColumnValue(EviHeader eviHeader, Entita entita) {
+        // Object value=row.get(header.getColumn());
+        Object value = eviHeader.getValue(entita);
         return value;
     }
 
@@ -302,7 +348,8 @@ public class EviTable implements Serializable {
                 //value = method.invoke(tpe, new Object[]{}).toString();
                 value = method.invoke(tpe, new Object[]{});
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EviEntita.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
         // Pokud se jedna o tabulku "Entita" metoda vrati hodnotu pole z  instance Entita
@@ -310,9 +357,10 @@ public class EviTable implements Serializable {
             try {
                 Method method = tpe.getClass().getMethod("get" + field, new Class[]{});
                 // value = (String) method.invoke(entita, new Object[]{});
-                value =  method.invoke(entita, new Object[]{});
+                value = method.invoke(entita, new Object[]{});
             } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
-                Logger.getLogger(EviEntita.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EviEntita.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
         return value;
@@ -372,13 +420,14 @@ public class EviTable implements Serializable {
     public void removeEntita(Entita entita) {
         if (entita == null || entita.isNewEntity()) {
             return;
-        }        
+        }
         for (EviAttrValue attrValue : this.eviForm.getValues()) {
             try {
                 // Vymazat uplne vsechno s ohledem na plati OD-DO
                 attrValue.removeAllValues();
             } catch (Exception ex) {
-                Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EviTable.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly vymazány.", "Chyba" + ex.getMessage()));
                 return;
             }
@@ -386,7 +435,8 @@ public class EviTable implements Serializable {
         try {
             entitaController.destroy(this.selectedEntita);
         } catch (Exception ex) {
-            Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EviTable.class
+                    .getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly vymazány.", "Chyba" + ex.getMessage()));
             return;
         }
@@ -420,7 +470,8 @@ public class EviTable implements Serializable {
             reLoadEntities();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Data byla úspěšně uložena."));
         } catch (Exception ex) {
-            Logger.getLogger(EviForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EviForm.class
+                    .getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly uloženy.", "Chyba" + ex.getMessage()));
             throw ex;
         }
@@ -443,7 +494,8 @@ public class EviTable implements Serializable {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EviTable.class
+                    .getName()).log(Level.SEVERE, null, ex);
             this.dialog.closeDynamic(null);
         }
     }
@@ -457,7 +509,8 @@ public class EviTable implements Serializable {
         try {
             saveAttributes(event);
         } catch (Exception ex) {
-            Logger.getLogger(EviTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EviTable.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         this.dialog.closeDynamic(null);
     }
@@ -603,17 +656,30 @@ public class EviTable implements Serializable {
     }
 
     /**
-     * @return the values
+     * @return the tempHashMap
      */
     public ArrayList<EviAttrValue> getValues() {
         return eviForm.getValues();
     }
 
     /**
-     * @param values the values to set
+     * @param values the tempHashMap to set
      */
     public void setValues(ArrayList<EviAttrValue> values) {
         this.eviForm.setValues(values);
     }
 
+    /**
+     * @return the eviHeaders
+     */
+    public ArrayList<EviHeader> getEviHeaders() {
+        return eviHeaders;
+    }
+
+    /**
+     * @param eviHeaders the eviHeaders to set
+     */
+    public void setEviHeaders(ArrayList<EviHeader> eviHeaders) {
+        this.eviHeaders = eviHeaders;
+    }
 }
