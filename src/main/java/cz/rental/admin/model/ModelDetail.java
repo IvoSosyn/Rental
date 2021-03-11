@@ -22,6 +22,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.component.inputtext.InputText;
+import org.primefaces.component.spinner.Spinner;
+import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -197,11 +200,20 @@ public class ModelDetail implements Serializable {
         return ret;
     }
 
+    public void changeValue(javax.faces.event.AjaxBehaviorEvent e) {
+        UIComponent uic= PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formModelDetail:attrsize");
+        System.out.println(" e.getSource().getClass(): "+e.getSource().getClass() );
+        ((Spinner) uic).getValue();
+        Object value=((InputText) e.getSource()).getValue();
+        System.out.println("                    value: "+value);        
+//        System.out.println(" e.getOldValue(): "+e.getOldValue()+"  e.getNewValue(): "+e.getNewValue());
+    }
+
     /**
      * @return the attribute
      */
     public Attribute getAttribute() {
-        if (this.attribute instanceof Attribute) {
+        if (!(this.attribute instanceof Attribute)) {
             this.attribute = new Attribute();
         }
         return this.attribute;

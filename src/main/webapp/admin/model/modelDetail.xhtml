@@ -18,20 +18,23 @@
                 </f:facet>
 
                 <p:outputLabel value="Pořadí:" for="@next" />
-                <p:inputNumber id="poradi" value="#{modelDetail.attribute.poradi}" placeholder="1 a více" required="true" minValue="1" requiredMessage="Povinná hodnota, minimálně 1" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
+                <p:inputNumber id="poradi" value="#{modelDetail.attribute.poradi}" placeholder="1 a více" required="true" minValue="1"  decimalPlaces="0" requiredMessage="Povinná hodnota, minimálně 1" validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                     <p:ajax update="poradiMsg  :formModelDetailButtons" event="blur" />
+                    <p:ajax event="valueChange" listener="#{modelDetail.changeValue}" />
                 </p:inputNumber>
                 <p:message id="poradiMsg" for="@previous" />
 
                 <p:outputLabel value="Název:" for="@next" />
                 <p:inputText id="attrname" value="#{modelDetail.attribute.attrname}" placeholder="2 znaky" required="true" requiredMessage="Povinná hodnota, název položky minimálně 2 znaky."  validator="modelDetailValidator" disabled="#{!modelDetail.isEditable()}"  >
                     <p:ajax update="attrnameMsg :formModelDetailButtons" event="blur" />
+                    <p:ajax event="valueChange" listener="#{modelDetail.changeValue}" />
                 </p:inputText>
                 <p:message  id="attrnameMsg" for="@previous" />
 
                 <p:outputLabel value="Popis:" for="@next" />
                 <p:inputText id="popis" value="#{modelDetail.attribute.popis}"  placeholder="...popis položky, který Vám ji více přiblíží ..."  validator="modelDetailValidator"  disabled="#{!modelDetail.isEditable()}"  >
                     <p:ajax update="popisMsg :formModelDetailButtons" event="blur" />
+                    <p:ajax event="valueChange" listener="#{modelDetail.changeValue}" />
                 </p:inputText>
                 <p:message  id="popisMsg" for="@previous" />
 
