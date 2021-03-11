@@ -257,7 +257,7 @@ public class EviTable implements Serializable {
             if (column.contains("Attribute.")) {
                 for (Attribute attr : this.attributes) {
                     if (column.contains("Attribute." + attr.getAttrname().trim())) {
-                        this.eviHeaders.add(new EviHeader(column, attr.getPopis(), null));
+                        this.eviHeaders.add(new EviHeader(column, attr.getPopis(), attr));
                         break;
                     }
                 }

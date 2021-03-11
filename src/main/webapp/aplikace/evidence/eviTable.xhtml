@@ -43,12 +43,12 @@
                     <f:facet name="header">
                         <h:outputText value="#{eviHeader.header}" />
                     </f:facet>
-                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type== 67}" />
-                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type== 78}" />
-                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type== 73}" />
-                        <p:graphicImage value="/images/OK15x15.png" rendered="#{eviHeader.type==76 and eviTable.getColumnValue(eviHeader,entita)>0.0 }" />
-                        <h:outputText value=" " rendered="#{eviHeader.type==76 and eviTable.getColumnValue(eviHeader,entita)==0.0 }" />
-                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.type==68}" >
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.isRendered('C')}" />
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.isRendered('I')}" />
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.isRendered('N')}" />
+                        <p:graphicImage value="/images/OK15x15.png" rendered="#{eviHeader.isRendered('L') and eviTable.getColumnValue(eviHeader,entita)>0.0 }" />
+                        <h:outputText value=" " rendered="#{eviHeader.isRendered('L') and eviTable.getColumnValue(eviHeader,entita)==0.0 }" />
+                        <h:outputText value="#{eviTable.getColumnValue(eviHeader,entita)}" rendered="#{eviHeader.isRendered('D')}" >
                             <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                         </h:outputText>
 

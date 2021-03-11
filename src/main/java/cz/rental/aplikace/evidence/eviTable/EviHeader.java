@@ -65,6 +65,10 @@ public class EviHeader {
         }
     }
 
+    public boolean isRendered(String type) {
+        return (this.getType()==type.charAt(0));
+    }
+
     /**
      * @return the header
      */
