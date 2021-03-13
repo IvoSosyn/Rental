@@ -19,10 +19,14 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.component.inputnumber.InputNumber;
+import org.primefaces.component.inputtext.InputText;
 
 /**
  *
@@ -32,9 +36,9 @@ import javax.inject.Named;
 @SessionScoped
 public class EviForm implements Serializable {
 
-    private static long serialVersionUID = 42L;
+    private static final long serialVersionUID = 42L;
 
-    private static int COUNT_ENTITA_NEW = 1;
+    private static final int COUNT_ENTITA_NEW = 1;
 
     @EJB
     private cz.rental.entity.AttributeController attrController;
@@ -123,6 +127,61 @@ public class EviForm implements Serializable {
             Logger.getLogger(EviForm.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hodnoty NEbyly uloženy.", "Chyba" + ex.getMessage()));
         }
+    }
+
+    public void valueChangeListener(ValueChangeEvent e) {
+        String label = "";
+        UIInput uii = (UIInput) e.getSource();
+        if (e.getSource() instanceof InputText) {
+            InputText inputText = (InputText) e.getSource();
+            label = inputText.getLabel();
+            if (label.contains("IC")) {
+                for (EviAttrValue value : values) {
+                    if (value.getAttribute().getAttrname().toUpperCase().contains("NAZEV")) {
+                        value.setValue(String.format("Poznamka z valueChangeListener %1$s", inputText.getValue()));
+                        break;
+                    }
+                }
+            }
+
+        }
+        if (e.getSource() instanceof InputNumber) {
+            InputNumber inputNumber = (InputNumber) e.getSource();
+            label = inputNumber.getLabel();
+            if (label.contains("IC")) {
+                for (EviAttrValue value : values) {
+                    if (value.getAttribute().getAttrname().toUpperCase().contains("NAZEV")) {
+                        value.setValue(String.format("Poznamka z valueChangeListener %1$s", inputNumber.getValue()));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Metoda provadi vylidaci hodnoty a provedeni scriptu
+     *
+     * @param e udalost, ktera je zdrojem akce
+     */
+    public void valueChange(javax.faces.event.AjaxBehaviorEvent e) {
+        //UIComponent uic= PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formModelDetail:attrsize");
+//        UIComponent uic = e.getComponent();
+//        String clientId = uic.getClientId();
+//        Object uiObject = e.getSource();
+//        System.out.println(" e.getSource().getClass(): " + e.getSource().getClass());
+//        Map<String, String> requestParameterMap = PrimeFacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+//        UIComponent uicFormAttr = PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formAttr:dataGridAttr");
+//        List<UIComponent> children = uicFormAttr.getChildren();
+//        for (UIComponent uIComponent : children) {
+//            System.out.println("uIComponent.getId(): " + uIComponent.getId());
+//            System.out.println("uIComponent.getClientId(): " + uIComponent.getClientId());
+//            System.out.println("uIComponent.getClientId(FacesContext): " + uIComponent.getClientId(PrimeFacesContext.getCurrentInstance()));
+//            System.out.println("uIComponent.getContainerClientId(FacesContext): " + uIComponent.getContainerClientId(PrimeFacesContext.getCurrentInstance()));
+//            System.out.println(" uIComponent.getAttributes().get(\"attrName\"): " + uIComponent.getAttributes().get("attrName"));
+//        }
+        System.out.println("-");
+
     }
 
     /**
