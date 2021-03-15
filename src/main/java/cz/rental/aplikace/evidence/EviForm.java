@@ -9,9 +9,13 @@ import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Entita;
 import cz.rental.utils.Aplikace;
+import cz.rental.utils.ScriptTools;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,8 +29,13 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.script.ScriptException;
+import org.primefaces.PrimeFaces;
+import org.primefaces.component.datepicker.DatePicker;
 import org.primefaces.component.inputnumber.InputNumber;
 import org.primefaces.component.inputtext.InputText;
+import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.context.PrimeFacesContext;
 
 /**
  *
@@ -52,6 +61,8 @@ public class EviForm implements Serializable {
     private Entita entita = null;
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<EviAttrValue> values = new ArrayList<>();
+    private HashMap<String, EviAttrValue> valuesMap = new HashMap<>();
+    private ScriptTools scriptTools = null;
 
     @PostConstruct
     public void init() {
@@ -77,9 +88,13 @@ public class EviForm implements Serializable {
         }
         this.entita = entita;
         this.values = new ArrayList<>(this.attributes.size());
+        this.scriptTools = new ScriptTools(this);
+        EviAttrValue eav;
         for (Attribute attr : this.getAttributes()) {
             // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
-            boolean add = this.values.add(new EviAttrValue(this.attrController, this.entita, attr, null, null));
+            eav = new EviAttrValue(this.attrController, this.entita, attr, null, null);
+            boolean add = this.values.add(eav);
+            valuesMap.put(attr.getAttrname(), eav);
         }
     }
 
@@ -129,59 +144,75 @@ public class EviForm implements Serializable {
         }
     }
 
+    /**
+     * Metoda provede JavaScript, pokud je pro menene pole definovany v
+     * sablone/modelu.
+     *
+     * @param e udalost nad menenym polem se starou a novou hodnotou
+     */
     public void valueChangeListener(ValueChangeEvent e) {
-        String label = "";
+        String label = null;
+        String script = null;
         UIInput uii = (UIInput) e.getSource();
         if (e.getSource() instanceof InputText) {
             InputText inputText = (InputText) e.getSource();
             label = inputText.getLabel();
-            if (label.contains("IC")) {
-                for (EviAttrValue value : values) {
-                    if (value.getAttribute().getAttrname().toUpperCase().contains("NAZEV")) {
-                        value.setValue(String.format("Poznamka z valueChangeListener %1$s", inputText.getValue()));
-                        break;
-                    }
-                }
-            }
-
         }
         if (e.getSource() instanceof InputNumber) {
             InputNumber inputNumber = (InputNumber) e.getSource();
             label = inputNumber.getLabel();
-            if (label.contains("IC")) {
-                for (EviAttrValue value : values) {
-                    if (value.getAttribute().getAttrname().toUpperCase().contains("NAZEV")) {
-                        value.setValue(String.format("Poznamka z valueChangeListener %1$s", inputNumber.getValue()));
-                        break;
-                    }
-                }
+        }
+        if (e.getSource() instanceof SelectBooleanCheckbox) {
+            SelectBooleanCheckbox selectBooleanCheckbox = (SelectBooleanCheckbox) e.getSource();
+            label = selectBooleanCheckbox.getLabel();
+        }
+        if (e.getSource() instanceof DatePicker) {
+            DatePicker datePicker = (DatePicker) e.getSource();
+            label = datePicker.getLabel();
+        }
+        if (label == null) {
+            return;
+        }
+        for (EviAttrValue value : values) {
+            if (value.getAttribute().getAttrname().equalsIgnoreCase(label)) {
+                script = value.getAttribute().getScript();
+                break;
             }
+        }
+        if (script == null) {
+            return;
+        }
+        Throwable scrErr = this.scriptTools.run(script);
+        if (scrErr != null) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(script, scrErr.getMessage()));
         }
     }
 
     /**
-     * Metoda provadi vylidaci hodnoty a provedeni scriptu
-     *
-     * @param e udalost, ktera je zdrojem akce
+     * Metoda dosadi hodnotu 'value' do formularove promenne definovane hodnotou
+     * 'klic'
+     * Metoda provadi automatickou konverzi z retezce 'String' na cislo 'Double'
+     * 
+     * @param klic pole formulare, kam dosadit hodnotu 'value'
+     * @param value hodonta k dosazeni
+     * @throws java.text.ParseException - chyba v pripaded konverze retecove hodnoty 'value' na datum
      */
-    public void valueChange(javax.faces.event.AjaxBehaviorEvent e) {
-        //UIComponent uic= PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formModelDetail:attrsize");
-//        UIComponent uic = e.getComponent();
-//        String clientId = uic.getClientId();
-//        Object uiObject = e.getSource();
-//        System.out.println(" e.getSource().getClass(): " + e.getSource().getClass());
-//        Map<String, String> requestParameterMap = PrimeFacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-//        UIComponent uicFormAttr = PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formAttr:dataGridAttr");
-//        List<UIComponent> children = uicFormAttr.getChildren();
-//        for (UIComponent uIComponent : children) {
-//            System.out.println("uIComponent.getId(): " + uIComponent.getId());
-//            System.out.println("uIComponent.getClientId(): " + uIComponent.getClientId());
-//            System.out.println("uIComponent.getClientId(FacesContext): " + uIComponent.getClientId(PrimeFacesContext.getCurrentInstance()));
-//            System.out.println("uIComponent.getContainerClientId(FacesContext): " + uIComponent.getContainerClientId(PrimeFacesContext.getCurrentInstance()));
-//            System.out.println(" uIComponent.getAttributes().get(\"attrName\"): " + uIComponent.getAttributes().get("attrName"));
-//        }
-        System.out.println("-");
-
+    public void setFromScrtipt(Object klic, Object value) throws ParseException {
+        if (klic instanceof String) {
+            String[] attrName = ((String) klic).split(".");
+            for (EviAttrValue eviAttrValue : values) {
+                if (eviAttrValue.getAttribute().getAttrname().equalsIgnoreCase(attrName[attrName.length - 1])) {
+                    if ((eviAttrValue.getAttribute().getAttrtype() == 'I' || eviAttrValue.getAttribute().getAttrtype() == 'N') && value instanceof String) {
+                        eviAttrValue.setValue(Double.valueOf((String) value));
+                    } else if (eviAttrValue.getAttribute().getAttrtype() == 'D' && value instanceof String) {
+                        eviAttrValue.setValue(Aplikace.getSimpleDateFormat().parse((String) value));
+                    } else {
+                        eviAttrValue.setValue(value);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -252,6 +283,20 @@ public class EviForm implements Serializable {
      */
     public void setUcet(Ucet account) {
         this.ucet = account;
+    }
+
+    /**
+     * @return the valuesMap
+     */
+    public HashMap<String, EviAttrValue> getValuesMap() {
+        return valuesMap;
+    }
+
+    /**
+     * @param valuesMap the valuesMap to set
+     */
+    public void setValuesMap(HashMap<String, EviAttrValue> valuesMap) {
+        this.valuesMap = valuesMap;
     }
 
 }

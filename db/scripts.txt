@@ -1,0 +1,3 @@
+js.set('n.nazev',{n.prijmeni}+{n.jmeno}+{n.titul}+','+{n.titulza})
+
+js.set('n.vs',{n.rc}.replace('/',''))

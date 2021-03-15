@@ -203,10 +203,6 @@ public class ModelDetail implements Serializable {
     public void changeValue(javax.faces.event.AjaxBehaviorEvent e) {
         UIComponent uic= PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formModelDetail:attrsize");
         System.out.println(" e.getSource().getClass(): "+e.getSource().getClass() );
-        ((Spinner) uic).getValue();
-        Object value=((InputText) e.getSource()).getValue();
-        System.out.println("                    value: "+value);        
-//        System.out.println(" e.getOldValue(): "+e.getOldValue()+"  e.getNewValue(): "+e.getNewValue());
     }
 
     /**
