@@ -7,6 +7,7 @@ package cz.rental.utils;
 
 import cz.rental.aplikace.evidence.EviForm;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -62,12 +63,14 @@ public class ScriptTools {
 
     private boolean transformScript(String script) {
         boolean lOk = false;
-        String regex = "\\{[^\\{][^\\}]{2,}\\}";
+        ArrayList<String> fields=new ArrayList<>();
+        String regex = "[\\{][^\\}]*[\\}]";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(script);
         int i = 0;
         while (matcher.find()) {
-            System.out.println((++i) + ". =" + script.substring(matcher.start(), matcher.end()));
+            fields.add(script.substring(matcher.start(), matcher.end()));
+            System.out.println((i) + ". =" + fields.get(i++));
         }
         return lOk;
     }
