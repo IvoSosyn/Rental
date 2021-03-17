@@ -105,7 +105,7 @@
             </p:panelGrid>
         </h:form>
         <h:form   id="formModelDetailButtons" >
-            <p:commandButton id="saveButton" value="Ulož" ajax="true" actionListener="#{modelTable.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isButtonSaveEnable()}" />
+            <p:commandButton id="saveButton" value="Ulož" actionListener="#{modelTable.saveAttribute}" update=":formModelDetail :formModelTable" icon="fa fa-save" disabled="#{!modelDetail.isButtonSaveEnable()}" />
             <p:commandButton id="resetButton" value="Reset"  actionListener="#{modelDetail.resetAttributes}" update=":formModelDetail :formModelTable :formModelDetailButtons" icon="fa fa-refresh"  />
         </h:form>
     </ui:composition>

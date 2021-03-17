@@ -22,6 +22,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.NodeSelectEvent;
@@ -193,7 +194,7 @@ public class ModelTable implements Serializable {
      * Metoda ulozi aktualni Attrtibute do DB
      *
      */
-    public void saveAttribute() {
+    public void saveAttribute(ActionEvent event) {
         this.selectedAttr = modelDetail.getAttribute();
         try {
             if (this.selectedAttr.isNewEntity()) {

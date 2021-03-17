@@ -42,7 +42,7 @@
                 </p:inputText>
 
                 <f:facet name="footer">                        
-                    <p:commandButton id="buttonSaveAttrValue" value="Ulož" actionListener="#{eviForm.saveAttributes}" ajax="true"  icon="fa fa-save" update=":formAttr:growlAttr :formEntita"  styleClass="rounded-button" >
+                    <p:commandButton id="buttonSaveAttrValue" value="Ulož" actionListener="#{eviForm.saveAttributes}" update=":formAttr:growlAttr :formEntita" icon="fa fa-save"   styleClass="rounded-button" >
                         <f:param name="zmenaOD" value="#{evidence.datumZmenyAsString()}" />
                     </p:commandButton>
                 </f:facet>
