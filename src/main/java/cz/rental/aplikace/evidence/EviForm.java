@@ -11,8 +11,6 @@ import cz.rental.entity.Entita;
 import cz.rental.utils.Aplikace;
 import cz.rental.utils.ScriptTools;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,14 +21,15 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.script.ScriptException;
-import org.primefaces.PrimeFaces;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.datagrid.DataGrid;
 import org.primefaces.component.datepicker.DatePicker;
 import org.primefaces.component.inputnumber.InputNumber;
 import org.primefaces.component.inputtext.InputText;
@@ -173,45 +172,31 @@ public class EviForm implements Serializable {
         if (label == null) {
             return;
         }
-        for (EviAttrValue value : values) {
-            if (value.getAttribute().getAttrname().equalsIgnoreCase(label)) {
-                script = value.getAttribute().getScript();
-                break;
-            }
-        }
-        if (script == null) {
+
+        CommandButton commandButton = (CommandButton) PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formAttr:dataGridAttr:buttonSaveAttrValue");
+        Throwable validateErr = this.scriptTools.validate(label, e.getNewValue(), values);
+        if (validateErr != null) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(validateErr.getMessage()));
+            uii.setValid(false);
+            commandButton.setDisabled(true);
             return;
         }
-        Throwable scrErr = this.scriptTools.run(script);
-        if (scrErr != null) {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(script, scrErr.getMessage()));
-        }
-    }
-
-    /**
-     * Metoda dosadi hodnotu 'value' do formularove promenne definovane hodnotou
-     * 'klic'
-     * Metoda provadi automatickou konverzi z retezce 'String' na cislo 'Double'
-     * 
-     * @param klic pole formulare, kam dosadit hodnotu 'value'
-     * @param value hodonta k dosazeni
-     * @throws java.text.ParseException - chyba v pripaded konverze retecove hodnoty 'value' na datum
-     */
-    public void setFromScrtipt(Object klic, Object value) throws ParseException {
-        if (klic instanceof String) {
-            String[] attrName = ((String) klic).split(".");
-            for (EviAttrValue eviAttrValue : values) {
-                if (eviAttrValue.getAttribute().getAttrname().equalsIgnoreCase(attrName[attrName.length - 1])) {
-                    if ((eviAttrValue.getAttribute().getAttrtype() == 'I' || eviAttrValue.getAttribute().getAttrtype() == 'N') && value instanceof String) {
-                        eviAttrValue.setValue(Double.valueOf((String) value));
-                    } else if (eviAttrValue.getAttribute().getAttrtype() == 'D' && value instanceof String) {
-                        eviAttrValue.setValue(Aplikace.getSimpleDateFormat().parse((String) value));
-                    } else {
-                        eviAttrValue.setValue(value);
-                    }
+        uii.setValid(true);
+        DataGrid dataGrid = (DataGrid) PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formAttr:dataGridAttr");
+        boolean isValid = true;
+        for (UIComponent uIComponent : dataGrid.getChildren()) {
+            if (UIInput.class.isAssignableFrom(uIComponent.getClass())) {
+                isValid &= ((UIInput) uIComponent).isValid();
+                if (!isValid) {
                     break;
                 }
             }
+        }
+        commandButton.setDisabled(!isValid);
+
+        Throwable scrErr = this.scriptTools.run(label, e.getNewValue(), values);
+        if (scrErr != null) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(scrErr.getMessage()));
         }
     }
 
