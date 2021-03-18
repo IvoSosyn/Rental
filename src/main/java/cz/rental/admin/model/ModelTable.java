@@ -214,6 +214,7 @@ public class ModelTable implements Serializable {
         loadAttributesForTypentity(this.typentity);
         selectedAttrs = new ArrayList<>();
         selectedAttrs.add(this.selectedAttr);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Údaje úspěšně uloženy do databáze."));
     }
 
     /**

@@ -21,15 +21,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.datagrid.DataGrid;
 import org.primefaces.component.datepicker.DatePicker;
 import org.primefaces.component.inputnumber.InputNumber;
 import org.primefaces.component.inputtext.InputText;
@@ -87,7 +84,8 @@ public class EviForm implements Serializable {
         }
         this.entita = entita;
         this.values = new ArrayList<>(this.attributes.size());
-        this.scriptTools = new ScriptTools(this);
+
+        this.setScriptTools(new ScriptTools(this));
         EviAttrValue eav;
         for (Attribute attr : this.getAttributes()) {
             // Vybrat uplne vsechno, bez ohledu na platnost, aby se dalo podivat do cele historie
@@ -120,6 +118,23 @@ public class EviForm implements Serializable {
         String param = params.get("zmenaOD");
         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Metoda saveAttrValues(ActionEvent event) neni zatim immplementovana", "ActionEvent event" + event.getSource()));
         //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Metoda saveAttrValues(ActionEvent event) neni zatim immplementovana", "ActionEvent event" + event.getSource()));
+        //
+        //  Kontrola hodnot
+        Throwable validateErr;
+        int messages = 0;
+        for (EviAttrValue eviAttrValue : this.values) {
+            if (eviAttrValue.getAttribute().getAttrparser() != null && !eviAttrValue.getAttribute().getAttrparser().isEmpty()) {
+                validateErr = this.getScriptTools().validate(eviAttrValue.getAttribute().getAttrname(), eviAttrValue.getValue(), values);
+                if (validateErr != null) {
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba položky: " + eviAttrValue.getAttribute().getPopis(), validateErr.getMessage()));
+                    ++messages;
+                }
+            }
+        }
+        if (messages > 0) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hodnoty NEbyly uloženy.", "Protože se v položkách vyskytlo" + messages + " chyb,hodnoty NEbyly uloženy."));
+            return;
+        }
         try {
             // Nejdriv ulozim zmeny do DB vety Entita
             if (entitaController.findEntita(this.entita) == null) {
@@ -172,31 +187,17 @@ public class EviForm implements Serializable {
         if (label == null) {
             return;
         }
-
-        CommandButton commandButton = (CommandButton) PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formAttr:dataGridAttr:buttonSaveAttrValue");
-        Throwable validateErr = this.scriptTools.validate(label, e.getNewValue(), values);
+        System.out.println("***");
+        Throwable validateErr = this.getScriptTools().validate(label, e.getNewValue(), values);
         if (validateErr != null) {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(validateErr.getMessage()));
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba hodnoty.", validateErr.getMessage()));
             uii.setValid(false);
-            commandButton.setDisabled(true);
             return;
         }
         uii.setValid(true);
-        DataGrid dataGrid = (DataGrid) PrimeFacesContext.getCurrentInstance().getViewRoot().findComponent("formAttr:dataGridAttr");
-        boolean isValid = true;
-        for (UIComponent uIComponent : dataGrid.getChildren()) {
-            if (UIInput.class.isAssignableFrom(uIComponent.getClass())) {
-                isValid &= ((UIInput) uIComponent).isValid();
-                if (!isValid) {
-                    break;
-                }
-            }
-        }
-        commandButton.setDisabled(!isValid);
-
-        Throwable scrErr = this.scriptTools.run(label, e.getNewValue(), values);
+        Throwable scrErr = this.getScriptTools().run(label, e.getNewValue(), values);
         if (scrErr != null) {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(scrErr.getMessage()));
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba scriptu.",scrErr.getMessage()));
         }
     }
 
@@ -282,6 +283,20 @@ public class EviForm implements Serializable {
      */
     public void setValuesMap(HashMap<String, EviAttrValue> valuesMap) {
         this.valuesMap = valuesMap;
+    }
+
+    /**
+     * @return the scriptTools
+     */
+    public ScriptTools getScriptTools() {
+        return scriptTools;
+    }
+
+    /**
+     * @param scriptTools the scriptTools to set
+     */
+    public void setScriptTools(ScriptTools scriptTools) {
+        this.scriptTools = scriptTools;
     }
 
 }
