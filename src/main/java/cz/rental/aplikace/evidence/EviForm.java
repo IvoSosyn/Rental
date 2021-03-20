@@ -120,19 +120,7 @@ public class EviForm implements Serializable {
         //PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Metoda saveAttrValues(ActionEvent event) neni zatim immplementovana", "ActionEvent event" + event.getSource()));
         //
         //  Kontrola hodnot
-        Throwable validateErr;
-        int messages = 0;
-        for (EviAttrValue eviAttrValue : this.values) {
-            if (eviAttrValue.getAttribute().getAttrparser() != null && !eviAttrValue.getAttribute().getAttrparser().isEmpty()) {
-                validateErr = this.getScriptTools().validate(eviAttrValue.getAttribute().getAttrname(), eviAttrValue.getValue(), values);
-                if (validateErr != null) {
-                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba položky: " + eviAttrValue.getAttribute().getPopis(), validateErr.getMessage()));
-                    ++messages;
-                }
-            }
-        }
-        if (messages > 0) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hodnoty NEbyly uloženy.", "Protože se v položkách vyskytlo" + messages + " chyb,hodnoty NEbyly uloženy."));
+        if(!this.isValuesValid()){
             return;
         }
         try {
@@ -158,6 +146,26 @@ public class EviForm implements Serializable {
         }
     }
 
+    public boolean isValuesValid() {
+        //  Kontrola hodnot
+        Throwable validateErr;
+        int messages = 0;
+        for (EviAttrValue eviAttrValue : getValues()) {
+            if (eviAttrValue.getAttribute().getAttrparser() != null && !eviAttrValue.getAttribute().getAttrparser().isEmpty()) {
+                validateErr = this.getScriptTools().validate(eviAttrValue.getAttribute().getAttrname(), eviAttrValue.getValue(), getValues());
+                if (validateErr != null) {
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba položky: " + eviAttrValue.getAttribute().getPopis(), validateErr.getMessage()));
+                    ++messages;
+                }
+            }
+        }
+        if (messages > 0) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hodnoty NEbyly uloženy.", "Protože se v položkách vyskytlo" + messages + " chyb,hodnoty NEbyly uloženy."));
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Metoda provede JavaScript, pokud je pro menene pole definovany v
      * sablone/modelu.
@@ -166,7 +174,6 @@ public class EviForm implements Serializable {
      */
     public void valueChangeListener(ValueChangeEvent e) {
         String label = null;
-        String script = null;
         UIInput uii = (UIInput) e.getSource();
         if (e.getSource() instanceof InputText) {
             InputText inputText = (InputText) e.getSource();
@@ -187,17 +194,21 @@ public class EviForm implements Serializable {
         if (label == null) {
             return;
         }
-        System.out.println("***");
-        Throwable validateErr = this.getScriptTools().validate(label, e.getNewValue(), values);
-        if (validateErr != null) {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba hodnoty.", validateErr.getMessage()));
-            uii.setValid(false);
-            return;
-        }
-        uii.setValid(true);
+//        System.out.println("***");
+//        Throwable validateErr = this.getScriptTools().validate(label, e.getNewValue(), values);
+//        if (validateErr != null) {
+//            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba hodnoty.", validateErr.getMessage()));
+//            uii.setValid(false);
+//            return;
+//        }
+//        uii.setValid(true);
+//        if (!uii.isValid()) {
+//            return;
+//        }
+
         Throwable scrErr = this.getScriptTools().run(label, e.getNewValue(), values);
         if (scrErr != null) {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba scriptu.",scrErr.getMessage()));
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba scriptu.", scrErr.getMessage()));
         }
     }
 

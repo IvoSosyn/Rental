@@ -19,18 +19,18 @@
                         <p:outputLabel value="#{attrValue.attribute.popis}: " title="#{attrValue.attribute.attrname}"  for="@next" />
                         <!-- Hodnota *** -->                    
                         <!-- *********** String -->                    
-                        <p:inputText id="cValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('C')}" value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" />
+                        <p:inputText id="cValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('C')}" value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" validator="eviFormValidator" />
                         <!-- *********** Integer -->                    
-                        <p:inputNumber id="iValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('I')}" value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" />
+                        <p:inputNumber id="iValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('I')}" value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty"  validator="eviFormValidator" />
 
                         <!-- *********** Double -->                    
-                        <p:inputNumber id="nValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('N')}"  value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" />
+                        <p:inputNumber id="nValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('N')}"  value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty"  validator="eviFormValidator"/>
                         <!-- *********** Boolean -->                    
-                        <p:selectBooleanCheckbox id="lValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('L')}" value="#{attrValue.value}" disabled="false"  />
+                        <p:selectBooleanCheckbox id="lValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('L')}" value="#{attrValue.value}" disabled="false"  validator="eviFormValidator" />
                         <!-- *********** Date -->                    
-                        <p:datePicker id="dValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('D')}" value="#{attrValue.value}" converter="datumConverter" size="#{attrValue.attrSize}" locale="cs_CZ" monthNavigator="true" yearNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false" />
+                        <p:datePicker id="dValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('D')}" value="#{attrValue.value}" converter="datumConverter" size="#{attrValue.attrSize}" locale="cs_CZ" monthNavigator="true" yearNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false"  validator="eviFormValidator"/>
                         <!-- *********** Table(ciselnik) -->                    
-                        <p:inputText id="tValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('T')}"  value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}"  size="#{attrValue.attrSize}"  title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}" />
+                        <p:inputText id="tValue#{attrValue.attribute.poradi.toString()}" rendered="#{attrValue.isRenderedAttr('T')}"  value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}"  size="#{attrValue.attrSize}"  title="#{attrValue.attribute.popis}" label="#{attrValue.attribute.popis}"  validator="eviFormValidator" />
                         <f:facet name="footer">                        
                             <p:commandButton id="buttonSaveAttrValue" value="Ulož a konec" actionListener="#{eviTable.saveAttrAndEnd}" ajax="true"  icon="fa fa-save" styleClass="rounded-button" >
                                 <f:param name="zmenaOD" value="#{evidence.datumZmenyAsString()}" />

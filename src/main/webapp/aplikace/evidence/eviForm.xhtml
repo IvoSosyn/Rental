@@ -17,27 +17,27 @@
                 <p:outputLabel value="#{attrValue.attribute.popis}: " title="#{attrValue.attribute.attrname}"  for="@next" />
                 <!-- Hodnota *** -->                    
                 <!-- *********** String -->                    
-                <p:inputText  rendered="#{attrValue.isRenderedAttr('C')}" value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" title="#{attrValue.attribute.popis}" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}" >
+                <p:inputText  rendered="#{attrValue.isRenderedAttr('C')}" value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" title="#{attrValue.attribute.popis}" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}" validator="eviFormValidator"  >
                     <p:ajax event="valueChange" update="@form" />
                 </p:inputText>
                 <!-- *********** Integer -->                    
-                <p:inputNumber  rendered="#{attrValue.isRenderedAttr('I')}" value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}" >
+                <p:inputNumber  rendered="#{attrValue.isRenderedAttr('I')}" value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}"  validator="eviFormValidator" >
                     <p:ajax event="valueChange" update="@form" />
                 </p:inputNumber>
                 <!-- *********** Double -->                    
-                <p:inputNumber  rendered="#{attrValue.isRenderedAttr('N')}"  value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}" >
+                <p:inputNumber  rendered="#{attrValue.isRenderedAttr('N')}"  value="#{attrValue.value}" disabled="false" maxlength="#{attrValue.attrSize}" size="#{attrValue.attrSize}" decimalPlaces="#{attrValue.attrDecimal}" emptyValue="empty" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}"  validator="eviFormValidator" >
                     <p:ajax event="valueChange" update="@form" />
                 </p:inputNumber>
                 <!-- *********** Boolean -->                    
-                <p:selectBooleanCheckbox  rendered="#{attrValue.isRenderedAttr('L')}" value="#{attrValue.value}" disabled="false"  valueChangeListener="#{eviForm.valueChangeListener}"  label="#{attrValue.attribute.attrname}" >
+                <p:selectBooleanCheckbox  rendered="#{attrValue.isRenderedAttr('L')}" value="#{attrValue.value}" disabled="false"  valueChangeListener="#{eviForm.valueChangeListener}"  label="#{attrValue.attribute.attrname}"  validator="eviFormValidator" >
                     <p:ajax event="valueChange" update="@form" />
                 </p:selectBooleanCheckbox>
                 <!-- *********** Date -->                    
-                <p:datePicker  rendered="#{attrValue.isRenderedAttr('D')}" value="#{attrValue.value}" converter="datumConverter" size="#{attrValue.attrSize}" locale="cs_CZ" monthNavigator="true" yearNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false"  valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}"  >
+                <p:datePicker  rendered="#{attrValue.isRenderedAttr('D')}" value="#{attrValue.value}" converter="datumConverter" size="#{attrValue.attrSize}" locale="cs_CZ" monthNavigator="true" yearNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" disabled="false"  valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}"   validator="eviFormValidator" >
                     <p:ajax event="valueChange" update="@form" />
                 </p:datePicker>
                 <!-- *********** Table(ciselnik) -->                    
-                <p:inputText  rendered="#{attrValue.isRenderedAttr('T')}"  value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}"  size="#{attrValue.attrSize}"  title="#{attrValue.attribute.popis}" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}" >
+                <p:inputText  rendered="#{attrValue.isRenderedAttr('T')}"  value="#{attrValue.value}" style="width:96%" maxlength="#{attrValue.attrSize}"  size="#{attrValue.attrSize}"  title="#{attrValue.attribute.popis}" valueChangeListener="#{eviForm.valueChangeListener}" label="#{attrValue.attribute.attrname}"  validator="eviFormValidator" >
                     <p:ajax event="valueChange" update="@form" />
                 </p:inputText>
 

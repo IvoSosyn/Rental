@@ -479,25 +479,7 @@ public class EviTable implements Serializable {
      * Metoda zkontroluje validitu hodnot a vytvori FacesMessag hlaseni o chybach
      * @return vsechny hodnoty k ulozeni jsou validni true|false
      */
-    private boolean isValuesValid() {
-        //  Kontrola hodnot
-        Throwable validateErr;
-        int messages = 0;
-        for (EviAttrValue eviAttrValue : getValues()) {
-            if (eviAttrValue.getAttribute().getAttrparser() != null && !eviAttrValue.getAttribute().getAttrparser().isEmpty()) {
-                validateErr = getEviForm().getScriptTools().validate(eviAttrValue.getAttribute().getAttrname(), eviAttrValue.getValue(), getValues());
-                if (validateErr != null) {
-                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba položky: " + eviAttrValue.getAttribute().getPopis(), validateErr.getMessage()));
-                    ++messages;
-                }
-            }
-        }
-        if (messages > 0) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hodnoty NEbyly uloženy.", "Protože se v položkách vyskytlo" + messages + " chyb,hodnoty NEbyly uloženy."));
-            return false;
-        }
-        return true;
-    }
+
 
     /**
      * Metoda ulozi vsechny hodnoty do DB a vytvori novy zaznam, ktery predlozi
@@ -506,7 +488,7 @@ public class EviTable implements Serializable {
      * @param event udalost, ktera vyvolala ulozeni
      */
     public void saveAttrAndAdd(ActionEvent event) {
-        if (!this.isValuesValid()) {
+        if (!eviForm.isValuesValid()) {
             return;
         }
         try {
@@ -530,7 +512,7 @@ public class EviTable implements Serializable {
      * @param event udalost, ktera vyvolala ulozeni
      */
     public void saveAttrAndEnd(ActionEvent event) {
-        if (!this.isValuesValid()) {
+        if (!eviForm.isValuesValid()) {
             return;
         }
         try {
