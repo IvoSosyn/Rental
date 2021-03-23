@@ -42,8 +42,10 @@ public class JSONExport {
     cz.rental.entity.TypentityController typEntitycontroller;
     @EJB
     cz.rental.entity.AttrController attrController;
-    
+
     Query query = null;
+    Date platiOd = Aplikace.getPlatiOd();
+    Date platiDo = Aplikace.getPlatiDo();
 
     File exportFile = new File(System.getenv("TEMP"), String.format("%1$tY%1$tm%1$td", Aplikace.getCalendar()) + "ModelNajem.JSON");
     OutputStream os = null;
@@ -56,10 +58,19 @@ public class JSONExport {
     HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
 
     public void exportModel(Typentity typentityRoot) {
+        if (platiOd == null) {
+            Aplikace.getCalendar().set(1970, Calendar.JANUARY, 1, 0, 0, 0);
+            platiOd = Aplikace.getCalendar().getTime();
+        }
+        if (platiDo == null) {
+            Aplikace.getCalendar().set(2101, Calendar.JANUARY, 1, 0, 0, 0);
+            Aplikace.getCalendar().add(Calendar.HOUR_OF_DAY, -1);
+            platiDo = Aplikace.getCalendar().getTime();
+        }
 
         try {
 
-            JsonObjectBuilder json = Json.createObjectBuilder().add("TYPENTITY", Json.createArrayBuilder().add(createJSON(typentityRoot)));
+            JsonObjectBuilder json = createJSONx(typentityRoot);
 
             //write to file
             os = new FileOutputStream(exportFile);
@@ -81,23 +92,47 @@ public class JSONExport {
         }
     }
 
+    private JsonObjectBuilder createJSONx(Typentity typEntity) {
+        // Typentity - popis
+        JsonObjectBuilder jsonObjectTypEntity = Json.createObjectBuilder();
+        if (typEntity == null) {
+            query = typEntitycontroller.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)");
+            query.setParameter("PlatiOD", this.platiOd);
+            query.setParameter("PlatiDO", this.platiDo);
+            typEntity = (Typentity) query.getSingleResult();
+        }
+        if (typEntity == null) {
+            return null;
+        }
+        System.out.println(" typEntity:="+typEntity.getTypentity()+" "+typEntity.getPopis());
+        // Nacist pole a getMetody 
+        JsonObjectBuilder jsonObjectTypEntityFields = Json.createObjectBuilder();
+        getObjectFields(Typentity.class, typEntity, jsonObjectTypEntityFields);
+        getTypEntityAttributes(typEntity, jsonObjectTypEntityFields);
+
+        // Pole s Child - Typentity
+        query = typEntitycontroller.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParentEntity AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)");
+        query.setParameter("idParentEntity", typEntity.getId());
+        query.setParameter("PlatiOD", platiOd);
+        query.setParameter("PlatiDO", platiDo);
+        List<Typentity> listChild = query.getResultList();
+        for (Typentity typentityChild : listChild) {
+            JsonObjectBuilder jsonObject = createJSONx(typentityChild);
+            if (jsonObject != null) {
+                jsonObjectTypEntityFields.add("TYPENTITY", jsonObject);
+            }
+        }
+        jsonObjectTypEntity.add("TYPENTITY", jsonObjectTypEntityFields);
+
+        return jsonObjectTypEntity;
+    }
+
     /**
      * Rekursivni volani metody nad DB - nalezeni dane Entita (samostatny
      * objekt) a jejich Attribute (samostatny objekt)
      */
     private JsonObjectBuilder createJSON(Typentity typEntity) {
 
-        Date platiOd = Aplikace.getPlatiOd();
-        if (platiOd == null) {
-            Aplikace.getCalendar().set(1970, Calendar.JANUARY, 1, 0, 0, 0);
-            platiOd = Aplikace.getCalendar().getTime();
-        }
-        Date platiDo = Aplikace.getPlatiDo();
-        if (platiDo == null) {
-            Aplikace.getCalendar().set(2101, Calendar.JANUARY, 1, 0, 0, 0);
-            Aplikace.getCalendar().add(Calendar.HOUR_OF_DAY, -1);
-            platiDo = Aplikace.getCalendar().getTime();
-        }
         // Typentity - popis
         JsonObjectBuilder jobTypEntity = Json.createObjectBuilder();
         if (typEntity instanceof Typentity) {
@@ -131,11 +166,7 @@ public class JSONExport {
                             } else {
                                 jobTypEntity.add(field.getName(), value.toString());
                             }
-                        } catch (IllegalAccessException ex) {
-                            Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IllegalArgumentException ex) {
-                            Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (InvocationTargetException ex) {
+                        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                             Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         break;
@@ -163,11 +194,7 @@ public class JSONExport {
                             } else {
                                 jobTypEntity.add(field.getName(), value.toString());
                             }
-                        } catch (IllegalAccessException ex) {
-                            Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IllegalArgumentException ex) {
-                            Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (InvocationTargetException ex) {
+                        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                             Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         break;
@@ -204,11 +231,7 @@ public class JSONExport {
                                 } else {
                                     jobAttr.add(field.getName(), value.toString());
                                 }
-                            } catch (IllegalAccessException ex) {
-                                Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (InvocationTargetException ex) {
+                            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                                 Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             break;
@@ -236,11 +259,7 @@ public class JSONExport {
                                 } else {
                                     jobAttr.add(field.getName(), value.toString());
                                 }
-                            } catch (IllegalAccessException ex) {
-                                Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (InvocationTargetException ex) {
+                            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                                 Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             break;
@@ -265,4 +284,56 @@ public class JSONExport {
         }
         return jobTypEntity;
     }
+
+    private void getTypEntityAttributes(Typentity typEntity, JsonObjectBuilder jsonObjectTypEntityFields) {
+        JsonArrayBuilder jobAttrs = Json.createArrayBuilder();
+        query = attrController.getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntity AND a.identita IS NULL AND (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD) ORDER BY a.poradi");
+        query.setParameter("idTypEntity", typEntity.getId());
+        query.setParameter("PlatiOD", platiOd);
+        query.setParameter("PlatiDO", platiDo);
+        List<Attribute> listAttr = query.getResultList();
+        for (Attribute attr : listAttr) {
+            JsonObjectBuilder jobAttr = Json.createObjectBuilder();
+            getObjectFields(Attribute.class, attr, jobAttr);
+            jobAttrs.add(jobAttr);
+        }
+        jsonObjectTypEntityFields.add("ATTRIBUTE", jobAttrs);
+
+    }
+
+    private void getObjectFields(java.lang.Class objectClass, Object object, JsonObjectBuilder jsonObjectTypEntityFields) {
+        // System.out.println(" object.getClass().getName(): " + object.getClass().getName());
+        if (object != null && !objectClass.getName().contains("EntitySuperClassNajem")) {
+            //System.out.println(" object.getClass().getSuperclass().getName(): " + object.getClass().getSuperclass().getName());
+            getObjectFields(EntitySuperClassNajem.class, object, jsonObjectTypEntityFields);
+        }
+        for (Field field : objectClass.getDeclaredFields()) {
+            for (Method method : objectClass.getDeclaredMethods()) {
+                if (method.getName().equalsIgnoreCase("get" + field.getName())) {
+                    try {
+                        value = method.invoke(object);
+                        if (value == null) {
+                            jsonObjectTypEntityFields.addNull(field.getName());
+                        } else if (value instanceof String) {
+                            jsonObjectTypEntityFields.add(field.getName(), (String) value);
+                        } else if (value instanceof Integer) {
+                            jsonObjectTypEntityFields.add(field.getName(), (Integer) value);
+                        } else if (value instanceof Double) {
+                            jsonObjectTypEntityFields.add(field.getName(), (Double) value);
+                        } else if (value instanceof Date) {
+                            jsonObjectTypEntityFields.add(field.getName(), Aplikace.getSimpleDateFormat().format((Date) value));
+                        } else if (value instanceof Boolean) {
+                            jsonObjectTypEntityFields.add(field.getName(), (Boolean) value);
+                        } else {
+                            jsonObjectTypEntityFields.add(field.getName(), value.toString());
+                        }
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                        Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
 }
