@@ -8,6 +8,7 @@ package cz.rental.admin.model;
 import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Typentity;
+import cz.rental.utils.JSONExport;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -51,7 +52,10 @@ public class ModelTree implements Serializable {
     cz.rental.entity.TypentityController typEntitycontroller;
     @EJB
     cz.rental.entity.AttrController attrController;
+    @EJB
+    JSONExport jsonExport;
 
+    
     @Inject
     ModelTable modelTable;
 
@@ -398,8 +402,8 @@ public class ModelTree implements Serializable {
      * Metoda vyexportuje cely strom Typentity i s Attributes
      */
     public void exportToJSON() {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Export dat do JSON souboru ... TO-DO", "Export do JSON ještě není hotov .. TO-DO");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        // Export "this.typentityRoot" to JSONExport        
+        jsonExport.exportModel(this.typentityRoot);
     }
 
     /**
