@@ -72,7 +72,8 @@ public class JSONExport {
         try {
 
             JsonObjectBuilder json = createJSONx(typentityRoot);
-
+            
+            
             //write to file
             os = new FileOutputStream(exportFile);
             try (JsonWriter jsonWriter = Json.createWriter(os)) {
