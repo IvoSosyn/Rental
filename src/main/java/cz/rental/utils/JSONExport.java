@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +48,7 @@ public class JSONExport {
     Date platiOd = Aplikace.getPlatiOd();
     Date platiDo = Aplikace.getPlatiDo();
 
-    File exportFile = new File(System.getenv("TEMP"), String.format("%1$tY%1$tm%1$td", Aplikace.getCalendar()) + "ModelNajem.JSON");
+    File exportFile = new File(System.getenv("TEMP"), String.format("ModelNajem%1$tY%1$tm%1$td", Aplikace.getCalendar()) + ".JSON");
     OutputStream os = null;
     Object value = null;
     HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
@@ -105,9 +106,10 @@ public class JSONExport {
             return null;
         }
         System.out.println(" typEntity:="+typEntity.getTypentity()+" "+typEntity.getPopis());
-        // Nacist pole a getMetody 
         JsonObjectBuilder jsonObjectTypEntityFields = Json.createObjectBuilder();
+        // Nacist pole a getMetody pro Typentity
         getObjectFields(Typentity.class, typEntity, jsonObjectTypEntityFields);
+        // Nacist pole a getMetody pro Attribute s klíčem Typentity.id
         getTypEntityAttributes(typEntity, jsonObjectTypEntityFields);
 
         // Pole s Child - Typentity
@@ -115,14 +117,14 @@ public class JSONExport {
         query.setParameter("idParentEntity", typEntity.getId());
         query.setParameter("PlatiOD", platiOd);
         query.setParameter("PlatiDO", platiDo);
-        List<Typentity> listChild = query.getResultList();
+        ArrayList<Typentity> listChild = new ArrayList<>(query.getResultList());
         for (Typentity typentityChild : listChild) {
             JsonObjectBuilder jsonObject = createJSONx(typentityChild);
             if (jsonObject != null) {
-                jsonObjectTypEntityFields.add("TYPENTITY", jsonObject);
+                jsonObjectTypEntityFields=jsonObjectTypEntityFields.add(typentityChild.getTypentity()+"-"+typentityChild.getPopis(), jsonObject);
             }
         }
-        jsonObjectTypEntity.add("TYPENTITY", jsonObjectTypEntityFields);
+        jsonObjectTypEntity.add(typEntity.getTypentity()+"-"+typEntity.getPopis(), jsonObjectTypEntityFields);
 
         return jsonObjectTypEntity;
     }
