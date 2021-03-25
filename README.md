@@ -1,3 +1,5 @@
+- 👋 Hi, I’m @IvoSosyn
+
 # Rental #
 ==========
 Webová aplikace k evideci a výpočtu nájemného.
