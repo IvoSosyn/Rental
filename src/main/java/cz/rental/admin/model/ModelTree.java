@@ -9,6 +9,7 @@ import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Typentity;
 import cz.rental.utils.JSONExport;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -22,6 +23,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.component.inputtext.InputText;
+import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
@@ -55,7 +57,6 @@ public class ModelTree implements Serializable {
     @EJB
     JSONExport jsonExport;
 
-    
     @Inject
     ModelTable modelTable;
 
@@ -402,8 +403,18 @@ public class ModelTree implements Serializable {
      * Metoda vyexportuje cely strom Typentity i s Attributes
      */
     public void exportToJSON() {
-        // Export "this.typentityRoot" to JSONExport        
-        jsonExport.exportModel(this.typentityRoot);
+        String jsonFileName = null;
+        try {
+            // Export "this.typentityRoot" to JSONExport
+            jsonFileName = jsonExport.exportModel(this.typentityRoot);
+        } catch (IOException ex) {
+            Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Systémová chyba, opakujte později a chybu nahlaste zřizovateli. ", ex.getLocalizedMessage()));
+        } catch (Exception e) {
+            Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, e);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Systémová chyba, opakujte později a chybu nahlaste zřizovateli. ", e.getLocalizedMessage()));
+        }
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Export souboru byl úspěšný, jméno vyexportovaního souboru: ", jsonFileName));
     }
 
     /**

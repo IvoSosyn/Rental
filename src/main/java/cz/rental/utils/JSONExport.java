@@ -47,8 +47,8 @@ public class JSONExport {
     Query query = null;
     Date platiOd = Aplikace.getPlatiOd();
     Date platiDo = Aplikace.getPlatiDo();
-
-    File exportFile = new File(System.getenv("TEMP"), String.format("ModelNajem%1$tY%1$tm%1$td", Aplikace.getCalendar()) + ".JSON");
+    int randomInt = (int) (Math.random() * 1000);
+    File exportFile = new File(System.getenv("TEMP"), String.format("ModelNajem%1$04d", randomInt) + ".JSON");
     OutputStream os = null;
     Object value = null;
     HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
@@ -58,7 +58,7 @@ public class JSONExport {
     HashSet<Field> hashSetAttributeFields = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredFields()));
     HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
 
-    public void exportModel(Typentity typentityRoot) {
+    public String exportModel(Typentity typentityRoot) throws FileNotFoundException, IOException {
         if (platiOd == null) {
             Aplikace.getCalendar().set(1970, Calendar.JANUARY, 1, 0, 0, 0);
             platiOd = Aplikace.getCalendar().getTime();
@@ -68,35 +68,33 @@ public class JSONExport {
             Aplikace.getCalendar().add(Calendar.HOUR_OF_DAY, -1);
             platiDo = Aplikace.getCalendar().getTime();
         }
-
         try {
 
-            JsonObjectBuilder json = createJSONx(typentityRoot);
-            
-            
+            JsonObjectBuilder json = Json.createObjectBuilder().add("MODEL", createJsonObjectModel(typentityRoot));
+
             //write to file
             os = new FileOutputStream(exportFile);
             try (JsonWriter jsonWriter = Json.createWriter(os)) {
                 jsonWriter.writeObject(json.build());
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         } catch (Exception e) {
-            Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, e);
+            throw e;
         } finally {
             try {
                 if (os instanceof FileOutputStream) {
                     os.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(JSONExport.class.getName()).log(Level.SEVERE, null, ex);
+                throw ex;
             }
         }
+        return exportFile.getAbsolutePath();
     }
 
-    private JsonObjectBuilder createJSONx(Typentity typEntity) {
+    private JsonObjectBuilder createJsonObjectModel(Typentity typEntity) {
         // Typentity - popis
-        JsonObjectBuilder jsonObjectTypEntity = Json.createObjectBuilder();
         if (typEntity == null) {
             query = typEntitycontroller.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)");
             query.setParameter("PlatiOD", this.platiOd);
@@ -106,35 +104,38 @@ public class JSONExport {
         if (typEntity == null) {
             return null;
         }
-        System.out.println(" typEntity:="+typEntity.getTypentity()+" "+typEntity.getPopis());
-        JsonObjectBuilder jsonObjectTypEntityFields = Json.createObjectBuilder();
+        System.out.println(" typEntity:=" + typEntity.getTypentity() + " " + typEntity.getPopis());
+        JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+
         // Nacist pole a getMetody pro Typentity
-        getObjectFields(Typentity.class, typEntity, jsonObjectTypEntityFields);
+        getObjectFields(Typentity.class, typEntity, jsonObject);
+
         // Nacist pole a getMetody pro Attribute s klíčem Typentity.id
-        getTypEntityAttributes(typEntity, jsonObjectTypEntityFields);
+        jsonObject.add("ATTRIBUTE", this.getAttributes(typEntity));
 
         // Pole s Child - Typentity
+        JsonArrayBuilder jsonChild = Json.createArrayBuilder();
         query = typEntitycontroller.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent= :idParentEntity AND (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD)");
         query.setParameter("idParentEntity", typEntity.getId());
         query.setParameter("PlatiOD", platiOd);
         query.setParameter("PlatiDO", platiDo);
         ArrayList<Typentity> listChild = new ArrayList<>(query.getResultList());
         for (Typentity typentityChild : listChild) {
-            JsonObjectBuilder jsonObject = createJSONx(typentityChild);
-            if (jsonObject != null) {
-                jsonObjectTypEntityFields=jsonObjectTypEntityFields.add(typentityChild.getTypentity()+"-"+typentityChild.getPopis(), jsonObject);
+            JsonObjectBuilder jsonObjectChild = createJsonObjectModel(typentityChild);
+            if (jsonObjectChild != null) {
+                jsonChild.add(jsonObjectChild);
             }
         }
-        jsonObjectTypEntity.add(typEntity.getTypentity()+"-"+typEntity.getPopis(), jsonObjectTypEntityFields);
+        jsonObject.add("TYPENTITIES", jsonChild);
 
-        return jsonObjectTypEntity;
+        return jsonObject;
     }
 
     /**
      * Rekursivni volani metody nad DB - nalezeni dane Entita (samostatny
      * objekt) a jejich Attribute (samostatny objekt)
      */
-    private JsonObjectBuilder createJSON(Typentity typEntity) {
+    private JsonObjectBuilder createJSON_OLD(Typentity typEntity) {
 
         // Typentity - popis
         JsonObjectBuilder jobTypEntity = Json.createObjectBuilder();
@@ -281,14 +282,14 @@ public class JSONExport {
             query.setParameter("PlatiDO", platiDo);
             List<Typentity> listChild = query.getResultList();
             for (Typentity typentityChild : listChild) {
-                jobEntyties.add(createJSON(typentityChild));
+                jobEntyties.add(createJsonObjectModel(typentityChild));
             }
             jobTypEntity.add("TYPENTITY", jobEntyties);
         }
         return jobTypEntity;
     }
 
-    private void getTypEntityAttributes(Typentity typEntity, JsonObjectBuilder jsonObjectTypEntityFields) {
+    private JsonArrayBuilder getAttributes(Typentity typEntity) {
         JsonArrayBuilder jobAttrs = Json.createArrayBuilder();
         query = attrController.getEm().createQuery("SELECT a FROM Attribute a WHERE a.idtypentity= :idTypEntity AND a.identita IS NULL AND (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD) ORDER BY a.poradi");
         query.setParameter("idTypEntity", typEntity.getId());
@@ -300,8 +301,7 @@ public class JSONExport {
             getObjectFields(Attribute.class, attr, jobAttr);
             jobAttrs.add(jobAttr);
         }
-        jsonObjectTypEntityFields.add("ATTRIBUTE", jobAttrs);
-
+        return jobAttrs;
     }
 
     private void getObjectFields(java.lang.Class objectClass, Object object, JsonObjectBuilder jsonObjectTypEntityFields) {
