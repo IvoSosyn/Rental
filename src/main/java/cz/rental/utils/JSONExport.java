@@ -69,7 +69,6 @@ public class JSONExport {
             platiDo = Aplikace.getCalendar().getTime();
         }
         try {
-
             JsonObjectBuilder json = Json.createObjectBuilder().add("MODEL", createJsonObjectModel(typentityRoot));
 
             //write to file

@@ -9,7 +9,10 @@ import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Typentity;
 import cz.rental.utils.JSONExport;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,8 +30,12 @@ import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DefaultStreamedContent.Builder;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
+import org.primefaces.util.SerializableSupplier;
 
 /**
  *
@@ -401,9 +408,12 @@ public class ModelTree implements Serializable {
 
     /**
      * Metoda vyexportuje cely strom Typentity i s Attributes
+     *
+     * @return
      */
-    public void exportToJSON() {
+    public StreamedContent exportToJSON() throws FileNotFoundException {
         String jsonFileName = null;
+        StreamedContent file = null;
         try {
             // Export "this.typentityRoot" to JSONExport
             jsonFileName = jsonExport.exportModel(this.typentityRoot);
@@ -415,6 +425,21 @@ public class ModelTree implements Serializable {
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Systémová chyba, opakujte později a chybu nahlaste zřizovateli. ", e.getLocalizedMessage()));
         }
         PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Export souboru byl úspěšný, jméno vyexportovaního souboru: ", jsonFileName));
+        final String is = jsonFileName;
+        file = DefaultStreamedContent.builder()
+                .contentType("application/json")
+                .name("Model.json")
+                .stream(() -> {
+                    try {
+                        return new FileInputStream(is);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(ModelTree.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    return null;
+                })
+                .build();
+
+        return file;
     }
 
     /**

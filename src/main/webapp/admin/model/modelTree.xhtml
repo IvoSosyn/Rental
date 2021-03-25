@@ -66,7 +66,9 @@
                                     <p:commandButton id="editReports" value="Sestavy"  actionListener="#{modelTree.editReports}"  update=":formModelTree:messages" icon="fa fa-stack-overflow" disabled="#{!modelTree.editable}"  title="Vloží seznam použitelných sestav k vybrané entitě (uzlu)." />                                    
                                 </div>
                                 <div class="ui-g-12 ui-md-6 ui-lg-3">
-                                    <p:commandButton id="exportModelTree" value="Export"  actionListener="#{modelTree.exportToJSON}"  update=":formModelTree:messages" icon="fa fa-file-code-o" disabled="#{!modelTree.editable}"  title="Export dat do souboru typu JSON." />
+                                    <p:commandButton id="exportModelTree" value="Export"  update=":formModelTree:messages" icon="fa fa-file-code-o" disabled="#{!modelTree.editable}"  title="Export dat do souboru typu JSON." >
+                                        <p:fileDownload value="#{modelTree.exportToJSON()}" />
+                                    </p:commandButton>
                                 </div>
                             </div>
                         </f:facet>
@@ -80,6 +82,7 @@
                         <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail :formModelTree:modelTreeMenu :formModelTree:pasteTypentity"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null or !modelTree.appendable }"  title="Zkopíruj entitu (uzel) do paměti"/>
                         <p:menuitem value="Vlož(#{modelTree.copyNodeName})"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.copyNode eq null or !modelTree.appendable}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
                     </p:contextMenu>
+                
                 </h:form>
             </div>
         </div>
