@@ -443,6 +443,13 @@ public class ModelTree implements Serializable {
     }
 
     /**
+     * Metoda načte data pro Model (provede Update nových položek nebo Insert)
+     */
+    public void importFromJSON() {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Není naprogramováno.", "Není naprogramováno."));
+    }
+
+    /**
      * @return the rootNode
      */
     public TreeNode getRootNode() {

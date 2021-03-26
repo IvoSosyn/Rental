@@ -11,6 +11,15 @@
             color: #c61e40;
         }
     </style>
+    <script type="text/javascript">
+        function start() {
+            PF('statusDialog').show();
+        }
+
+        function stop() {
+            PF('statusDialog').hide();
+        }
+    </script>
     <ui:composition>	
         <div class="ui-g">
             <div class="ui-g-7">
@@ -66,8 +75,12 @@
                                     <p:commandButton id="editReports" value="Sestavy"  actionListener="#{modelTree.editReports}"  update=":formModelTree:messages" icon="fa fa-stack-overflow" disabled="#{!modelTree.editable}"  title="Vloží seznam použitelných sestav k vybrané entitě (uzlu)." />                                    
                                 </div>
                                 <div class="ui-g-12 ui-md-6 ui-lg-3">
-                                    <p:commandButton id="exportModelTree" value="Export"  update=":formModelTree:messages" icon="fa fa-file-code-o" disabled="#{!modelTree.editable}"  title="Export dat do souboru typu JSON." >
+                                    <p:commandButton id="exportModelTree" value="Export" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" update=":formModelTree:messages" icon="fa fa-file-code-o" disabled="#{!modelTree.editable}"  title="Export dat do souboru typu JSON." >
                                         <p:fileDownload value="#{modelTree.exportToJSON()}" />
+                                    </p:commandButton>
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton id="importModelTree" value="Import" actionListener="#{modelTree.importFromJSON()}" update="@form" icon="fa fa-file-code-o" disabled="#{!modelTree.editable}"  title="Import dat ze souboru typu JSON." >
                                     </p:commandButton>
                                 </div>
                             </div>
@@ -82,7 +95,11 @@
                         <p:menuitem value="Kopíruj" action="#{modelTree.copyNodeFrom}" update=":formModelTreeDetail:gridDetail :formModelTree:modelTreeMenu :formModelTree:pasteTypentity"  icon="fa fa-copy" disabled="#{modelTree.selectedNode eq null or !modelTree.appendable }"  title="Zkopíruj entitu (uzel) do paměti"/>
                         <p:menuitem value="Vlož(#{modelTree.copyNodeName})"    action="#{modelTree.pasteNodeTo}"  update=":formModelTree:modelTree :formModelTreeDetail:gridDetail"  icon="fa fa-paste" disabled="#{modelTree.copyNode eq null or !modelTree.appendable}"  title="Vloží entitu (uzel) z paměti do vybraného místa" />
                     </p:contextMenu>
-                
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false"
+                              resizable="false">
+                        <i class="pi pi-spinner pi-spin" style="font-size:3rem"></i>
+                    </p:dialog>
+
                 </h:form>
             </div>
         </div>
