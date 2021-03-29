@@ -34,6 +34,7 @@
             org.primefaces.application.DialogViewHandler
         </view-handler>
     </application>
+    
     <navigation-rule>
         <from-view-id>/admin/model/model.xhtml</from-view-id>
         <navigation-case>

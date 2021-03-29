@@ -9,10 +9,10 @@ import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Typentity;
 import cz.rental.utils.JSONExport;
+import cz.rental.utils.JSONImport;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -31,11 +31,9 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.DefaultStreamedContent.Builder;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
-import org.primefaces.util.SerializableSupplier;
 
 /**
  *
@@ -63,6 +61,9 @@ public class ModelTree implements Serializable {
     cz.rental.entity.AttrController attrController;
     @EJB
     JSONExport jsonExport;
+    
+    @Inject
+    JSONImport jsonImport;
 
     @Inject
     ModelTable modelTable;
@@ -446,7 +447,7 @@ public class ModelTree implements Serializable {
      * Metoda načte data pro Model (provede Update nových položek nebo Insert)
      */
     public void importFromJSON() {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Není naprogramováno.", "Není naprogramováno."));
+        jsonImport.importModel();
     }
 
     /**

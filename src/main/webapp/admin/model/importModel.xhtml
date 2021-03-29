@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui"       
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Import data do Modelu(Šablony)</title>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/all.min-jsf.css" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/v4-shims.min-jsf.css" />
+        <h:outputStylesheet name="/css/jsfcrud.css"/>
+        <h:outputScript name="/js/jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+        <h:form  id="importModelForm" enctype="multipart/form-data" >
+            <p:growl id="importModelGrowl" />
+            <p:selectBooleanCheckbox id="createNewModel" value="#{jsonImport.createNewModel}" itemLabel="Načíst data jako nový model(šablonu).">
+                <p:ajax event="change" update="importTypentityID importAttributeID" />
+            </p:selectBooleanCheckbox>
+            <H3>Aktualizovat entity (uzly) podle</H3>
+            <div class="p-formgroup-inline">
+                <div class="p-field">
+                    <label for="importTypentityID" class="p-sr-only">Názvu entity(uzlu) (doporučeno)  </label>
+                    <p:toggleSwitch id="importTypentityID" value="#{jsonImport.importTypentityID}" disabled="#{jsonImport.createNewModel}"/>
+                    <label for="importTypentityID" class="p-sr-only"> Vnitřního ID</label>
+                </div>
+            </div>
+
+            <H3>Aktualizovat atributy entity(uzlu) podle</H3>
+            <div class="p-formgroup-inline">
+                <div class="p-field">
+                    <label for="importAttributeID" class="p-sr-only">Názvu atributu (doporučeno) </label>
+                    <p:toggleSwitch id="importAttributeID" value="#{jsonImport.importAttributeID}" disabled="#{jsonImport.createNewModel}"/>
+                    <label for="importAttributeID" class="p-sr-only"> Vnitřního ID</label>
+                </div>
+            </div>
+            <div>
+                <p:fileUpload value="#{jsonImport.uploadFile}" mode="simple" skinSimple="true" label="Vyberte soubor"  title="Vyberte správný soubor se strukturou JSON k načtení do databáze." />
+            </div>
+            <p:commandButton value="Import dat" ajax="false" actionListener="#{jsonImport.importFromJsonToModel}" icon="fa fa-mail-reply" style="text-align:left;" update="importModelGrowl"/>
+            <p:commandButton value="Zpět" actionListener="#{jsonImport.closeModelDialog}" icon="fa fa-mail-reply" style="text-align:left;" />
+        </h:form>
+    </h:body>
+</html>
