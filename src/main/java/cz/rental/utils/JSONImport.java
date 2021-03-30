@@ -20,6 +20,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.persistence.Query;
 import org.primefaces.PrimeFaces;
@@ -42,7 +45,7 @@ public class JSONImport implements Serializable {
     Date platiOd = Aplikace.getPlatiOd();
     Date platiDo = Aplikace.getPlatiDo();
 
-    private UploadedFile uploadFile=null;
+    private UploadedFile uploadFile = null;
     private boolean createNewModel = true;
     private boolean importTypentityID = false;
     private boolean importAttributeID = false;
@@ -73,7 +76,8 @@ public class JSONImport implements Serializable {
         options.put("responsive", true);
         PrimeFaces.current().dialog().openDynamic("/admin/model/importModel.xhtml", options, null);
     }
-/*
+
+    /*
     public void importFromJsonToModelParse(ActionEvent actionEvent) {
         if (uploadFile == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Není vybrán správný soubor s daty!!", "Nelze provést načtení do databáze !!"));
@@ -144,9 +148,9 @@ public class JSONImport implements Serializable {
         }
         closeModelDialog(actionEvent);
     }
-*/
+     */
     public void importFromJsonToModel(ActionEvent actionEvent) {
-        if (uploadFile == null || uploadFile.getFileName()==null){
+        if (uploadFile == null || uploadFile.getFileName() == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Není vybrán správný soubor s daty!!", "Nelze provést načtení do databáze !!"));
             return;
         }
@@ -169,14 +173,11 @@ public class JSONImport implements Serializable {
 //            System.out.println(" key:"+key+" "+jsom.get(key).getAsString());
 //            jsom.get(key);            
 //        }
-        
-        javax.json.JsonReader jsr=Json.createReader(is);
-        javax.json.JsonObject jso=jsr.readObject().getJsonObject("MODEL");
-        for (Map.Entry<String, JsonValue> jse : jso.entrySet()) {
-            System.out.println(" jse.getKey():"+jse.getKey()+" jse.getValue():"+jse.getValue()+" jse.getValueType():"+jse.getValue().getValueType());
-            
-        }
-        
+
+        JsonReader jsr = Json.createReader(is);
+        JsonObject jso = jsr.readObject();
+        importJsonObject("MODEL", jso);
+
         if (is != null) {
             try {
                 uploadFile.getInputStream().close();
@@ -185,6 +186,41 @@ public class JSONImport implements Serializable {
             }
         }
         closeModelDialog(actionEvent);
+    }
+
+    private void importJsonObject(String objectName, JsonObject jsonObject) {
+        JsonObject jso = jsonObject.getJsonObject(objectName);
+        for (Map.Entry<String, JsonValue> jse : jso.entrySet()) {
+            System.out.println(" jse.getKey():" + jse.getKey() + " jse.getValue():" + jse.getValue() + " jse.getValueType():" + jse.getValue().getValueType());
+            switch (jse.getValue().getValueType()) {
+                case OBJECT: {
+                    importJsonObject(jse.getKey(), jsonObject);
+                    break;
+                }
+                case ARRAY: {
+                    JsonArray jsa=jse.getValue().asJsonArray();
+                    for (JsonValue jsonValue : jsa) {
+                        System.out.println(" jsonValue.getValueType():"+jsonValue.getValueType());
+                    }
+                    break;
+                }
+                case STRING: {
+                    break;
+                }
+                case NUMBER: {
+                    break;
+                }
+                case TRUE: {
+                    break;
+                }
+                case FALSE: {
+                    break;
+                }
+                case NULL: {
+                    break;
+                }
+            }
+        }
     }
 
     public void closeModelDialog(ActionEvent actionEvent) {
