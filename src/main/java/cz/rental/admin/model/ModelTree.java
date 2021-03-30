@@ -445,9 +445,10 @@ public class ModelTree implements Serializable {
 
     /**
      * Metoda načte data pro Model (provede Update nových položek nebo Insert)
+     * @param typentityRoot
      */
-    public void importFromJSON() {
-        jsonImport.importModel();
+    public void importFromJSON(Typentity typentityRoot) {
+        jsonImport.importModel(typentityRoot);
     }
 
     /**

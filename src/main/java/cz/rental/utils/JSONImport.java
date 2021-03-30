@@ -5,6 +5,7 @@
  */
 package cz.rental.utils;
 
+import cz.rental.entity.Typentity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class JSONImport implements Serializable {
     @EJB
     cz.rental.entity.AttrController attrController;
 
+    Typentity typentityRoot=null;
     Query query = null;
     Date platiOd = Aplikace.getPlatiOd();
     Date platiDo = Aplikace.getPlatiDo();
@@ -59,95 +61,29 @@ public class JSONImport implements Serializable {
 //    HashSet<Field> hashSetAttributeFields = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredFields()));
 //    HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
 
-    public void importModel() {
+    public void importModel(Typentity typentityRoot) {
+        this.typentityRoot = typentityRoot;
+
         HashMap<String, Object> options = new HashMap<>();
 
         options.put("modal", false);
         options.put("minimizable", true);
         options.put("maximizable", true);
-        options.put("draggable", true);
+        options.put("draggable", false);
         options.put("resizable", true);
-        options.put("width", 1024);
-        options.put("height", 780);
-        options.put("contentWidth", 1024);
-        options.put("contentHeight", 780);
+        options.put("width", 800);
+        options.put("height", 600);
+        options.put("contentWidth", 800);
+        options.put("contentHeight", 600);
         options.put("closeOnEscape", true);
         options.put("fitViewport", true);
         options.put("responsive", true);
         PrimeFaces.current().dialog().openDynamic("/admin/model/importModel.xhtml", options, null);
     }
 
-    /*
-    public void importFromJsonToModelParse(ActionEvent actionEvent) {
-        if (uploadFile == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Není vybrán správný soubor s daty!!", "Nelze provést načtení do databáze !!"));
-            return;
-        }
-        try {
-            is = uploadFile.getInputStream();
-        } catch (IOException ex) {
-            Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nelze načíst soubor " + uploadFile.getFileName() + " s daty!!", "Nelze provést načtení do databáze !!"));
-            return;
-        }
-        JsonParser jsp = Json.createParser(is);
-        // START_OBJECT, END_OBJECT, START_ARRAY, END_ARRAY, KEY_NAME, VALUE_STRING, VALUE_NUMBER, VALUE_TRUE, VALUE_FALSE, and VALUE_NULL
-        while (jsp.hasNext()) {
-            JsonParser.Event event = jsp.next();
-            switch (event) {
-                case START_OBJECT: {
-                    System.out.println(" " + event.name());
-                    break;
-                }
-                case END_OBJECT: {
-                    System.out.println(" " + event.name());
-                    break;
-                }
-                case START_ARRAY: {
-                    System.out.println(" " + event.name());
-                    break;
-                }
-                case END_ARRAY: {
-                    System.out.println(" " + event.name());
-                    break;
-                }
-                case KEY_NAME: {
-                    System.out.println(" " + jsp.getString());
-                    break;
-                }
-                case VALUE_STRING: {
-                    System.out.println(" " + jsp.getString());
-
-                    break;
-                }
-                case VALUE_NUMBER: {
-                    System.out.println(" " + jsp.getLong());
-
-                    break;
-                }
-                case VALUE_TRUE: {
-                    System.out.println(" " + jsp.getValue());
-                    break;
-                }
-                case VALUE_FALSE: {
-                    System.out.println(" " + jsp.getValue());
-                    break;
-                }
-                case VALUE_NULL: {
-                    System.out.println(" " + jsp.getValue());
-                    break;
-                }
-            }
-        }
-        if (is != null) {
-            try {
-                uploadFile.getInputStream().close();
-            } catch (IOException ex) {
-                Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        closeModelDialog(actionEvent);
-    }
+    /**
+     * Metoda nacte z JSON souboru data definujici model(sablonu) a aktualizuje bud aktualni model(sablonu) nebo vytvori novy
+     * @param actionEvent - button event z dialogu
      */
     public void importFromJsonToModel(ActionEvent actionEvent) {
         if (uploadFile == null || uploadFile.getFileName() == null) {
@@ -161,26 +97,19 @@ public class JSONImport implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nelze načíst soubor " + uploadFile.getFileName() + " s daty!!", "Nelze provést načtení do databáze !!"));
             return;
         }
-//        Gson gson=new Gson();
-//        JsonObject jso=gson.fromJson(new BufferedReader(new InputStreamReader(is)), JsonObject.class);
-//        
-//        Set<Map.Entry<String, JsonElement>> entrySet =jso.entrySet();
-//        for (Map.Entry<String, JsonElement> entry : entrySet) {
-//            System.out.println(" entry.getKey():"+entry.getKey()+" entry.getValue():"+entry.getValue());
-//        }
-//        JsonObject jsom=jso.getAsJsonObject("/MODEL/popis");
-//        for (String key : jsom.keySet()) {
-//            System.out.println(" key:"+key+" "+jsom.get(key).getAsString());
-//            jsom.get(key);            
-//        }
 
         JsonReader jsr = Json.createReader(is);
-        JsonObject jso = jsr.readObject();
-        importJsonObject("MODEL", jso);
+        JsonObject jso = jsr.readObject().getJsonObject("MODEL");
+        if (jso == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Soubor " + uploadFile.getFileName() + " nemá správný formát!!", "Nelze provést načtení do databáze !!"));
+            return;
+        }
+        processJsonObject(jso);
 
         if (is != null) {
             try {
                 uploadFile.getInputStream().close();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Import souboru " + uploadFile.getFileName() + " byl úspěšný.", "Model(šablona) byl načten do databáze."));
             } catch (IOException ex) {
                 Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -188,19 +117,31 @@ public class JSONImport implements Serializable {
         closeModelDialog(actionEvent);
     }
 
-    private void importJsonObject(String objectName, JsonObject jsonObject) {
-        JsonObject jso = jsonObject.getJsonObject(objectName);
-        for (Map.Entry<String, JsonValue> jse : jso.entrySet()) {
-            System.out.println(" jse.getKey():" + jse.getKey() + " jse.getValue():" + jse.getValue() + " jse.getValueType():" + jse.getValue().getValueType());
+    /**
+     * Metoda zpracuje JsonObject definujici Typentity nebo Attribute rozebere
+     * .json soubor na jdnotlive cleny a ty dale zpracuje do DB jako nove nebo
+     * jako aktualizaci
+     *
+     * @param jsonObject objekt ke zpracovani
+     */
+    private void processJsonObject(JsonObject jsonObject) {
+        for (Map.Entry<String, JsonValue> jse : jsonObject.entrySet()) {
+            System.out.println(" jse.getKey():" + jse.getKey() + " jse.getValueType():" + jse.getValue().getValueType() + " jse.getValue():" + jse.getValue());
             switch (jse.getValue().getValueType()) {
                 case OBJECT: {
-                    importJsonObject(jse.getKey(), jsonObject);
+                    processJsonObject(jsonObject);
                     break;
                 }
                 case ARRAY: {
-                    JsonArray jsa=jse.getValue().asJsonArray();
+                    JsonArray jsa = jse.getValue().asJsonArray();
                     for (JsonValue jsonValue : jsa) {
-                        System.out.println(" jsonValue.getValueType():"+jsonValue.getValueType());
+                        System.out.println(" jsonValue.getValueType():" + jsonValue.getValueType());
+                        switch (jsonValue.getValueType()) {
+                            case OBJECT: {
+                                processJsonObject(jsonValue.asJsonObject());
+                                break;
+                            }
+                        }
                     }
                     break;
                 }
