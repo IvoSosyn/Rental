@@ -5,18 +5,12 @@
  */
 package cz.rental.utils;
 
-import cz.rental.entity.Attribute;
-import cz.rental.entity.EntitySuperClassNajem;
-import cz.rental.entity.Typentity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -26,7 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.json.Json;
-import javax.json.stream.JsonParser;
+import javax.json.JsonValue;
 import javax.persistence.Query;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.file.UploadedFile;
@@ -49,18 +43,18 @@ public class JSONImport implements Serializable {
     Date platiDo = Aplikace.getPlatiDo();
 
     private UploadedFile uploadFile=null;
-    private boolean createNewModel = false;
+    private boolean createNewModel = true;
     private boolean importTypentityID = false;
     private boolean importAttributeID = false;
     InputStream is = null;
 
     Object value = null;
-    HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
-    HashSet<Method> hashSetSuperMethods = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredMethods()));
-    HashSet<Field> hashSetTypentityFields = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredFields()));
-    HashSet<Method> hashSetTypentityMethods = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredMethods()));
-    HashSet<Field> hashSetAttributeFields = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredFields()));
-    HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
+//    HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
+//    HashSet<Method> hashSetSuperMethods = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredMethods()));
+//    HashSet<Field> hashSetTypentityFields = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredFields()));
+//    HashSet<Method> hashSetTypentityMethods = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredMethods()));
+//    HashSet<Field> hashSetAttributeFields = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredFields()));
+//    HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
 
     public void importModel() {
         HashMap<String, Object> options = new HashMap<>();
@@ -79,8 +73,8 @@ public class JSONImport implements Serializable {
         options.put("responsive", true);
         PrimeFaces.current().dialog().openDynamic("/admin/model/importModel.xhtml", options, null);
     }
-
-    public void importFromJsonToModel(ActionEvent actionEvent) {
+/*
+    public void importFromJsonToModelParse(ActionEvent actionEvent) {
         if (uploadFile == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Není vybrán správný soubor s daty!!", "Nelze provést načtení do databáze !!"));
             return;
@@ -141,6 +135,48 @@ public class JSONImport implements Serializable {
                 }
             }
         }
+        if (is != null) {
+            try {
+                uploadFile.getInputStream().close();
+            } catch (IOException ex) {
+                Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        closeModelDialog(actionEvent);
+    }
+*/
+    public void importFromJsonToModel(ActionEvent actionEvent) {
+        if (uploadFile == null || uploadFile.getFileName()==null){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Není vybrán správný soubor s daty!!", "Nelze provést načtení do databáze !!"));
+            return;
+        }
+        try {
+            is = uploadFile.getInputStream();
+        } catch (IOException ex) {
+            Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nelze načíst soubor " + uploadFile.getFileName() + " s daty!!", "Nelze provést načtení do databáze !!"));
+            return;
+        }
+//        Gson gson=new Gson();
+//        JsonObject jso=gson.fromJson(new BufferedReader(new InputStreamReader(is)), JsonObject.class);
+//        
+//        Set<Map.Entry<String, JsonElement>> entrySet =jso.entrySet();
+//        for (Map.Entry<String, JsonElement> entry : entrySet) {
+//            System.out.println(" entry.getKey():"+entry.getKey()+" entry.getValue():"+entry.getValue());
+//        }
+//        JsonObject jsom=jso.getAsJsonObject("/MODEL/popis");
+//        for (String key : jsom.keySet()) {
+//            System.out.println(" key:"+key+" "+jsom.get(key).getAsString());
+//            jsom.get(key);            
+//        }
+        
+        javax.json.JsonReader jsr=Json.createReader(is);
+        javax.json.JsonObject jso=jsr.readObject().getJsonObject("MODEL");
+        for (Map.Entry<String, JsonValue> jse : jso.entrySet()) {
+            System.out.println(" jse.getKey():"+jse.getKey()+" jse.getValue():"+jse.getValue()+" jse.getValueType():"+jse.getValue().getValueType());
+            
+        }
+        
         if (is != null) {
             try {
                 uploadFile.getInputStream().close();
