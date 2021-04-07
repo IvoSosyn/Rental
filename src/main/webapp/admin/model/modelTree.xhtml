@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="ui-g-12 ui-md-6 ui-lg-3">
                                     <p:commandButton id="importModelTree" value="Import" actionListener="#{modelTree.importFromJSON(modelTree.typentityRoot)}" update="@form" icon="fa fa-file-code-o" disabled="#{!modelTree.editable}"  title="Import dat ze souboru typu JSON." >
-                                        <f:attribute name="typentityRoot" value="#{modelTree.typentityRoot}">
+                                        <f:attribute name="typentityRoot" value="#{modelTree.typentityRoot}" />
                                     </p:commandButton>
                                 </div>
                             </div>

@@ -5,6 +5,8 @@
  */
 package cz.rental.utils;
 
+import cz.rental.aplikace.evidence.EviEntita;
+import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -42,7 +45,7 @@ public class JSONImport implements Serializable {
     @EJB
     cz.rental.entity.AttrController attrController;
 
-    Typentity typentityRoot=null;
+    Typentity typentityRoot = null;
     Query query = null;
     Date platiOd = Aplikace.getPlatiOd();
     Date platiDo = Aplikace.getPlatiDo();
@@ -54,13 +57,15 @@ public class JSONImport implements Serializable {
     InputStream is = null;
 
     Object value = null;
+
+    private Stack<Typentity> stack = new Stack();
+
 //    HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
 //    HashSet<Method> hashSetSuperMethods = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredMethods()));
 //    HashSet<Field> hashSetTypentityFields = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredFields()));
 //    HashSet<Method> hashSetTypentityMethods = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredMethods()));
 //    HashSet<Field> hashSetAttributeFields = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredFields()));
 //    HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
-
     public void importModel(Typentity typentityRoot) {
         this.typentityRoot = typentityRoot;
 
@@ -82,7 +87,9 @@ public class JSONImport implements Serializable {
     }
 
     /**
-     * Metoda nacte z JSON souboru data definujici model(sablonu) a aktualizuje bud aktualni model(sablonu) nebo vytvori novy
+     * Metoda nacte z JSON souboru data definujici model(sablonu) a aktualizuje
+     * bud aktualni model(sablonu) nebo vytvori novy
+     *
      * @param actionEvent - button event z dialogu
      */
     public void importFromJsonToModel(ActionEvent actionEvent) {
@@ -104,7 +111,9 @@ public class JSONImport implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Soubor " + uploadFile.getFileName() + " nemá správný formát!!", "Nelze provést načtení do databáze !!"));
             return;
         }
-        processJsonObject(jso);
+        Typentity parent = new Typentity();
+
+        processJsonObject(jso, parent);
 
         if (is != null) {
             try {
@@ -124,21 +133,42 @@ public class JSONImport implements Serializable {
      *
      * @param jsonObject objekt ke zpracovani
      */
-    private void processJsonObject(JsonObject jsonObject) {
+    private void processJsonObject(JsonObject jsonObject, Typentity parent) {
+        int rezim = 0;
         for (Map.Entry<String, JsonValue> jse : jsonObject.entrySet()) {
             System.out.println(" jse.getKey():" + jse.getKey() + " jse.getValueType():" + jse.getValue().getValueType() + " jse.getValue():" + jse.getValue());
             switch (jse.getValue().getValueType()) {
                 case OBJECT: {
-                    processJsonObject(jsonObject);
+                    if (jse.getKey().equalsIgnoreCase("TYPENTITIES")) {
+                        Typentity newParent = new Typentity();
+                        newParent.setIdparent(parent.getId());
+                        processJsonObject(jsonObject, newParent);
+                    }
+                    if (jse.getKey().equalsIgnoreCase("ATTRIBUTE")) {
+                        processJsonObject(jsonObject, parent);
+                    }
                     break;
                 }
                 case ARRAY: {
                     JsonArray jsa = jse.getValue().asJsonArray();
+                    if (jse.getKey().equalsIgnoreCase("TYPENTITIES")) {
+                        rezim = 0;
+                    }
+                    if (jse.getKey().equalsIgnoreCase("ATTRIBUTE")) {
+                        rezim = 1;
+                    }
                     for (JsonValue jsonValue : jsa) {
                         System.out.println(" jsonValue.getValueType():" + jsonValue.getValueType());
                         switch (jsonValue.getValueType()) {
                             case OBJECT: {
-                                processJsonObject(jsonValue.asJsonObject());
+                                if (rezim == 0) {
+                                    Typentity newParent = new Typentity();
+                                    newParent.setIdparent(parent.getId());
+                                    processJsonObject(jsonObject, newParent);
+                                }
+                                if (rezim == 1) {
+                                    Attribute newAttr = new Attribute();
+                                }
                                 break;
                             }
                         }
