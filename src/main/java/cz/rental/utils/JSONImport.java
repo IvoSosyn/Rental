@@ -5,16 +5,15 @@
  */
 package cz.rental.utils;
 
-import cz.rental.aplikace.evidence.EviEntita;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.Typentity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -58,7 +57,10 @@ public class JSONImport implements Serializable {
 
     Object value = null;
 
-    private Stack<Typentity> stack = new Stack();
+    enum Mode {
+        TYPENTITY, ATTRIBUTE
+    }
+    Mode mode = Mode.TYPENTITY;
 
 //    HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
 //    HashSet<Method> hashSetSuperMethods = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredMethods()));
@@ -67,6 +69,7 @@ public class JSONImport implements Serializable {
 //    HashSet<Field> hashSetAttributeFields = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredFields()));
 //    HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
     public void importModel(Typentity typentityRoot) {
+
         this.typentityRoot = typentityRoot;
 
         HashMap<String, Object> options = new HashMap<>();
@@ -111,9 +114,11 @@ public class JSONImport implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Soubor " + uploadFile.getFileName() + " nemá správný formát!!", "Nelze provést načtení do databáze !!"));
             return;
         }
-        Typentity parent = new Typentity();
 
-        processJsonObject(jso, parent);
+        // Start rekurzivniho volani nad JSON objekty
+        mode = Mode.TYPENTITY;
+        Typentity typentity = new Typentity();
+        processJsonObject(jso, typentity, null);
 
         if (is != null) {
             try {
@@ -133,61 +138,92 @@ public class JSONImport implements Serializable {
      *
      * @param jsonObject objekt ke zpracovani
      */
-    private void processJsonObject(JsonObject jsonObject, Typentity parent) {
-        int rezim = 0;
+    private void processJsonObject(JsonObject jsonObject, Typentity typentity, Attribute attribute) {
         for (Map.Entry<String, JsonValue> jse : jsonObject.entrySet()) {
-            System.out.println(" jse.getKey():" + jse.getKey() + " jse.getValueType():" + jse.getValue().getValueType() + " jse.getValue():" + jse.getValue());
+            System.out.println(" jse.getKey():" + jse.getKey() + " jse.getValueType():" + jse.getValue().getValueType() + " jse.getValue():" + jse.getValue().toString().substring(0, Math.min(jse.getValue().toString().length(), 15)));
             switch (jse.getValue().getValueType()) {
                 case OBJECT: {
                     if (jse.getKey().equalsIgnoreCase("TYPENTITIES")) {
-                        Typentity newParent = new Typentity();
-                        newParent.setIdparent(parent.getId());
-                        processJsonObject(jsonObject, newParent);
+                        mode = Mode.TYPENTITY;
+                        break;
                     }
                     if (jse.getKey().equalsIgnoreCase("ATTRIBUTE")) {
-                        processJsonObject(jsonObject, parent);
+                        mode = Mode.ATTRIBUTE;
+                        break;
                     }
                     break;
                 }
                 case ARRAY: {
                     JsonArray jsa = jse.getValue().asJsonArray();
-                    if (jse.getKey().equalsIgnoreCase("TYPENTITIES")) {
-                        rezim = 0;
-                    }
-                    if (jse.getKey().equalsIgnoreCase("ATTRIBUTE")) {
-                        rezim = 1;
-                    }
                     for (JsonValue jsonValue : jsa) {
                         System.out.println(" jsonValue.getValueType():" + jsonValue.getValueType());
                         switch (jsonValue.getValueType()) {
                             case OBJECT: {
-                                if (rezim == 0) {
-                                    Typentity newParent = new Typentity();
-                                    newParent.setIdparent(parent.getId());
-                                    processJsonObject(jsonObject, newParent);
+                                if (mode == Mode.TYPENTITY) {
+                                    Typentity newTypentity = new Typentity();
+                                    newTypentity.setIdparent(typentity.getId());
+                                    newTypentity.setNewEntity(true);
+                                    processJsonObject(jsonValue.asJsonObject(), newTypentity, null);
                                 }
-                                if (rezim == 1) {
-                                    Attribute newAttr = new Attribute();
+                                if (mode == Mode.ATTRIBUTE) {
+                                    Attribute newAttribute = new Attribute();
+                                    newAttribute.setIdtypentity(typentity.getId());
+                                    newAttribute.setNewEntity(true);
+                                    processJsonObject(jsonValue.asJsonObject(), typentity, newAttribute);
                                 }
                                 break;
                             }
                         }
                     }
+                    if (mode == Mode.ATTRIBUTE) {
+                        mode = Mode.TYPENTITY;
+                    }
+
                     break;
                 }
                 case STRING: {
+                    if (mode == Mode.ATTRIBUTE) {
+                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
+                    }
+                    if (mode == Mode.TYPENTITY) {
+                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
+                    }
                     break;
                 }
                 case NUMBER: {
+                    if (mode == Mode.ATTRIBUTE) {
+                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
+                    }
+                    if (mode == Mode.TYPENTITY) {
+                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
+                    }
                     break;
                 }
                 case TRUE: {
+                    if (mode == Mode.ATTRIBUTE) {
+                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
+                    }
+                    if (mode == Mode.TYPENTITY) {
+                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
+                    }
                     break;
                 }
                 case FALSE: {
+                    if (mode == Mode.ATTRIBUTE) {
+                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
+                    }
+                    if (mode == Mode.TYPENTITY) {
+                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
+                    }
                     break;
                 }
                 case NULL: {
+                    if (mode == Mode.ATTRIBUTE) {
+                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
+                    }
+                    if (mode == Mode.TYPENTITY) {
+                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
+                    }
                     break;
                 }
             }
@@ -196,6 +232,48 @@ public class JSONImport implements Serializable {
 
     public void closeModelDialog(ActionEvent actionEvent) {
         PrimeFaces.current().dialog().closeDynamic(null);
+    }
+
+    private void fillAttribute(Attribute attribute, String key, JsonValue value) {
+        String strValue = null;
+        if (value != null) {
+            strValue = value.toString();
+        }
+        if (key.equalsIgnoreCase("Poradi")) {
+            attribute.setPoradi(value != null ? Integer.parseInt(strValue) : null);
+        }
+        if (key.equalsIgnoreCase("AttrType")) {
+            attribute.setAttrtype(value != null ? strValue.charAt(0) : null);
+        }
+        if (key.equalsIgnoreCase("Attrsize")) {
+            attribute.setAttrsize(value != null ? new BigInteger(strValue) : null);
+        }
+        if (key.equalsIgnoreCase("Attrdecimal")) {
+            attribute.setAttrdecimal(value != null ? new BigInteger(strValue) : null);
+        }
+        if (key.equalsIgnoreCase("Popis")) {
+            attribute.setPopis(strValue);
+        }
+
+    }
+
+    private void fillTypentity(Typentity typentity, String key, JsonValue value) {
+        String strValue = null;
+        if (value != null) {
+            strValue = value.toString();
+        }
+        if (key.equalsIgnoreCase("Typentity")) {
+            typentity.setTypentity(strValue);
+        }
+        if (key.equalsIgnoreCase("Attrsystem")) {
+            typentity.setAttrsystem(value != null && value.getValueType()==JsonValue.ValueType.TRUE);
+        }
+        if (key.equalsIgnoreCase("Editor")) {
+            typentity.setEditor(value != null ? strValue.charAt(0) : null);
+        }
+        if (key.equalsIgnoreCase("Popis")) {
+            typentity.setPopis(strValue);
+        }
     }
 
     /**
