@@ -6,7 +6,6 @@
 package cz.rental.utils;
 
 import cz.rental.entity.Attribute;
-import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +13,6 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +45,7 @@ public class JSONImport implements Serializable {
     cz.rental.entity.AttrController attrController;
 
     Typentity typentityRoot = null;
+    boolean succes = false;
     Query query = null;
     Date platiOd = Aplikace.getPlatiOd();
     Date platiDo = Aplikace.getPlatiDo();
@@ -59,6 +58,7 @@ public class JSONImport implements Serializable {
 
     public void importModel(Typentity typentityRoot) {
 
+        this.succes = false;
         this.typentityRoot = typentityRoot;
 
         HashMap<String, Object> options = new HashMap<>();
@@ -79,7 +79,7 @@ public class JSONImport implements Serializable {
     }
 
     public void closeModelDialog(ActionEvent actionEvent) {
-        PrimeFaces.current().dialog().closeDynamic(null);
+        PrimeFaces.current().dialog().closeDynamic(this.succes);
     }
 
     /**
@@ -111,7 +111,7 @@ public class JSONImport implements Serializable {
         // Start rekurzivniho volani nad JSON objekty
         Typentity typentity = null;
         UUID typEntityId = jso.isNull("id") ? null : UUID.fromString(jso.asJsonObject().getString("id"));
-        if (typEntityId != null) {
+        if (!this.createNewModel && typEntityId != null) {
             typentity = this.typEntitycontroller.getTypentity(typEntityId);
         }
         if (typentity == null) {
@@ -129,6 +129,7 @@ public class JSONImport implements Serializable {
         if (is != null) {
             try {
                 uploadFile.getInputStream().close();
+                this.succes = true;
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Import souboru " + uploadFile.getFileName() + " byl úspěšný.", "Model(šablona) byl načten do databáze."));
             } catch (IOException ex) {
                 Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
@@ -158,11 +159,11 @@ public class JSONImport implements Serializable {
         }
         // Zpracovat pole s podrizenymi Typentities pro parent typentity
         JsonArray jsonTypentityArray = jso.getJsonArray("TYPENTITIES");
-        UUID typEntityId = null;
+        UUID typEntityId;
         for (JsonValue jsonValue : jsonTypentityArray) {
             Typentity newTypentity = null;
             typEntityId = jsonValue.asJsonObject().isNull("id") ? null : UUID.fromString(jsonValue.asJsonObject().getString("id"));
-            if (typEntityId != null) {
+            if (this.importTypentityID && typEntityId != null) {
                 newTypentity = this.typEntitycontroller.getTypentity(typEntityId);
             }
             if (newTypentity == null) {
@@ -176,7 +177,7 @@ public class JSONImport implements Serializable {
 
     private void fillTypentity(JsonObject jso, Typentity typentity) throws Exception {
 
-        typentity.setTypentity(jso.getString("typentity"));
+        typentity.setTypentity(jso.getString("typentity", "???"));
         typentity.setEditor(jso.getString("editor", "F").charAt(0));
         typentity.setIdmodel(!jso.isNull("idmodel") ? UUID.fromString(jso.getString("idmodel")) : null);
 
@@ -214,11 +215,11 @@ public class JSONImport implements Serializable {
         attribute.setAttrtype(jso.getString("attrtype", "C").charAt(0));
         attribute.setAttrsize(new BigInteger(jso.getString("attrsize", "10")));
         attribute.setAttrdecimal(new BigInteger(jso.getString("attrdecimal", "0")));
-        attribute.setAttrparser(jso.getString("attrparser"));
-        attribute.setAttrmask(jso.getString("attrmask"));
-        attribute.setTables(jso.getString("tables"));
-        attribute.setScript(jso.getString("sript"));
-        attribute.setPoradi(jso.getInt("poradi"));
+        attribute.setAttrparser(jso.getString("attrparser", ""));
+        attribute.setAttrmask(jso.getString("attrmask", ""));
+        attribute.setTables(jso.getString("tables", ""));
+        attribute.setScript(jso.getString("sript", ""));
+        attribute.setPoradi(jso.getInt("poradi", 100));
 
         attribute.setAttrsystem(jso.getBoolean("attrsystem", false));
         attribute.setPopis(jso.getString("popis", ""));

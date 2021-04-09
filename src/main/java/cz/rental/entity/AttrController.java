@@ -11,6 +11,7 @@ import cz.rental.aplikace.Ucet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -322,35 +323,47 @@ public class AttrController extends JpaController {
      * Metoda vyhleda Attribute podle zadanych parametru
      *
      * @param attrName - jmeno atribut Attribute.attrname
-     * @param typentity - Typentity vlastnici Attribute
-     * @param entita - Entita vlastnici Attribute
-     * @return hledany Attribute nebo null
+     * @param typentity - Typentity vlastnici Attribute.idtypentity
+     * @param entita - Entita vlastnici Attribute.identita
+     * @return hledany Attribute nebo null pokud neexistuje
      */
     public Attribute getAttribute(String attrName, Typentity typentity, Entita entita) {
-        StringBuilder sb = new StringBuilder("SELECT a FROM Attribute a WHERE (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD) ");
+        HashMap<String, Object> params = new HashMap<>(3);
+        StringBuilder sb = new StringBuilder("SELECT a FROM Attribute a WHERE (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD)");
         if (attrName instanceof String) {
-            sb.append(" AND a.attrname= '").append(attrName).append("'");
+            sb.append(" AND a.attrname= :AttrName");
+            params.put("AttrName", attrName);
         }
         if (typentity instanceof Typentity) {
-            sb.append(" AND a.idtypentity= ").append(typentity.getId().toString()).append("");
+            sb.append(" AND a.idtypentity= :IDtypEntity");
+            params.put("IDtypEntity", typentity.getId());
+        } else {
+            sb.append(" AND a.idtypentity IS NULL");
         }
         if (entita instanceof Entita) {
-            sb.append(" AND a.identita= ").append(entita.getId().toString()).append("");
+            sb.append(" AND a.identita= :IDEntita");
+            params.put("IDEntita", entita.getId());
+        } else {
+            sb.append(" AND a.identita IS NULL");
         }
-
         sb.append(" ORDER BY a.platiod ASC NULLS FIRST, a.platido ASC NULLS LAST, a.timemodify ASC NULLS FIRST");
+        params.put("PlatiOD", Aplikace.getPlatiOd());
+        params.put("PlatiDO", Aplikace.getPlatiDo());
+
         this.query = getEm().createQuery(sb.toString());
-        this.query.setParameter("PlatiOD", Aplikace.getPlatiOd());
-        this.query.setParameter("PlatiDO", Aplikace.getPlatiDo());
+        params.keySet().forEach(paramKey -> {
+            this.query.setParameter(paramKey, params.get(paramKey));
+        });
+
 
         ArrayList<Attribute> attrArrayList = new ArrayList<>(this.query.getResultList());
-        getEm().close();
+        // getEm().close();
         return attrArrayList.isEmpty() ? null : attrArrayList.get(0);
 
     }
 
     /**
-     * Metoda vyhleda Attribute podle zadanych parametru (ID)
+     * Metoda vyhleda Attribute podle zadaneho parametru (ID)
      *
      * @param attrId - ID hledaneho parametru
      * @return hledany Attribute nebo null
@@ -359,13 +372,17 @@ public class AttrController extends JpaController {
         if (attrId == null) {
             return null;
         }
-        this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.id= :AttrId AND (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD)");
+        Attribute attribute = null;
+        this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.id= :AttrId");
         this.query.setParameter("AttrId", attrId);
-        this.query.setParameter("PlatiOD", Aplikace.getPlatiOd());
-        this.query.setParameter("PlatiDO", Aplikace.getPlatiDo());
 
-        ArrayList<Attribute> attrArrayList = new ArrayList<>(this.query.getResultList());
-        getEm().close();
-        return attrArrayList.isEmpty() ? null : attrArrayList.get(0);
+        try {
+            attribute = (Attribute) this.query.getSingleResult();
+        } catch (Exception ex) {
+            Logger.getLogger(AttrController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // getEm().close();
+        return attribute;
     }
 }
