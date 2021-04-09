@@ -61,7 +61,7 @@ public class ModelTree implements Serializable {
     cz.rental.entity.AttrController attrController;
     @EJB
     JSONExport jsonExport;
-    
+
     @Inject
     JSONImport jsonImport;
 
@@ -117,6 +117,11 @@ public class ModelTree implements Serializable {
         this.typentity = new Typentity();
         this.rootNode = typEntitycontroller.fillTreeNodes(this.typentityRoot);
         modelTable.onNodeUnselect(null);
+    }
+
+    public void refreshModels(SelectEvent event) {
+        this.typentityRoot = null;
+        fillTreeNodes();
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -445,6 +450,7 @@ public class ModelTree implements Serializable {
 
     /**
      * Metoda načte data pro Model (provede Update nových položek nebo Insert)
+     *
      * @param typentityRoot
      */
     public void importFromJSON(Typentity typentityRoot) {
