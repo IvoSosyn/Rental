@@ -6,6 +6,7 @@
 package cz.rental.utils;
 
 import cz.rental.entity.Attribute;
+import cz.rental.entity.Entita;
 import cz.rental.entity.Typentity;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +15,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -55,19 +57,6 @@ public class JSONImport implements Serializable {
     private boolean importAttributeID = false;
     InputStream is = null;
 
-    Object value = null;
-
-    enum Mode {
-        TYPENTITY, ATTRIBUTE
-    }
-    Mode mode = Mode.TYPENTITY;
-
-//    HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
-//    HashSet<Method> hashSetSuperMethods = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredMethods()));
-//    HashSet<Field> hashSetTypentityFields = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredFields()));
-//    HashSet<Method> hashSetTypentityMethods = new HashSet<>(Arrays.asList(Typentity.class.getDeclaredMethods()));
-//    HashSet<Field> hashSetAttributeFields = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredFields()));
-//    HashSet<Method> hashSetAttributeMethods = new HashSet<>(Arrays.asList(Attribute.class.getDeclaredMethods()));
     public void importModel(Typentity typentityRoot) {
 
         this.typentityRoot = typentityRoot;
@@ -87,6 +76,10 @@ public class JSONImport implements Serializable {
         options.put("fitViewport", true);
         options.put("responsive", true);
         PrimeFaces.current().dialog().openDynamic("/admin/model/importModel.xhtml", options, null);
+    }
+
+    public void closeModelDialog(ActionEvent actionEvent) {
+        PrimeFaces.current().dialog().closeDynamic(null);
     }
 
     /**
@@ -116,9 +109,22 @@ public class JSONImport implements Serializable {
         }
 
         // Start rekurzivniho volani nad JSON objekty
-        mode = Mode.TYPENTITY;
-        Typentity typentity = new Typentity();
-        processJsonObject(jso, typentity, null);
+        Typentity typentity = null;
+        UUID typEntityId = jso.isNull("id") ? null : UUID.fromString(jso.asJsonObject().getString("id"));
+        if (typEntityId != null) {
+            typentity = this.typEntitycontroller.getTypentity(typEntityId);
+        }
+        if (typentity == null) {
+            typentity = new Typentity();
+            typentity.setId(UUID.randomUUID());
+            typentity.setIdparent(null);
+        }
+        try {
+            processJsonTypentityObject(jso, typentity);
+        } catch (Exception ex) {
+            Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Import souboru " + uploadFile.getFileName() + " NEbyl úspěšný.Data se nepodřilo uložit do databáze, opravte JSON soubor a postup opakujte.", ex.getLocalizedMessage()));
+        }
 
         if (is != null) {
             try {
@@ -136,144 +142,95 @@ public class JSONImport implements Serializable {
      * .json soubor na jdnotlive cleny a ty dale zpracuje do DB jako nove nebo
      * jako aktualizaci
      *
-     * @param jsonObject objekt ke zpracovani
+     * @param jso objekt JSON ke zpracovani
+     * @param typentity aktualni Typentity k naplneni hodnotami z JSON objektu a
+     * dale jako parent parametr do rekurzivniho volani
+     * @throws java.lang.Exception
      */
-    private void processJsonObject(JsonObject jsonObject, Typentity typentity, Attribute attribute) {
-        for (Map.Entry<String, JsonValue> jse : jsonObject.entrySet()) {
-            System.out.println(" jse.getKey():" + jse.getKey() + " jse.getValueType():" + jse.getValue().getValueType() + " jse.getValue():" + jse.getValue().toString().substring(0, Math.min(jse.getValue().toString().length(), 15)));
-            switch (jse.getValue().getValueType()) {
-                case OBJECT: {
-                    if (jse.getKey().equalsIgnoreCase("TYPENTITIES")) {
-                        mode = Mode.TYPENTITY;
-                        break;
-                    }
-                    if (jse.getKey().equalsIgnoreCase("ATTRIBUTE")) {
-                        mode = Mode.ATTRIBUTE;
-                        break;
-                    }
-                    break;
-                }
-                case ARRAY: {
-                    JsonArray jsa = jse.getValue().asJsonArray();
-                    for (JsonValue jsonValue : jsa) {
-                        System.out.println(" jsonValue.getValueType():" + jsonValue.getValueType());
-                        switch (jsonValue.getValueType()) {
-                            case OBJECT: {
-                                if (mode == Mode.TYPENTITY) {
-                                    Typentity newTypentity = new Typentity();
-                                    newTypentity.setIdparent(typentity.getId());
-                                    newTypentity.setNewEntity(true);
-                                    processJsonObject(jsonValue.asJsonObject(), newTypentity, null);
-                                }
-                                if (mode == Mode.ATTRIBUTE) {
-                                    Attribute newAttribute = new Attribute();
-                                    newAttribute.setIdtypentity(typentity.getId());
-                                    newAttribute.setNewEntity(true);
-                                    processJsonObject(jsonValue.asJsonObject(), typentity, newAttribute);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    if (mode == Mode.ATTRIBUTE) {
-                        mode = Mode.TYPENTITY;
-                    }
+    public void processJsonTypentityObject(JsonObject jso, Typentity typentity) throws Exception {
+        // Naplnit objekt Typentity
+        fillTypentity(jso, typentity);
 
-                    break;
-                }
-                case STRING: {
-                    if (mode == Mode.ATTRIBUTE) {
-                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
-                    }
-                    if (mode == Mode.TYPENTITY) {
-                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
-                    }
-                    break;
-                }
-                case NUMBER: {
-                    if (mode == Mode.ATTRIBUTE) {
-                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
-                    }
-                    if (mode == Mode.TYPENTITY) {
-                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
-                    }
-                    break;
-                }
-                case TRUE: {
-                    if (mode == Mode.ATTRIBUTE) {
-                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
-                    }
-                    if (mode == Mode.TYPENTITY) {
-                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
-                    }
-                    break;
-                }
-                case FALSE: {
-                    if (mode == Mode.ATTRIBUTE) {
-                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
-                    }
-                    if (mode == Mode.TYPENTITY) {
-                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
-                    }
-                    break;
-                }
-                case NULL: {
-                    if (mode == Mode.ATTRIBUTE) {
-                        this.fillAttribute(attribute, jse.getKey(), jse.getValue());
-                    }
-                    if (mode == Mode.TYPENTITY) {
-                        this.fillTypentity(typentity, jse.getKey(), jse.getValue());
-                    }
-                    break;
-                }
+        // Zpracovat pole s Attribute pro typentity
+        JsonArray jsonAttrArray = jso.getJsonArray("ATTRIBUTE");
+        for (JsonValue jsonValue : jsonAttrArray) {
+            createAttribute(jsonValue.asJsonObject(), typentity);
+        }
+        // Zpracovat pole s podrizenymi Typentities pro parent typentity
+        JsonArray jsonTypentityArray = jso.getJsonArray("TYPENTITIES");
+        UUID typEntityId = null;
+        for (JsonValue jsonValue : jsonTypentityArray) {
+            Typentity newTypentity = null;
+            typEntityId = jsonValue.asJsonObject().isNull("id") ? null : UUID.fromString(jsonValue.asJsonObject().getString("id"));
+            if (typEntityId != null) {
+                newTypentity = this.typEntitycontroller.getTypentity(typEntityId);
             }
+            if (newTypentity == null) {
+                newTypentity = new Typentity();
+                newTypentity.setId(UUID.randomUUID());
+                newTypentity.setIdparent(typentity.getId());
+            }
+            processJsonTypentityObject(jsonValue.asJsonObject(), newTypentity);
         }
     }
 
-    public void closeModelDialog(ActionEvent actionEvent) {
-        PrimeFaces.current().dialog().closeDynamic(null);
+    private void fillTypentity(JsonObject jso, Typentity typentity) throws Exception {
+
+        typentity.setTypentity(jso.getString("typentity"));
+        typentity.setEditor(jso.getString("editor", "F").charAt(0));
+        typentity.setIdmodel(!jso.isNull("idmodel") ? UUID.fromString(jso.getString("idmodel")) : null);
+
+        typentity.setAttrsystem(jso.getBoolean("attrsystem", false));
+        typentity.setPopis(jso.getString("popis", " "));
+
+        // Ulozit do databaze
+        if (typentity.isNewEntity()) {
+            this.attrController.create(typentity);
+            typentity.setNewEntity(false);
+        } else {
+            this.attrController.edit(typentity);
+        }
     }
 
-    private void fillAttribute(Attribute attribute, String key, JsonValue value) {
-        String strValue = null;
-        if (value != null) {
-            strValue = value.toString();
+    private void createAttribute(JsonObject jso, Typentity typentity) throws Exception {
+        UUID attrId = jso.isNull("id") ? null : UUID.fromString(jso.getString("id"));
+        String attrName = jso.getString("attrname");
+
+        Attribute attribute = null;
+        if (this.importAttributeID) {
+            attribute = this.attrController.getAttribute(attrId);
+
+        } else {
+            attribute = this.attrController.getAttribute(attrName, typentity, null);
         }
-        if (key.equalsIgnoreCase("Poradi")) {
-            attribute.setPoradi(value != null ? Integer.parseInt(strValue) : null);
-        }
-        if (key.equalsIgnoreCase("AttrType")) {
-            attribute.setAttrtype(value != null ? strValue.charAt(0) : null);
-        }
-        if (key.equalsIgnoreCase("Attrsize")) {
-            attribute.setAttrsize(value != null ? new BigInteger(strValue) : null);
-        }
-        if (key.equalsIgnoreCase("Attrdecimal")) {
-            attribute.setAttrdecimal(value != null ? new BigInteger(strValue) : null);
-        }
-        if (key.equalsIgnoreCase("Popis")) {
-            attribute.setPopis(strValue);
+        if (attribute == null) {
+            attribute = new Attribute();
+            attribute.setId(UUID.randomUUID());
+            attribute.setIdtypentity(typentity.getId());
+            attribute.setNewEntity(true);
         }
 
-    }
+        attribute.setAttrname(attrName);
+        attribute.setAttrtype(jso.getString("attrtype", "C").charAt(0));
+        attribute.setAttrsize(new BigInteger(jso.getString("attrsize", "10")));
+        attribute.setAttrdecimal(new BigInteger(jso.getString("attrdecimal", "0")));
+        attribute.setAttrparser(jso.getString("attrparser"));
+        attribute.setAttrmask(jso.getString("attrmask"));
+        attribute.setTables(jso.getString("tables"));
+        attribute.setScript(jso.getString("sript"));
+        attribute.setPoradi(jso.getInt("poradi"));
 
-    private void fillTypentity(Typentity typentity, String key, JsonValue value) {
-        String strValue = null;
-        if (value != null) {
-            strValue = value.toString();
+        attribute.setAttrsystem(jso.getBoolean("attrsystem", false));
+        attribute.setPopis(jso.getString("popis", ""));
+
+        // Ulozit do databaze
+        if (attribute.isNewEntity()) {
+            this.attrController.create(attribute);
+            attribute.setNewEntity(false);
+        } else {
+            this.attrController.edit(attribute);
         }
-        if (key.equalsIgnoreCase("Typentity")) {
-            typentity.setTypentity(strValue);
-        }
-        if (key.equalsIgnoreCase("Attrsystem")) {
-            typentity.setAttrsystem(value != null && value.getValueType()==JsonValue.ValueType.TRUE);
-        }
-        if (key.equalsIgnoreCase("Editor")) {
-            typentity.setEditor(value != null ? strValue.charAt(0) : null);
-        }
-        if (key.equalsIgnoreCase("Popis")) {
-            typentity.setPopis(strValue);
-        }
+
     }
 
     /**

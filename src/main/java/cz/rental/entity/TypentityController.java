@@ -9,7 +9,6 @@ import cz.rental.aplikace.Ucet;
 import cz.rental.utils.Aplikace;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;

@@ -317,4 +317,55 @@ public class AttrController extends JpaController {
         int deleted = this.query.executeUpdate();
         //System.out.println(" Delete from Attribute "+deleted);
     }
+
+    /**
+     * Metoda vyhleda Attribute podle zadanych parametru
+     *
+     * @param attrName - jmeno atribut Attribute.attrname
+     * @param typentity - Typentity vlastnici Attribute
+     * @param entita - Entita vlastnici Attribute
+     * @return hledany Attribute nebo null
+     */
+    public Attribute getAttribute(String attrName, Typentity typentity, Entita entita) {
+        StringBuilder sb = new StringBuilder("SELECT a FROM Attribute a WHERE (t.platiod IS NULL OR t.platiod <= :PlatiDO) AND (t.platido IS NULL OR t.platido >= :PlatiOD) ");
+        if (attrName instanceof String) {
+            sb.append(" AND a.attrname= '").append(attrName).append("'");
+        }
+        if (typentity instanceof Typentity) {
+            sb.append(" AND a.idtypentity= ").append(typentity.getId().toString()).append("");
+        }
+        if (entita instanceof Entita) {
+            sb.append(" AND a.identita= ").append(entita.getId().toString()).append("");
+        }
+
+        sb.append(" ORDER BY a.platiod ASC NULLS FIRST, a.platido ASC NULLS LAST, a.timemodify ASC NULLS FIRST");
+        this.query = getEm().createQuery(sb.toString());
+        this.query.setParameter("PlatiOD", Aplikace.getPlatiOd());
+        this.query.setParameter("PlatiDO", Aplikace.getPlatiDo());
+
+        ArrayList<Attribute> attrArrayList = new ArrayList<>(this.query.getResultList());
+        getEm().close();
+        return attrArrayList.isEmpty() ? null : attrArrayList.get(0);
+
+    }
+
+    /**
+     * Metoda vyhleda Attribute podle zadanych parametru (ID)
+     *
+     * @param attrId - ID hledaneho parametru
+     * @return hledany Attribute nebo null
+     */
+    public Attribute getAttribute(UUID attrId) {
+        if (attrId == null) {
+            return null;
+        }
+        this.query = getEm().createQuery("SELECT a FROM Attribute a WHERE a.id= :AttrId AND (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD)");
+        this.query.setParameter("AttrId", attrId);
+        this.query.setParameter("PlatiOD", Aplikace.getPlatiOd());
+        this.query.setParameter("PlatiDO", Aplikace.getPlatiDo());
+
+        ArrayList<Attribute> attrArrayList = new ArrayList<>(this.query.getResultList());
+        getEm().close();
+        return attrArrayList.isEmpty() ? null : attrArrayList.get(0);
+    }
 }
