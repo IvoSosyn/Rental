@@ -120,8 +120,11 @@ public class ModelTree implements Serializable {
     }
 
     public void refreshModels(SelectEvent event) {
-        this.typentityRoot = null;
-        fillTreeNodes();
+        Boolean importSuccesfully = (Boolean) event.getObject();
+        if (importSuccesfully) {
+            this.typentityRoot = null;
+            fillTreeNodes();
+        }
     }
 
     public void onNodeSelect(NodeSelectEvent event) {

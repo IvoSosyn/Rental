@@ -78,6 +78,12 @@ public class JSONImport implements Serializable {
         PrimeFaces.current().dialog().openDynamic("/admin/model/importModel.xhtml", options, null);
     }
 
+    /**
+     * Metoda uzavre dialog a preda data volajicimu objektu (uspech nebo
+     * neuspech importu)
+     *
+     * @param actionEvent - udalost uzavirajici dialog - source=commandButton
+     */
     public void closeModelDialog(ActionEvent actionEvent) {
         PrimeFaces.current().dialog().closeDynamic(this.succes);
     }
