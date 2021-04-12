@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +41,8 @@ import org.primefaces.model.file.UploadedFile;
 @SessionScoped
 public class JSONImport implements Serializable {
 
+    private static final long serialVersionUID = 42L;
+
     @EJB
     cz.rental.entity.TypentityController typEntitycontroller;
     @EJB
@@ -51,9 +55,16 @@ public class JSONImport implements Serializable {
     Date platiDo = Aplikace.getPlatiDo();
 
     private UploadedFile uploadFile = null;
-    private boolean createNewModel = true;
+    private String howToImportModel="aktJsonId";
+    private String howToImportTypentity="TypEntityName";
+    private String howToImportAttribute="AttrName";
+
+    private boolean aktSelectedModel = true;
+    private boolean aktJsonModel = false;
+    private boolean createNewModel = false;
     private boolean importTypentityID = false;
     private boolean importAttributeID = false;
+    
     InputStream is = null;
 
     public void importModel(Typentity typentityRoot) {
@@ -62,6 +73,7 @@ public class JSONImport implements Serializable {
         this.typentityRoot = typentityRoot;
 
         HashMap<String, Object> options = new HashMap<>();
+        HashMap<String, List<String>> params = new HashMap<>();
 
         options.put("modal", false);
         options.put("minimizable", true);
@@ -75,7 +87,12 @@ public class JSONImport implements Serializable {
         options.put("closeOnEscape", true);
         options.put("fitViewport", true);
         options.put("responsive", true);
-        PrimeFaces.current().dialog().openDynamic("/admin/model/importModel.xhtml", options, null);
+
+        ArrayList list = new ArrayList();
+        list.add(typentityRoot.getId().toString());
+        params.put("typentityRoot", list);
+
+        PrimeFaces.current().dialog().openDynamic("/admin/model/importModel.xhtml", options, params);
     }
 
     /**
@@ -117,9 +134,20 @@ public class JSONImport implements Serializable {
         // Start rekurzivniho volani nad JSON objekty
         Typentity typentity = null;
         UUID typEntityId = jso.isNull("id") ? null : UUID.fromString(jso.asJsonObject().getString("id"));
-        if (!this.createNewModel && typEntityId != null) {
-            typentity = this.typEntitycontroller.getTypentity(typEntityId);
+        String typEntityTyp = jso.isNull("typentity") ? null : jso.getString("typentity");
+
+        if (!this.createNewModel) {
+            // Aktualizovat model z JSON souboru
+            if (typEntityId != null) {
+                typentity = this.typEntitycontroller.getTypentity(typEntityId);
+            }
+            
+            // Aktualizovat aktualne vybrany model
+            if (this.typentityRoot != null) {
+                typentity = this.typentityRoot;
+            }
         }
+
         if (typentity == null) {
             typentity = new Typentity();
             typentity.setId(UUID.randomUUID());
@@ -159,12 +187,12 @@ public class JSONImport implements Serializable {
         fillTypentity(jso, typentity);
 
         // Zpracovat pole s Attribute pro typentity
-        JsonArray jsonAttrArray = jso.getJsonArray("ATTRIBUTE");
+        JsonArray jsonAttrArray = jso.getJsonArray(JSONExport.ATTRIBUTES_ARRAY_NAME);
         for (JsonValue jsonValue : jsonAttrArray) {
             createAttribute(jsonValue.asJsonObject(), typentity);
         }
         // Zpracovat pole s podrizenymi Typentities pro parent typentity
-        JsonArray jsonTypentityArray = jso.getJsonArray("TYPENTITIES");
+        JsonArray jsonTypentityArray = jso.getJsonArray(JSONExport.TYPENTITIES_ARRAY_NAME);
         UUID typEntityId;
         for (JsonValue jsonValue : jsonTypentityArray) {
             Typentity newTypentity = null;
@@ -294,6 +322,76 @@ public class JSONImport implements Serializable {
      */
     public void setCreateNewModel(boolean createNewModel) {
         this.createNewModel = createNewModel;
+    }
+
+    /**
+     * @return the aktSelectedModel
+     */
+    public boolean isAktSelectedModel() {
+        return aktSelectedModel;
+    }
+
+    /**
+     * @param aktSelectedModel the aktSelectedModel to set
+     */
+    public void setAktSelectedModel(boolean aktSelectedModel) {
+        this.aktSelectedModel = aktSelectedModel;
+    }
+
+    /**
+     * @return the aktJsonModel
+     */
+    public boolean isAktJsonModel() {
+        return aktJsonModel;
+    }
+
+    /**
+     * @param aktJsonModel the aktJsonModel to set
+     */
+    public void setAktJsonModel(boolean aktJsonModel) {
+        this.aktJsonModel = aktJsonModel;
+    }
+
+    /**
+     * @return the howToImportModel
+     */
+    public String getHowToImportModel() {
+        return howToImportModel;
+    }
+
+    /**
+     * @param howToImportModel the howToImportModel to set
+     */
+    public void setHowToImportModel(String howToImportModel) {
+        this.howToImportModel = howToImportModel;
+    }
+
+    /**
+     * @return the howToImportTypentity
+     */
+    public String getHowToImportTypentity() {
+        return howToImportTypentity;
+    }
+
+    /**
+     * @param howToImportTypentity the howToImportTypentity to set
+     */
+    public void setHowToImportTypentity(String howToImportTypentity) {
+        this.howToImportTypentity = howToImportTypentity;
+    }
+
+    /**
+     * @return the howToImportAttribute
+     */
+    public String getHowToImportAttribute() {
+        return howToImportAttribute;
+    }
+
+    /**
+     * @param howToImportAttribute the howToImportAttribute to set
+     */
+    public void setHowToImportAttribute(String howToImportAttribute) {
+        this.howToImportAttribute = howToImportAttribute;
     }
 
 }

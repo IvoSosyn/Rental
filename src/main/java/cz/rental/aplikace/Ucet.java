@@ -57,8 +57,7 @@ public class Ucet implements Serializable {
     @PostConstruct
     public void init() {
         this.account = new Account();
-        this.account.setNewEntity(true);
-        
+        this.account.setNewEntity(true);        
     }
 
     /**

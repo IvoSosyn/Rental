@@ -5,6 +5,7 @@
  */
 package cz.rental.utils;
 
+import cz.rental.aplikace.Ucet;
 import cz.rental.entity.Attribute;
 import cz.rental.entity.EntitySuperClassNajem;
 import cz.rental.entity.Typentity;
@@ -13,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +27,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
@@ -36,19 +40,27 @@ import javax.persistence.Query;
  *
  * @author sosyn
  */
-@Stateless
-public class JSONExport {
+@Named(value = "jsonExport")
+@SessionScoped
+public class JSONExport implements Serializable {
+
+    private static final long serialVersionUID = 42L;
+
+    final static String TYPENTITIES_ARRAY_NAME = "TYPENTITIES";
+    final static String ATTRIBUTES_ARRAY_NAME = "ATTRIBUTES";
 
     @EJB
     cz.rental.entity.TypentityController typEntitycontroller;
     @EJB
     cz.rental.entity.AttrController attrController;
+    @Inject
+    private Ucet ucet;
 
     Query query = null;
     Date platiOd = Aplikace.getPlatiOd();
     Date platiDo = Aplikace.getPlatiDo();
     int randomInt = (int) (Math.random() * 1000);
-    File exportFile = new File(System.getenv("TEMP"), String.format("ModelNajem%1$04d", randomInt) + ".JSON");
+    File exportFile = null;
     OutputStream os = null;
     Object value = null;
     HashSet<Field> hashSetSuperFields = new HashSet<>(Arrays.asList(EntitySuperClassNajem.class.getDeclaredFields()));
@@ -69,6 +81,7 @@ public class JSONExport {
             platiDo = Aplikace.getCalendar().getTime();
         }
         try {
+            exportFile = new File(System.getenv("TEMP"), String.format("Model%1$02d-%2$tY%2$tm%2$td-%2$tH%2$tM", ucet.getPin(), Calendar.getInstance()) + ".JSON");
             JsonObjectBuilder json = Json.createObjectBuilder().add("MODEL", createJsonObjectModel(typentityRoot));
 
             //write to file
@@ -110,7 +123,7 @@ public class JSONExport {
         getObjectFields(Typentity.class, typEntity, jsonObject);
 
         // Nacist pole a getMetody pro Attribute s klíčem Typentity.id
-        jsonObject.add("ATTRIBUTE", this.getAttributes(typEntity));
+        jsonObject.add(ATTRIBUTES_ARRAY_NAME, this.getAttributes(typEntity));
 
         // Pole s Child - Typentity
         JsonArrayBuilder jsonChild = Json.createArrayBuilder();
@@ -125,7 +138,7 @@ public class JSONExport {
                 jsonChild.add(jsonObjectChild);
             }
         }
-        jsonObject.add("TYPENTITIES", jsonChild);
+        jsonObject.add(TYPENTITIES_ARRAY_NAME, jsonChild);
 
         return jsonObject;
     }

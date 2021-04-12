@@ -6,7 +6,13 @@
       xmlns:o="http://omnifaces.org/ui"
       xmlns:p="http://primefaces.org/ui"       
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-
+    
+    <style type="text/css">
+        .grid-radio td {
+            padding: .5rem;
+        }
+    </style>
+    
     <h:head>
         <title>Import data do Modelu(Šablony)</title>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
@@ -19,26 +25,24 @@
     <h:body>
         <h:form  id="importModelForm" enctype="multipart/form-data" >
             <p:growl id="importModelGrowl" />
-            <p:selectBooleanCheckbox id="createNewModel" value="#{jsonImport.createNewModel}" itemLabel="Načíst data jako nový model(šablonu).">
-                <p:ajax event="change" update="importTypentityID importAttributeID" />
-            </p:selectBooleanCheckbox>
-            <H3>Aktualizovat entity (uzly) podle</H3>
-            <div class="p-formgroup-inline">
-                <div class="p-field">
-                    <label for="importTypentityID" class="p-sr-only">Názvu entity(uzlu) (doporučeno)  </label>
-                    <p:toggleSwitch id="importTypentityID" value="#{jsonImport.importTypentityID}" disabled="#{jsonImport.createNewModel}"/>
-                    <label for="importTypentityID" class="p-sr-only"> Vnitřního ID</label>
-                </div>
-            </div>
+     
+            <h5 class="p-mt-0">Aktualizovat model (šablonu):</h5>
+            <p:selectOneRadio id="sorImportModel" value="#{jsonImport.howToImportModel}" layout="grid" columns="3" styleClass="grid-radio">
+                <f:selectItem itemLabel="Aktuálně vybraný model" itemValue="aktSelectedId"/>
+                <f:selectItem itemLabel="Model uvedený v JSON souboru" itemValue="aktJsonId"/>
+                <f:selectItem itemLabel="Vytvoř zcela nový model" itemValue="CreateNewId"/>
+            </p:selectOneRadio>
+            <h5 class="p-mt-0">Aktualizovat jednotlivé uzly (typy entit) podle:</h5>
+            <p:selectOneRadio id="sorImportTypentity" value="#{jsonImport.howToImportTypentity}" layout="grid" columns="2" styleClass="grid-radio">
+                <f:selectItem itemLabel="Názvu typu entity (doporučeno)" itemValue="TypEntityName"/>
+                <f:selectItem itemLabel="ID typu entity" itemValue="TypEntityId"/>
+            </p:selectOneRadio>
+            <h5 class="p-mt-0">Aktualizovat atributy(položky) každé entity(uzlu) podle:</h5>
+            <p:selectOneRadio id="sorImportAttr" value="#{jsonImport.howToImportAttribute}" layout="grid" columns="2" styleClass="grid-radio">
+                <f:selectItem itemLabel="Názvu atributu (doporučeno)" itemValue="AttrName"/>
+                <f:selectItem itemLabel="ID atributu" itemValue="AttrId"/>
+            </p:selectOneRadio>
 
-            <H3>Aktualizovat atributy entity(uzlu) podle</H3>
-            <div class="p-formgroup-inline">
-                <div class="p-field">
-                    <label for="importAttributeID" class="p-sr-only">Názvu atributu (doporučeno) </label>
-                    <p:toggleSwitch id="importAttributeID" value="#{jsonImport.importAttributeID}" disabled="#{jsonImport.createNewModel}"/>
-                    <label for="importAttributeID" class="p-sr-only"> Vnitřního ID</label>
-                </div>
-            </div>
             <div>
                 <p:fileUpload value="#{jsonImport.uploadFile}" mode="simple" skinSimple="true" label="Vyberte soubor"  title="Vyberte správný soubor se strukturou JSON k načtení do databáze." />
             </div>

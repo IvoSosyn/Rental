@@ -59,7 +59,7 @@ public class ModelTree implements Serializable {
     cz.rental.entity.TypentityController typEntitycontroller;
     @EJB
     cz.rental.entity.AttrController attrController;
-    @EJB
+    @Inject
     JSONExport jsonExport;
 
     @Inject
