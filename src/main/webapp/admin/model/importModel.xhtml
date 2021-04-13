@@ -28,19 +28,15 @@
      
             <h5 class="p-mt-0">Aktualizovat model (šablonu):</h5>
             <p:selectOneRadio id="sorImportModel" value="#{jsonImport.howToImportModel}" layout="grid" columns="3" styleClass="grid-radio">
-                <f:selectItem itemLabel="Aktuálně vybraný model" itemValue="aktSelectedId"/>
-                <f:selectItem itemLabel="Model uvedený v JSON souboru" itemValue="aktJsonId"/>
-                <f:selectItem itemLabel="Vytvořit zcela nový model" itemValue="CreateNewId"/>
+                <f:selectItems value="#{jsonImport.howToImportModels}" var="howTo" itemLabel="#{howTo[0]}" itemValue="#{howTo[1]}"/>
             </p:selectOneRadio>
             <h5 class="p-mt-0">Aktualizovat jednotlivé uzly (typy entit) podle:</h5>
             <p:selectOneRadio id="sorImportTypentity" value="#{jsonImport.howToImportTypentity}" layout="grid" columns="2" styleClass="grid-radio">
-                <f:selectItem itemLabel="Názvu typu entity (doporučeno)" itemValue="TypEntityName"/>
-                <f:selectItem itemLabel="ID typu entity" itemValue="TypEntityId"/>
+                <f:selectItems value="#{jsonImport.howToImportTypentities}" var="howTo" itemLabel="#{howTo[0]}" itemValue="#{howTo[1]}"/>
             </p:selectOneRadio>
             <h5 class="p-mt-0">Aktualizovat atributy(položky) každé entity(uzlu) podle:</h5>
             <p:selectOneRadio id="sorImportAttr" value="#{jsonImport.howToImportAttribute}" layout="grid" columns="2" styleClass="grid-radio">
-                <f:selectItem itemLabel="Názvu atributu (doporučeno)" itemValue="AttrName"/>
-                <f:selectItem itemLabel="ID atributu" itemValue="AttrId"/>
+                <f:selectItems value="#{jsonImport.howToImportAttributes}" var="howTo" itemLabel="#{howTo[0]}" itemValue="#{howTo[1]}"/>
             </p:selectOneRadio>
 
             <div>
