@@ -58,10 +58,6 @@ public class JSONImport implements Serializable {
     private UploadedFile uploadFile = null;
     private ArrayList<String[]> howToImportModels = null;
     private String howToImportModel = "AktJsonId";
-    private ArrayList<String[]> howToImportTypentities = null;
-    private String howToImportTypentity = "TypEntityName";
-    private ArrayList<String[]> howToImportAttributes = null;
-    private String howToImportAttribute = "AttrName";
 
     private boolean aktSelectedModel = true;
     private boolean aktJsonModel = false;
@@ -83,14 +79,6 @@ public class JSONImport implements Serializable {
         getHowToImportModels().add(new String[]{"Aktuálně vybraný model", "AktSelectedId"});
         getHowToImportModels().add(new String[]{"Model uvedený v JSON souboru", "AktJsonId"});
         getHowToImportModels().add(new String[]{"Vytvořit zcela nový model", "CreateNewId"});
-        // Rezim importu uzlu Typentity
-        setHowToImportTypentities(new ArrayList<>());
-        getHowToImportTypentities().add(new String[]{"Názvu typu entity (doporučeno)", "TypEntityName"});
-        getHowToImportTypentities().add(new String[]{"ID typu entity", "TypEntityId"});
-        // Rezim importu Attributes
-        setHowToImportAttributes(new ArrayList<>());
-        getHowToImportAttributes().add(new String[]{"Názvu atributu (doporučeno)", "AttrName"});
-        getHowToImportAttributes().add(new String[]{"ID atributu", "AttrId"});
     }
 
     public void importModel(Typentity typentityRoot) {
@@ -162,13 +150,13 @@ public class JSONImport implements Serializable {
         UUID typEntityId = jso.isNull("id") ? null : UUID.fromString(jso.asJsonObject().getString("id"));
         String typEntityTyp = jso.isNull("typentity") ? null : jso.getString("typentity");
 
-        howToImportTypentity = "TypEntityName";
-        howToImportAttribute = "AttrName";
+        this.importTypentityID = false;
+        this.importAttributeID = false;
 
         if (this.howToImportModel.equals("CreateNewId")) {
             // Vytvorit zcela novy model(sablonu)
-            howToImportTypentity = "TypEntityId";
-            howToImportAttribute = "AttrId";
+            this.importTypentityID = true;
+            this.importAttributeID = true;
         } else if (this.howToImportModel.equals("AktJsonId")) {
             // Aktualizovat model podle ID z JSON souboru
             if (typEntityId != null && this.typentityRoot.getId().compareTo(typEntityId) == 0) {
@@ -232,12 +220,12 @@ public class JSONImport implements Serializable {
         for (JsonValue jsonValue : jsonTypentityArray) {
             Typentity newTypentity = null;
             typEntityId = jsonValue.asJsonObject().isNull("id") ? null : UUID.fromString(jsonValue.asJsonObject().getString("id"));
-            String typEntityName = jso.isNull("typentity") ? null : jso.getString("typentity");
-            if (this.howToImportTypentity.equals("TypEntityId") && typEntityId != null) {
+            String typEntityName = jsonValue.asJsonObject().isNull("typentity") ? null : jsonValue.asJsonObject().getString("typentity");
+            if (this.importTypentityID && typEntityId != null) {
                 newTypentity = this.typEntitycontroller.getTypentity(typEntityId);
             }
-            if ((this.howToImportTypentity.equals("TypEntityName") || newTypentity == null) && typEntityName != null) {
-                newTypentity = this.typEntitycontroller.getTypentityName(typentity.getId(),typEntityName);
+            if ((!this.importTypentityID || newTypentity == null) && typEntityName != null) {
+                newTypentity = this.typEntitycontroller.getTypentityName(typentity.getId(), typEntityName);
             }
 
             if (newTypentity == null) {
@@ -261,22 +249,22 @@ public class JSONImport implements Serializable {
 
         // Ulozit do databaze
         if (typentity.isNewEntity()) {
-            this.attrController.create(typentity);
+            this.typEntitycontroller.create(typentity);
             typentity.setNewEntity(false);
         } else {
-            this.attrController.edit(typentity);
+            this.typEntitycontroller.edit(typentity);
         }
     }
 
     private void createAttribute(JsonObject jso, Typentity typentity) throws Exception {
         UUID attrId = jso.isNull("id") ? null : UUID.fromString(jso.getString("id"));
-        String attrName = jso.getString("attrname");
+        String attrName = jso.isNull("attrname") ? null : jso.getString("attrname");
 
         Attribute attribute = null;
-        if (this.importAttributeID) {
+        if (this.importAttributeID && attrId != null) {
             attribute = this.attrController.getAttribute(attrId);
 
-        } else {
+        } else if (!this.importAttributeID && attrName != null) {
             attribute = this.attrController.getAttribute(attrName, typentity, null);
         }
         if (attribute == null) {
@@ -408,34 +396,6 @@ public class JSONImport implements Serializable {
     }
 
     /**
-     * @return the howToImportTypentity
-     */
-    public String getHowToImportTypentity() {
-        return howToImportTypentity;
-    }
-
-    /**
-     * @param howToImportTypentity the howToImportTypentity to set
-     */
-    public void setHowToImportTypentity(String howToImportTypentity) {
-        this.howToImportTypentity = howToImportTypentity;
-    }
-
-    /**
-     * @return the howToImportAttribute
-     */
-    public String getHowToImportAttribute() {
-        return howToImportAttribute;
-    }
-
-    /**
-     * @param howToImportAttribute the howToImportAttribute to set
-     */
-    public void setHowToImportAttribute(String howToImportAttribute) {
-        this.howToImportAttribute = howToImportAttribute;
-    }
-
-    /**
      * @return the howToImportModels
      */
     public ArrayList<String[]> getHowToImportModels() {
@@ -447,34 +407,6 @@ public class JSONImport implements Serializable {
      */
     public void setHowToImportModels(ArrayList<String[]> howToImportModels) {
         this.howToImportModels = howToImportModels;
-    }
-
-    /**
-     * @return the howToImportTypentities
-     */
-    public ArrayList<String[]> getHowToImportTypentities() {
-        return howToImportTypentities;
-    }
-
-    /**
-     * @param howToImportTypentities the howToImportTypentities to set
-     */
-    public void setHowToImportTypentities(ArrayList<String[]> howToImportTypentities) {
-        this.howToImportTypentities = howToImportTypentities;
-    }
-
-    /**
-     * @return the howToImportAttributes
-     */
-    public ArrayList<String[]> getHowToImportAttributes() {
-        return howToImportAttributes;
-    }
-
-    /**
-     * @param howToImportAttributes the howToImportAttributes to set
-     */
-    public void setHowToImportAttributes(ArrayList<String[]> howToImportAttributes) {
-        this.howToImportAttributes = howToImportAttributes;
     }
 
 }

@@ -221,20 +221,26 @@ public class TypentityController extends JpaController {
     }
 
     /**
-     *  Metoda vyhleda zaznam Typentity podle ID predchudce a nazvu Typuentity
+     * Metoda vyhleda zaznam Typentity podle ID predchudce a nazvu Typuentity
+     *
      * @param idParent - (ID) rodice hledaneho zaznamu
      * @param typEntity - typ entity ("D" jako Dum,"B" jako Byt,...)
      * @return
      */
     public Typentity getTypentityName(UUID idParent, String typEntity) {
         Typentity typentity = null;
-        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent = :idParent AND t.typentity = :typEntity "));
-        this.getQuery().setParameter("idParent", idParent);
+        if (idParent != null) {
+            this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent = :idParent AND t.typentity = :typEntity "));
+            this.getQuery().setParameter("idParent", idParent);
+
+        } else {
+            this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent IS NULL AND t.typentity = :typEntity "));
+        }
         this.getQuery().setParameter("typEntity", typEntity);
         try {
             typentity = (Typentity) this.getQuery().getSingleResult();
-        } catch (NoResultException|NonUniqueResultException nEx) {
-            System.out.println(" TypentityController.getTypentityName(idParent,typEntity):"+nEx.getLocalizedMessage());
+        } catch (NoResultException | NonUniqueResultException nEx) {
+            System.out.println(" TypentityController.getTypentityName(idParent,typEntity):" + nEx.getLocalizedMessage());
         }
         return typentity;
     }
