@@ -20,6 +20,7 @@ import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -91,7 +92,7 @@ public class TypentityController extends JpaController {
         List<Typentity> list = this.getQuery().getResultList();
         if (!list.isEmpty()) {
             for (Typentity typEntity : list) {
-                treeNodeTypentity = new DefaultTreeNode( typEntity, treeNodeParent);
+                treeNodeTypentity = new DefaultTreeNode(typEntity, treeNodeParent);
 
                 // Rekursivni volani nad vnorenou urovni
                 addNode(treeNodeTypentity, typEntity);
@@ -217,6 +218,25 @@ public class TypentityController extends JpaController {
             attrControler.copyAttr(children, childrenNew);
             copyTypentityChilds(children, childrenNew.getId());
         }
+    }
+
+    /**
+     *  Metoda vyhleda zaznam Typentity podle ID predchudce a nazvu Typuentity
+     * @param idParent - (ID) rodice hledaneho zaznamu
+     * @param typEntity - typ entity ("D" jako Dum,"B" jako Byt,...)
+     * @return
+     */
+    public Typentity getTypentityName(UUID idParent, String typEntity) {
+        Typentity typentity = null;
+        this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent = :idParent AND t.typentity = :typEntity "));
+        this.getQuery().setParameter("idParent", idParent);
+        this.getQuery().setParameter("typEntity", typEntity);
+        try {
+            typentity = (Typentity) this.getQuery().getSingleResult();
+        } catch (NoResultException|NonUniqueResultException nEx) {
+            System.out.println(" TypentityController.getTypentityName(idParent,typEntity):"+nEx.getLocalizedMessage());
+        }
+        return typentity;
     }
 
 }
