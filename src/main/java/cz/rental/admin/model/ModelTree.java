@@ -108,7 +108,7 @@ public class ModelTree implements Serializable {
                 this.models.add(this.typentityRoot);
             }
             if (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
-                boolean added = this.models.addAll(typEntitycontroller.getRootTypEntity());
+                boolean isAddAll = this.models.addAll(typEntitycontroller.getRootTypEntity());
             }
             if (this.typentityRoot == null && !models.isEmpty()) {
                 this.typentityRoot = models.get(0);

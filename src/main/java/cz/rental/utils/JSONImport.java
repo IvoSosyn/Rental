@@ -156,8 +156,6 @@ public class JSONImport implements Serializable {
 
         if (this.howToImportModel.equals("CreateNewId")) {
             // Vytvorit zcela novy model(sablonu)
-            this.importTypentityID = true;
-            this.importAttributeID = true;
         } else if (this.howToImportModel.equals("AktJsonId")) {
             // Aktualizovat model podle ID z JSON souboru
             if (typEntityId != null && this.typentityRoot.getId().compareTo(typEntityId) == 0) {
@@ -165,6 +163,8 @@ public class JSONImport implements Serializable {
             } else {
                 typentity = this.typEntitycontroller.getTypentity(typEntityId);
             }
+            this.importTypentityID = true;
+            this.importAttributeID = true;
         } else if (this.howToImportModel.equals("AktSelectedId")) {
             // Aktualizovat aktualne vybrany model bez ohledu na ID ze souboru
             typentity = this.typentityRoot;
@@ -249,8 +249,7 @@ public class JSONImport implements Serializable {
 
         typentity.setTypentity(jso.getString("typentity", "???"));
         typentity.setEditor(jso.getString("editor", "F").charAt(0));
-        typentity.setIdmodel(!jso.isNull("idmodel") ? UUID.fromString(jso.getString("idmodel")) : null);
-
+        typentity.setIdmodel(!this.howToImportModel.equals("AktJsonId") || jso.isNull("idmodel") ? null : UUID.fromString(jso.getString("idmodel")));
         typentity.setAttrsystem(jso.getBoolean("attrsystem", false));
         typentity.setPopis(jso.getString("popis", " "));
 
