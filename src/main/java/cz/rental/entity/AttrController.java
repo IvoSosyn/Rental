@@ -359,7 +359,7 @@ public class AttrController extends JpaController {
 
         Attribute attribute = null;
         try {
-            attribute = (Attribute) this.getQuery().getSingleResult();
+            attribute = (Attribute) this.query.getSingleResult();
         } catch (NonUniqueResultException nEx) {
             throw nEx;
         } catch (NoResultException nEx) {
