@@ -204,5 +204,4 @@ public class Uzivatel implements Serializable {
     public void setUser(cz.rental.entity.User user) {
         this.user = user;
     }
-
 }

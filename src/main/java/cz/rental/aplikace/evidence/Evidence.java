@@ -38,6 +38,9 @@ public class Evidence implements Serializable {
 
     @PostConstruct
     public void init() {
+        if (!(ucet instanceof Ucet)) {
+            ucet = new Ucet();
+        }
     }
 
     public void handleDateSelect(SelectEvent event) {

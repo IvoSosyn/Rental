@@ -23,6 +23,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 /**
@@ -327,7 +329,7 @@ public class AttrController extends JpaController {
      * @param entita - Entita vlastnici Attribute.identita
      * @return hledany Attribute nebo null pokud neexistuje
      */
-    public Attribute getAttribute(String attrName, Typentity typentity, Entita entita) {
+    public Attribute getAttribute(String attrName, Typentity typentity, Entita entita) throws Exception {
         HashMap<String, Object> params = new HashMap<>(3);
         StringBuilder sb = new StringBuilder("SELECT a FROM Attribute a WHERE (a.platiod IS NULL OR a.platiod <= :PlatiDO) AND (a.platido IS NULL OR a.platido >= :PlatiOD)");
         if (attrName instanceof String) {
@@ -355,11 +357,17 @@ public class AttrController extends JpaController {
             this.query.setParameter(paramKey, params.get(paramKey));
         });
 
+        Attribute attribute = null;
+        try {
+            attribute = (Attribute) this.getQuery().getSingleResult();
+        } catch (NonUniqueResultException nEx) {
+            throw nEx;
+        } catch (NoResultException nEx) {
+            System.out.println(" AttrContrloler.getAttribute(attrName,typentity,entita) :" + nEx.getLocalizedMessage());
+        }
 
-        ArrayList<Attribute> attrArrayList = new ArrayList<>(this.query.getResultList());
         // getEm().close();
-        return attrArrayList.isEmpty() ? null : attrArrayList.get(0);
-
+        return attribute;
     }
 
     /**

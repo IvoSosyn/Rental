@@ -7,9 +7,11 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
+import cz.rental.utils.Aplikace;
 import cz.rental.utils.SHA512;
 import java.io.File;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -23,6 +25,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
+import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -57,7 +60,10 @@ public class Ucet implements Serializable {
     @PostConstruct
     public void init() {
         this.account = new Account();
-        this.account.setNewEntity(true);        
+        this.account.setNewEntity(true);
+        if (!(uzivatel instanceof Uzivatel)) {
+            this.uzivatel = new Uzivatel();
+        }
     }
 
     /**
@@ -309,4 +315,59 @@ public class Ucet implements Serializable {
         this.accountDir = accountDir;
     }
 
+    /**
+     * @return the platiOd
+     */
+    public Date getPlatiOd() {
+        return this.uzivatel.getParam("ObdobiOD", Aplikace.getPlatiOd());
+    }
+
+    /**
+     * @param platiOd the platiOd to set
+     */
+    public void setPlatiOd(Date platiOd) {
+        this.uzivatel.setParam("ObdobiOD", platiOd);
+        if (!this.uzivatel.setParam("ObdobiOD", platiOd)) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení parametru 'ObdobiOD' NEBYLA úspěšná.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(platiOd)));
+        }
+    }
+
+    /**
+     * @return the platiDo
+     */
+    public Date getPlatiDo() {
+        return this.uzivatel.getParam("ObdobiDO", Aplikace.getPlatiDo());
+    }
+
+    /**
+     * @param platiDo the platiDo to set
+     */
+    public void setPlatiDo(Date platiDo) {
+        if (!this.uzivatel.setParam("ObdobiDO", platiDo)) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení parametru 'ObdobiDO' NEBYLA úspěšná.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(platiDo)));
+        }
+    }
+
+    /**
+     * @return the datumZmeny
+     */
+    public Date getDatumZmeny() {
+        return this.uzivatel.getParam("ZmenaOD", Aplikace.getPlatiDo());
+    }
+
+    /**
+     * @param datumZmeny the datumZmeny to set
+     */
+    public void setDatumZmeny(Date datumZmeny) {
+        if (!this.uzivatel.setParam("ZmenaOD", datumZmeny)) {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení parametru 'ZmenaOD' NEBYLA úspěšná.", "Předávaná hodnota: " + Aplikace.getSimpleDateFormat().format(datumZmeny)));
+        }
+    }
+
+    /**
+     * @return the datumZmeny
+     */
+    public String datumZmenyAsString() {
+        return Aplikace.getSimpleDateFormat().format(this.uzivatel.getParam("ZmenaOD", Aplikace.getZmenaOd()));
+    }
 }

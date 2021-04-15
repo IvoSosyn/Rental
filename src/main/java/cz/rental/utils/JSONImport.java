@@ -30,6 +30,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.file.UploadedFile;
@@ -178,9 +179,11 @@ public class JSONImport implements Serializable {
         // Vlastni rekursivní zpracování JSON objektu
         try {
             processJsonTypentityObject(jso, typentity);
+        } catch (NonUniqueResultException nEx) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Import souboru " + uploadFile.getFileName() + " NEbyl úspěšný.Data se nepodřilo uložit do databáze, opravte JSON soubor a postup opakujte.", nEx.getLocalizedMessage()));
         } catch (Exception ex) {
             Logger.getLogger(JSONImport.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Import souboru " + uploadFile.getFileName() + " NEbyl úspěšný.Data se nepodřilo uložit do databáze, opravte JSON soubor a postup opakujte.", ex.getLocalizedMessage()));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Import souboru " + uploadFile.getFileName() + " NEbyl úspěšný.Data se nepodřilo uložit do databáze, opravte JSON soubor a postup opakujte.", ex.getLocalizedMessage()));
         }
         // Uzavrit JSON soubor
         if (is != null) {
@@ -225,7 +228,11 @@ public class JSONImport implements Serializable {
                 newTypentity = this.typEntitycontroller.getTypentity(typEntityId);
             }
             if ((!this.importTypentityID || newTypentity == null) && typEntityName != null) {
-                newTypentity = this.typEntitycontroller.getTypentityName(typentity.getId(), typEntityName);
+                try {
+                    newTypentity = this.typEntitycontroller.getTypentityName(typentity.getId(), typEntityName);
+                } catch (NonUniqueResultException nEx) {
+                    throw new NonUniqueResultException("Položka: " + typEntityName + " je pro uzel:" + typentity.getPopis() + " v databázi duplicitní - opravte údaj.");
+                }
             }
 
             if (newTypentity == null) {
@@ -265,7 +272,11 @@ public class JSONImport implements Serializable {
             attribute = this.attrController.getAttribute(attrId);
 
         } else if (!this.importAttributeID && attrName != null) {
-            attribute = this.attrController.getAttribute(attrName, typentity, null);
+            try {
+                attribute = this.attrController.getAttribute(attrName, typentity, null);
+            } catch (NonUniqueResultException nEx) {
+                throw new NonUniqueResultException("Položka: " + attrName + " je pro atribut:" + typentity.getPopis() + " v databázi duplicitní - opravte údaj.");
+            }
         }
         if (attribute == null) {
             attribute = new Attribute();

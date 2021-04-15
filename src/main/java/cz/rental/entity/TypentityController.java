@@ -221,13 +221,13 @@ public class TypentityController extends JpaController {
     }
 
     /**
-     * Metoda vyhleda zaznam Typentity podle ID predchudce a nazvu Typuentity
+     * Metoda vyhleda zaznam Typentity podle ID predchudce a nazvu Typentity.typentity
      *
      * @param idParent - (ID) rodice hledaneho zaznamu
      * @param typEntity - typ entity ("D" jako Dum,"B" jako Byt,...)
-     * @return
+     * @return pozadovany zaznam Typentity nabo null, pokud neexistuje
      */
-    public Typentity getTypentityName(UUID idParent, String typEntity) {
+    public Typentity getTypentityName(UUID idParent, String typEntity) throws Exception {
         Typentity typentity = null;
         if (idParent != null) {
             this.setQuery(this.getEm().createQuery("SELECT t FROM Typentity t WHERE t.idparent = :idParent AND t.typentity = :typEntity "));
@@ -239,7 +239,9 @@ public class TypentityController extends JpaController {
         this.getQuery().setParameter("typEntity", typEntity);
         try {
             typentity = (Typentity) this.getQuery().getSingleResult();
-        } catch (NoResultException | NonUniqueResultException nEx) {
+        } catch (NonUniqueResultException nEx) {
+            throw nEx;
+        }catch (NoResultException nEx) {
             System.out.println(" TypentityController.getTypentityName(idParent,typEntity):" + nEx.getLocalizedMessage());
         }
         return typentity;
