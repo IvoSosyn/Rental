@@ -81,36 +81,32 @@ public class ModelTree implements Serializable {
 //        } catch (NamingException ex) {
 //            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        fillTreeNodes();
-    }
-
-    /**
-     * Metoda je volana pri udalosti "select" v SelectOneMenu komponente TO-DO:
-     * zalozeni nove sablony-modelu doresit
-     *
-     * @param event
-     */
-    public void onModelSelect(SelectEvent event) {
-        this.typentityRoot = (Typentity) event.getObject();
-        fillTreeNodes();
+        fillTreeNodes(null, true);
     }
 
     /**
      * Hlavni metoda plnici "Tree" jednotlivými "TreeNode" V TreeNode.getData()
      * je ulozena konkretni instance "Typentity" na zaklade rodicovskeho UUID
      * "Typentity.idparent"
+     * @param typentityRoot - Typentity ktery je aktualne ve zpracování
+     * @param readModels
      */
-    public void fillTreeNodes() {
-        if (this.typentityRoot == null) {
-            this.models = new ArrayList<>();
+    private void fillTreeNodes(Typentity typentityRoot, boolean readModels) {
+        readModels = readModels || typentityRoot == null;
+        if (typentityRoot == null) {
             this.typentityRoot = typEntitycontroller.getTypentity(ucet.getAccount().getId());
+        } else {
+            this.typentityRoot = typentityRoot;
+        }
+        if (readModels) {
+            this.models = new ArrayList<>();
             if (this.typentityRoot != null) {
                 this.models.add(this.typentityRoot);
             }
             if (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
                 boolean isAddAll = this.models.addAll(typEntitycontroller.getRootTypEntity());
             }
-            if (this.typentityRoot == null && !models.isEmpty()) {
+            if (typentityRoot == null && !models.isEmpty()) {
                 this.typentityRoot = models.get(0);
             }
         }
@@ -122,9 +118,19 @@ public class ModelTree implements Serializable {
     public void refreshModels(SelectEvent event) {
         Boolean importSuccesfully = (Boolean) event.getObject();
         if (importSuccesfully) {
-            this.typentityRoot = null;
-            fillTreeNodes();
+            this.fillTreeNodes(null, true);
         }
+    }
+
+    /**
+     * Metoda je volana pri udalosti "select" v SelectOneMenu komponente TO-DO:
+     * zalozeni nove sablony-modelu doresit
+     *
+     * @param event
+     */
+    public void onModelSelect(SelectEvent event) {
+        this.typentityRoot = (Typentity) event.getObject();
+        this.fillTreeNodes(this.typentityRoot, false);
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -458,6 +464,7 @@ public class ModelTree implements Serializable {
      */
     public void importFromJSON(Typentity typentityRoot) {
         jsonImport.importModel(typentityRoot);
+        this.fillTreeNodes(typentityRoot, true);
     }
 
     /**
@@ -543,4 +550,5 @@ public class ModelTree implements Serializable {
     public void setModels(ArrayList<Typentity> models) {
         this.models = models;
     }
+
 }
