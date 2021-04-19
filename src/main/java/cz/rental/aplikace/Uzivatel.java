@@ -10,6 +10,8 @@ import cz.rental.entity.User;
 import cz.rental.entity.UserController;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -44,6 +46,7 @@ public class Uzivatel implements Serializable {
 //    private HttpServletRequest httpRequest;
     boolean debugApp = false;
     private User user = null;
+    private HashMap<String, UzivatelParam> userParams = new HashMap<>();
 
     /**
      * Inicializace matice prav uzivatele
@@ -67,6 +70,7 @@ public class Uzivatel implements Serializable {
         }
         this.user = new User();
         this.user.setNewEntity(true);
+        fillUserParams();
     }
 
     /**
@@ -81,6 +85,7 @@ public class Uzivatel implements Serializable {
     public boolean getUserForAccount(Account acc, String email, String passwordSHA512) {
         if (userController instanceof UserController) {
             this.user = userController.getUserForAccount(acc, email, passwordSHA512);
+            fillUserParamsByUser();
         }
         return (this.user instanceof User);
     }
@@ -191,6 +196,40 @@ public class Uzivatel implements Serializable {
         return userController.setUserParam(this.user, paramName, value);
     }
 
+    private void fillUserParams() {
+        this.userParams.put("SUPERVISOR", new UzivatelParam("SUPERVISOR", "Neomezená práva správce", false));
+        this.userParams.put("ACCOUNT", new UzivatelParam("ACCOUNT", "Může vidět položky účtu", false));
+        this.userParams.put("ACCOUNT_EDIT", new UzivatelParam("ACCOUNT_EDIT", "Může editovat účet", false));
+        this.userParams.put("UZIVATEL", new UzivatelParam("UZIVATEL", "Může vidět seznam uživatelů", false));
+        this.userParams.put("UZIVATEL_EDIT", new UzivatelParam("UZIVATEL_EDIT", "Může editovat seznam uživatelů", false));
+        this.userParams.put("MODEL", new UzivatelParam("MODEL", "Může vidět model(šablonu)", false));
+        this.userParams.put("MODEL_EDIT", new UzivatelParam("MODEL_EDIT", "Může editovat model(šablonu)", false));
+        this.userParams.put("EVIDENCE", new UzivatelParam("EVIDENCE", "Může vidět evidenci", false));
+        this.userParams.put("EVIDENCE_EDIT", new UzivatelParam("MODEL_EDIT", "Může editovat editovat evidenci", false));
+    }
+
+
+    
+    private void fillUserParamsByUser() {
+        for (Map.Entry<String, UzivatelParam> entry : userParams.entrySet()) {
+            String key = entry.getKey();
+            UzivatelParam up = entry.getValue();
+
+            if (up.getDefaultValue() instanceof Boolean) {
+                up.setValue(this.getParam(key, ((Boolean) up.getDefaultValue())));
+            }
+            if (up.getDefaultValue() instanceof Date) {
+                up.setValue(this.getParam(key, ((Date) up.getDefaultValue())));
+            }
+            if (up.getDefaultValue() instanceof String) {
+                up.setValue(this.getParam(key, ((String) up.getDefaultValue())));
+            }
+            if (up.getDefaultValue() instanceof Double) {
+                up.setValue(this.getParam(key, ((Double) up.getDefaultValue())));
+            }
+        }
+    }
+
     /**
      * @return the user
      */
@@ -203,5 +242,19 @@ public class Uzivatel implements Serializable {
      */
     public void setUser(cz.rental.entity.User user) {
         this.user = user;
+    }
+
+    /**
+     * @return the userParams
+     */
+    public HashMap<String, UzivatelParam> getUserParams() {
+        return userParams;
+    }
+
+    /**
+     * @param userParams the userParams to set
+     */
+    public void setUserParams(HashMap<String, UzivatelParam> userParams) {
+        this.userParams = userParams;
     }
 }
