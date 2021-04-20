@@ -9,6 +9,7 @@ import cz.rental.entity.Account;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,18 +78,19 @@ public class Uzivatel implements Serializable {
      * Metoda vzhleda v DB 'User' pro 'Ucet' a 'email' a v pripade ze souhlasi
      * heslo, naplni promennou <code>user</code>
      *
-     * @param acc ucet registrace
+     * @param account ucet registrace
      * @param email email uzivatele
      * @param passwordSHA512 HASH - 512 hesla
      * @return
      */
-    public boolean getUserForAccount(Account acc, String email, String passwordSHA512) {
+    public boolean getUserForAccount(Account account, String email, String passwordSHA512) {
         if (userController instanceof UserController) {
-            this.user = userController.getUserForAccount(acc, email, passwordSHA512);
+            this.user = userController.getUserForAccount(account, email, passwordSHA512);
             fillUserParamsByUser();
         }
         return (this.user instanceof User);
     }
+
 
     /**
      * Metoda zalozi nebo aktualizuje zaznam User v DB
@@ -208,8 +210,6 @@ public class Uzivatel implements Serializable {
         this.userParams.put("EVIDENCE_EDIT", new UzivatelParam("MODEL_EDIT", "Může editovat editovat evidenci", false));
     }
 
-
-    
     private void fillUserParamsByUser() {
         for (Map.Entry<String, UzivatelParam> entry : userParams.entrySet()) {
             String key = entry.getKey();

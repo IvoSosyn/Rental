@@ -5,6 +5,7 @@
  */
 package cz.rental.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -64,6 +65,20 @@ public class UserController extends JpaController {
             System.out.println(" UserController.getUserForAccount() vraci chybu" + e.getMessage());
         }
         return accUser;
+    }
+
+    /**
+     * Metoda vytvori matici uzivatelu (<code>User</code>) pro zadany Ucet
+     * (<code>Account</code>)
+     *
+     * @param account Ucet(<code>Account</code>), pro ktery hledam vsechny
+     * uzivatele
+     * @return Kolekce s uzivateli k uctu
+     */
+    public ArrayList<User> getUsersForAccount(Account account) {
+        this.query = getEm().createQuery("SELECT u FROM User u WHERE u.idaccount=:account");
+        this.query.setParameter("account", account);
+        return new ArrayList<>(this.query.getResultList());
     }
 
     /**
@@ -165,10 +180,10 @@ public class UserController extends JpaController {
                 }
             } catch (Exception e) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, e);
-                for (ConstraintViolation cv : ((ConstraintViolationException)e).getConstraintViolations()) {
+                for (ConstraintViolation cv : ((ConstraintViolationException) e).getConstraintViolations()) {
                     cv.getLeafBean();
                 }
-                
+
                 lOk = false;
             }
         }

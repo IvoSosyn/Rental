@@ -7,10 +7,13 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
+import cz.rental.entity.User;
+import cz.rental.entity.UserController;
 import cz.rental.utils.Aplikace;
 import cz.rental.utils.SHA512;
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +49,8 @@ public class Ucet implements Serializable {
     // "Insert Code > Add Business Method")
     @EJB
     private AccountController accController;
+    @EJB
+    private UserController userController;
     @Inject
     private Uzivatel uzivatel;
     private Account account;
@@ -56,6 +61,7 @@ public class Ucet implements Serializable {
     private String passwordHelp = "";
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
+    private User selectedUser;
 
     @PostConstruct
     public void init() {
@@ -88,6 +94,19 @@ public class Ucet implements Serializable {
             throw new Exception("Účet pro PIN:" + pin + " a eMail: " + email + " NEEXISTUJE nebo máte chybné heslo.");
         }
         return ucetExist;
+    }
+
+    /**
+     * Metoda vraci matici uzivatelu(<code>User</code>) pro tento
+     * ucet(<code>Account</code>)
+     *
+     * @return matici uzivatelu nebo praydnou matici
+     */
+    public ArrayList<User> getUsersForAccount() {
+        if (userController instanceof UserController) {
+            return userController.getUsersForAccount(this.account);
+        }
+        return new ArrayList<>();
     }
 
     /**
@@ -369,5 +388,19 @@ public class Ucet implements Serializable {
      */
     public String datumZmenyAsString() {
         return Aplikace.getSimpleDateFormat().format(this.uzivatel.getParam("ZmenaOD", Aplikace.getZmenaOd()));
+    }
+
+    /**
+     * @return the selectedUser
+     */
+    public User getSelectedUser() {
+        return selectedUser;
+    }
+
+    /**
+     * @param selectedUser the selectedUser to set
+     */
+    public void setSelectedUser(User selectedUser) {
+        this.selectedUser = selectedUser;
     }
 }

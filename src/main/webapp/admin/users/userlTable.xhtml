@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      >
+
+    <ui:composition>	
+        <h:form id="formUserTable">
+            <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+            <p:dataTable id="tableUserTable" var="user" 
+                         value="#{ucet.usersForAccount}" 
+                         selectionMode="multiple" 
+                         selection="#{ucet.selectedUser}" 
+                         rowKey="#{user.id}"
+                         style="margin-bottom:0"  
+                         resizableColumns="true" 
+                         resizeMode="expand" >
+
+                <f:facet id="headerTableModelTable" name="header">
+                    Uživatelé účtu: #{ucet.account.fullname}
+                </f:facet>
+
+                <!--
+                <p:ajax event="rowSelect" listener="#{modelDetail.onRowSelect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr :formModelTable:tableModelTable:copyAttr :formModelTable:tableModelTable:pasteAttr :formModelTable:modelTableMenu" />
+                <p:ajax event="rowUnselect" listener="#{modelDetail.onRowUnselect}" update=":formModelDetail :formModelTable:tableModelTable:addAttr :formModelTable:tableModelTable:delAttr :formModelTable:tableModelTable:copyAttr :formModelTable:tableModelTable:pasteAttr :formModelTable:modelTableMenu" />
+
+                <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                                                    <p:column headerText="ID">
+                                                        <h:outputText value="#{attribute.id}" />
+                                                    </p:column>                    
+                -->
+                <p:column headerText="Název">
+                    <h:outputText value="#{user.fullname}"  />
+                </p:column>                
+                
+                <p:column headerText="Plati Od">
+                    <h:outputText value="#{attribute.platiod}" >
+                        <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+                    </h:outputText>    
+                </p:column>
+                <p:column headerText="Plati Do">
+                    <h:outputText value="#{attribute.platido}" >
+                        <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Systém">
+                    <p:graphicImage value="/images/OK15x15.png" rendered="#{attribute.attrsystem}" />
+<!--                    
+                    <h:outputText value="#{attribute.attrsystem?'S':' '}" />
+-->
+                </p:column>                    
+                <f:facet id="footerUcetTable" name="footer">
+                </f:facet>
+            </p:dataTable>
+            <p:contextMenu id="tableUserMenu" for="tableUserTable" >
+                <p:menuitem value="Přidej"  action="#{modelTable.addAttr}" update=":formModelTable :formModelDetail"  icon="fa fa-plus" disabled="#{!modelTree.appendable}"  title="Přidání nové položky." />
+                <p:menuitem value="Smaž(#{modelTable.selectedAttrs.size()})"    action="#{modelTable.deleteAttr}"   update=":formModelTable :formModelDetail "  icon="fa fa-ban" disabled="#{!modelTree.removable}" title="Smazání vybraných položek (řádků)." >
+                    <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznamy (#{modelTable.selectedAttrs.size()}) smazat ?" icon="pi pi-exclamation-triangle" />
+                </p:menuitem>
+                <p:separator /> 
+                <p:menuitem value="Kopírovat(#{modelTable.selectedAttrs.size()})" action="#{modelTable.copyAttrFrom}"   update=":formModelTable :formModelDetail"  icon="fa fa-copy"  disabled="#{!modelTable.appendable}" title="Kopie označených záznamů do paměti."/>
+                <p:menuitem value="Vlož(#{modelTable.copyAttrs.size()})"  action="#{modelTable.pasteAttrTo}" update=":formModelTable :formModelDetail"  icon="fa fa-paste" disabled="#{!modelTable.pasteable}" title="Vložení záznamů z paměti." />
+            </p:contextMenu>
+        </h:form>
+    </ui:composition>
+</html>
+
