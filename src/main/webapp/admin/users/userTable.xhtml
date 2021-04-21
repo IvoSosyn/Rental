@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      >
+
+    <ui:composition>	
+        <h:form id="formUserTable">
+            <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+            <p:dataTable id="tableUserTable" var="user" 
+                         value="#{ucet.usersForAccount}" 
+                         selectionMode="single" 
+                         selection="#{ucet.selectedUser}" 
+                         rowKey="#{user.id}"
+                         style="margin-bottom:0"  
+                         resizableColumns="true" 
+                         resizeMode="expand" >
+
+                <f:facet id="headerTableModelTable" name="header">
+                    Uživatelé účtu: #{ucet.account.fullname}
+                </f:facet>
+                <p:ajax event="rowSelect" listener="#{ucet.onRowSelect}" update="@form" />
+                <p:ajax event="rowUnselect" listener="#{ucet.onRowUnselect}" update="@form" />
+
+                <p:column headerText="Název">
+                    <h:outputText value="#{user.fullname}"  />
+                </p:column>                
+                <p:column headerText="E-mail">
+                    <h:outputText value="#{user.email}"  />
+                </p:column>                
+                <p:column headerText="Popis">
+                    <h:outputText value="#{user.popis}"  />
+                </p:column>                
+                <p:column>
+                    <f:facet name="header">
+                        <h:panelGrid columns="1" border="0" frame="none"  >
+                            <h:outputText value="Heslo je" />
+                            <h:outputText value="zadáno" />
+                        </h:panelGrid>
+                    </f:facet>
+                    <p:graphicImage value="/images/OK15x15.png" rendered="#{user.passwordsha512.length()>0}" />
+                </p:column>  
+                <p:column headerText="Plati Od">
+                    <h:outputText value="#{user.platiod}" >
+                        <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+                    </h:outputText>    
+                </p:column>
+                <p:column headerText="Plati Do">
+                    <h:outputText value="#{user.platido}" >
+                        <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
+                    </h:outputText>
+                </p:column>
+
+                <f:facet id="footerUcetTable" name="footer">
+                </f:facet>
+            </p:dataTable>
+            <p:contextMenu id="tableUserMenu" for="tableUserTable" >
+                <p:menuitem value="Přidej"  action="#{ucet.addUser()}" update="tableUserTable"  icon="fa fa-plus" disabled="#{!ucet.appendable()}"  title="Přidání nové položky." />
+                <p:menuitem value="Smaž(#{ucet.selectedUser.fullname})" action="#{ucet.removeUser()}"   update="tableUserTable"  icon="fa fa-ban" disabled="#{!ucet.removable()}" title="Smazání vybraných položek (řádků)." >
+                    <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznam (#{ucet.selectedUser}) smazat ?" icon="pi pi-exclamation-triangle" />
+                </p:menuitem>
+            </p:contextMenu>
+        </h:form>
+    </ui:composition>
+</html>
+

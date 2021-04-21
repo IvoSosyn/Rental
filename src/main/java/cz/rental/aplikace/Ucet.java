@@ -30,6 +30,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -61,6 +62,7 @@ public class Ucet implements Serializable {
     private String passwordHelp = "";
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
+    private ArrayList<User> users = new ArrayList();
     private User selectedUser;
 
     @PostConstruct
@@ -104,9 +106,13 @@ public class Ucet implements Serializable {
      */
     public ArrayList<User> getUsersForAccount() {
         if (userController instanceof UserController) {
-            return userController.getUsersForAccount(this.account);
+            this.setUsers(userController.getUsersForAccount(this.account));
         }
-        return new ArrayList<>();
+        User user = new User();
+        user.setNewEntity(true);
+        this.getUsers().add(user);
+        System.out.println(" getUsersForAccount():" + this.getUsers().size());
+        return this.getUsers();
     }
 
     /**
@@ -192,6 +198,37 @@ public class Ucet implements Serializable {
      */
     public void saveAccount() throws Exception {
         getAccController().saveAccount(this.account);
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+    }
+
+    public void addUser() {
+        for (User user : users) {
+            if (user.isNewEntity()) {
+                this.selectedUser = user;
+                break;
+            }
+        }
+    }
+
+    public void removeUser() {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+    }
+
+    public boolean appendable() {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+        return false;
+    }
+
+    public boolean removable() {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+        return false;
     }
 
     /**
@@ -402,5 +439,19 @@ public class Ucet implements Serializable {
      */
     public void setSelectedUser(User selectedUser) {
         this.selectedUser = selectedUser;
+    }
+
+    /**
+     * @return the users
+     */
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    /**
+     * @param users the users to set
+     */
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
     }
 }
