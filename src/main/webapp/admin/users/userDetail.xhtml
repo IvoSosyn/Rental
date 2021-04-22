@@ -10,7 +10,34 @@
 
     <ui:composition>	
         <h:form  id="formUserDetail">
-            <p:outputLabel value="#{ucet.selectedUser.fullname}" />
+            <p:outputLabel value="Identifikace uživatele: " for="@next" />
+            <p:inputText id="uzivFullName" value="#{ucet.uzivatelEdit.user.fullname}" />
+            <p:outputLabel value="Emailová adresa uživatele:" for="@next" />
+            <p:inputText id="uzivEmail" value="#{ucet.uzivatelEdit.user.email}" />
+            <p:outputLabel value="Popis(komentář) k uživateli:" for="@next" />
+            <p:inputText id="uzivPopis" value="#{ucet.uzivatelEdit.user.popis}" />
+            <p:outputLabel value="Heslo #{ucet.uzivatelEdit.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" />            
+
+            <p:dataTable id="tableUserDetailTbl"
+                         value="#{ucet.uzivatelEdit.userParams}" 
+                         var="uzivatelParam" 
+                         style="margin-bottom:0"  
+                         resizableColumns="true" 
+                         resizeMode="expand" >
+
+                <f:facet id="headerTableModelTable" name="header">
+                    Detail uživatele:
+                </f:facet>
+                <p:column headerText="Popis parametru:">
+                    <p:outputLabel value="#{uzivatelParam.popis}" />
+                </p:column>                
+                <p:column headerText="Ano |  Ne">
+                    <p:toggleSwitch value="#{uzivatelParam.value}" />
+                </p:column>                
+
+                <f:facet id="footerUcetTable" name="footer">
+                </f:facet>
+            </p:dataTable>
         </h:form>
     </ui:composition>
 </html>

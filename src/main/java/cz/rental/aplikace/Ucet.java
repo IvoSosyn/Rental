@@ -64,6 +64,7 @@ public class Ucet implements Serializable {
     private String accountDir = null;
     private ArrayList<User> users = new ArrayList();
     private User selectedUser;
+    private Uzivatel uzivatelEdit;
 
     @PostConstruct
     public void init() {
@@ -72,6 +73,8 @@ public class Ucet implements Serializable {
         if (!(uzivatel instanceof Uzivatel)) {
             this.uzivatel = new Uzivatel();
         }
+        uzivatelEdit = new Uzivatel();
+        uzivatelEdit.initUzivatelByUser(new User());
     }
 
     /**
@@ -201,11 +204,13 @@ public class Ucet implements Serializable {
     }
 
     public void onRowSelect(SelectEvent event) {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+        this.uzivatelEdit.setUser(selectedUser);
+        this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+        this.uzivatelEdit.setUser(selectedUser);
+        this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
 
     public void addUser() {
@@ -453,5 +458,19 @@ public class Ucet implements Serializable {
      */
     public void setUsers(ArrayList<User> users) {
         this.users = users;
+    }
+
+    /**
+     * @return the uzivatelEdit
+     */
+    public Uzivatel getUzivatelEdit() {
+        return uzivatelEdit;
+    }
+
+    /**
+     * @param uzivatelEdit the uzivatelEdit to set
+     */
+    public void setUzivatelEdit(Uzivatel uzivatelEdit) {
+        this.uzivatelEdit = uzivatelEdit;
     }
 }

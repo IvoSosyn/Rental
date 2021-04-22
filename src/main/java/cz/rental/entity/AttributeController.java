@@ -138,7 +138,7 @@ public class AttributeController extends JpaController {
 
     public void deleteAttrs(ArrayList<Attribute> selectedAttrs) throws Exception {
         for (Attribute selectedAttr : selectedAttrs) {
-            if (!selectedAttr.isNewEntity() && (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) ? true : selectedAttr.getAttrsystem() != null && !selectedAttr.getAttrsystem())) {
+            if (!selectedAttr.isNewEntity() && (ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) ? true : selectedAttr.getAttrsystem() != null && !selectedAttr.getAttrsystem())) {
                 this.destroy(selectedAttr);
             }
         }

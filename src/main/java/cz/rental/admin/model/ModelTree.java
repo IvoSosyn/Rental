@@ -103,7 +103,7 @@ public class ModelTree implements Serializable {
             if (this.typentityRoot != null) {
                 this.models.add(this.typentityRoot);
             }
-            if (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
+            if (ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false)) {
                 boolean isAddAll = this.models.addAll(typEntitycontroller.getRootTypEntity());
             }
             if (typentityRoot == null && !models.isEmpty()) {
@@ -162,7 +162,7 @@ public class ModelTree implements Serializable {
     private void deleteFromDb(TreeNode selectedNode) {
         try {
             Typentity typEntityDel = (Typentity) selectedNode.getData();
-            if (typEntityDel.getAttrsystem() != null && typEntityDel.getAttrsystem() && !ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false)) {
+            if (typEntityDel.getAttrsystem() != null && typEntityDel.getAttrsystem() && !ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false)) {
                 return;
             }
             this.attrController.deleteAllTypentityId(typEntityDel.getId());
@@ -277,7 +277,7 @@ public class ModelTree implements Serializable {
      * @return uzivatel muze pridavat zaznamy
      */
     public boolean isAppendable() {
-        boolean isAppendable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
+        boolean isAppendable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) || ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, false);
         return (isAppendable);
     }
 
@@ -290,9 +290,9 @@ public class ModelTree implements Serializable {
     public boolean isEditable() {
         boolean isEditable = (this.typentity != null);
         if (isEditable) {
-            isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
+            isEditable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false);
             if (!isEditable) {
-                isEditable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
+                isEditable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, false);
             }
         }
         return (isEditable);
@@ -306,9 +306,9 @@ public class ModelTree implements Serializable {
     public boolean isRemovable() {
         boolean isRemoveable = (this.typentity != null);
         if (isRemoveable) {
-            isRemoveable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
+            isRemoveable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false);
             if (!isRemoveable) {
-                isRemoveable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
+                isRemoveable = this.typentity.getAttrsystem() != null && !this.typentity.getAttrsystem() && ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, false);
             }
         }
         return (isRemoveable);

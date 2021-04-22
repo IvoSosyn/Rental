@@ -11,8 +11,9 @@
     <ui:composition>	
         <h:form id="formUserTable">
             <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
-            <p:dataTable id="tableUserTable" var="user" 
+            <p:dataTable id="tableUserTable"
                          value="#{ucet.usersForAccount}" 
+                         var="user" 
                          selectionMode="single" 
                          selection="#{ucet.selectedUser}" 
                          rowKey="#{user.id}"
@@ -23,8 +24,8 @@
                 <f:facet id="headerTableModelTable" name="header">
                     Uživatelé účtu: #{ucet.account.fullname}
                 </f:facet>
-                <p:ajax event="rowSelect" listener="#{ucet.onRowSelect}" update="@form" />
-                <p:ajax event="rowUnselect" listener="#{ucet.onRowUnselect}" update="@form" />
+                <p:ajax event="rowSelect" listener="#{ucet.onRowSelect}" update=":formUserTable:tableUserMenu :formUserDetail" />
+                <p:ajax event="rowUnselect" listener="#{ucet.onRowUnselect}" update=":formUserTable:tableUserMenu :formUserDetail" />
 
                 <p:column headerText="Název">
                     <h:outputText value="#{user.fullname}"  />
@@ -59,8 +60,8 @@
                 </f:facet>
             </p:dataTable>
             <p:contextMenu id="tableUserMenu" for="tableUserTable" >
-                <p:menuitem value="Přidej"  action="#{ucet.addUser()}" update="tableUserTable"  icon="fa fa-plus" disabled="#{!ucet.appendable()}"  title="Přidání nové položky." />
-                <p:menuitem value="Smaž(#{ucet.selectedUser.fullname})" action="#{ucet.removeUser()}"   update="tableUserTable"  icon="fa fa-ban" disabled="#{!ucet.removable()}" title="Smazání vybraných položek (řádků)." >
+                <p:menuitem value="Přidej"  action="#{ucet.addUser()}" update="tableUserTable :formUserDetail"  icon="fa fa-plus" disabled="#{!ucet.appendable()}"  title="Přidání nové položky." />
+                <p:menuitem value="Smaž(#{ucet.selectedUser.fullname})" action="#{ucet.removeUser()}"   update="tableUserTable :formUserDetail"  icon="fa fa-ban" disabled="#{!ucet.removable()}" title="Smazání vybraných položek (řádků)." >
                     <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznam (#{ucet.selectedUser}) smazat ?" icon="pi pi-exclamation-triangle" />
                 </p:menuitem>
             </p:contextMenu>

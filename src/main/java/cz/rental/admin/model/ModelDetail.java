@@ -22,8 +22,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.component.inputtext.InputText;
-import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -120,7 +118,7 @@ public class ModelDetail implements Serializable {
      */
     public Boolean isEditable() {
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
-        boolean isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
+        boolean isEditable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) || ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, false);
         if (!(this.attribute instanceof Attribute)) {
             isEditable = false;
         }
@@ -131,11 +129,11 @@ public class ModelDetail implements Serializable {
             isEditable = this.editabelAttrdecimal.contains(this.attribute.getAttrtype());
         }
         if (isEditable && uic.getId().equals("attrsystem")) {
-            isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
+            isEditable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false);
         }
         // Systemove polozky muze editovat pouze SUPERVISOR
         if (isEditable && this.attribute.getAttrsystem() != null && this.attribute.getAttrsystem()) {
-            isEditable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false);
+            isEditable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false);
         }
         return isEditable;
     }

@@ -177,7 +177,7 @@ public class Registrace implements Serializable {
     }
 
     public Boolean isEditable() {
-        boolean isEditable = this.ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || this.ucet.getUzivatel().getParam(Uzivatel.ACCOUNT_EDIT, false);
+        boolean isEditable = this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.ACCOUNT_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         return isEditable;
     }

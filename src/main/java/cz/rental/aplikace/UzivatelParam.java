@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class UzivatelParam {
 
-    private String paramName = "";
+    private Uzivatel.USER_PARAM_NAME paramName;
     private String popis = "";
     private Object value = null;
     private Object defaultValue = null;
@@ -21,24 +21,10 @@ public class UzivatelParam {
     public UzivatelParam() {
     }
 
-    public UzivatelParam(String paramName, String popis, Object defaultValue) {
+    public UzivatelParam(Uzivatel.USER_PARAM_NAME paramName, String popis, Object defaultValue) {
         this.paramName = paramName;
         this.popis = popis;
         this.defaultValue = defaultValue;
-    }
-
-    /**
-     * @return the paramName
-     */
-    public String getParamName() {
-        return paramName;
-    }
-
-    /**
-     * @param paramName the paramName to set
-     */
-    public void setParamName(String paramName) {
-        this.paramName = paramName;
     }
 
     /**
@@ -81,5 +67,19 @@ public class UzivatelParam {
      */
     public void setDefaultValue(Object defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    /**
+     * @return the paramName
+     */
+    public Uzivatel.USER_PARAM_NAME getParamName() {
+        return paramName;
+    }
+
+    /**
+     * @param paramName the paramName to set
+     */
+    public void setParamName(Uzivatel.USER_PARAM_NAME paramName) {
+        this.paramName = paramName;
     }
 }

@@ -315,7 +315,7 @@ public class AttrController extends JpaController {
      * @param idTypEntity - ID Typentity, jehoz Attribute se maji smazat
      */
     public void deleteAllTypentityId(UUID idTypEntity) {
-        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity" + (ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) ? "" : " AND NOT a.attrsystem"));
+        this.query = getEm().createQuery("DELETE FROM Attribute a WHERE a.idtypentity=:idTypEntity" + (ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) ? "" : " AND NOT a.attrsystem"));
         this.query.setParameter("idTypEntity", idTypEntity);
         int deleted = this.query.executeUpdate();
         //System.out.println(" Delete from Attribute "+deleted);

@@ -223,7 +223,7 @@ public class ModelTable implements Serializable {
      * @return uzivatel muze pridavat zaznamy
      */
     public boolean isAppendable() {
-        boolean isAppendable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
+        boolean isAppendable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) || ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, false);
         return (isAppendable);
     }
 
@@ -237,7 +237,7 @@ public class ModelTable implements Serializable {
     public boolean isPasteable() {
         boolean isPasteable = (this.copyAttrs != null && !this.copyAttrs.isEmpty());
         if (isPasteable) {
-            isPasteable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
+            isPasteable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) || ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, false);
         }
         return (isPasteable);
     }
@@ -250,7 +250,7 @@ public class ModelTable implements Serializable {
     public boolean isRemovable() {
         boolean isRemoveable = (this.selectedAttrs != null && !this.selectedAttrs.isEmpty());
         if (isRemoveable) {
-            isRemoveable = ucet.getUzivatel().getParam(Uzivatel.SUPERVISOR, false) || ucet.getUzivatel().getParam(cz.rental.aplikace.Uzivatel.MODEL_EDIT, false);
+            isRemoveable = ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) || ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, false);
         }
         return (isRemoveable);
     }

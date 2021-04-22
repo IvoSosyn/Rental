@@ -34,9 +34,9 @@ public class Uzivatel implements Serializable {
 
     static final long serialVersionUID = 42L;
 
-    public static final String SUPERVISOR = "Supervisor";
-    public static final String MODEL_EDIT = "ModelEdit";
-    public static final String ACCOUNT_EDIT = "AccounEdit";
+    public static enum USER_PARAM_NAME {
+        SUPERVISOR, MODEL, MODEL_EDIT, ACCOUNT, ACCOUNT_EDIT, UZIVATEL, UZIVATEL_EDIT, EVIDENCE, EVIDENCE_EDIT
+    };
 
     @Inject
     private ServletContext context;
@@ -47,7 +47,7 @@ public class Uzivatel implements Serializable {
 //    private HttpServletRequest httpRequest;
     boolean debugApp = false;
     private User user = null;
-    private HashMap<String, UzivatelParam> userParams = new HashMap<>();
+    private ArrayList<UzivatelParam> userParams = new ArrayList<>();
 
     /**
      * Inicializace matice prav uzivatele
@@ -71,7 +71,14 @@ public class Uzivatel implements Serializable {
         }
         this.user = new User();
         this.user.setNewEntity(true);
-        fillUserParams();
+        initUserParams();
+    }
+
+    public boolean initUzivatelByUser(User user) {
+        this.user = user;
+        initUserParams();
+        fillUserParamsByUser();
+        return false;
     }
 
     /**
@@ -90,7 +97,6 @@ public class Uzivatel implements Serializable {
         }
         return (this.user instanceof User);
     }
-
 
     /**
      * Metoda zalozi nebo aktualizuje zaznam User v DB
@@ -114,8 +120,6 @@ public class Uzivatel implements Serializable {
      * Metoda vrati logickou hodnotu pojmenovaneho parametru nabo defaultni
      * hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
      *
-     * TO-DO: Dodelat vazbu naprava v DB
-     *
      * @param paramName - jmeno pozadovaneho parametru
      * @param defaultValue - defaultni hodnota k navraceni, pokud parametr
      * neexituje nebo neni nastaven
@@ -130,7 +134,30 @@ public class Uzivatel implements Serializable {
         if (paramName.toUpperCase().contains("DEBUG")) {
             booleanValue = debugApp;
         } else {
-            booleanValue = (boolean) userController.getUserParam(user, paramName.toUpperCase(), true);
+            booleanValue = (boolean) userController.getUserParam(user, paramName.toUpperCase(), defaultValue);
+        }
+        return booleanValue;
+    }
+
+    /**
+     * Metoda vrati logickou hodnotu pojmenovaneho parametru nabo defaultni
+     * hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
+     *
+     * @param paramName - jmeno pozadovaneho parametru
+     * @param defaultValue - defaultni hodnota k navraceni, pokud parametr
+     * neexituje nebo neni nastaven
+     * @return true|false hodnota pozadovaneho parametru
+     */
+    public boolean getParam(Uzivatel.USER_PARAM_NAME paramName, boolean defaultValue) {
+        boolean booleanValue = defaultValue;
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
+        // Apliace je v DEBUG rezimu true|false
+        if (paramName.name().toUpperCase().contains("DEBUG")) {
+            booleanValue = debugApp;
+        } else {
+            booleanValue = (boolean) userController.getUserParam(this.user, paramName.name().toUpperCase(), defaultValue);
         }
         return booleanValue;
     }
@@ -148,7 +175,23 @@ public class Uzivatel implements Serializable {
         if (!(userController instanceof UserController)) {
             return defaultValue;
         }
-        return (String) userController.getUserParam(this.user, paramName, defaultValue);
+        return (String) userController.getUserParam(this.user, paramName.toUpperCase(), defaultValue);
+    }
+
+    /**
+     * Metoda vrati retezcovou hodnotu pojmenovaneho parametru nabo defaultni
+     * hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
+     *
+     * @param paramName - jmeno pozadovaneho parametru
+     * @param defaultValue - defaultni hodnota k navraceni, pokud parametr
+     * neexituje nebo neni nastaven
+     * @return hodnota pozadovaneho parametru nebo default
+     */
+    public String getParam(Uzivatel.USER_PARAM_NAME paramName, String defaultValue) {
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
+        return (String) userController.getUserParam(this.user, paramName.name().toUpperCase(), defaultValue);
     }
 
     /**
@@ -168,6 +211,22 @@ public class Uzivatel implements Serializable {
     }
 
     /**
+     * Metoda vrati numerickou=double hodnotu pojmenovaneho parametru nabo
+     * defaultni hodnotu, pokud neexistuje v DB nebo neni jeste nastaven
+     *
+     * @param paramName - jmeno pozadovaneho parametru
+     * @param defaultValue - defaultni hodnota k navraceni, pokud parametr
+     * neexituje nebo neni nastaven
+     * @return hodnota pozadovaneho parametru nebo default
+     */
+    public double getParam(Uzivatel.USER_PARAM_NAME paramName, double defaultValue) {
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
+        return (double) userController.getUserParam(this.user, paramName.toString().toUpperCase(), defaultValue);
+    }
+
+    /**
      * Metoda vrati datum pojmenovaneho parametru nabo defaultni hodnotu, pokud
      * neexistuje v DB nebo neni jeste nastaven
      *
@@ -180,7 +239,23 @@ public class Uzivatel implements Serializable {
         if (!(userController instanceof UserController)) {
             return defaultValue;
         }
-        return (Date) userController.getUserParam(this.user, paramName, defaultValue);
+        return (Date) userController.getUserParam(this.user, paramName.toUpperCase(), defaultValue);
+    }
+
+    /**
+     * Metoda vrati datum pojmenovaneho parametru nabo defaultni hodnotu, pokud
+     * neexistuje v DB nebo neni jeste nastaven
+     *
+     * @param paramName - jmeno pozadovaneho parametru
+     * @param defaultValue - defaultni hodnota k navraceni, pokud parametr
+     * neexituje nebo neni nastaven
+     * @return datum pozadovaneho parametru nebo default
+     */
+    public Date getParam(Uzivatel.USER_PARAM_NAME paramName, Date defaultValue) {
+        if (!(userController instanceof UserController)) {
+            return defaultValue;
+        }
+        return (Date) userController.getUserParam(this.user, paramName.name().toUpperCase(), defaultValue);
     }
 
     /**
@@ -195,37 +270,51 @@ public class Uzivatel implements Serializable {
         if (!(userController instanceof UserController)) {
             return false;
         }
-        return userController.setUserParam(this.user, paramName, value);
+        return userController.setUserParam(this.user, paramName.toUpperCase(), value);
     }
 
-    private void fillUserParams() {
-        this.userParams.put("SUPERVISOR", new UzivatelParam("SUPERVISOR", "Neomezená práva správce", false));
-        this.userParams.put("ACCOUNT", new UzivatelParam("ACCOUNT", "Může vidět položky účtu", false));
-        this.userParams.put("ACCOUNT_EDIT", new UzivatelParam("ACCOUNT_EDIT", "Může editovat účet", false));
-        this.userParams.put("UZIVATEL", new UzivatelParam("UZIVATEL", "Může vidět seznam uživatelů", false));
-        this.userParams.put("UZIVATEL_EDIT", new UzivatelParam("UZIVATEL_EDIT", "Může editovat seznam uživatelů", false));
-        this.userParams.put("MODEL", new UzivatelParam("MODEL", "Může vidět model(šablonu)", false));
-        this.userParams.put("MODEL_EDIT", new UzivatelParam("MODEL_EDIT", "Může editovat model(šablonu)", false));
-        this.userParams.put("EVIDENCE", new UzivatelParam("EVIDENCE", "Může vidět evidenci", false));
-        this.userParams.put("EVIDENCE_EDIT", new UzivatelParam("MODEL_EDIT", "Může editovat editovat evidenci", false));
+    /**
+     * Ulozeni uzivatelskeho parametru do DB
+     *
+     * @param paramName - jmeno ukladaneho parametru
+     * @param value - hodnota ukleadaneho parametru (String, Boolean, Double,
+     * Date)
+     * @return ulozeni do DB bylo uspesne true|false
+     */
+    public boolean setParam(Uzivatel.USER_PARAM_NAME paramName, Object value) {
+        if (!(userController instanceof UserController)) {
+            return false;
+        }
+        return userController.setUserParam(this.user, paramName.name().toUpperCase(), value);
+    }
+
+    private void initUserParams() {
+        this.userParams = new ArrayList<>();
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, "Neomezená práva správce", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.ACCOUNT, "Může vidět položky účtu", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.ACCOUNT_EDIT, "Může editovat účet", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.UZIVATEL, "Může vidět seznam uživatelů", true));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, "Může editovat seznam uživatelů", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.MODEL, "Může vidět model(šablonu)", true));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, "Může editovat model(šablonu)", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE, "Může vidět evidenci", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE_EDIT, "Může editovat editovat evidenci", false));
     }
 
     private void fillUserParamsByUser() {
-        for (Map.Entry<String, UzivatelParam> entry : userParams.entrySet()) {
-            String key = entry.getKey();
-            UzivatelParam up = entry.getValue();
+        for (UzivatelParam up : this.userParams) {
 
             if (up.getDefaultValue() instanceof Boolean) {
-                up.setValue(this.getParam(key, ((Boolean) up.getDefaultValue())));
+                up.setValue(this.getParam(up.getParamName(), ((Boolean) up.getDefaultValue())));
             }
             if (up.getDefaultValue() instanceof Date) {
-                up.setValue(this.getParam(key, ((Date) up.getDefaultValue())));
+                up.setValue(this.getParam(up.getParamName(), ((Date) up.getDefaultValue())));
             }
             if (up.getDefaultValue() instanceof String) {
-                up.setValue(this.getParam(key, ((String) up.getDefaultValue())));
+                up.setValue(this.getParam(up.getParamName(), ((String) up.getDefaultValue())));
             }
             if (up.getDefaultValue() instanceof Double) {
-                up.setValue(this.getParam(key, ((Double) up.getDefaultValue())));
+                up.setValue(this.getParam(up.getParamName(), ((Double) up.getDefaultValue())));
             }
         }
     }
@@ -247,14 +336,14 @@ public class Uzivatel implements Serializable {
     /**
      * @return the userParams
      */
-    public HashMap<String, UzivatelParam> getUserParams() {
+    public ArrayList<UzivatelParam> getUserParams() {
         return userParams;
     }
 
     /**
      * @param userParams the userParams to set
      */
-    public void setUserParams(HashMap<String, UzivatelParam> userParams) {
+    public void setUserParams(ArrayList<UzivatelParam> userParams) {
         this.userParams = userParams;
     }
 }
