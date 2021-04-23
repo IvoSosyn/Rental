@@ -10,34 +10,81 @@
 
     <ui:composition>	
         <h:form  id="formUserDetail">
-            <p:outputLabel value="Identifikace uživatele: " for="@next" />
-            <p:inputText id="uzivFullName" value="#{ucet.uzivatelEdit.user.fullname}" />
-            <p:outputLabel value="Emailová adresa uživatele:" for="@next" />
-            <p:inputText id="uzivEmail" value="#{ucet.uzivatelEdit.user.email}" />
-            <p:outputLabel value="Popis(komentář) k uživateli:" for="@next" />
-            <p:inputText id="uzivPopis" value="#{ucet.uzivatelEdit.user.popis}" />
-            <p:outputLabel value="Heslo #{ucet.uzivatelEdit.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" />            
+            <div class="p-field">
+                <p:outputLabel value="Identifikace uživatele: " for="@next" />
+                <p:inputText id="uzivFullName" value="#{ucet.uzivatelEdit.user.fullname}" />
+            </div>
+            <div class="p-field">
+                <p:outputLabel value="Emailová adresa uživatele:" for="@next" />
+                <p:inputText id="uzivEmail" value="#{ucet.uzivatelEdit.user.email}" />
+            </div>
+            <div class="p-field">
+                <p:outputLabel value="Popis(komentář) k uživateli:" for="@next" />
+                <p:inputText id="uzivPopis" value="#{ucet.uzivatelEdit.user.popis}" />
+            </div>
+            <div class="p-field">
+                <p:graphicImage value="/images/OK15x15.png" rendered="#{ucet.uzivatelEdit.user.passwordsha512.length()>0}" style="width:30px" />
+                <p:outputLabel value="Heslo #{ucet.uzivatelEdit.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" for="@previous" />            
+            </div>
+            <ui:remove>
+                ==== Jednotlivá nastavení práv ====
+            </ui:remove>
+            <div class="ui-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('SUPERVISOR').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('SUPERVISOR').value}"  valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}" label="SUPERVISOR" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('MODEL').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('MODEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}" label="MODEL" />
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('MODEL_EDIT').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('MODEL_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}" label="MODEL_EDIT" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('ACCOUNT').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('ACCOUNT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}" label="ACCOUNT" />
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('ACCOUNT_EDIT').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('ACCOUNT_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}" label="ACCOUNT_EDIT" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}"  label="UZIVATEL" />
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL_EDIT').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}" label="UZIVATEL_EDIT" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}" label="EVIDENCE" />
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE_EDIT').popis} :"  for="@next" />
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParmChanged}"  label="EVIDENCE_EDIT" />
+                </div>
+            </div>
+            <ui:remove>
+                === Varianta s tabulkovým zpracováním práv ==============
+                <p:dataTable id="tableUserDetailTbl"
+                             value="#{ucet.uzivatelEdit.userParams}" 
+                             var="uzivatelParam" 
+                             style="margin-bottom:0"  
+                             resizableColumns="true" 
+                             resizeMode="expand" >
 
-            <p:dataTable id="tableUserDetailTbl"
-                         value="#{ucet.uzivatelEdit.userParams}" 
-                         var="uzivatelParam" 
-                         style="margin-bottom:0"  
-                         resizableColumns="true" 
-                         resizeMode="expand" >
+                    <f:facet id="headerTableModelTable" name="header">
+                        Detail uživatele:
+                    </f:facet>
+                    <p:column headerText="Popis parametru:">
+                        <p:outputLabel value="#{uzivatelParam.popis}" />
+                    </p:column>                
+                    <p:column headerText="Ano |  Ne">
+                        <p:toggleSwitch value="#{uzivatelParam.value}" />
+                    </p:column>                
 
-                <f:facet id="headerTableModelTable" name="header">
-                    Detail uživatele:
-                </f:facet>
-                <p:column headerText="Popis parametru:">
-                    <p:outputLabel value="#{uzivatelParam.popis}" />
-                </p:column>                
-                <p:column headerText="Ano |  Ne">
-                    <p:toggleSwitch value="#{uzivatelParam.value}" />
-                </p:column>                
+                    <f:facet id="footerUcetTable" name="footer">
+                    </f:facet>
+                </p:dataTable>
 
-                <f:facet id="footerUcetTable" name="footer">
-                </f:facet>
-            </p:dataTable>
+            </ui:remove>
+
+
         </h:form>
     </ui:composition>
 </html>

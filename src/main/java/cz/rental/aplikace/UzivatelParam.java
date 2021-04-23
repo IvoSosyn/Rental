@@ -5,8 +5,6 @@
  */
 package cz.rental.aplikace;
 
-import java.util.Date;
-
 /**
  *
  * @author sosyn

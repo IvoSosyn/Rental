@@ -11,18 +11,19 @@ import cz.rental.entity.UserController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import org.primefaces.context.PrimeFacesContext;
 
 /**
  *
@@ -31,13 +32,13 @@ import javax.servlet.ServletContext;
 @Named(value = "uzivatel")
 @SessionScoped
 public class Uzivatel implements Serializable {
-
+    
     static final long serialVersionUID = 42L;
-
+    
     public static enum USER_PARAM_NAME {
         SUPERVISOR, MODEL, MODEL_EDIT, ACCOUNT, ACCOUNT_EDIT, UZIVATEL, UZIVATEL_EDIT, EVIDENCE, EVIDENCE_EDIT
     };
-
+    
     @Inject
     private ServletContext context;
     @EJB
@@ -73,7 +74,7 @@ public class Uzivatel implements Serializable {
         this.user.setNewEntity(true);
         initUserParams();
     }
-
+    
     public boolean initUzivatelByUser(User user) {
         this.user = user;
         initUserParams();
@@ -287,7 +288,7 @@ public class Uzivatel implements Serializable {
         }
         return userController.setUserParam(this.user, paramName.name().toUpperCase(), value);
     }
-
+    
     private void initUserParams() {
         this.userParams = new ArrayList<>();
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, "Neomezená práva správce", false));
@@ -300,10 +301,10 @@ public class Uzivatel implements Serializable {
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE, "Může vidět evidenci", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE_EDIT, "Může editovat editovat evidenci", false));
     }
-
+    
     private void fillUserParamsByUser() {
         for (UzivatelParam up : this.userParams) {
-
+            
             if (up.getDefaultValue() instanceof Boolean) {
                 up.setValue(this.getParam(up.getParamName(), ((Boolean) up.getDefaultValue())));
             }
@@ -317,6 +318,19 @@ public class Uzivatel implements Serializable {
                 up.setValue(this.getParam(up.getParamName(), ((Double) up.getDefaultValue())));
             }
         }
+    }
+
+    public UzivatelParam getUserParm(String paramName) {
+        for (UzivatelParam userParam : userParams) {
+            if (userParam.getParamName().name().equalsIgnoreCase(paramName)) {
+                return userParam;                
+            }            
+        }
+        return null;
+    }
+    
+    public void userParmChanged(ValueChangeEvent event) {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není zatím implementováno"));
     }
 
     /**
