@@ -21,20 +21,20 @@
                          resizableColumns="true" 
                          resizeMode="expand" >
 
-                <f:facet id="headerTableModelTable" name="header">
+                <f:facet id="headerUserTable" name="header">
                     Uživatelé účtu: #{ucet.account.fullname}
                 </f:facet>
-                <p:ajax event="rowSelect" listener="#{ucet.onRowSelect}" update=":formUserTable:tableUserMenu :formUserDetail" />
-                <p:ajax event="rowUnselect" listener="#{ucet.onRowUnselect}" update=":formUserTable:tableUserMenu :formUserDetail" />
+                <p:ajax event="rowSelect" listener="#{ucet.onRowSelect}" update=":formUserTable:menuUserTable  :formUserDetail" />
+                <p:ajax event="rowUnselect" listener="#{ucet.onRowUnselect}" update=":formUserTable:menuUserTable  :formUserDetail" />
 
                 <p:column headerText="Název">
-                    <h:outputText value="#{user.fullname}"  />
+                    <h:outputText value="#{user.fullname}" />
                 </p:column>                
                 <p:column headerText="E-mail">
-                    <h:outputText value="#{user.email}"  />
+                    <h:outputText value="#{user.email}" />
                 </p:column>                
                 <p:column headerText="Popis">
-                    <h:outputText value="#{user.popis}"  />
+                    <h:outputText value="#{user.popis}" />
                 </p:column>                
                 <p:column>
                     <f:facet name="header">
@@ -56,10 +56,24 @@
                     </h:outputText>
                 </p:column>
 
-                <f:facet id="footerUcetTable" name="footer">
+                <f:facet id="footerUserTable" name="footer">
+                    <div class="p-grid p-jc-center" align="center">                    
+                        <div class="p-col-8 p-md-4 p-sm-6">
+                            <p:commandButton value="Nový" icon="fa fa-plus" ajax="true" update="@form :formUserDetail " styleClass="rounded-button"  />
+                        </div>
+                        <div class="p-col-4 p-md-4 p-sm-6">
+                            <p:commandButton id="delAttr" value="Smaž(#{ucet.selectedUser.fullname})" process="@this"  update=":formUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraných položek (řádků)."  icon="fa fa-ban"  style="color: #c61e40;"  >
+                                <p:confirm  header="Potvrzení akce" message="Opravdu chcete vybraný záznam (#{ucet.selectedUser.fullname}) smazat ?" icon="pi pi-exclamation-triangle" />
+                                <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                                    <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                                </p:confirmDialog>  
+                            </p:commandButton>                        
+                        </div>
+                    </div>
                 </f:facet>
             </p:dataTable>
-            <p:contextMenu id="tableUserMenu" for="tableUserTable" >
+            <p:contextMenu id="menuUserTable" for="tableUserTable" >
                 <p:menuitem value="Přidej"  action="#{ucet.addUser()}" update="tableUserTable :formUserDetail"  icon="fa fa-plus" disabled="#{!ucet.appendable()}"  title="Přidání nové položky." />
                 <p:menuitem value="Smaž(#{ucet.selectedUser.fullname})" action="#{ucet.removeUser()}"   update="tableUserTable :formUserDetail"  icon="fa fa-ban" disabled="#{!ucet.removable()}" title="Smazání vybraných položek (řádků)." >
                     <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznam (#{ucet.selectedUser}) smazat ?" icon="pi pi-exclamation-triangle" />
