@@ -223,16 +223,16 @@ public class Ucet implements Serializable {
     }
 
     public void removeUser() {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není dosud naprogramováno.","removeUser()"));
     }
 
     public boolean appendable() {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není dosud naprogramováno.","appendable()"));
         return false;
     }
 
     public boolean removable() {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není naprogramováno dosud"));
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není dosud naprogramováno.","removable()"));
         return false;
     }
 

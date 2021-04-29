@@ -16,7 +16,9 @@
     </h:head>
 
     <h:body>
-        <p:growl id="growl" showDetail="true" life="7000" />
+        <ui:remove>
+            <p:growl id="growl" showDetail="true" life="7000" />            
+        </ui:remove>
         <div class="ui-fluid">
             <div class="p-field">
                 <ui:insert name="header">
