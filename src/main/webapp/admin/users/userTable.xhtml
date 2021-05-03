@@ -60,10 +60,10 @@
                 <f:facet id="footerUserTable" name="footer">
                     <div class="p-grid p-jc-center" align="center">                    
                         <div class="p-col-3 p-md-3 p-sm-3">
-                            <p:commandButton id="addUser" value="Nový" icon="pi pi-plus" ajax="true" update=":formUserTable:tableUserTable :formUserDetail" styleClass="rounded-button"   title="Vytvoří nový záznam." />
+                            <p:commandButton id="addUser" value="Nový" actionListener="#{ucet.addUser()}" disabled="#{!ucet.appendable()}" icon="pi pi-plus" ajax="true" update=":formUserTable:tableUserTable :formUserDetail" styleClass="rounded-button"   title="Vytvoří nový záznam." />
                         </div>
                         <div class="p-col-3 p-md-3 p-sm-3 p-offset-6">
-                            <p:commandButton id="delUser" value="Smaž(#{ucet.selectedUser.fullname})" process="@this"  update=":formUserTable:tableUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraných položek (řádků)."  icon="pi pi-trash"  style="color: #c61e40;"  >
+                            <p:commandButton id="delUser" value="Smaž(#{ucet.selectedUser.fullname})" actionListener="#{ucet.delUser()}" disabled="#{!ucet.removable()}" process="@this"  update=":formUserTable:tableUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraných položek (řádků)."  icon="pi pi-trash"  style="color: #c61e40;"  >
                                 <p:confirm  header="Potvrzení akce" message="Opravdu chcete vybraný záznam (#{ucet.selectedUser.fullname}) smazat ?" icon="pi pi-exclamation-triangle" />
                                 <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
@@ -77,7 +77,7 @@
             <p:contextMenu id="menuUserTable" for="tableUserTable" >
                 <p:autoUpdate/>
                 <p:menuitem value="Nový"  action="#{ucet.addUser()}" update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-plus" disabled="#{!ucet.appendable()}"  title="Vytvoří nový záznam." />
-                <p:menuitem value="Smaž(#{ucet.selectedUser.fullname})" action="#{ucet.removeUser()}"   update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-trash" disabled="#{!ucet.removable()}" title="Smazání vybraných položek (řádků)." >
+                <p:menuitem value="Smaž(#{ucet.selectedUser.fullname})" action="#{ucet.delUser()}"   update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-trash" disabled="#{!ucet.removable()}" title="Smazání vybraných položek (řádků)." >
                     <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznam (#{ucet.selectedUser}) smazat ?" icon="pi pi-exclamation-triangle" />
                 </p:menuitem>
             </p:contextMenu>

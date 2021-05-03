@@ -82,37 +82,12 @@
             </div>
             <div class="p-grid  p-jc-center">
                 <div class="p-col-3 p-md-3 p-sm-12">
-                    <p:commandButton value="Ulož" icon="pi pi-save"/>
+                    <p:commandButton value="Ulož" update=":formUserTable" icon="pi pi-save"/>
                 </div>
                 <div class="p-col-3 p-md-3 p-sm-12 p-offset-6">
-                    <p:commandButton value="Reset"  icon="pi pi-refresh"/>
+                    <p:commandButton value="Reset" update="@form :formUserTable" icon="pi pi-refresh"/>
                 </div>
             </div>
-            <ui:remove>
-                === Varianta s tabulkovým zpracováním práv ==============
-                <p:dataTable id="tableUserDetailTbl"
-                             value="#{ucet.uzivatelEdit.userParams}" 
-                             var="uzivatelParam" 
-                             style="margin-bottom:0"  
-                             resizableColumns="true" 
-                             resizeMode="expand" >
-
-                    <f:facet id="headerTableModelTable" name="header">
-                        Detail uživatele:
-                    </f:facet>
-                    <p:column headerText="Popis parametru:">
-                        <p:outputLabel value="#{uzivatelParam.popis}" />
-                    </p:column>                
-                    <p:column headerText="Ano |  Ne">
-                        <p:toggleSwitch value="#{uzivatelParam.value}" />
-                    </p:column>                
-
-                    <f:facet id="footerUcetTable" name="footer">
-                        <p:commandButton id="saveButton" value="Ulož"  update="@form :formUserTable" icon="fa fa-save" />
-                        <p:commandButton id="resetButton" value="Reset" update="@form :formUserTable" icon="fa fa-refresh"  />
-                    </f:facet>
-                </p:dataTable>
-            </ui:remove>
         </h:form>
     </ui:composition>
 </html>

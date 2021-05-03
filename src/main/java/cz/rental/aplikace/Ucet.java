@@ -22,6 +22,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -222,18 +224,35 @@ public class Ucet implements Serializable {
         }
     }
 
-    public void removeUser() {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není dosud naprogramováno.","removeUser()"));
+    public void delUser() {
+        if (this.selectedUser != null && !this.selectedUser.isNewEntity() ) {
+            try {
+                userController.destroy(this.selectedUser);
+            } catch (Exception ex) {
+                Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Vymazání uživatele: "+this.selectedUser.getFullname()+" z registru nebylo úspěšné.", "Po chvíli zkuste znovu."));
+            }
+        } else {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(this.selectedUser == null?"Není vybrán žádný uživatel k vymazání.":"Nový neuložený uživatel se nedá vymazat.", "Vyberte správného uživatele k vymazání"));
+        }
     }
 
+    /**
+     * Muze uzivatel pridavat nove uzivatele 
+     * tj.ma pravo UZIVATEL_EDIT
+     * @return true|false
+     */
     public boolean appendable() {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není dosud naprogramováno.","appendable()"));
-        return false;
+        return this.uzivatel!=null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true);
     }
 
+    /**
+     * Muze uizivatel smazat zaznam o uzivateli 
+     * tj.ma pravo UZIVATEL_EDIT a vybrany zaznam neni 'NewEntity'
+     * @return true|false
+     */
     public boolean removable() {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není dosud naprogramováno.","removable()"));
-        return false;
+        return this.uzivatel!=null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true) && this.selectedUser!=null && !this.selectedUser.isNewEntity() ;
     }
 
     /**
