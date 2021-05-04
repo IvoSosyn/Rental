@@ -90,10 +90,10 @@ public class UserController extends JpaController {
     public void saveUser(User user) throws Exception {
         if (getEm().find(User.class, user.getId()) == null) {
             getEm().persist(user);
-            user.setNewEntity(false);
         } else {
             getEm().merge(user);
         }
+        user.setNewEntity(false);
     }
 
     /**
@@ -138,7 +138,7 @@ public class UserController extends JpaController {
      * @param user uzivatel, ke kteremu se poji parametr
      * @param paramName jemeno ukladaneho parametru
      * @param value hodnota parametru k ulozeni do DB
-     * @return
+     * @return true|false - uspech ulozeni dat do DB
      */
     public boolean setUserParam(User user, String paramName, Object value) {
         boolean lOk = user instanceof User && paramName instanceof String;

@@ -115,6 +115,8 @@ public class Ucet implements Serializable {
         }
         User user = new User();
         user.setNewEntity(true);
+        user.setPopis("Nový záznam.");
+        user.setPasswordsha512(SHA512.getSHA512(""));
         this.getUsers().add(user);
         System.out.println(" getUsersForAccount():" + this.getUsers().size());
         return this.getUsers();
@@ -219,40 +221,69 @@ public class Ucet implements Serializable {
         for (User user : users) {
             if (user.isNewEntity()) {
                 this.selectedUser = user;
+                this.uzivatelEdit.setUser(selectedUser);
+                this.uzivatelEdit.initUzivatelByUser(selectedUser);
                 break;
             }
         }
     }
 
     public void delUser() {
-        if (this.selectedUser != null && !this.selectedUser.isNewEntity() ) {
+        if (this.selectedUser != null && !this.selectedUser.isNewEntity()) {
             try {
                 userController.destroy(this.selectedUser);
             } catch (Exception ex) {
                 Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Vymazání uživatele: "+this.selectedUser.getFullname()+" z registru nebylo úspěšné.", "Po chvíli zkuste znovu."));
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Vymazání uživatele: " + this.selectedUser.getFullname() + " z registru nebylo úspěšné.", "Po chvíli zkuste znovu."));
             }
         } else {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(this.selectedUser == null?"Není vybrán žádný uživatel k vymazání.":"Nový neuložený uživatel se nedá vymazat.", "Vyberte správného uživatele k vymazání"));
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(this.selectedUser == null ? "Není vybrán žádný uživatel k vymazání." : "Nový neuložený uživatel se nedá vymazat.", "Vyberte správného uživatele k vymazání"));
         }
     }
 
     /**
-     * Muze uzivatel pridavat nove uzivatele 
-     * tj.ma pravo UZIVATEL_EDIT
-     * @return true|false
+     * Metoda ulozi data z detailu editace uzivatele do DB vcetne jeho prav
      */
-    public boolean appendable() {
-        return this.uzivatel!=null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true);
+    public void saveUser() {
+        if (this.uzivatelEdit != null && this.uzivatelEdit.getUser() != null) {
+            try {
+                if (this.uzivatelEdit.getUser().getIdaccount() == null) {
+                    this.uzivatelEdit.getUser().setIdaccount(this.account);
+                }
+                if (this.uzivatelEdit.getUser().getPasswordsha512().isEmpty()) {
+                    this.uzivatelEdit.getUser().setPasswordsha512(SHA512.getSHA512(""));
+                }
+                this.uzivatelEdit.saveUser();
+                boolean saveUserParams = this.uzivatelEdit.saveUserParams();
+                if (!saveUserParams) {
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení hodnot práv uživatele: " + this.uzivatelEdit.getUser().getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení uživatele: " + this.uzivatelEdit.getUser().getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+            }
+        } else {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
+        }
     }
 
     /**
-     * Muze uizivatel smazat zaznam o uzivateli 
-     * tj.ma pravo UZIVATEL_EDIT a vybrany zaznam neni 'NewEntity'
+     * Muze uzivatel pridavat nove uzivatele tj.ma pravo UZIVATEL_EDIT
+     *
+     * @return true|false
+     */
+    public boolean appendable() {
+        return this.uzivatel != null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true);
+    }
+
+    /**
+     * Muze uizivatel smazat zaznam o uzivateli tj.ma pravo UZIVATEL_EDIT a
+     * vybrany zaznam neni 'NewEntity'
+     *
      * @return true|false
      */
     public boolean removable() {
-        return this.uzivatel!=null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true) && this.selectedUser!=null && !this.selectedUser.isNewEntity() ;
+        return this.uzivatel != null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true) && this.selectedUser != null && !this.selectedUser.isNewEntity();
     }
 
     /**

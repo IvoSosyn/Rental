@@ -32,13 +32,13 @@ import org.primefaces.context.PrimeFacesContext;
 @Named(value = "uzivatel")
 @SessionScoped
 public class Uzivatel implements Serializable {
-    
+
     static final long serialVersionUID = 42L;
-    
+
     public static enum USER_PARAM_NAME {
         SUPERVISOR, MODEL, MODEL_EDIT, ACCOUNT, ACCOUNT_EDIT, UZIVATEL, UZIVATEL_EDIT, EVIDENCE, EVIDENCE_EDIT
     };
-    
+
     @Inject
     private ServletContext context;
     @EJB
@@ -74,7 +74,13 @@ public class Uzivatel implements Serializable {
         this.user.setNewEntity(true);
         initUserParams();
     }
+
+    public Uzivatel() {
+        init();
+    }
     
+    
+
     public boolean initUzivatelByUser(User user) {
         this.user = user;
         initUserParams();
@@ -288,7 +294,7 @@ public class Uzivatel implements Serializable {
         }
         return userController.setUserParam(this.user, paramName.name().toUpperCase(), value);
     }
-    
+
     private void initUserParams() {
         this.userParams = new ArrayList<>();
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, "Neomezená práva správce", false));
@@ -301,10 +307,10 @@ public class Uzivatel implements Serializable {
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE, "Může vidět evidenci", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE_EDIT, "Může editovat editovat evidenci", false));
     }
-    
+
     private void fillUserParamsByUser() {
         for (UzivatelParam up : this.userParams) {
-            
+
             if (up.getDefaultValue() instanceof Boolean) {
                 up.setValue(this.getParam(up.getParamName(), ((Boolean) up.getDefaultValue())));
             }
@@ -320,17 +326,32 @@ public class Uzivatel implements Serializable {
         }
     }
 
+    /**
+     * Metoda ulozi hodnoty z matice UserParams pro uzivatele User do DB 
+     *
+     * @return true|false uspech ulozeni vsech parametru do DB
+     */
+    public boolean saveUserParams() {
+        for (UzivatelParam userParam : this.userParams) {
+            boolean setParam = setParam(userParam.getParamName(), userParam.getValue());
+            if (!setParam) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public UzivatelParam getUserParm(String paramName) {
         for (UzivatelParam userParam : userParams) {
             if (userParam.getParamName().name().equalsIgnoreCase(paramName)) {
-                return userParam;                
-            }            
+                return userParam;
+            }
         }
         return null;
     }
-    
-    public void userParmChanged(ValueChangeEvent event) {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není zatím implementováno"));
+
+    public void userParamChanged(ValueChangeEvent event) {
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není zatím implementováno","userParamChanged()"));
     }
 
     /**
