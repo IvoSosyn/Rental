@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -114,6 +115,7 @@ public class Ucet implements Serializable {
             this.setUsers(userController.getUsersForAccount(this.account));
         }
         User user = new User();
+        user.setId(UUID.randomUUID());
         user.setNewEntity(true);
         user.setPopis("Nový záznam.");
         user.setPasswordsha512(SHA512.getSHA512(""));
@@ -212,7 +214,7 @@ public class Ucet implements Serializable {
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
 
-    public void onRowUnselect(UnselectEvent event) {
+    public void onRowUnselect(UnselectEvent event) {        
         this.uzivatelEdit.setUser(selectedUser);
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }

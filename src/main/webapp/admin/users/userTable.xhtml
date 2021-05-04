@@ -17,10 +17,8 @@
                          selectionMode="single" 
                          selection="#{ucet.selectedUser}" 
                          rowKey="#{user.id}"
-                         style="margin-bottom:0"  
                          resizableColumns="true" 
                          resizeMode="expand" >
-            
 
                 <f:facet id="headerUserTable" name="header">
                     Uživatelé účtu: #{ucet.account.fullname}
@@ -56,7 +54,9 @@
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
                 </p:column>
-
+                <ui:remove>
+                    -------- Patička -------------
+                </ui:remove>                
                 <f:facet id="footerUserTable" name="footer">
                     <div class="p-grid p-jc-center" align="center">                    
                         <div class="p-col-3 p-md-3 p-sm-3">
@@ -74,6 +74,9 @@
                     </div>
                 </f:facet>
             </p:dataTable>
+            <ui:remove>
+                -------- Kontextové menu -------------
+            </ui:remove>                
             <p:contextMenu id="menuUserTable" for="tableUserTable" >
                 <p:autoUpdate/>
                 <p:menuitem value="Nový"  action="#{ucet.addUser()}" update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-plus" disabled="#{!ucet.appendable()}"  title="Vytvoří nový záznam." />
@@ -84,4 +87,3 @@
         </h:form>
     </ui:composition>
 </html>
-
