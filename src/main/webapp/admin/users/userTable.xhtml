@@ -12,7 +12,7 @@
         <h:form id="formUserTable">
             <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
             <p:dataTable id="tableUserTable"
-                         value="#{ucet.usersForAccount}" 
+                         value="#{ucet.users}" 
                          var="user" 
                          selectionMode="single" 
                          selection="#{ucet.selectedUser}" 
@@ -60,10 +60,10 @@
                 <f:facet id="footerUserTable" name="footer">
                     <div class="p-grid p-jc-center" align="center">                    
                         <div class="p-col-3 p-md-3 p-sm-3">
-                            <p:commandButton id="addUser" value="Nový" actionListener="#{ucet.addUser()}" disabled="#{!ucet.appendable()}" icon="pi pi-plus" ajax="true" update=":formUserTable:tableUserTable :formUserDetail" styleClass="rounded-button"   title="Vytvoří nový záznam." />
+                            <p:commandButton id="addUser" value="Nový" actionListener="#{ucet.addUser()}" disabled="#{!ucet.appendable()}" icon="pi pi-plus" ajax="true" update=":formUserTable:tableUserTable :formUserDetail" styleClass="rounded-button" title="Vytvoří nový záznam pro uživatele." />
                         </div>
                         <div class="p-col-3 p-md-3 p-sm-3 p-offset-6">
-                            <p:commandButton id="delUser" value="Smaž(#{ucet.selectedUser.fullname})" actionListener="#{ucet.delUser()}" disabled="#{!ucet.removable()}" process="@this"  update=":formUserTable:tableUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraných položek (řádků)."  icon="pi pi-trash"  style="color: #c61e40;"  >
+                            <p:commandButton id="delUser" value="Smaž(#{ucet.selectedUser.fullname})" actionListener="#{ucet.delUser()}" disabled="#{!ucet.removable()}" process="@this"  update=":formUserTable:tableUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraného uživatele."  icon="pi pi-trash"  style="color: #c61e40;"  >
                                 <p:confirm  header="Potvrzení akce" message="Opravdu chcete vybraný záznam (#{ucet.selectedUser.fullname}) smazat ?" icon="pi pi-exclamation-triangle" />
                                 <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />

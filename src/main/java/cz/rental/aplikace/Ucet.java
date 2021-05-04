@@ -42,9 +42,9 @@ import org.primefaces.event.UnselectEvent;
 @Named(value = "ucet")
 @SessionScoped
 public class Ucet implements Serializable {
-
+    
     static final long serialVersionUID = 42L;
-
+    
     public static final String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
     public static final int ACCOUNT_MIN_PIN = 1000;
     public static final int ACCOUNT_MAX_PIN = 9999 + 1;
@@ -68,7 +68,7 @@ public class Ucet implements Serializable {
     private ArrayList<User> users = new ArrayList();
     private User selectedUser;
     private Uzivatel uzivatelEdit;
-
+    
     @PostConstruct
     public void init() {
         this.account = new Account();
@@ -101,6 +101,9 @@ public class Ucet implements Serializable {
         } else {
             throw new Exception("Účet pro PIN:" + pin + " a eMail: " + email + " NEEXISTUJE nebo máte chybné heslo.");
         }
+        if (this.account instanceof Account) {
+            getUsersForAccount();
+        }
         return ucetExist;
     }
 
@@ -112,16 +115,15 @@ public class Ucet implements Serializable {
      */
     public ArrayList<User> getUsersForAccount() {
         if (userController instanceof UserController) {
-            this.setUsers(userController.getUsersForAccount(this.account));
+            this.users = userController.getUsersForAccount(this.account);
         }
         User user = new User();
         user.setId(UUID.randomUUID());
         user.setNewEntity(true);
         user.setPopis("Nový záznam.");
-        user.setPasswordsha512(SHA512.getSHA512(""));
-        this.getUsers().add(user);
-        System.out.println(" getUsersForAccount():" + this.getUsers().size());
-        return this.getUsers();
+        this.users.add(user);
+        System.out.println(" getUsersForAccount():" + this.users.size());
+        return this.users;
     }
 
     /**
@@ -148,7 +150,7 @@ public class Ucet implements Serializable {
     public void savePassword() {
         PrimeFaces.current().dialog().closeDynamic(this.password);
     }
-
+    
     public void passFromDialog(SelectEvent event) {
         this.account.setPasswordsha512(SHA512.getSHA512(this.password));
         this.account.setPasswordhelp(this.passwordHelp);
@@ -160,9 +162,9 @@ public class Ucet implements Serializable {
      * @param event
      */
     public void validatePassword(ValueChangeEvent event) {
-
+        
         String newConfirmPass = (String) event.getNewValue();
-
+        
         if (newConfirmPass == null || newConfirmPass.isEmpty() || !this.password.equals(newConfirmPass)) {
             FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -186,11 +188,11 @@ public class Ucet implements Serializable {
         isEnable = this.getPassword() != null && !this.getPassword().isEmpty()
                 && this.getPasswordControl() != null && !this.getPasswordControl().isEmpty()
                 && this.getPassword().equals(this.getPasswordControl());
-
+        
         return isEnable;
-
+        
     }
-
+    
     public void changePin(ActionEvent event) {
         //System.out.println("Ucet.changePin()");
         int randomPin = 0;
@@ -208,28 +210,37 @@ public class Ucet implements Serializable {
     public void saveAccount() throws Exception {
         getAccController().saveAccount(this.account);
     }
+// -------------------------
+// Prace s uzivateli
+// ------------------------    
 
+    public String loadUsers() {
+        this.getUsersForAccount();
+        return "/admin/users/users.xhtml";
+    }
+    
     public void onRowSelect(SelectEvent event) {
         this.uzivatelEdit.setUser(selectedUser);
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
-
-    public void onRowUnselect(UnselectEvent event) {        
+    
+    public void onRowUnselect(UnselectEvent event) {
         this.uzivatelEdit.setUser(selectedUser);
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
-
+    
     public void addUser() {
-        for (User user : users) {
-            if (user.isNewEntity()) {
-                this.selectedUser = user;
-                this.uzivatelEdit.setUser(selectedUser);
-                this.uzivatelEdit.initUzivatelByUser(selectedUser);
-                break;
-            }
-        }
+        this.selectedUser = users.get(users.size() - 1);
+//        for (User user : users) {
+//            if (user.isNewEntity()) {
+//                this.selectedUser = user;
+//                this.uzivatelEdit.setUser(selectedUser);
+//                this.uzivatelEdit.initUzivatelByUser(selectedUser);
+//                break;
+//            }
+//        }
     }
-
+    
     public void delUser() {
         if (this.selectedUser != null && !this.selectedUser.isNewEntity()) {
             try {
@@ -241,6 +252,7 @@ public class Ucet implements Serializable {
         } else {
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(this.selectedUser == null ? "Není vybrán žádný uživatel k vymazání." : "Nový neuložený uživatel se nedá vymazat.", "Vyberte správného uživatele k vymazání"));
         }
+        getUsersForAccount();
     }
 
     /**
@@ -267,6 +279,7 @@ public class Ucet implements Serializable {
         } else {
             PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
         }
+        getUsersForAccount();
     }
 
     /**

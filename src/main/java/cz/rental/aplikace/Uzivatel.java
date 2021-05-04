@@ -79,8 +79,11 @@ public class Uzivatel implements Serializable {
         init();
     }
     
-    
-
+    /**
+     * Metoda vytvori matici parametru s default hodnotami a nasledne ji naplni hodnotami pro konkretniho User z DB
+     * @param user - konkretni uzivatel, pro ktereho se nachysta matice s parametry
+     * @return true|false - jak vytvoreni a naplneni probehlo
+     */
     public boolean initUzivatelByUser(User user) {
         this.user = user;
         initUserParams();
