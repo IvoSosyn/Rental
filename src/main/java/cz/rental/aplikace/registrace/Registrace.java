@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.context.PrimeFacesContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -110,6 +111,8 @@ public class Registrace implements Serializable {
         this.ucet.getUzivatel().getUser().setIdaccount(this.ucet.getAccount());
         this.ucet.getUzivatel().getUser().setFullname(this.ucet.getAccount().getFullname());
         this.ucet.getUzivatel().getUser().setEmail(this.ucet.getAccount().getEmail());
+        this.ucet.getUzivatel().setPassword("daniela");
+        this.ucet.getUzivatel().setPasswordHelp("d.a.n.i.e.l.a.");
         this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
         this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
         this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
@@ -177,7 +180,7 @@ public class Registrace implements Serializable {
     }
 
     public Boolean isEditable() {
-        boolean isEditable = this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.ACCOUNT_EDIT, false);
+        boolean isEditable = this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, true) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.ACCOUNT_EDIT, false);
         UIComponent uic = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance());
         return isEditable;
     }
@@ -218,7 +221,15 @@ public class Registrace implements Serializable {
 //        this.ucet.getAccount().setIdmodel(selectedModel);
         //PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(" Není dosud implementováno.","Není dosud implementováno."));
     }
+    
+    public void passFromDialog(SelectEvent event) {
+        // Ulozit heslo do uctu vlastnika Account
+        this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512(this.ucet.getUzivatel().getPassword()));
+        this.ucet.getAccount().setPasswordhelp(this.ucet.getUzivatel().getPasswordHelp());
+        // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
+    }
 
+    
     /**
      * Metoda vraci kratkou infomaci o naplneni Account.passwordsha512
      *

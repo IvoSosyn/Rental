@@ -42,9 +42,9 @@ import org.primefaces.event.UnselectEvent;
 @Named(value = "ucet")
 @SessionScoped
 public class Ucet implements Serializable {
-    
+
     static final long serialVersionUID = 42L;
-    
+
     public static final String ACCOUNT_ROOT_DIR = File.separator + "Rental" + File.separator + "Accounts";
     public static final int ACCOUNT_MIN_PIN = 1000;
     public static final int ACCOUNT_MAX_PIN = 9999 + 1;
@@ -60,15 +60,12 @@ public class Ucet implements Serializable {
     private Account account;
     private Integer pin = 0;
     private String email = null;
-    private String password = null;
-    private String passwordControl = null;
-    private String passwordHelp = "";
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
     private ArrayList<User> users = new ArrayList();
     private User selectedUser;
     private Uzivatel uzivatelEdit;
-    
+
     @PostConstruct
     public void init() {
         this.account = new Account();
@@ -124,75 +121,7 @@ public class Ucet implements Serializable {
         this.users.add(user);
         System.out.println(" getUsersForAccount():" + this.users.size());
         return this.users;
-    }
-
-    /**
-     * Metoda zavola dialog (samostatny .XHTML soubor) pro zadani hesla
-     */
-    public void editPassword() {
-        Map<String, Object> options = new HashMap<>();
-        options.put("modal", true);
-        options.put("draggable", true);
-        options.put("resizable", true);
-        options.put("width", 1000);
-        options.put("height", 350);
-        options.put("contentWidth", 1000);
-        options.put("contentHeight", 350);
-        options.put("closeOnEscape", true);
-        // options.put("includeViewParams", true);
-        PrimeFaces.current().dialog().openDynamic("/aplikace/registrace/password.xhtml", options, null);
-    }
-
-    /**
-     * Metoda uzavre dialog se zadanim hesla - je volana ze samostatneho XHTML
-     * souboru, ve kterem je dialog
-     */
-    public void savePassword() {
-        PrimeFaces.current().dialog().closeDynamic(this.password);
-    }
-    
-    public void passFromDialog(SelectEvent event) {
-        this.account.setPasswordsha512(SHA512.getSHA512(this.password));
-        this.account.setPasswordhelp(this.passwordHelp);
-        // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
-    }
-
-    /**
-     *
-     * @param event
-     */
-    public void validatePassword(ValueChangeEvent event) {
-        
-        String newConfirmPass = (String) event.getNewValue();
-        
-        if (newConfirmPass == null || newConfirmPass.isEmpty() || !this.password.equals(newConfirmPass)) {
-            FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(event.getComponent().getClientId(), msg);
-        }
-    }
-
-    /**
-     * Metoda testuje, zda-li lze ulozit heslo
-     *
-     * @return
-     */
-    public boolean isPassBtnSaveEnabled() {
-        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
-        if (!isEnable) {
-            return false;
-        }
-//        String password = this.getUcet().getPassword();
-//        String passwordControl = this.getUcet().getPasswordControl();;
-//
-        isEnable = this.getPassword() != null && !this.getPassword().isEmpty()
-                && this.getPasswordControl() != null && !this.getPasswordControl().isEmpty()
-                && this.getPassword().equals(this.getPasswordControl());
-        
-        return isEnable;
-        
-    }
-    
+    } 
     public void changePin(ActionEvent event) {
         //System.out.println("Ucet.changePin()");
         int randomPin = 0;
@@ -218,17 +147,17 @@ public class Ucet implements Serializable {
         this.getUsersForAccount();
         return "/admin/users/users.xhtml";
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         this.uzivatelEdit.setUser(selectedUser);
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
-    
+
     public void onRowUnselect(UnselectEvent event) {
         this.uzivatelEdit.setUser(selectedUser);
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
-    
+
     public void addUser() {
         this.selectedUser = users.get(users.size() - 1);
 //        for (User user : users) {
@@ -240,7 +169,7 @@ public class Ucet implements Serializable {
 //            }
 //        }
     }
-    
+
     public void delUser() {
         if (this.selectedUser != null && !this.selectedUser.isNewEntity()) {
             try {
@@ -343,47 +272,6 @@ public class Ucet implements Serializable {
         this.account = account;
     }
 
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * @return the passwordControl
-     */
-    public String getPasswordControl() {
-        return passwordControl;
-    }
-
-    /**
-     * @param passwordControl the passwordControl to set
-     */
-    public void setPasswordControl(String passwordControl) {
-        this.passwordControl = passwordControl;
-    }
-
-    /**
-     * @return the passwordHelp
-     */
-    public String getPasswordHelp() {
-        return passwordHelp;
-    }
-
-    /**
-     * @param passwordHelp the passwordHelp to set
-     */
-    public void setPasswordHelp(String passwordHelp) {
-        this.passwordHelp = passwordHelp;
-    }
 
     /**
      * @return the email

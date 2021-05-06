@@ -8,22 +8,28 @@ package cz.rental.aplikace;
 import cz.rental.entity.Account;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
+import cz.rental.utils.SHA512;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.context.PrimeFacesContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -49,6 +55,10 @@ public class Uzivatel implements Serializable {
     boolean debugApp = false;
     private User user = null;
     private ArrayList<UzivatelParam> userParams = new ArrayList<>();
+
+    private String password = null;
+    private String passwordControl = null;
+    private String passwordHelp = "";
 
     /**
      * Inicializace matice prav uzivatele
@@ -78,10 +88,13 @@ public class Uzivatel implements Serializable {
     public Uzivatel() {
         init();
     }
-    
+
     /**
-     * Metoda vytvori matici parametru s default hodnotami a nasledne ji naplni hodnotami pro konkretniho User z DB
-     * @param user - konkretni uzivatel, pro ktereho se nachysta matice s parametry
+     * Metoda vytvori matici parametru s default hodnotami a nasledne ji naplni
+     * hodnotami pro konkretniho User z DB
+     *
+     * @param user - konkretni uzivatel, pro ktereho se nachysta matice s
+     * parametry
      * @return true|false - jak vytvoreni a naplneni probehlo
      */
     public boolean initUzivatelByUser(User user) {
@@ -330,7 +343,7 @@ public class Uzivatel implements Serializable {
     }
 
     /**
-     * Metoda ulozi hodnoty z matice UserParams pro uzivatele User do DB 
+     * Metoda ulozi hodnoty z matice UserParams pro uzivatele User do DB
      *
      * @return true|false uspech ulozeni vsech parametru do DB
      */
@@ -354,7 +367,72 @@ public class Uzivatel implements Serializable {
     }
 
     public void userParamChanged(ValueChangeEvent event) {
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není zatím implementováno","userParamChanged()"));
+        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není zatím implementováno", "userParamChanged()"));
+    }
+
+    /**
+     * Metoda zavola dialog (samostatny .XHTML soubor) pro zadani hesla
+     */
+    public void editPassword() {
+        Map<String, Object> options = new HashMap<>();
+        options.put("modal", true);
+        options.put("draggable", true);
+        options.put("resizable", true);
+        options.put("width", 1000);
+        options.put("height", 350);
+        options.put("contentWidth", 1000);
+        options.put("contentHeight", 350);
+        options.put("closeOnEscape", true);
+        // options.put("includeViewParams", true);
+        PrimeFaces.current().dialog().openDynamic("/aplikace/password.xhtml", options, null);
+    }
+
+    /**
+     * Metoda uzavre dialog se zadanim hesla - je volana ze samostatneho XHTML
+     * souboru, ve kterem je dialog
+     */
+    public void savePassword() {
+        PrimeFaces.current().dialog().closeDynamic(this.password);
+    }
+   
+    /**
+     * Metoda testuje, zda-li lze ulozit heslo
+     *
+     * @return
+     */
+    public boolean isPassBtnSaveEnabled() {
+        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
+        if (!isEnable) {
+            return false;
+        }
+//        String password = this.getUcet().getPassword();
+//        String passwordControl = this.getUcet().getPasswordControl();;
+//
+        isEnable = this.getPassword() != null && !this.getPassword().isEmpty()
+                && this.getPasswordControl() != null && !this.getPasswordControl().isEmpty()
+                && this.getPassword().equals(this.getPasswordControl());
+
+        return isEnable;
+
+    }
+
+    /**
+     * Metoda provede validaci hesla proti kontrolnimu heslu
+     * @param event Udalost s hodnotami 
+     */
+    public void validatePassword(ValueChangeEvent event) {
+        String newConfirmPass = (String) event.getNewValue();
+        if (newConfirmPass == null || newConfirmPass.isEmpty() || !this.password.equals(newConfirmPass)) {
+            FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(event.getComponent().getClientId(), msg);
+        }
+    }
+
+    public void passFromDialog(SelectEvent event) {
+        this.user.setPasswordsha512(SHA512.getSHA512(this.getPassword()));
+        this.user.setPasswordsha512(this.getPasswordHelp());
+        // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
     }
 
     /**
@@ -383,5 +461,47 @@ public class Uzivatel implements Serializable {
      */
     public void setUserParams(ArrayList<UzivatelParam> userParams) {
         this.userParams = userParams;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return the passwordControl
+     */
+    public String getPasswordControl() {
+        return passwordControl;
+    }
+
+    /**
+     * @param passwordControl the passwordControl to set
+     */
+    public void setPasswordControl(String passwordControl) {
+        this.passwordControl = passwordControl;
+    }
+
+    /**
+     * @return the passwordHelp
+     */
+    public String getPasswordHelp() {
+        return passwordHelp;
+    }
+
+    /**
+     * @param passwordHelp the passwordHelp to set
+     */
+    public void setPasswordHelp(String passwordHelp) {
+        this.passwordHelp = passwordHelp;
     }
 }
