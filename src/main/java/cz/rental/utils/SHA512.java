@@ -16,6 +16,9 @@ public class SHA512  {
     // Java program to calculate SHA-512 hash value 
 
     public static String getSHA512(String input) {
+        if (input==null) {
+            return null;
+        }
         try {
             // getInstance() method is called with algorithm SHA-512 
             MessageDigest md = MessageDigest.getInstance("SHA-512");

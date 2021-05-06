@@ -379,9 +379,9 @@ public class Uzivatel implements Serializable {
         options.put("draggable", true);
         options.put("resizable", true);
         options.put("width", 1000);
-        options.put("height", 350);
+        options.put("height", 400);
         options.put("contentWidth", 1000);
-        options.put("contentHeight", 350);
+        options.put("contentHeight", 400);
         options.put("closeOnEscape", true);
         // options.put("includeViewParams", true);
         PrimeFaces.current().dialog().openDynamic("/aplikace/password.xhtml", options, null);
