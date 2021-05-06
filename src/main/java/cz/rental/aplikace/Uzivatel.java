@@ -140,14 +140,16 @@ public class Uzivatel implements Serializable {
                 this.saveUser();
                 boolean saveUserParams = this.saveUserParams();
                 if (!saveUserParams) {
-                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení hodnot práv uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Uložení hodnot práv uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                }else{
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Uložení uživatele: " + this.user.getFullname() + " do databáze bylo úspěšné."," "));
                 }
             } catch (Exception ex) {
                 Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Uložení uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
             }
         } else {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
         }
     }
 
