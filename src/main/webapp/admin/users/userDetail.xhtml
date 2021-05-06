@@ -23,12 +23,14 @@
                     <p:outputLabel value="Popis(komentář) k uživateli:" for="@next" />
                     <p:inputText id="uzivPopis" value="#{ucet.uzivatelEdit.user.popis}" />
                 </div>
-                <div class="p-field p-col-2 p-md-2 p-sm-2">
+                <div id="idUserPassword" class="p-field p-col-6 p-md-6 p-sm-6">
                     <p:graphicImage value="/images/OK15x15.png" rendered="#{ucet.uzivatelEdit.user.passwordsha512.length()>0}" style="width:30px;vertical-align: middle;" />
                     <p:outputLabel value="Heslo #{ucet.uzivatelEdit.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" for="@previous" style="vertical-align: middle;" />    
                 </div>
-                <div class="p-field p-col-2 p-md-2 p-sm-2">
-                    <p:commandButton value="Změna hesla" />                    
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <p:commandButton value="Heslo"  actionListener="#{ucet.uzivatelEdit.editPassword}" >
+                        <p:ajax event="dialogReturn"  listener="#{ucet.uzivatelEdit.passFromDialog}" update="idUserPassword" />
+                    </p:commandButton>
                 </div>
                 <div class="p-field p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="Platí od:" for="@next" />

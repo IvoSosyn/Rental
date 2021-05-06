@@ -117,7 +117,6 @@ public class Ucet implements Serializable {
         User user = new User();
         user.setId(UUID.randomUUID());
         user.setNewEntity(true);
-        user.setPopis("Nový záznam.");
         this.users.add(user);
         System.out.println(" getUsersForAccount():" + this.users.size());
         return this.users;
