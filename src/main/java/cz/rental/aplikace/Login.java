@@ -98,7 +98,7 @@ public class Login implements Serializable {
         if (acc instanceof Account && usr instanceof User) {
 //            PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo je OK."));
             this.ucet.setAccount(acc);
-            this.ucet.getUzivatel().setUser(usr);
+            this.ucet.getUzivatel().initUzivatelByUser(usr);
             return "aplikace/evidence/evidence.xhtml";
         } else {
             PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Špatné heslo", "Nelze pokračovat, opravte stěžejní bezpečnostní údaj."));
@@ -140,9 +140,7 @@ public class Login implements Serializable {
             jr.runJasperReports(new File(jrxmlURI), new File(jsonURI), "C:\\temp\\testCesta.pdf");
         } catch (JRException | MalformedURLException | URISyntaxException | FileNotFoundException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

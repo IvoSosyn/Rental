@@ -81,10 +81,26 @@
                     <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
                     <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="EVIDENCE_EDIT" style="vertical-align: middle;"/>
                 </div>
+                <div class="p-col-6 p-md-6 p-sm-12">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('IMPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('IMPORT_MODEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="IMPORT_MODEL" style="vertical-align: middle;"/>
+                </div>
+                <div class="p-col-6 p-md-6 p-sm-12">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EXPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EXPORT_MODEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="EXPORT_MODEL" style="vertical-align: middle;"/>
+                </div>
+                <div class="p-col-6 p-md-6 p-sm-12">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('IMPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('IMPORT_DATA').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="IMPORT_DATA" style="vertical-align: middle;"/>
+                </div>
+                <div class="p-col-6 p-md-6 p-sm-12">
+                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EXPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EXPORT_DATA').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="EXPORT_DATA" style="vertical-align: middle;"/>
+                </div>
             </div>
             <div class="p-grid  p-jc-center">
                 <div class="p-col-3 p-md-3 p-sm-12">
-                    <p:commandButton value="Ulož"  actionListener="#{ucet.saveUser()}" update=":formUserTable" icon="pi pi-save"/>
+                    <p:commandButton value="Ulož" actionListener="#{ucet.uzivatelEdit.saveUzivatel()}" action="#{ucet.refreshUsers()}"  update=":formUserTable @form" icon="pi pi-save"/>
                 </div>          
             </div>
         </h:form>

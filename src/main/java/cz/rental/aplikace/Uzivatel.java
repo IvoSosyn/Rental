@@ -42,7 +42,7 @@ public class Uzivatel implements Serializable {
     static final long serialVersionUID = 42L;
 
     public static enum USER_PARAM_NAME {
-        SUPERVISOR, MODEL, MODEL_EDIT, ACCOUNT, ACCOUNT_EDIT, UZIVATEL, UZIVATEL_EDIT, EVIDENCE, EVIDENCE_EDIT
+        SUPERVISOR, MODEL, MODEL_EDIT, ACCOUNT, ACCOUNT_EDIT, UZIVATEL, UZIVATEL_EDIT, EVIDENCE, EVIDENCE_EDIT, IMPORT_MODEL, EXPORT_MODEL, IMPORT_DATA, EXPORT_DATA
     };
 
     @Inject
@@ -66,6 +66,7 @@ public class Uzivatel implements Serializable {
     @PostConstruct
     public void init() {
         String param;
+        System.out.println(" Uzivatel.init()");
         if (!(userController instanceof UserController)) {
             try {
                 userController = (UserController) InitialContext.doLookup("java:module/UserController!cz.rental.entity.UserController");
@@ -83,6 +84,7 @@ public class Uzivatel implements Serializable {
         this.user = new User();
         this.user.setNewEntity(true);
         initUserParams();
+        System.out.println(" Uzivatel.init()");
     }
 
     public Uzivatel() {
@@ -99,6 +101,9 @@ public class Uzivatel implements Serializable {
      */
     public boolean initUzivatelByUser(User user) {
         this.user = user;
+        this.password = null;
+        this.passwordControl = null;
+        this.passwordHelp = user.getPasswordhelp();
         initUserParams();
         fillUserParamsByUser();
         return false;
@@ -116,9 +121,34 @@ public class Uzivatel implements Serializable {
     public boolean getUserForAccount(Account account, String email, String passwordSHA512) {
         if (userController instanceof UserController) {
             this.user = userController.getUserForAccount(account, email, passwordSHA512);
+            this.password = null;
+            this.passwordHelp = user.getPasswordhelp();
             fillUserParamsByUser();
         }
         return (this.user instanceof User);
+    }
+
+    /**
+     * Metoda ulozi data z detailu editace uzivatele do DB vcetne jeho prav
+     */
+    public void saveUzivatel() {
+        if (this.user != null && this.user.getIdaccount() != null) {
+            try {
+                if (this.user.getPasswordsha512() == null || this.user.getPasswordsha512().isEmpty()) {
+                    this.user.setPasswordsha512(SHA512.getSHA512(""));
+                }
+                this.saveUser();
+                boolean saveUserParams = this.saveUserParams();
+                if (!saveUserParams) {
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení hodnot práv uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+            }
+        } else {
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
+        }
     }
 
     /**
@@ -126,7 +156,7 @@ public class Uzivatel implements Serializable {
      *
      * @throws Exception vyjimka, pokud ulození do DB nebude uspesne
      */
-    public void saveUser() throws Exception {
+    private void saveUser() throws Exception {
         if (!(this.user instanceof User)) {
             return;
         }
@@ -322,6 +352,10 @@ public class Uzivatel implements Serializable {
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, "Může editovat model(šablonu)", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE, "Může vidět evidenci", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE_EDIT, "Může editovat editovat evidenci", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.IMPORT_MODEL, "Může načítat(importovat) model(šablonu)", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EXPORT_MODEL, "Může ukládat(exportovat) model(šablonu)", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.IMPORT_DATA, "Může načítat(importovat) data do evidence", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EXPORT_DATA, "Může ukládat(exportovat) data z evidence", false));
     }
 
     private void fillUserParamsByUser() {
@@ -394,7 +428,7 @@ public class Uzivatel implements Serializable {
     public void savePassword() {
         PrimeFaces.current().dialog().closeDynamic(this.password);
     }
-   
+
     /**
      * Metoda testuje, zda-li lze ulozit heslo
      *
@@ -408,21 +442,20 @@ public class Uzivatel implements Serializable {
 //        String password = this.getUcet().getPassword();
 //        String passwordControl = this.getUcet().getPasswordControl();;
 //
-        isEnable = this.getPassword() != null && !this.getPassword().isEmpty()
-                && this.getPasswordControl() != null && !this.getPasswordControl().isEmpty()
-                && this.getPassword().equals(this.getPasswordControl());
-
+        isEnable = this.password != null && !this.password.isEmpty()
+                && this.passwordControl != null && !this.passwordControl.isEmpty()
+                && this.password.equals(this.passwordControl);
         return isEnable;
-
     }
 
     /**
      * Metoda provede validaci hesla proti kontrolnimu heslu
-     * @param event Udalost s hodnotami 
+     *
+     * @param event Udalost s hodnotami
      */
     public void validatePassword(ValueChangeEvent event) {
         String newConfirmPass = (String) event.getNewValue();
-        if (newConfirmPass == null || newConfirmPass.isEmpty() || !this.password.equals(newConfirmPass)) {
+        if (newConfirmPass == null || newConfirmPass.isEmpty() || this.password == null || !this.password.equals(newConfirmPass)) {
             FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(event.getComponent().getClientId(), msg);

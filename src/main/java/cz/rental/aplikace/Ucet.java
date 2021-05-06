@@ -10,18 +10,13 @@ import cz.rental.entity.AccountController;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
 import cz.rental.utils.Aplikace;
-import cz.rental.utils.SHA512;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import javax.ejb.EJB;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.primefaces.PrimeFaces;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +24,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
@@ -116,11 +110,13 @@ public class Ucet implements Serializable {
         }
         User user = new User();
         user.setId(UUID.randomUUID());
+        user.setIdaccount(this.account);
         user.setNewEntity(true);
         this.users.add(user);
         System.out.println(" getUsersForAccount():" + this.users.size());
         return this.users;
-    } 
+    }
+
     public void changePin(ActionEvent event) {
         //System.out.println("Ucet.changePin()");
         int randomPin = 0;
@@ -186,28 +182,9 @@ public class Ucet implements Serializable {
     /**
      * Metoda ulozi data z detailu editace uzivatele do DB vcetne jeho prav
      */
-    public void saveUser() {
-        if (this.uzivatelEdit != null && this.uzivatelEdit.getUser() != null) {
-            try {
-                if (this.uzivatelEdit.getUser().getIdaccount() == null) {
-                    this.uzivatelEdit.getUser().setIdaccount(this.account);
-                }
-                if (this.uzivatelEdit.getUser().getPasswordsha512().isEmpty()) {
-                    this.uzivatelEdit.getUser().setPasswordsha512(SHA512.getSHA512(""));
-                }
-                this.uzivatelEdit.saveUser();
-                boolean saveUserParams = this.uzivatelEdit.saveUserParams();
-                if (!saveUserParams) {
-                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení hodnot práv uživatele: " + this.uzivatelEdit.getUser().getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Uložení uživatele: " + this.uzivatelEdit.getUser().getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
-            }
-        } else {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
-        }
+    public String refreshUsers() {
         getUsersForAccount();
+        return null;
     }
 
     /**
@@ -270,7 +247,6 @@ public class Ucet implements Serializable {
     public void setAccount(Account account) {
         this.account = account;
     }
-
 
     /**
      * @return the email
