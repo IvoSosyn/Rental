@@ -45,17 +45,17 @@ public class UcetValidator implements Validator, Serializable {
             System.out.println("Chyba: " + msg.getSummary() + " " + msg.getDetail());
         } else if (component == null) {
             System.out.println(" Neznámá komponenta: ");
-            msg = new FacesMessage("System failed", "Systémová chyba, neznámá komponenta. ");
-        } else if (component.getClientId().contains("idAccEmail")) {
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,"System failed", "Systémová chyba, neznámá komponenta. ");
+        } else if (component.getClientId().contains("idAccEmail") || component.getClientId().contains("idUserEmail") ) {
             Pattern r = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
             Matcher m = r.matcher((String) value);
             if (!m.matches()) {
-                msg = new FacesMessage("Nesprávný formát e-mailové adresy.", "E-mail identifikuje uživatele a je to povinný údaj.");
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Nesprávný formát e-mailové adresy.", "E-mail identifikuje uživatele a je to povinný údaj.");
             }
         }
         // Vyhodit chybu, pokud je testovana polozka chybna
         if (msg != null) {
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            // msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             // FacesContext.getCurrentInstance().addMessage(component == null ? null : component.getClientId(), msg);
             throw new ValidatorException(msg);
         }

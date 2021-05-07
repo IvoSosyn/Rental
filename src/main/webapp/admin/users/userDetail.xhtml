@@ -13,15 +13,19 @@
             <div class="p-grid">
                 <div class="p-field p-field p-col-12 p-md-12 p-sm-12">
                     <p:outputLabel value="Identifikace uživatele: " for="@next" />
-                    <p:inputText id="uzivFullName" value="#{ucet.uzivatelEdit.user.fullname}" />
+                    <p:inputText id="idUserFullName" value="#{ucet.uzivatelEdit.user.fullname}"  size="100" maxlength="150"  required="true" validatorMessage="Identifikace uživatele je povinná."  />
+                    <p:message id="idUserFullNameMessage" for="@previous" />
                 </div>
                 <div class="p-field p-col-12 p-md-12 p-sm-12">
                     <p:outputLabel value="Emailová adresa uživatele:" for="@next" />
-                    <p:inputText id="uzivEmail" value="#{ucet.uzivatelEdit.user.email}" />
+                    <p:inputText id="idUserEmail" value="#{ucet.uzivatelEdit.user.email}" size="100" maxlength="150"   required="true" validator="ucetValidator" >
+                        <p:keyFilter regEx="/[a-z0-9_.-@]/i"/>  
+                    </p:inputText>
+                    <p:message id="idUserEmailMessage" for="@previous" />
                 </div>
                 <div class="p-field p-col-12 p-md-12 p-sm-12">
                     <p:outputLabel value="Popis(komentář) k uživateli:" for="@next" />
-                    <p:inputText id="uzivPopis" value="#{ucet.uzivatelEdit.user.popis}" />
+                    <p:inputText id="idUserPopis" value="#{ucet.uzivatelEdit.user.popis}" size="100" maxlength="150" />
                 </div>
                 <div class="p-field p-col-6 p-md-6 p-sm-6">
                     <p:graphicImage id="idUserPassOK" value="/images/OK15x15.png" rendered="#{ucet.uzivatelEdit.user.passwordsha512.length()>0}" style="width:30px;vertical-align: middle;" />
@@ -47,7 +51,7 @@
             <div class="p-grid  p-jc-center">
                 <div class="p-col-12" align="center">
                     <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('SUPERVISOR').popis} :"  for="@next" style="vertical-align: middle;" />
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('SUPERVISOR').value}"  valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="SUPERVISOR" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('SUPERVISOR').value}"   valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="SUPERVISOR" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
@@ -100,7 +104,7 @@
             </div>
             <div class="p-grid  p-jc-center">
                 <div class="p-col-3 p-md-3 p-sm-12">
-                    <p:commandButton value="Ulož" actionListener="#{ucet.uzivatelEdit.saveUzivatel()}" action="#{ucet.refreshUsers()}"  update=":formUserTable @form" icon="pi pi-save"/>
+                    <p:commandButton value="Ulož" ajax="true" actionListener="#{ucet.uzivatelEdit.saveUzivatel()}" action="#{ucet.refreshUsers()}"  update=":formUserTable @form" icon="pi pi-save"/>
                 </div>          
             </div>
         </h:form>

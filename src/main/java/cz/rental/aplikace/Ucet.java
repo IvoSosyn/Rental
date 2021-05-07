@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.UUID;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -23,8 +25,15 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.datepicker.DatePicker;
+import org.primefaces.component.inputtext.InputText;
+import org.primefaces.component.toggleswitch.ToggleSwitch;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -145,16 +154,26 @@ public class Ucet implements Serializable {
 
     public void onRowSelect(SelectEvent event) {
         this.uzivatelEdit.setUser(selectedUser);
+        clearFormUserDetail();
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
+        this.uzivatel=this.uzivatelEdit;
     }
 
     public void onRowUnselect(UnselectEvent event) {
         this.uzivatelEdit.setUser(selectedUser);
+        clearFormUserDetail();
         this.uzivatelEdit.initUzivatelByUser(selectedUser);
     }
 
-    public void addUser() {
+    public String addUser() {
+        DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("formUserTable:tableUserTable");
+        // dataTable.reset();
         this.selectedUser = users.get(users.size() - 1);
+        HashSet<String> selectedRowKeys = new HashSet<>(1);
+        selectedRowKeys.add(this.selectedUser.getId().toString());
+        dataTable.setSelectedRowKeys(selectedRowKeys);
+        onRowSelect(null);
+
 //        for (User user : users) {
 //            if (user.isNewEntity()) {
 //                this.selectedUser = user;
@@ -163,6 +182,7 @@ public class Ucet implements Serializable {
 //                break;
 //            }
 //        }
+        return null;
     }
 
     public void delUser() {
@@ -204,6 +224,44 @@ public class Ucet implements Serializable {
      */
     public boolean removable() {
         return this.uzivatel != null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true) && this.selectedUser != null && !this.selectedUser.isNewEntity();
+    }
+
+    public void clearFormUserDetail() {
+        UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
+//        ArrayList<String> resetIds = new ArrayList<>();
+//        resetIds.add("formUserDetail");
+//        root.resetValues(FacesContext.getCurrentInstance(), resetIds);
+        UIComponent formUserDetail = root.findComponent("formUserDetail");
+        // for JSF 2 getFacetsAndChildren instead of only JSF 1 getChildren
+        Iterator<UIComponent> children = formUserDetail.getFacetsAndChildren();
+        clearAllComponentInChilds(children);
+    }
+
+    private void clearAllComponentInChilds(Iterator<UIComponent> childrenIt) {
+
+        while (childrenIt.hasNext()) {
+            UIComponent component = childrenIt.next();
+            System.out.println("handling component " + component.getId());
+            if (component instanceof InputText) {
+                InputText com = (InputText) component;
+                com.resetValue();
+            }
+            if (component instanceof DatePicker) {
+                DatePicker com = (DatePicker) component;
+                com.resetValue();
+            }
+            if (component instanceof ToggleSwitch) {
+                ToggleSwitch com = (ToggleSwitch) component;
+                com.resetValue();
+            }
+//            if (component instanceof OutputLabel) {
+//                OutputLabel com = (OutputLabel) component;
+//                com.resetValue();
+//            }
+            clearAllComponentInChilds(component.getFacetsAndChildren());
+
+        }
+
     }
 
     /**

@@ -403,6 +403,7 @@ public class Uzivatel implements Serializable {
     }
 
     public void userParamChanged(ValueChangeEvent event) {
+        Object source = event.getSource();
         PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není zatím implementováno", "userParamChanged()"));
     }
 
@@ -410,6 +411,7 @@ public class Uzivatel implements Serializable {
      * Metoda zavola dialog (samostatny .XHTML soubor) pro zadani hesla
      */
     public void editPassword() {
+        
         Map<String, Object> options = new HashMap<>();
         options.put("modal", true);
         options.put("draggable", true);
