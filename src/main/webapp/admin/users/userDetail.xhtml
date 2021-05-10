@@ -32,7 +32,7 @@
                     <p:outputLabel id="idUserPassLabel" value="Heslo #{ucet.uzivatelEdit.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" for="@previous" style="vertical-align: middle;" />    
                 </div>
                 <div class="p-field p-col-6 p-md-6 p-sm-6">
-                    <p:commandButton value="Heslo"  actionListener="#{ucet.uzivatelEdit.editPassword()}" >
+                    <p:commandButton value="Heslo"  actionListener="#{password.editPassword(password.password,password.passwordControl,ucet.uzivatelEdit.user.passwordhelp)}" >
                         <p:ajax event="dialogReturn"  listener="#{ucet.uzivatelEdit.passFromDialog}" update="idUserPassOK idUserPassLabel" />
                     </p:commandButton>
                 </div>

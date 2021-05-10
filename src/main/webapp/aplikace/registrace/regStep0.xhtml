@@ -55,7 +55,7 @@
             <h:panelGroup>
                 <p:outputLabel  id="idAccPass" value="#{registrace.passwordMessage()}"  />
                 <p:spacer width="10" />
-                <p:commandButton value="Heslo"  actionListener="#{uzivatel.editPassword}" disabled="#{!registrace.isButtonEnable()}" >
+                <p:commandButton value="Heslo"  actionListener="#{password.editPassword(password.password,password.passwordControl,registrace.ucet.uzivatel.user.passwordhelp)}" disabled="#{!registrace.isButtonEnable()}" >
                     <p:ajax event="dialogReturn"  listener="#{registrace.passFromDialog}" update="idAccPass accPassMsg" />
                 </p:commandButton>
             </h:panelGroup>

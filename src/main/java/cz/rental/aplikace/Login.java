@@ -83,7 +83,7 @@ public class Login implements Serializable {
             this.passwordHelp = acc.getPasswordhelp();
         }
         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(facesMessageSummary, this.passwordHelp));
-        PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(facesMessageSummary, this.passwordHelp));
+        PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO,facesMessageSummary, this.passwordHelp));
     }
 
     /**

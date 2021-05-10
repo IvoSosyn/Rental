@@ -9,6 +9,7 @@ import cz.rental.aplikace.Ucet;
 import cz.rental.aplikace.Uzivatel;
 import cz.rental.entity.Typentity;
 import cz.rental.utils.Aplikace;
+import cz.rental.utils.Password;
 import cz.rental.utils.SHA512;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,6 +49,8 @@ public class Registrace implements Serializable {
 
     @Inject
     private Ucet ucet;
+    @Inject
+    private Password password;
 
     @Inject
     private ViewModelTree viewModelTree;
@@ -94,8 +97,8 @@ public class Registrace implements Serializable {
         this.ucet.getAccount().setCity("Krnov");
         this.ucet.getAccount().setPostcode("794 01");
         this.ucet.getAccount().setTelnumber("736667337");
-        this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512("daniela"));
-        this.ucet.getAccount().setPasswordhelp("d.a.n.i.e.l.a.");
+        //this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512("daniela"));
+        //this.ucet.getAccount().setPasswordhelp("d.a.n.i.e.l.a.");
         this.ucet.getAccount().setPlatiod(Aplikace.getPlatiOd());
         this.ucet.getAccount().setPlatido(Aplikace.getPlatiDo());
         // Vygenerovat novy PIN
@@ -111,8 +114,8 @@ public class Registrace implements Serializable {
         this.ucet.getUzivatel().getUser().setIdaccount(this.ucet.getAccount());
         this.ucet.getUzivatel().getUser().setFullname(this.ucet.getAccount().getFullname());
         this.ucet.getUzivatel().getUser().setEmail(this.ucet.getAccount().getEmail());
-        this.ucet.getUzivatel().setPassword("daniela");
-        this.ucet.getUzivatel().setPasswordHelp("d.a.n.i.e.l.a.");
+        password.setPassword("daniela");
+        password.setPasswordHelp("d.a.n.i.e.l.a.");
         this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
         this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
         this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
@@ -224,8 +227,8 @@ public class Registrace implements Serializable {
     
     public void passFromDialog(SelectEvent event) {
         // Ulozit heslo do uctu vlastnika Account
-        this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512(this.ucet.getUzivatel().getPassword()));
-        this.ucet.getAccount().setPasswordhelp(this.ucet.getUzivatel().getPasswordHelp());
+        this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512(password.getPassword()));
+        this.ucet.getAccount().setPasswordhelp(password.getPasswordHelp());
         // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
     }
 
@@ -454,5 +457,19 @@ public class Registrace implements Serializable {
 //    public void setSelectedModel(Typentity selectedModel) {
 //        this.selectedModel = selectedModel;
 //    }
+
+    /**
+     * @return the password
+     */
+    public Password getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(Password password) {
+        this.password = password;
+    }
 
 }

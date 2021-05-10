@@ -8,6 +8,7 @@ package cz.rental.aplikace;
 import cz.rental.entity.Account;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
+import cz.rental.utils.Password;
 import cz.rental.utils.SHA512;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -45,20 +45,18 @@ public class Uzivatel implements Serializable {
         SUPERVISOR, MODEL, MODEL_EDIT, ACCOUNT, ACCOUNT_EDIT, UZIVATEL, UZIVATEL_EDIT, EVIDENCE, EVIDENCE_EDIT, IMPORT_MODEL, EXPORT_MODEL, IMPORT_DATA, EXPORT_DATA
     };
 
+    //    @Inject
+    //    private HttpServletRequest httpRequest;
     @Inject
     private ServletContext context;
     @EJB
     private UserController userController;
+    @Inject
+    private Password password;
 
-//    @Inject
-//    private HttpServletRequest httpRequest;
     boolean debugApp = false;
     private User user = null;
     private ArrayList<UzivatelParam> userParams = new ArrayList<>();
-
-    private String password = null;
-    private String passwordControl = null;
-    private String passwordHelp = "";
 
     /**
      * Inicializace matice prav uzivatele
@@ -101,9 +99,6 @@ public class Uzivatel implements Serializable {
      */
     public boolean initUzivatelByUser(User user) {
         this.user = user;
-        this.password = null;
-        this.passwordControl = null;
-        this.passwordHelp = user.getPasswordhelp();
         initUserParams();
         fillUserParamsByUser();
         return false;
@@ -121,8 +116,6 @@ public class Uzivatel implements Serializable {
     public boolean getUserForAccount(Account account, String email, String passwordSHA512) {
         if (userController instanceof UserController) {
             this.user = userController.getUserForAccount(account, email, passwordSHA512);
-            this.password = null;
-            this.passwordHelp = user.getPasswordhelp();
             fillUserParamsByUser();
         }
         return (this.user instanceof User);
@@ -140,16 +133,16 @@ public class Uzivatel implements Serializable {
                 this.saveUser();
                 boolean saveUserParams = this.saveUserParams();
                 if (!saveUserParams) {
-                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Uložení hodnot práv uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
-                }else{
-                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Uložení uživatele: " + this.user.getFullname() + " do databáze bylo úspěšné."," "));
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Uložení hodnot práv uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                } else {
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Uložení uživatele: " + this.user.getFullname() + " do databáze bylo úspěšné.", " "));
                 }
             } catch (Exception ex) {
                 Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Uložení uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Uložení uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
             }
         } else {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Není vybrán žádný uživatel k uložení dat.", "Vyberte správného uživatele k uložení dat."));
         }
     }
 
@@ -408,67 +401,13 @@ public class Uzivatel implements Serializable {
     }
 
     /**
-     * Metoda zavola dialog (samostatny .XHTML soubor) pro zadani hesla
+     * Metoda naplni pole User hodnotami ze samostatneho formulare
+     * @param event
      */
-    public void editPassword() {
-        
-        Map<String, Object> options = new HashMap<>();
-        options.put("modal", true);
-        options.put("draggable", true);
-        options.put("resizable", true);
-        options.put("width", 1000);
-        options.put("height", 400);
-        options.put("contentWidth", 1000);
-        options.put("contentHeight", 400);
-        options.put("closeOnEscape", true);
-        // options.put("includeViewParams", true);
-        PrimeFaces.current().dialog().openDynamic("/aplikace/password.xhtml", options, null);
-    }
-
-    /**
-     * Metoda uzavre dialog se zadanim hesla - je volana ze samostatneho XHTML
-     * souboru, ve kterem je dialog
-     */
-    public void savePassword() {
-        PrimeFaces.current().dialog().closeDynamic(this.password);
-    }
-
-    /**
-     * Metoda testuje, zda-li lze ulozit heslo
-     *
-     * @return
-     */
-    public boolean isPassBtnSaveEnabled() {
-        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
-        if (!isEnable) {
-            return false;
-        }
-//        String password = this.getUcet().getPassword();
-//        String passwordControl = this.getUcet().getPasswordControl();;
-//
-        isEnable = this.password != null && !this.password.isEmpty()
-                && this.passwordControl != null && !this.passwordControl.isEmpty()
-                && this.password.equals(this.passwordControl);
-        return isEnable;
-    }
-
-    /**
-     * Metoda provede validaci hesla proti kontrolnimu heslu
-     *
-     * @param event Udalost s hodnotami
-     */
-    public void validatePassword(ValueChangeEvent event) {
-        String newConfirmPass = (String) event.getNewValue();
-        if (newConfirmPass == null || newConfirmPass.isEmpty() || this.password == null || !this.password.equals(newConfirmPass)) {
-            FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(event.getComponent().getClientId(), msg);
-        }
-    }
-
     public void passFromDialog(SelectEvent event) {
-        this.user.setPasswordsha512(SHA512.getSHA512(this.getPassword()));
-        this.user.setPasswordsha512(this.getPasswordHelp());
+        System.out.println(" Uzivatel.passFromDialog.event:"+event);
+        this.user.setPasswordsha512(SHA512.getSHA512(password.getPassword()));
+        this.user.setPasswordhelp(password.getPasswordHelp());
         // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
     }
 
@@ -503,42 +442,14 @@ public class Uzivatel implements Serializable {
     /**
      * @return the password
      */
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
     /**
      * @param password the password to set
      */
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
-    }
-
-    /**
-     * @return the passwordControl
-     */
-    public String getPasswordControl() {
-        return passwordControl;
-    }
-
-    /**
-     * @param passwordControl the passwordControl to set
-     */
-    public void setPasswordControl(String passwordControl) {
-        this.passwordControl = passwordControl;
-    }
-
-    /**
-     * @return the passwordHelp
-     */
-    public String getPasswordHelp() {
-        return passwordHelp;
-    }
-
-    /**
-     * @param passwordHelp the passwordHelp to set
-     */
-    public void setPasswordHelp(String passwordHelp) {
-        this.passwordHelp = passwordHelp;
     }
 }
