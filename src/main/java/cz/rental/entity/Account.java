@@ -72,7 +72,6 @@ public class Account extends EntitySuperClassNajem implements Serializable {
     private String telnumber;
 
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 2147483647)
     @Column(nullable = false, length = 2147483647)
     private String passwordsha512;

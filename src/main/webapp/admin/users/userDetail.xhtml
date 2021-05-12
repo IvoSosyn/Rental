@@ -13,36 +13,36 @@
             <div class="p-grid">
                 <div class="p-field p-field p-col-12 p-md-12 p-sm-12">
                     <p:outputLabel value="Identifikace uživatele: " for="@next" />
-                    <p:inputText id="idUserFullName" value="#{ucet.uzivatelEdit.user.fullname}"  size="100" maxlength="150"  required="true" validatorMessage="Identifikace uživatele je povinná."  />
+                    <p:inputText id="idUserFullName" value="#{uzivatel.user.fullname}"  size="100" maxlength="150"  required="true" validatorMessage="Identifikace uživatele je povinná."  />
                     <p:message id="idUserFullNameMessage" for="@previous" />
                 </div>
                 <div class="p-field p-col-12 p-md-12 p-sm-12">
                     <p:outputLabel value="Emailová adresa uživatele:" for="@next" />
-                    <p:inputText id="idUserEmail" value="#{ucet.uzivatelEdit.user.email}" size="100" maxlength="150"   required="true" validator="ucetValidator" >
+                    <p:inputText id="idUserEmail" value="#{uzivatel.user.email}" size="100" maxlength="150"   required="true" validator="ucetValidator"  validatorMessage="E-mail uživatele je povinná." >
                         <p:keyFilter regEx="/[a-z0-9_.-@]/i"/>  
                     </p:inputText>
                     <p:message id="idUserEmailMessage" for="@previous" />
                 </div>
                 <div class="p-field p-col-12 p-md-12 p-sm-12">
                     <p:outputLabel value="Popis(komentář) k uživateli:" for="@next" />
-                    <p:inputText id="idUserPopis" value="#{ucet.uzivatelEdit.user.popis}" size="100" maxlength="150" />
+                    <p:inputText id="idUserPopis" value="#{uzivatel.user.popis}" size="100" maxlength="150" />
                 </div>
                 <div class="p-field p-col-6 p-md-6 p-sm-6">
-                    <p:graphicImage id="idUserPassOK" value="/images/OK15x15.png" rendered="#{ucet.uzivatelEdit.user.passwordsha512.length()>0}" style="width:30px;vertical-align: middle;" />
-                    <p:outputLabel id="idUserPassLabel" value="Heslo #{ucet.uzivatelEdit.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" for="@previous" style="vertical-align: middle;" />    
+                    <p:graphicImage id="idUserPassOK" value="/images/OK15x15.png" rendered="#{uzivatel.user.passwordsha512.length()>0}" style="width:30px;vertical-align: middle;" />
+                    <p:outputLabel id="idUserPassLabel" value="Heslo #{uzivatel.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" for="@previous" style="vertical-align: middle;" />    
                 </div>
                 <div class="p-field p-col-6 p-md-6 p-sm-6">
-                    <p:commandButton value="Heslo"  actionListener="#{password.editPassword(password.password,password.passwordControl,ucet.uzivatelEdit.user.passwordhelp)}" >
-                        <p:ajax event="dialogReturn"  listener="#{ucet.uzivatelEdit.passFromDialog}" update="idUserPassOK idUserPassLabel" />
+                    <p:commandButton value="Heslo"  actionListener="#{password.editPassword(password.password,password.passwordControl,uzivatel.user.passwordhelp)}" >
+                        <p:ajax event="dialogReturn"  listener="#{uzivatel.passFromDialog}" update="idUserPassOK idUserPassLabel" />
                     </p:commandButton>
                 </div>
                 <div class="p-field p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="Platí od:" for="@next" />
-                    <p:datePicker value="#{ucet.uzivatelEdit.user.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" />
+                    <p:datePicker value="#{uzivatel.user.platiod}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo OD kdy položka platí" />
                 </div>
                 <div class="p-field p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="Platí do:" for="@next" />
-                    <p:datePicker value="#{ucet.uzivatelEdit.user.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo DO kdy položka platí" />
+                    <p:datePicker value="#{uzivatel.user.platido}" locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  title=" Prázdné pole(neomezeně) nebo DO kdy položka platí" />
                 </div>
             </div>
             <ui:remove>
@@ -50,61 +50,61 @@
             </ui:remove>
             <div class="p-grid  p-jc-center">
                 <div class="p-col-12" align="center">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('SUPERVISOR').popis} :"  for="@next" style="vertical-align: middle;" />
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('SUPERVISOR').value}"   valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="SUPERVISOR" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('SUPERVISOR').popis} :"  for="@next" style="vertical-align: middle;" />
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('SUPERVISOR').value}"   valueChangeListener="#{uzivatel.userParamChanged}" label="SUPERVISOR" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('MODEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="MODEL" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('MODEL').value}" valueChangeListener="#{uzivatel.userParamChanged}" label="MODEL" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value=" #{ucet.uzivatelEdit.getUserParm('MODEL_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('MODEL_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="MODEL_EDIT" style="vertical-align: middle;"/>
+                    <p:outputLabel value=" #{uzivatel.getUserParm('MODEL_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('MODEL_EDIT').value}" valueChangeListener="#{uzivatel.userParamChanged}" label="MODEL_EDIT" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('ACCOUNT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('ACCOUNT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="ACCOUNT" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('ACCOUNT').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('ACCOUNT').value}" valueChangeListener="#{uzivatel.userParamChanged}" label="ACCOUNT" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value=" #{ucet.uzivatelEdit.getUserParm('ACCOUNT_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('ACCOUNT_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="ACCOUNT_EDIT" style="vertical-align: middle;"/>
+                    <p:outputLabel value=" #{uzivatel.getUserParm('ACCOUNT_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('ACCOUNT_EDIT').value}" valueChangeListener="#{uzivatel.userParamChanged}" label="ACCOUNT_EDIT" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="UZIVATEL" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('UZIVATEL').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('UZIVATEL').value}" valueChangeListener="#{uzivatel.userParamChanged}"  label="UZIVATEL" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('UZIVATEL_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="UZIVATEL_EDIT" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('UZIVATEL_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('UZIVATEL_EDIT').value}" valueChangeListener="#{uzivatel.userParamChanged}" label="UZIVATEL_EDIT" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}" label="EVIDENCE" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('EVIDENCE').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('EVIDENCE').value}" valueChangeListener="#{uzivatel.userParamChanged}" label="EVIDENCE" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EVIDENCE_EDIT').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="EVIDENCE_EDIT" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('EVIDENCE_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('EVIDENCE_EDIT').value}" valueChangeListener="#{uzivatel.userParamChanged}"  label="EVIDENCE_EDIT" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('IMPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('IMPORT_MODEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="IMPORT_MODEL" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('IMPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('IMPORT_MODEL').value}" valueChangeListener="#{uzivatel.userParamChanged}"  label="IMPORT_MODEL" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EXPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EXPORT_MODEL').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="EXPORT_MODEL" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('EXPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('EXPORT_MODEL').value}" valueChangeListener="#{uzivatel.userParamChanged}"  label="EXPORT_MODEL" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('IMPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('IMPORT_DATA').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="IMPORT_DATA" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('IMPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('IMPORT_DATA').value}" valueChangeListener="#{uzivatel.userParamChanged}"  label="IMPORT_DATA" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
-                    <p:outputLabel value="#{ucet.uzivatelEdit.getUserParm('EXPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{ucet.uzivatelEdit.getUserParm('EXPORT_DATA').value}" valueChangeListener="#{ucet.uzivatelEdit.userParamChanged}"  label="EXPORT_DATA" style="vertical-align: middle;"/>
+                    <p:outputLabel value="#{uzivatel.getUserParm('EXPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{uzivatel.getUserParm('EXPORT_DATA').value}" valueChangeListener="#{uzivatel.userParamChanged}"  label="EXPORT_DATA" style="vertical-align: middle;"/>
                 </div>
             </div>
             <div class="p-grid  p-jc-center">
                 <div class="p-col-3 p-md-3 p-sm-12">
-                    <p:commandButton value="Ulož" ajax="true" actionListener="#{ucet.uzivatelEdit.saveUzivatel()}" action="#{ucet.refreshUsers()}"  update=":formUserTable @form" icon="pi pi-save"/>
+                    <p:commandButton value="Ulož" ajax="true" actionListener="#{uzivatel.saveUzivatel()}" action="#{ucet.refreshUsers()}"  update=":formUserTable @form" icon="pi pi-save"/>
                 </div>          
             </div>
         </h:form>

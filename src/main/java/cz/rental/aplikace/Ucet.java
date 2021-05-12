@@ -58,7 +58,6 @@ public class Ucet implements Serializable {
     private AccountController accController;
     @EJB
     private UserController userController;
-    @Inject
     private Uzivatel uzivatel;
     private Account account;
     private Integer pin = 0;
@@ -67,7 +66,6 @@ public class Ucet implements Serializable {
     private String accountDir = null;
     private ArrayList<User> users = new ArrayList();
     private User selectedUser;
-    private Uzivatel uzivatelEdit;
 
     @PostConstruct
     public void init() {
@@ -76,8 +74,8 @@ public class Ucet implements Serializable {
         if (!(uzivatel instanceof Uzivatel)) {
             this.uzivatel = new Uzivatel();
         }
-        uzivatelEdit = new Uzivatel();
-        uzivatelEdit.initUzivatelByUser(new User());
+        uzivatel = new Uzivatel();
+        uzivatel.initUzivatelByUser(new User());
     }
 
     /**
@@ -153,16 +151,15 @@ public class Ucet implements Serializable {
     }
 
     public void onRowSelect(SelectEvent event) {
-        this.uzivatelEdit.setUser(selectedUser);
+        this.uzivatel.setUser(selectedUser);
         clearFormUserDetail();
-        this.uzivatelEdit.initUzivatelByUser(selectedUser);
-        this.uzivatel=this.uzivatelEdit;
+        this.uzivatel.initUzivatelByUser(selectedUser);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        this.uzivatelEdit.setUser(selectedUser);
+        this.uzivatel.setUser(selectedUser);
         clearFormUserDetail();
-        this.uzivatelEdit.initUzivatelByUser(selectedUser);
+        this.uzivatel.initUzivatelByUser(selectedUser);
     }
 
     public String addUser() {
@@ -177,8 +174,8 @@ public class Ucet implements Serializable {
 //        for (User user : users) {
 //            if (user.isNewEntity()) {
 //                this.selectedUser = user;
-//                this.uzivatelEdit.setUser(selectedUser);
-//                this.uzivatelEdit.initUzivatelByUser(selectedUser);
+//                this.uzivatel.setUser(selectedUser);
+//                this.uzivatel.initUzivatelByUser(selectedUser);
 //                break;
 //            }
 //        }
@@ -446,17 +443,4 @@ public class Ucet implements Serializable {
         this.users = users;
     }
 
-    /**
-     * @return the uzivatelEdit
-     */
-    public Uzivatel getUzivatelEdit() {
-        return uzivatelEdit;
-    }
-
-    /**
-     * @param uzivatelEdit the uzivatelEdit to set
-     */
-    public void setUzivatelEdit(Uzivatel uzivatelEdit) {
-        this.uzivatelEdit = uzivatelEdit;
-    }
 }

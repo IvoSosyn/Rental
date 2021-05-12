@@ -34,10 +34,10 @@ public class JpaController implements Serializable {
      */
     public void create(EntitySuperClassNajem entita) throws PreexistingEntityException, Exception {
         try {
-            getEm().persist(entita);
-            getEm().flush();
-            if (!getEm().isJoinedToTransaction()) {
-                getEm().joinTransaction();
+            this.em.persist(entita);
+            this.em.flush();
+            if (!this.em.isJoinedToTransaction()) {
+                this.em.joinTransaction();
             }
 
         } catch (Exception ex) {
@@ -60,8 +60,8 @@ public class JpaController implements Serializable {
      */
     public void edit(EntitySuperClassNajem entita) throws NonexistentEntityException, Exception {
         try {
-            entita = getEm().merge(entita);
-            getEm().flush();
+            entita = this.em.merge(entita);
+            this.em.flush();
             if (!getEm().isJoinedToTransaction()) {
                 getEm().joinTransaction();
             }
@@ -90,10 +90,10 @@ public class JpaController implements Serializable {
                 throw new NonexistentEntityException("Entita " + entita + " NEexistuje v databázi.");
             } else {
                 try {
-                    getEm().remove(getEm().merge(entita));
-                    getEm().flush();
-                    if (!getEm().isJoinedToTransaction()) {
-                        getEm().joinTransaction();
+                    this.em.remove(getEm().merge(entita));
+                    this.em.flush();
+                    if (!this.em.isJoinedToTransaction()) {
+                        this.em.joinTransaction();
                     }
                 } catch (Exception ex) {
                     Logger.getLogger(JpaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,7 +111,7 @@ public class JpaController implements Serializable {
      */
     public EntitySuperClassNajem findEntita(EntitySuperClassNajem entita) {
         try {
-            return (EntitySuperClassNajem) getEm().find((Class) entita.getClass(), entita.getId());
+            return (EntitySuperClassNajem) this.em.find((Class) entita.getClass(), entita.getId());
         } finally {
         }
     }
@@ -120,7 +120,7 @@ public class JpaController implements Serializable {
      * @return the em
      */
     public EntityManager getEm() {
-        return em;
+        return this.em;
     }
 
     /**

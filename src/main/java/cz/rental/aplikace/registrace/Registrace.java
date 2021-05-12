@@ -64,7 +64,6 @@ public class Registrace implements Serializable {
     private ArrayList<Typentity> models = new ArrayList<>(10);
 //    private Typentity selectedModel = null;
 
-
     @PostConstruct
     public void init() {
 //        try {
@@ -224,24 +223,25 @@ public class Registrace implements Serializable {
 //        this.ucet.getAccount().setIdmodel(selectedModel);
         //PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(" Není dosud implementováno.","Není dosud implementováno."));
     }
-    
+
     public void passFromDialog(SelectEvent event) {
         // Ulozit heslo do uctu vlastnika Account
         this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512(password.getPassword()));
         this.ucet.getAccount().setPasswordhelp(password.getPasswordHelp());
+        this.ucet.getUzivatel().getUser().setPasswordsha512(SHA512.getSHA512(password.getPassword()));
+        this.ucet.getUzivatel().getUser().setPasswordhelp(password.getPasswordHelp());
         // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
     }
 
-    
     /**
      * Metoda vraci kratkou infomaci o naplneni Account.passwordsha512
      *
      * @return hlaseni
      */
     public String passwordMessage() {
-        if (this.getUcet().getAccount().getPasswordsha512() instanceof String && !this.getUcet().getAccount().getPasswordsha512().isEmpty()) {
-            if (this.getUcet().getAccount().getPasswordhelp() instanceof String && !this.getUcet().getAccount().getPasswordhelp().isEmpty()) {
-                return "Nápověda hesla: " + this.getUcet().getAccount().getPasswordhelp().trim();
+        if (this.ucet.getUzivatel().getUser().getPasswordsha512() instanceof String && !this.ucet.getUzivatel().getUser().getPasswordsha512().isEmpty()) {
+            if (this.ucet.getUzivatel().getUser().getPasswordhelp() instanceof String && !this.ucet.getUzivatel().getUser().getPasswordhelp().isEmpty()) {
+                return "Nápověda hesla: " + this.ucet.getUzivatel().getUser().getPasswordhelp().trim();
             } else {
                 return "Máte uložené heslo.";
             }
@@ -256,52 +256,63 @@ public class Registrace implements Serializable {
      */
     public String createAccount() {
         boolean isOk = true;
-        // Uloz ucet do DB
-        try {
+        // Data nového účtu do DB
+        if (isOk) {
+            // Uloz ucet do DB
+            try {
 //            this.ucet.getAccount().setIdmodel(this.selectedModel);
-            this.ucet.saveAccount();
-        } catch (Exception ex) {
-            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
-            isOk = false;
+                this.ucet.saveAccount();
+            } catch (Exception ex) {
+                Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
+                isOk = false;
+            }
         }
-        try {
+        if (isOk) {
             // Novy uzivatel do DB - stejny jako registrator uctu
-            this.ucet.getUzivatel().getUser().setIdaccount(this.ucet.getAccount());
-            this.ucet.getUzivatel().getUser().setFullname(this.ucet.getAccount().getFullname());
-            this.ucet.getUzivatel().getUser().setEmail(this.ucet.getAccount().getEmail());
-            this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
-            this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
-            this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
-            this.ucet.getUzivatel().saveUzivatel();
-        } catch (Exception ex) {
-            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage()));
-            isOk = false;
+            try {
+                this.ucet.getUzivatel().getUser().setIdaccount(this.ucet.getAccount());
+                this.ucet.getUzivatel().getUser().setFullname(this.ucet.getAccount().getFullname());
+                this.ucet.getUzivatel().getUser().setEmail(this.ucet.getAccount().getEmail());
+                this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
+                this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
+                this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
+                this.ucet.getUzivatel().saveUzivatel();
+            } catch (Exception ex) {
+                Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage()));
+                isOk = false;
+            }
         }
-        // Kopie modelu(sablony)
-        try {
-            this.typentityController.copyTypentity(this.ucet.getAccount().getIdmodel(), this.ucet.getAccount());
-        } catch (Exception ex) {
-            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání modelu(šablony) účtu. Opakujte později.", ex.getMessage()));
-            isOk = false;
+        if (isOk) {
+            // Kopie modelu(sablony)
+            try {
+                this.typentityController.copyTypentity(this.ucet.getAccount().getIdmodel(), this.ucet.getAccount());
+            } catch (Exception ex) {
+                Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání modelu(šablony) účtu. Opakujte později.", ex.getMessage()));
+                isOk = false;
+            }
         }
-        // Zaloz adresare k uctu a vstupni 'index.xhtml'
-        try {
-            this.createAccountDir();
-        } catch (Exception ex) {
-            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage()));
-            isOk = false;
+        if (isOk) {
+            // Zaloz adresare k uctu a vstupni 'index.xhtml'
+            try {
+                this.createAccountDir();
+            } catch (Exception ex) {
+                Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage()));
+                isOk = false;
+            }
         }
-        // Napln XHTML soubory daty ze sablony
-        try {
-            this.createAccountHTML();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při plnění a konfiguraci souborů k účtu. Opakujte později.", ex.getMessage()));
-            isOk = false;
+        if (isOk) {
+            // Napln XHTML soubory daty ze sablony
+            try {
+                this.createAccountHTML();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
+                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při plnění a konfiguraci souborů k účtu. Opakujte později.", ex.getMessage()));
+                isOk = false;
+            }
         }
         if (isOk) {
             return "/aplikace/evidence/evidence.xhtml";
@@ -457,7 +468,6 @@ public class Registrace implements Serializable {
 //    public void setSelectedModel(Typentity selectedModel) {
 //        this.selectedModel = selectedModel;
 //    }
-
     /**
      * @return the password
      */
