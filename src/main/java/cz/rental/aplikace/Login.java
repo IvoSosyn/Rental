@@ -50,6 +50,8 @@ public class Login implements Serializable {
     private UserController userController;
     @Inject
     private Ucet ucet;
+    @Inject
+    private Uzivatel uzivatel;
 
     private Integer pin = 0;
     private String email = null;
@@ -99,6 +101,7 @@ public class Login implements Serializable {
 //            PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo je OK."));
             this.ucet.setAccount(acc);
             this.ucet.getUzivatel().initUzivatelByUser(usr);
+            this.uzivatel.initUzivatelByUser(usr);
             return "aplikace/evidence/evidence.xhtml";
         } else {
             PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Špatné heslo", "Nelze pokračovat, opravte stěžejní bezpečnostní údaj."));
@@ -199,5 +202,19 @@ public class Login implements Serializable {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * @return the uzivatel
+     */
+    public Uzivatel getUzivatel() {
+        return uzivatel;
+    }
+
+    /**
+     * @param uzivatel the uzivatel to set
+     */
+    public void setUzivatel(Uzivatel uzivatel) {
+        this.uzivatel = uzivatel;
     }
 }

@@ -29,7 +29,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.inject.Inject;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.datepicker.DatePicker;
 import org.primefaces.component.inputtext.InputText;
@@ -74,8 +73,8 @@ public class Ucet implements Serializable {
         if (!(uzivatel instanceof Uzivatel)) {
             this.uzivatel = new Uzivatel();
         }
-        uzivatel = new Uzivatel();
-        uzivatel.initUzivatelByUser(new User());
+        uzivatel = new Uzivatel();                        
+        uzivatel.initUzivatelByUser(uzivatel.getUser());
     }
 
     /**

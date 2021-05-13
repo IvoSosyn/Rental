@@ -13,8 +13,6 @@ import cz.rental.utils.SHA512;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -64,7 +62,7 @@ public class Uzivatel implements Serializable {
     @PostConstruct
     public void init() {
         String param;
-        System.out.println(" Uzivatel.init()");
+        System.out.println("==Start== Uzivatel.init()");
         if (!(userController instanceof UserController)) {
             try {
                 userController = (UserController) InitialContext.doLookup("java:module/UserController!cz.rental.entity.UserController");
@@ -72,17 +70,19 @@ public class Uzivatel implements Serializable {
                 Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (context == null || userController == null) {
+        if (userController == null) {
             return;
         }
-        param = context.getInitParameter("javax.faces.PROJECT_STAGE");
-        if (param != null && param.toUpperCase().contains("DEBUG")) {
-            debugApp = true;
+        if (context != null) {            
+            param = context.getInitParameter("javax.faces.PROJECT_STAGE");
+            if (param != null && param.toUpperCase().contains("DEBUG")) {
+                debugApp = true;
+            }
         }
         this.user = new User();
         this.user.setNewEntity(true);
         initUserParams();
-        System.out.println(" Uzivatel.init()");
+        System.out.println("==End== Uzivatel.init()");
     }
 
     public Uzivatel() {
@@ -402,10 +402,11 @@ public class Uzivatel implements Serializable {
 
     /**
      * Metoda naplni pole User hodnotami ze samostatneho formulare
+     *
      * @param event
      */
     public void passFromDialog(SelectEvent event) {
-        System.out.println(" Uzivatel.passFromDialog.event:"+event);
+        System.out.println(" Uzivatel.passFromDialog.event:" + event);
         this.user.setPasswordsha512(SHA512.getSHA512(password.getPassword()));
         this.user.setPasswordhelp(password.getPasswordHelp());
         // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));

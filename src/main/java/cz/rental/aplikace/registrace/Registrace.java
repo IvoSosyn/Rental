@@ -256,6 +256,7 @@ public class Registrace implements Serializable {
      */
     public String createAccount() {
         boolean isOk = true;
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Účet pro: " + this.ucet.getAccount().getFullname(), " byl úspěšně založen.");
         // Data nového účtu do DB
         if (isOk) {
             // Uloz ucet do DB
@@ -264,7 +265,7 @@ public class Registrace implements Serializable {
                 this.ucet.saveAccount();
             } catch (Exception ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při ukládání účtu. Opakujte později.", ex.getMessage()));
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při ukládání účtu. Opakujte později.", ex.getMessage());
                 isOk = false;
             }
         }
@@ -280,7 +281,7 @@ public class Registrace implements Serializable {
                 this.ucet.getUzivatel().saveUzivatel();
             } catch (Exception ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage()));
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage());
                 isOk = false;
             }
         }
@@ -290,7 +291,7 @@ public class Registrace implements Serializable {
                 this.typentityController.copyTypentity(this.ucet.getAccount().getIdmodel(), this.ucet.getAccount());
             } catch (Exception ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání modelu(šablony) účtu. Opakujte později.", ex.getMessage()));
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při zakládání modelu(šablony) účtu. Opakujte později.", ex.getMessage());
                 isOk = false;
             }
         }
@@ -300,7 +301,7 @@ public class Registrace implements Serializable {
                 this.createAccountDir();
             } catch (Exception ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage()));
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při zakládání souborů a adresářů k účtu. Opakujte později.", ex.getMessage());
                 isOk = false;
             }
         }
@@ -310,10 +311,11 @@ public class Registrace implements Serializable {
                 this.createAccountHTML();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Chyba při plnění a konfiguraci souborů k účtu. Opakujte později.", ex.getMessage()));
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při plnění a konfiguraci souborů k účtu. Opakujte později.", ex.getMessage());
                 isOk = false;
             }
         }
+        PrimeFacesContext.getCurrentInstance().addMessage(null, message);
         if (isOk) {
             return "/aplikace/evidence/evidence.xhtml";
         } else {
