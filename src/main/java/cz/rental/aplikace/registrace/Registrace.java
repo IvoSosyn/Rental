@@ -130,6 +130,8 @@ public class Registrace implements Serializable {
      */
     public boolean isRegistracniPanelEnable(int seletedStep) {
         boolean isEnable = true;
+        UIComponent facet = FacesContext.getCurrentInstance().getViewRoot().getFacet("formReg0Kontakt:idAccEmail");
+
         return isEnable;
     }
 
@@ -165,7 +167,11 @@ public class Registrace implements Serializable {
     }
 
     public boolean isNextEnable() {
-        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed() && !this.ucet.getAccount().getEmail().isEmpty();
+        boolean isEnable = true && !FacesContext.getCurrentInstance().isValidationFailed()
+                && this.ucet.getAccount().getEmail() != null
+                && !this.ucet.getAccount().getEmail().isEmpty()
+                && this.ucet.getUzivatel().getUser().getPasswordsha512() != null
+                && !this.ucet.getUzivatel().getUser().getPasswordsha512().isEmpty();
         return isEnable;
     }
 

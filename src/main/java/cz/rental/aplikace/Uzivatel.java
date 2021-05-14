@@ -25,7 +25,6 @@ import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
-import org.primefaces.PrimeFaces;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 

@@ -29,6 +29,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.datepicker.DatePicker;
 import org.primefaces.component.inputtext.InputText;
@@ -57,6 +58,7 @@ public class Ucet implements Serializable {
     private AccountController accController;
     @EJB
     private UserController userController;
+    @Inject
     private Uzivatel uzivatel;
     private Account account;
     private Integer pin = 0;
