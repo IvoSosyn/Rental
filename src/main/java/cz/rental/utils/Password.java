@@ -34,6 +34,7 @@ public class Password implements Serializable {
     /**
      * Inicializace matice prav uzivatele
      * 
+     * 
      */
     @PostConstruct
     public void init() {
