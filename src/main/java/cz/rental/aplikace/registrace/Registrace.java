@@ -231,6 +231,9 @@ public class Registrace implements Serializable {
     }
 
     public void passFromDialog(SelectEvent event) {
+        Password pass = (Password) event.getObject();
+        System.out.println(" Registrace.pass.getPassword():" + pass.getPassword());
+        System.out.println(" Registrace.password.getPassword():" + password.getPassword()+" (bean)");
         // Ulozit heslo do uctu vlastnika Account
         this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512(password.getPassword()));
         this.ucet.getAccount().setPasswordhelp(password.getPasswordHelp());

@@ -107,7 +107,7 @@ public class ModelDetail implements Serializable {
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        System.out.println("ModelDetail.onRowUnselect  event.getObject()=" + event.getObject());
+        System.out.println("ModelDetail.onRowUnselect#event.getObject()=" + event.getObject());
         this.attribute = new Attribute();
     }
 

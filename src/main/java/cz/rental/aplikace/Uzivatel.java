@@ -72,7 +72,7 @@ public class Uzivatel implements Serializable {
         if (userController == null) {
             return;
         }
-        if (context != null) {            
+        if (context != null) {
             param = context.getInitParameter("javax.faces.PROJECT_STAGE");
             if (param != null && param.toUpperCase().contains("DEBUG")) {
                 debugApp = true;
@@ -405,9 +405,10 @@ public class Uzivatel implements Serializable {
      * @param event
      */
     public void passFromDialog(SelectEvent event) {
-        System.out.println(" Uzivatel.passFromDialog.event:" + event);
-        this.user.setPasswordsha512(SHA512.getSHA512(password.getPassword()));
-        this.user.setPasswordhelp(password.getPasswordHelp());
+        // System.out.println(" Uzivatel.passFromDialog.event:" + event);
+        Password pass = (Password) event.getObject();
+        this.user.setPasswordsha512(SHA512.getSHA512(pass.getPassword()));
+        this.user.setPasswordhelp(pass.getPasswordHelp());
         // PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Heslo:", event.getObject().toString()));
     }
 
@@ -452,4 +453,5 @@ public class Uzivatel implements Serializable {
     public void setPassword(Password password) {
         this.password = password;
     }
+
 }

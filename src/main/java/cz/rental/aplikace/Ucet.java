@@ -239,7 +239,7 @@ public class Ucet implements Serializable {
 
         while (childrenIt.hasNext()) {
             UIComponent component = childrenIt.next();
-            System.out.println("handling component " + component.getId());
+            //System.out.println("handling component " + component.getId());
             if (component instanceof InputText) {
                 InputText com = (InputText) component;
                 com.resetValue();
