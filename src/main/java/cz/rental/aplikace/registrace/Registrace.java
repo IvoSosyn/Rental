@@ -66,11 +66,6 @@ public class Registrace implements Serializable {
 
     @PostConstruct
     public void init() {
-//        try {
-//            uzivatel = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.Uzivatel");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         // Nacist root dir pro soubory uctu, pokud je zadan ve WEB.XML  napr. na Linuxu
         //  <context-param>
         //      <param-name>cz.rental.accounts.root.dir</param-name>

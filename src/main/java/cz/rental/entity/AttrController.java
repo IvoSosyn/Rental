@@ -43,15 +43,6 @@ public class AttrController extends JpaController {
 
     @PostConstruct
     public void init() {
-//        try {
-//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }
-
-    public AttrController() {
     }
 
     /**

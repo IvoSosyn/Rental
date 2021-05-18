@@ -84,11 +84,7 @@ public class Uzivatel implements Serializable {
         System.out.println("==End== Uzivatel.init()");
     }
 
-    public Uzivatel() {
-        init();
-    }
-
-    /**
+     /**
      * Metoda vytvori matici parametru s default hodnotami a nasledne ji naplni
      * hodnotami pro konkretniho User z DB
      *

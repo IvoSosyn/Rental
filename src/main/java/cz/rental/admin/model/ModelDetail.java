@@ -54,12 +54,6 @@ public class ModelDetail implements Serializable {
     // "Insert Code > Add Business Method")
     @PostConstruct
     public void init() {
-//        try {
-//            ucet = (Ucet) InitialContext.doLookup("java:module/Account!cz.rental.aplikace.registrace.Account");
-//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.User");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-//        }        
 
         /**
          * Nacist ID editacnich komponent formulare s detailem Attribute k

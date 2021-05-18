@@ -72,11 +72,7 @@ public class Ucet implements Serializable {
     public void init() {
         this.account = new Account();
         this.account.setNewEntity(true);
-        if (!(uzivatel instanceof Uzivatel)) {
-            this.uzivatel = new Uzivatel();
-        }
-        uzivatel = new Uzivatel();                        
-        uzivatel.initUzivatelByUser(uzivatel.getUser());
+        this.uzivatel.initUzivatelByUser(this.uzivatel.getUser());
     }
 
     /**
@@ -102,6 +98,7 @@ public class Ucet implements Serializable {
         }
         if (this.account instanceof Account) {
             getUsersForAccount();
+            ucetExist = true;
         }
         return ucetExist;
     }

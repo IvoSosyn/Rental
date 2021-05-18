@@ -5,7 +5,6 @@
  */
 package cz.rental.entity;
 
-import cz.rental.aplikace.Uzivatel;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -13,7 +12,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import static javax.ejb.TransactionManagementType.CONTAINER;
-import javax.inject.Inject;
 import javax.persistence.Query;
 
 /**
@@ -27,17 +25,8 @@ public class AccountController extends JpaController {
 
     private Query query = null;
 
-    @Inject
-    Uzivatel user;
-
     @PostConstruct
     public void init() {
-//        try {
-//
-//            user = (Uzivatel) InitialContext.doLookup("java:module/User!cz.rental.aplikace.Uzivatel");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     /**

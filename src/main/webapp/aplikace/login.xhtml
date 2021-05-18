@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <style type="text/css">
         body .ui-steps .ui-steps-item {
@@ -104,9 +105,10 @@
             <p:panel id="panelLoginReg" header="Nemáte ještě účet ?" >
                 <p:outputLabel value="Zaregistrujte se: " for="@next" />
                 <p:commandLink ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{login.actionRegistrace()}"  style="margin-right:20px;" />        
-<!--
-                <p:commandButton ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{login.actionRegistrace()}"  style="margin-right:20px;" />        
--->
+                <ui:remove>
+                    === Vizualizace - nová registrace tlačítkem, míto odkazem ===
+                    <p:commandButton ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{login.actionRegistrace()}"  style="margin-right:20px;" />        
+                </ui:remove>
             </p:panel>
         </h:form>
     </h:body>  
