@@ -8,6 +8,7 @@ package cz.rental.utils;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -26,21 +27,21 @@ import org.primefaces.event.SelectEvent;
 public class Password implements Serializable {
 
     static final long serialVersionUID = 42L;
-
+    private double passwordID = 0.0;
+    
     private String password = null;
     private String passwordControl = null;
     private String passwordHelp = "";
 
     /**
      * Inicializace matice prav uzivatele
-     * 
-     * 
+     *
+     *
      */
     @PostConstruct
     public void init() {
-    }
-
-    public Password() {
+        this.passwordID=Math.random()*1000;
+        System.out.println(" Password.passwordID: "+this.passwordID);
     }
 
     /**
@@ -157,5 +158,19 @@ public class Password implements Serializable {
      */
     public void setPasswordHelp(String passwordHelp) {
         this.passwordHelp = passwordHelp;
+    }
+
+    /**
+     * @return the passwordID
+     */
+    public double getPasswordID() {
+        return passwordID;
+    }
+
+    /**
+     * @param passwordID the passwordID to set
+     */
+    public void setPasswordID(double passwordID) {
+        this.passwordID = passwordID;
     }
 }
