@@ -39,7 +39,7 @@ public class Password implements Serializable {
     @PostConstruct
     public void init() {
         this.passwordID = Math.random() * 1000;
-        System.out.println(" Password.passwordID: " + this.passwordID);
+        System.out.println(" init() Password.passwordID: " + this.passwordID);
     }
 
     /**
@@ -69,43 +69,16 @@ public class Password implements Serializable {
 
     /**
      * Metoda uzavre dialog se zadanim hesla - je volana ze samostatneho XHTML
-     * souboru, ve kterem je dialog
-     *
-     * @return vzdy vraci null - nepresmerovava na jinou strnku
+     * souboru, ve kterem je dialog vzdy vraci null - nepresmerovava na jinou
+     * strnku
      */
-    public boolean savePassword() {
-        boolean ok=false;
-        if (this.password == null || this.password.isEmpty()) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Heslo je povinný údaj.", "Doplňte hodnotu prosím-minimálně 4 znaky.");
-            FacesContext.getCurrentInstance().addMessage(":formPass:passMsg", msg);
-        }else if (this.passwordControl == null || this.passwordControl.isEmpty() || this.password == null || !this.password.equals(this.passwordControl)) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hesla se neshodují.", "Opravte je prosím.");
-            FacesContext.getCurrentInstance().addMessage(":formPass:passConfirmMsg", msg);
-        }  else {
-            ok=true;
-            PrimeFaces.current().dialog().closeDynamic(this);
+    public void savePassword() {
+        if (this.passwordHelp == null || this.passwordHelp.isEmpty()) {
+            PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_WARN,"Neudali jste žádnou nápovědu k heslu.", "Nápověda k heslu by Vám v budoucnu mohla pomoci."));
         }
-        return ok;
+        PrimeFaces.current().dialog().closeDynamic(this);
     }
 
-    /**
-     * Metoda testuje, zda-li lze ulozit heslo
-     *
-     * @return
-     */
-    public boolean isPassBtnSaveEnabled() {
-        boolean isEnable = !FacesContext.getCurrentInstance().isValidationFailed();
-        if (!isEnable) {
-            return false;
-        }
-//        String Password = this.getUcet().getPassword();
-//        String passwordControl = this.getUcet().getPasswordControl();;
-//
-        isEnable = this.password != null && !this.password.isEmpty()
-                && this.passwordControl != null && !this.passwordControl.isEmpty()
-                && this.password.equals(this.passwordControl);
-        return isEnable;
-    }
 
     /**
      * Metoda provede validaci hesla proti kontrolnimu heslu
