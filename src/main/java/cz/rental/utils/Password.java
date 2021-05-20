@@ -8,7 +8,6 @@ package cz.rental.utils;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -28,7 +27,7 @@ public class Password implements Serializable {
 
     static final long serialVersionUID = 42L;
     private double passwordID = 0.0;
-    
+
     private String password = null;
     private String passwordControl = null;
     private String passwordHelp = "";
@@ -36,12 +35,11 @@ public class Password implements Serializable {
     /**
      * Inicializace matice prav uzivatele
      *
-     *
      */
     @PostConstruct
     public void init() {
-        this.passwordID=Math.random()*1000;
-        System.out.println(" Password.passwordID: "+this.passwordID);
+        this.passwordID = Math.random() * 1000;
+        System.out.println(" Password.passwordID: " + this.passwordID);
     }
 
     /**
@@ -61,9 +59,9 @@ public class Password implements Serializable {
         options.put("draggable", true);
         options.put("resizable", true);
         options.put("width", 1000);
-        options.put("height", 400);
+        options.put("height", 450);
         options.put("contentWidth", 1000);
-        options.put("contentHeight", 400);
+        options.put("contentHeight", 450);
         options.put("closeOnEscape", true);
         // options.put("includeViewParams", true);
         PrimeFaces.current().dialog().openDynamic("/aplikace/password.xhtml", options, null);
@@ -75,9 +73,19 @@ public class Password implements Serializable {
      *
      * @return vzdy vraci null - nepresmerovava na jinou strnku
      */
-    public String savePassword() {
-        PrimeFaces.current().dialog().closeDynamic(this);
-        return null;
+    public boolean savePassword() {
+        boolean ok=false;
+        if (this.password == null || this.password.isEmpty()) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Heslo je povinný údaj.", "Doplňte hodnotu prosím-minimálně 4 znaky.");
+            FacesContext.getCurrentInstance().addMessage(":formPass:passMsg", msg);
+        }else if (this.passwordControl == null || this.passwordControl.isEmpty() || this.password == null || !this.password.equals(this.passwordControl)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hesla se neshodují.", "Opravte je prosím.");
+            FacesContext.getCurrentInstance().addMessage(":formPass:passConfirmMsg", msg);
+        }  else {
+            ok=true;
+            PrimeFaces.current().dialog().closeDynamic(this);
+        }
+        return ok;
     }
 
     /**
@@ -107,8 +115,7 @@ public class Password implements Serializable {
     public void validatePassword(ValueChangeEvent event) {
         String newConfirmPass = (String) event.getNewValue();
         if (newConfirmPass == null || newConfirmPass.isEmpty() || this.password == null || !this.password.equals(newConfirmPass)) {
-            FacesMessage msg = new FacesMessage("Hesla se neshodují, opravte je prosím.");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hesla se neshodují, opravte je prosím.", "");
             FacesContext.getCurrentInstance().addMessage(event.getComponent().getClientId(), msg);
         }
     }
