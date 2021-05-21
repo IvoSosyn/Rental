@@ -281,8 +281,9 @@ public class Registrace implements Serializable {
                 this.ucet.getUzivatel().getUser().setEmail(this.ucet.getAccount().getEmail());
                 this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
                 this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
-                this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
+                this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());                
                 this.ucet.getUzivatel().saveUzivatel();
+                this.ucet.getUzivatel().setParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, true);
             } catch (Exception ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage());

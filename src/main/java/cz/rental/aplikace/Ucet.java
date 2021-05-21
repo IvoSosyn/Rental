@@ -60,6 +60,8 @@ public class Ucet implements Serializable {
     private UserController userController;
     @Inject
     private Uzivatel uzivatel;
+    @Inject
+    private Uzivatel uzivatelLoged;
     private Account account;
     private Integer pin = 0;
     private String email = null;
@@ -144,6 +146,8 @@ public class Ucet implements Serializable {
 // ------------------------    
 
     public String loadUsers() {
+        this.uzivatelLoged.setUser(this.uzivatel.getUser());
+        this.uzivatelLoged.setUserParams(this.uzivatel.getUserParams());
         this.getUsersForAccount();
         return "/admin/users/users.xhtml";
     }
@@ -208,7 +212,9 @@ public class Ucet implements Serializable {
      * @return true|false
      */
     public boolean appendable() {
-        return this.uzivatel != null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true);
+        System.out.println(" Ucet.uzivatelLoged.getUser().getFullname():"+this.uzivatelLoged.getUser().getFullname());
+        System.out.println(" Ucet.uzivatel.getUser().getFullname():"+this.uzivatel.getUser().getFullname());
+        return this.uzivatelLoged != null && (this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
     }
 
     /**
@@ -218,7 +224,9 @@ public class Ucet implements Serializable {
      * @return true|false
      */
     public boolean removable() {
-        return this.uzivatel != null && this.uzivatel.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, true) && this.selectedUser != null && !this.selectedUser.isNewEntity();
+        System.out.println(" Ucet.uzivatelLoged.getUser().getFullname():"+this.uzivatelLoged.getUser().getFullname());
+        System.out.println(" Ucet.uzivatel.getUser().getFullname():"+this.uzivatel.getUser().getFullname());
+        return this.uzivatelLoged != null && (this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false)) && this.selectedUser != null && !this.selectedUser.isNewEntity();
     }
 
     public void clearFormUserDetail() {

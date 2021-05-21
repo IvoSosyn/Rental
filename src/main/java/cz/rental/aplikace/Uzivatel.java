@@ -381,7 +381,7 @@ public class Uzivatel implements Serializable {
         return true;
     }
 
-    public UzivatelParam getUserParm(String paramName) {
+    public UzivatelParam getUserParam(String paramName) {
         for (UzivatelParam userParam : userParams) {
             if (userParam.getParamName().name().equalsIgnoreCase(paramName)) {
                 return userParam;
