@@ -207,26 +207,34 @@ public class Ucet implements Serializable {
     }
 
     /**
-     * Muze uzivatel pridavat nove uzivatele tj.ma pravo UZIVATEL_EDIT
+     * Muze uzivatel editovat uzivatele tj.ma pravo UZIVATEL_EDIT nebo
+     * SUPERVISOR - pro smazani vybrany zaznam neni 'NewEntity'=true
      *
      * @return true|false
      */
-    public boolean appendable() {
-        System.out.println(" Ucet.uzivatelLoged.getUser().getFullname():"+this.uzivatelLoged.getUser().getFullname());
-        System.out.println(" Ucet.uzivatel.getUser().getFullname():"+this.uzivatel.getUser().getFullname());
-        return this.uzivatelLoged != null && (this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
-    }
-
-    /**
-     * Muze uizivatel smazat zaznam o uzivateli tj.ma pravo UZIVATEL_EDIT a
-     * vybrany zaznam neni 'NewEntity'
-     *
-     * @return true|false
-     */
-    public boolean removable() {
-        System.out.println(" Ucet.uzivatelLoged.getUser().getFullname():"+this.uzivatelLoged.getUser().getFullname());
-        System.out.println(" Ucet.uzivatel.getUser().getFullname():"+this.uzivatel.getUser().getFullname());
-        return this.uzivatelLoged != null && (this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false)) && this.selectedUser != null && !this.selectedUser.isNewEntity();
+    public boolean disabledUser(String mod) {
+        boolean lDisable = false;
+        System.out.println(" Ucet.uzivatel.getUser().getFullname():" + this.uzivatel.getUser().getFullname());
+        System.out.println(" Ucet.uzivatelLoged.getUser().getFullname():" + this.uzivatelLoged.getUser().getFullname());
+        
+        if (this.uzivatelLoged == null) {
+            System.out.println(" Ucet.uzivatelLoged: ==null");
+            lDisable = true;
+        } else if (this.uzivatelLoged.getUser() == null) {
+            System.out.println(" Ucet.uzivatelLoged.getUser(): ==null");
+            lDisable = true;
+        } else if (mod.equalsIgnoreCase("UserAdd")) {
+            lDisable = !(this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
+        } else if (mod.equalsIgnoreCase("UserDel")) {
+            lDisable = !(this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false))
+                    || this.selectedUser == null
+                    || this.selectedUser.isNewEntity();
+        } else if (mod.equalsIgnoreCase("UserEdit")) {
+            lDisable = !(this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
+        } else if (mod.equalsIgnoreCase("UserSupervisor")) {
+            lDisable = !(this.uzivatelLoged.getUser().getEmail() != null && this.uzivatelLoged.getUser().getEmail().equalsIgnoreCase("sosyn@seznam.cz"));
+        }
+        return lDisable;
     }
 
     public void clearFormUserDetail() {
