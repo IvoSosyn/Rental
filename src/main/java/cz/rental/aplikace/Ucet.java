@@ -60,7 +60,6 @@ public class Ucet implements Serializable {
     private UserController userController;
     @Inject
     private Uzivatel uzivatel;
-    @Inject
     private Uzivatel uzivatelLoged;
     private Account account;
     private Integer pin = 0;
@@ -146,6 +145,13 @@ public class Ucet implements Serializable {
 // ------------------------    
 
     public String loadUsers() {
+        try {
+            this.uzivatelLoged=this.uzivatel.clone();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
+            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Nelze vytvořit uživatele pro editaci." ,ex.getMessage() ));
+            return null;
+        }
         this.uzivatelLoged.setUser(this.uzivatel.getUser());
         this.uzivatelLoged.setUserParams(this.uzivatel.getUserParams());
         this.getUsersForAccount();

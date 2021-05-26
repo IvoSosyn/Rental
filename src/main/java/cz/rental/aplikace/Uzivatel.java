@@ -34,7 +34,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named(value = "uzivatel")
 @SessionScoped
-public class Uzivatel implements Serializable {
+public class Uzivatel implements Serializable, Cloneable {
 
     static final long serialVersionUID = 42L;
 
@@ -450,4 +450,9 @@ public class Uzivatel implements Serializable {
         this.password = password;
     }
 
+    @Override
+    public Uzivatel clone() throws CloneNotSupportedException{
+        return (Uzivatel) super.clone();
+    }
+    
 }

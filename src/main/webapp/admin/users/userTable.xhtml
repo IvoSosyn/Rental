@@ -12,19 +12,19 @@
         <h:form id="formUserTable">
             <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
             <p:dataTable id="tableUserTable"
-                         value="#{ucet.users}" 
+                         value="#{users.users}" 
                          var="user" 
                          selectionMode="single" 
-                         selection="#{ucet.selectedUser}" 
+                         selection="#{users.selectedUser}" 
                          rowKey="#{user.id}"
                          resizableColumns="true" 
                          resizeMode="expand" >
 
                 <f:facet id="headerUserTable" name="header">
-                    Uživatelé účtu: #{ucet.account.fullname}
+                    Uživatelé účtu: #{users.ucet.account.fullname}
                 </f:facet>
-                <p:ajax event="rowSelect" listener="#{ucet.onRowSelect}" update=":formUserTable:menuUserTable addUser delUser :formUserDetail" />
-                <p:ajax event="rowUnselect" listener="#{ucet.onRowUnselect}" update=":formUserTable:menuUserTable addUser delUser  :formUserDetail" />
+                <p:ajax event="rowSelect" listener="#{users.onRowSelect}" update=":formUserTable:menuUserTable addUser delUser :formUserDetail" />
+                <p:ajax event="rowUnselect" listener="#{users.onRowUnselect}" update=":formUserTable:menuUserTable addUser delUser  :formUserDetail" />
 
                 <p:column headerText="Název">
                     <h:outputText value="#{user.fullname}" />
@@ -60,11 +60,11 @@
                 <f:facet id="footerUserTable" name="footer">
                     <div class="p-grid p-jc-center" align="center">                    
                         <div class="p-col-3 p-md-3 p-sm-3">
-                            <p:commandButton id="addUser" value="Nový" action="#{ucet.addUser()}" disabled="#{ucet.disabledUser('UserAdd')}" icon="pi pi-plus" ajax="false" update=":formUserTable:tableUserTable :formUserDetail" styleClass="rounded-button" title="Vytvoří nový záznam pro uživatele." />
+                            <p:commandButton id="addUser" value="Nový" action="#{users.addUser()}" disabled="#{users.disabledUser('UserAdd')}" icon="pi pi-plus" ajax="false" update=":formUserTable:tableUserTable :formUserDetail" styleClass="rounded-button" title="Vytvoří nový záznam pro uživatele." />
                         </div>
                         <div class="p-col-3 p-md-3 p-sm-3 p-offset-6">
-                            <p:commandButton id="delUser" value="Smaž(#{ucet.selectedUser.fullname})" actionListener="#{ucet.delUser()}" disabled="#{ucet.disabledUser('UserDel')}" process="@this"  update=":formUserTable:tableUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraného uživatele."  icon="pi pi-trash"  style="color: #c61e40;"  >
-                                <p:confirm  header="Potvrzení akce" message="Opravdu chcete vybraný záznam (#{ucet.selectedUser.fullname}) smazat ?" icon="pi pi-exclamation-triangle" />
+                            <p:commandButton id="delUser" value="Smaž(#{users.selectedUser.fullname})" actionListener="#{users.delUser()}" disabled="#{users.disabledUser('UserDel')}" process="@this"  update=":formUserTable:tableUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraného uživatele."  icon="pi pi-trash"  style="color: #c61e40;"  >
+                                <p:confirm  header="Potvrzení akce" message="Opravdu chcete vybraný záznam (#{users.selectedUser.fullname}) smazat ?" icon="pi pi-exclamation-triangle" />
                                 <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                                     <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
@@ -79,9 +79,9 @@
             </ui:remove>                
             <p:contextMenu id="menuUserTable" for="tableUserTable" >
                 <p:autoUpdate/>
-                <p:menuitem value="Nový"  action="#{ucet.addUser()}" update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-plus" disabled="#{ucet.disabledUser('UserAdd')}"  title="Vytvoří nový záznam." />
-                <p:menuitem value="Smaž(#{ucet.selectedUser.fullname})" action="#{ucet.delUser()}"   update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-trash" disabled="#{ucet.disabledUser('UserDel')}" title="Smazání vybraných položek (řádků)." >
-                    <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznam (#{ucet.selectedUser}) smazat ?" icon="pi pi-exclamation-triangle" />
+                <p:menuitem value="Nový"  action="#{users.addUser()}" update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-plus" disabled="#{users.disabledUser('UserAdd')}"  title="Vytvoří nový záznam." />
+                <p:menuitem value="Smaž(#{users.selectedUser.fullname})" action="#{users.delUser()}"   update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-trash" disabled="#{users.disabledUser('UserDel')}" title="Smazání vybraných položek (řádků)." >
+                    <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznam (#{users.selectedUser}) smazat ?" icon="pi pi-exclamation-triangle" />
                 </p:menuitem>
             </p:contextMenu>
         </h:form>
