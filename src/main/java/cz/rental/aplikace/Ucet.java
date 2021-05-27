@@ -7,36 +7,20 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
-import cz.rental.entity.User;
 import cz.rental.entity.UserController;
 import cz.rental.utils.Aplikace;
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.UUID;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.component.datepicker.DatePicker;
-import org.primefaces.component.inputtext.InputText;
-import org.primefaces.component.toggleswitch.ToggleSwitch;
 import org.primefaces.context.PrimeFacesContext;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -56,8 +40,6 @@ public class Ucet implements Serializable {
     // "Insert Code > Add Business Method")
     @EJB
     private AccountController accController;
-    @EJB
-    private UserController userController;
     @Inject
     private Uzivatel uzivatel;
     private Account account;
@@ -100,7 +82,6 @@ public class Ucet implements Serializable {
         return ucetExist;
     }
 
-
     public void changePin(ActionEvent event) {
         //System.out.println("Ucet.changePin()");
         int randomPin = 0;
@@ -118,7 +99,6 @@ public class Ucet implements Serializable {
     public void saveAccount() throws Exception {
         getAccController().saveAccount(this.account);
     }
-
 
     /**
      * @return the uzivatel
