@@ -8,6 +8,7 @@ package cz.rental.admin.users;
 import cz.rental.aplikace.*;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
+import cz.rental.utils.Password;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,6 +49,8 @@ public class Users implements Serializable {
     private UserController userController;
     @Inject
     private Ucet ucet;
+    @Inject
+    private Password password;
     private Uzivatel uzivatel;
     private ArrayList<User> users = new ArrayList();
     private User selectedUser;
@@ -67,10 +70,6 @@ public class Users implements Serializable {
     // -------------------------
     // Prace s uzivateli
     // ------------------------    
-    public String loadUsers() {
-        return "/admin/users/users.xhtml";
-    }
-
     /**
      * Metoda vraci matici uzivatelu(<code>User</code>) pro tento
      * ucet(<code>Account</code>)
@@ -211,6 +210,16 @@ public class Users implements Serializable {
         }
 
     }
+
+    /**
+     * Metoda predplni "passwodHelp" do formulare a zavola dynamicky formular pro editaci hesla
+     */
+    public  void editPassword(){
+        password.editPassword("", "", this.selectedUser.getPasswordhelp());
+    }
+    /**
+     * Getter and Setter methods
+     */
 
     /**
      * @return the uzivatel

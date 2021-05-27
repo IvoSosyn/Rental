@@ -60,14 +60,11 @@ public class Ucet implements Serializable {
     private UserController userController;
     @Inject
     private Uzivatel uzivatel;
-    private Uzivatel uzivatelLoged;
     private Account account;
     private Integer pin = 0;
     private String email = null;
     private String accountsRootDir = Ucet.ACCOUNT_ROOT_DIR;
     private String accountDir = null;
-    private ArrayList<User> users = new ArrayList();
-    private User selectedUser;
 
     @PostConstruct
     public void init() {
@@ -98,30 +95,11 @@ public class Ucet implements Serializable {
             throw new Exception("Účet pro PIN:" + pin + " a eMail: " + email + " NEEXISTUJE nebo máte chybné heslo.");
         }
         if (this.account instanceof Account) {
-            getUsersForAccount();
             ucetExist = true;
         }
         return ucetExist;
     }
 
-    /**
-     * Metoda vraci matici uzivatelu(<code>User</code>) pro tento
-     * ucet(<code>Account</code>)
-     *
-     * @return matici uzivatelu nebo praydnou matici
-     */
-    public ArrayList<User> getUsersForAccount() {
-        if (userController instanceof UserController) {
-            this.users = userController.getUsersForAccount(this.account);
-        }
-        User user = new User();
-        user.setId(UUID.randomUUID());
-        user.setIdaccount(this.account);
-        user.setNewEntity(true);
-        this.users.add(user);
-        System.out.println(" getUsersForAccount():" + this.users.size());
-        return this.users;
-    }
 
     public void changePin(ActionEvent event) {
         //System.out.println("Ucet.changePin()");
@@ -140,146 +118,7 @@ public class Ucet implements Serializable {
     public void saveAccount() throws Exception {
         getAccController().saveAccount(this.account);
     }
-// -------------------------
-// Prace s uzivateli
-// ------------------------    
 
-    public String loadUsers() {
-        try {
-            this.uzivatelLoged=this.uzivatel.clone();
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Nelze vytvořit uživatele pro editaci." ,ex.getMessage() ));
-            return null;
-        }
-        this.uzivatelLoged.setUser(this.uzivatel.getUser());
-        this.uzivatelLoged.setUserParams(this.uzivatel.getUserParams());
-        this.getUsersForAccount();
-        return "/admin/users/users.xhtml";
-    }
-
-    public void onRowSelect(SelectEvent event) {
-        this.uzivatel.setUser(selectedUser);
-        clearFormUserDetail();
-        this.uzivatel.initUzivatelByUser(selectedUser);
-    }
-
-    public void onRowUnselect(UnselectEvent event) {
-        this.uzivatel.setUser(selectedUser);
-        clearFormUserDetail();
-        this.uzivatel.initUzivatelByUser(selectedUser);
-    }
-
-    public String addUser() {
-        DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("formUserTable:tableUserTable");
-        // dataTable.reset();
-        this.selectedUser = users.get(users.size() - 1);
-        HashSet<String> selectedRowKeys = new HashSet<>(1);
-        selectedRowKeys.add(this.selectedUser.getId().toString());
-        dataTable.setSelectedRowKeys(selectedRowKeys);
-        onRowSelect(null);
-
-//        for (User user : users) {
-//            if (user.isNewEntity()) {
-//                this.selectedUser = user;
-//                this.uzivatel.setUser(selectedUser);
-//                this.uzivatel.initUzivatelByUser(selectedUser);
-//                break;
-//            }
-//        }
-        return null;
-    }
-
-    public void delUser() {
-        if (this.selectedUser != null && !this.selectedUser.isNewEntity()) {
-            try {
-                userController.destroy(this.selectedUser);
-            } catch (Exception ex) {
-                Logger.getLogger(Ucet.class.getName()).log(Level.SEVERE, null, ex);
-                PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Vymazání uživatele: " + this.selectedUser.getFullname() + " z registru nebylo úspěšné.", "Po chvíli zkuste znovu."));
-            }
-        } else {
-            PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(this.selectedUser == null ? "Není vybrán žádný uživatel k vymazání." : "Nový neuložený uživatel se nedá vymazat.", "Vyberte správného uživatele k vymazání"));
-        }
-        getUsersForAccount();
-    }
-
-    /**
-     * Metoda ulozi data z detailu editace uzivatele do DB vcetne jeho prav
-     */
-    public String refreshUsers() {
-        getUsersForAccount();
-        return null;
-    }
-
-    /**
-     * Muze uzivatel editovat uzivatele tj.ma pravo UZIVATEL_EDIT nebo
-     * SUPERVISOR - pro smazani vybrany zaznam neni 'NewEntity'=true
-     *
-     * @return true|false
-     */
-    public boolean disabledUser(String mod) {
-        boolean lDisable = false;
-        System.out.println(" Ucet.uzivatel.getUser().getFullname():" + this.uzivatel.getUser().getFullname());
-        System.out.println(" Ucet.uzivatelLoged.getUser().getFullname():" + this.uzivatelLoged.getUser().getFullname());
-        
-        if (this.uzivatelLoged == null) {
-            System.out.println(" Ucet.uzivatelLoged: ==null");
-            lDisable = true;
-        } else if (this.uzivatelLoged.getUser() == null) {
-            System.out.println(" Ucet.uzivatelLoged.getUser(): ==null");
-            lDisable = true;
-        } else if (mod.equalsIgnoreCase("UserAdd")) {
-            lDisable = !(this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
-        } else if (mod.equalsIgnoreCase("UserDel")) {
-            lDisable = !(this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false))
-                    || this.selectedUser == null
-                    || this.selectedUser.isNewEntity();
-        } else if (mod.equalsIgnoreCase("UserEdit")) {
-            lDisable = !(this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.uzivatelLoged.getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
-        } else if (mod.equalsIgnoreCase("UserSupervisor")) {
-            lDisable = !(this.uzivatelLoged.getUser().getEmail() != null && this.uzivatelLoged.getUser().getEmail().equalsIgnoreCase("sosyn@seznam.cz"));
-        }
-        return lDisable;
-    }
-
-    public void clearFormUserDetail() {
-        UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
-//        ArrayList<String> resetIds = new ArrayList<>();
-//        resetIds.add("formUserDetail");
-//        root.resetValues(FacesContext.getCurrentInstance(), resetIds);
-        UIComponent formUserDetail = root.findComponent("formUserDetail");
-        // for JSF 2 getFacetsAndChildren instead of only JSF 1 getChildren
-        Iterator<UIComponent> children = formUserDetail.getFacetsAndChildren();
-        clearAllComponentInChilds(children);
-    }
-
-    private void clearAllComponentInChilds(Iterator<UIComponent> childrenIt) {
-
-        while (childrenIt.hasNext()) {
-            UIComponent component = childrenIt.next();
-            //System.out.println("handling component " + component.getId());
-            if (component instanceof InputText) {
-                InputText com = (InputText) component;
-                com.resetValue();
-            }
-            if (component instanceof DatePicker) {
-                DatePicker com = (DatePicker) component;
-                com.resetValue();
-            }
-            if (component instanceof ToggleSwitch) {
-                ToggleSwitch com = (ToggleSwitch) component;
-                com.resetValue();
-            }
-//            if (component instanceof OutputLabel) {
-//                OutputLabel com = (OutputLabel) component;
-//                com.resetValue();
-//            }
-            clearAllComponentInChilds(component.getFacetsAndChildren());
-
-        }
-
-    }
 
     /**
      * @return the uzivatel
@@ -434,33 +273,4 @@ public class Ucet implements Serializable {
     public String datumZmenyAsString() {
         return Aplikace.getSimpleDateFormat().format(this.uzivatel.getParam("ZmenaOD", Aplikace.getZmenaOd()));
     }
-
-    /**
-     * @return the selectedUser
-     */
-    public User getSelectedUser() {
-        return selectedUser;
-    }
-
-    /**
-     * @param selectedUser the selectedUser to set
-     */
-    public void setSelectedUser(User selectedUser) {
-        this.selectedUser = selectedUser;
-    }
-
-    /**
-     * @return the users
-     */
-    public ArrayList<User> getUsers() {
-        return users;
-    }
-
-    /**
-     * @param users the users to set
-     */
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
-    }
-
 }

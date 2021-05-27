@@ -225,10 +225,18 @@ public class Registrace implements Serializable {
         //PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(" Není dosud implementováno.","Není dosud implementováno."));
     }
 
+    /**
+     * Metoda predplni "passwodHelp" do formulare a zavola dynamicky formular
+     * pro editaci hesla
+     */
+    public void editPassword() {
+        password.editPassword("", "", this.ucet.getUzivatel().getUser().getPasswordhelp());
+    }
+
     public void passFromDialog(SelectEvent event) {
         Password pass = (Password) event.getObject();
         System.out.println(" Registrace.pass.getPassword():" + pass.getPassword());
-        System.out.println(" Registrace.password.getPassword():" + password.getPassword()+" (bean)");
+        System.out.println(" Registrace.password.getPassword():" + password.getPassword() + " (bean)");
         // Ulozit heslo do uctu vlastnika Account
         this.ucet.getAccount().setPasswordsha512(SHA512.getSHA512(password.getPassword()));
         this.ucet.getAccount().setPasswordhelp(password.getPasswordHelp());
@@ -281,7 +289,7 @@ public class Registrace implements Serializable {
                 this.ucet.getUzivatel().getUser().setEmail(this.ucet.getAccount().getEmail());
                 this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
                 this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
-                this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());                
+                this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
                 this.ucet.getUzivatel().saveUzivatel();
                 this.ucet.getUzivatel().setParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, true);
             } catch (Exception ex) {

@@ -28,15 +28,23 @@
                     <p:inputText id="idUserPopis" value="#{users.uzivatel.user.popis}" size="100" maxlength="150" />
                 </div>
                 <div class="p-field p-col-3 p-md-3 p-sm-3">
-                    <p:graphicImage id="idUserPassOK" value="/images/OK15x15.png" rendered="#{users.uzivatel.user.passwordsha512.length()>0}" style="width:30px;vertical-align: middle;" />
-                    <p:outputLabel id="idUserPassLabel" value="Heslo #{users.uzivatel.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" for="@previous" style="vertical-align: middle;" />    
+                    <p:graphicImage id="idUserPassOK" value="/images/OK15x15.png" rendered="#{users.uzivatel.user.passwordsha512.length()>0}" style="width:30px;vertical-align: middle;" >
+                        <p:autoUpdate />
+                    </p:graphicImage>
+                    <p:outputLabel id="idUserPassLabel" value="Heslo #{users.uzivatel.user.passwordsha512.length()>0?'zadáno':'NEzadáno'}" for="@previous" style="vertical-align: middle;" >
+                        <p:autoUpdate />
+                    </p:outputLabel>    
                 </div>
                 <div class="p-field p-col-3 p-md-3 p-sm-3">
-                    <p:graphicImage id="idUserPassHelpOK" value="/images/OK15x15.png" rendered="#{users.uzivatel.user.passwordhelp!=null and users.uzivatel.user.passwordhelp.length()>0}" style="width:30px;vertical-align: middle;" />
-                    <p:outputLabel id="idUserPassHelp" value="Nápověda #{users.uzivatel.user.passwordhelp!=null and users.uzivatel.user.passwordhelp.length()>0?'zadána':'NEzadána'}" for="@previous" style="vertical-align: middle;" title="Pokud nezadáte nápovědu pro heslo, nebudem Vám moci později pomoci." />    
+                    <p:graphicImage id="idUserPassHelpOK" value="/images/OK15x15.png" rendered="#{users.uzivatel.user.passwordhelp!=null and users.uzivatel.user.passwordhelp.length()>0}" style="width:30px;vertical-align: middle;" >
+                        <p:autoUpdate />
+                    </p:graphicImage>
+                    <p:outputLabel id="idUserPassHelp" value="Nápověda #{users.uzivatel.user.passwordhelp!=null and users.uzivatel.user.passwordhelp.length()>0?'zadána':'NEzadána'}" for="@previous" style="vertical-align: middle;" title="Pokud nezadáte nápovědu pro heslo, nebudem Vám moci později pomoci.">
+                        <p:autoUpdate />
+                    </p:outputLabel>    
                 </div>
                 <div class="p-field p-col-3 p-md-3 p-sm-3">
-                    <p:commandButton value="Heslo"  actionListener="#{password.editPassword(password.password,password.passwordControl,uzivatel.user.passwordhelp)}"  disabled="#{users.disabledUser('UserEdit')}" >
+                    <p:commandButton value="Heslo"  actionListener="#{users.editPassword()}"  disabled="#{users.disabledUser('UserEdit')}" >
                         <p:ajax event="dialogReturn"  listener="#{users.uzivatel.passFromDialog}" update="idUserPassOK idUserPassLabel idUserPassHelpOK idUserPassHelp" />
                     </p:commandButton>
                 </div>
