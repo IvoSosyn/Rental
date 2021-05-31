@@ -12,30 +12,36 @@
         <h:form id="formUserTable">
             <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
             <p:dataTable id="tableUserTable"
+                         widgetVar="tableUserTable"
                          value="#{users.users}" 
                          var="user" 
                          selectionMode="single" 
                          selection="#{users.selectedUser}" 
                          rowKey="#{user.id}"
                          resizableColumns="true" 
-                         resizeMode="expand" >
+                         resizeMode="expand" 
+                         filteredValue="#{users.filteredUsers}"
+                         >
 
                 <f:facet id="headerUserTable" name="header">
-                    Uživatelé účtu: #{users.ucet.account.fullname}
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        Uživatelé účtu: #{users.ucet.account.fullname}
+                        <p:inputText id="globalFilterUserTable" onkeyup="PF('tableUserTable').filter()" style="width:10rem" placeholder="Vložte klíčové slovo." />
+                    </div>
                 </f:facet>
                 <p:ajax event="rowSelect" listener="#{users.onRowSelect}" update=":formUserTable:menuUserTable addUser delUser :formUserDetail" />
                 <p:ajax event="rowUnselect" listener="#{users.onRowUnselect}" update=":formUserTable:menuUserTable addUser delUser  :formUserDetail" />
 
-                <p:column headerText="Název">
+                <p:column headerText="Název" sortBy="#{user.fullname}"  filterBy="#{user.fullname}"  filterMatchMode="contains"  >
                     <h:outputText value="#{user.fullname}" />
                 </p:column>                
-                <p:column headerText="E-mail">
+                <p:column headerText="E-mail" sortBy="#{user.email}"  filterBy="#{user.email}"  filterMatchMode="contains" >
                     <h:outputText value="#{user.email}" />
                 </p:column>                
-                <p:column headerText="Popis">
+                <p:column headerText="Popis" sortBy="#{user.popis}"  filterBy="#{user.popis}" filterMatchMode="contains"  >
                     <h:outputText value="#{user.newEntity?'Nový záznam.':user.popis}" />
                 </p:column>                
-                <p:column>
+                <p:column sortBy="#{user.passwordsha512}" >
                     <f:facet name="header">
                         <h:panelGrid columns="1" border="0" frame="none"  >
                             <h:outputText value="Heslo je" />
@@ -44,15 +50,21 @@
                     </f:facet>
                     <p:graphicImage value="/images/OK15x15.png" rendered="#{user.passwordsha512.length()>0}" />
                 </p:column>  
-                <p:column headerText="Plati Od">
+                <p:column headerText="Plati Od"  filterMatchMode="range" sortBy="#{user.platiod}">
                     <h:outputText value="#{user.platiod}" >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>    
+                    <f:facet name="filter">
+                        <p:datePicker selectionMode="range" onchange="PF('tableUserTable').filter()" />
+                    </f:facet>
                 </p:column>
-                <p:column headerText="Plati Do">
-                    <h:outputText value="#{user.platido}" >
+                <p:column headerText="Plati Do"   filterMatchMode="range"  sortBy="#{user.platido}">
+                    <h:outputText value="#{user.platido}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
+                    <f:facet name="filter">
+                        <p:datePicker selectionMode="range" onchange="PF('tableUserTable').filter()" />
+                    </f:facet>
                 </p:column>
                 <ui:remove>
                     -------- Patička -------------

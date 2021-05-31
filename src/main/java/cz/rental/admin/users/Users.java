@@ -53,6 +53,7 @@ public class Users implements Serializable {
     private Password password;
     private Uzivatel uzivatel;
     private ArrayList<User> users = new ArrayList();
+    private ArrayList<User> filteredUsers = new ArrayList();
     private User selectedUser;
 
     @PostConstruct
@@ -275,5 +276,19 @@ public class Users implements Serializable {
      */
     public void setUcet(Ucet ucet) {
         this.ucet = ucet;
+    }
+
+    /**
+     * @return the filteredUsers
+     */
+    public ArrayList<User> getFilteredUsers() {
+        return filteredUsers;
+    }
+
+    /**
+     * @param filteredUsers the filteredUsers to set
+     */
+    public void setFilteredUsers(ArrayList<User> filteredUsers) {
+        this.filteredUsers = filteredUsers;
     }
 }
