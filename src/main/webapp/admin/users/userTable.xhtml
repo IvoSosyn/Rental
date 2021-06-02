@@ -12,7 +12,7 @@
         <h:form id="formUserTable">
             <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
             <p:dataTable id="tableUserTable"
-                         widgetVar="tableUserTable"
+                         widgetVar="tableUserTableVar"
                          value="#{users.users}" 
                          var="user" 
                          selectionMode="single" 
@@ -21,12 +21,13 @@
                          resizableColumns="true" 
                          resizeMode="expand" 
                          filteredValue="#{users.filteredUsers}"
+                         globalFilterFunction="#{users.globalFilterFunction}"
                          >
 
                 <f:facet id="headerUserTable" name="header">
                     <div class="p-d-flex p-ai-center p-jc-between">
                         Uživatelé účtu: #{users.ucet.account.fullname}
-                        <p:inputText id="globalFilterUserTable" onkeyup="PF('tableUserTable').filter()" style="width:10rem" placeholder="Vložte klíčové slovo." />
+                        <p:inputText id="globalFilter" onkeyup="PF('tableUserTableVar').filter();return false;" style="width:10rem" placeholder="Vložte klíčové slovo." />
                     </div>
                 </f:facet>
                 <p:ajax event="rowSelect" listener="#{users.onRowSelect}" update=":formUserTable:menuUserTable addUser delUser :formUserDetail" />
@@ -50,21 +51,21 @@
                     </f:facet>
                     <p:graphicImage value="/images/OK15x15.png" rendered="#{user.passwordsha512.length()>0}" />
                 </p:column>  
-                <p:column headerText="Plati Od"  filterMatchMode="range" sortBy="#{user.platiod}">
-                    <h:outputText value="#{user.platiod}" >
+                <p:column field="platiod" headerText="Plati Od" filterMatchMode="range" filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
+                    <f:facet name="filter" >
+                        <p:datePicker selectionMode="range" onchange="PF('tableUserTableVar').filter();return false;"  locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" />
+                    </f:facet>                    
+                    <h:outputText value="#{user.platiod}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
-                    </h:outputText>    
-                    <f:facet name="filter">
-                        <p:datePicker selectionMode="range" onchange="PF('tableUserTable').filter()" />
-                    </f:facet>
+                    </h:outputText>
                 </p:column>
-                <p:column headerText="Plati Do"   filterMatchMode="range"  sortBy="#{user.platido}">
+                <p:column  field="platido"  headerText="Plati Do" filterMatchMode="range"  filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
+                    <f:facet name="filter" >
+                        <p:datePicker selectionMode="range" onchange="PF('tableUserTableVar').filter();return false;"  locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" />
+                    </f:facet>
                     <h:outputText value="#{user.platido}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
-                    <f:facet name="filter">
-                        <p:datePicker selectionMode="range" onchange="PF('tableUserTable').filter()" />
-                    </f:facet>
                 </p:column>
                 <ui:remove>
                     -------- Patička -------------

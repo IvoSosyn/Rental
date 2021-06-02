@@ -8,11 +8,17 @@ package cz.rental.admin.users;
 import cz.rental.aplikace.*;
 import cz.rental.entity.User;
 import cz.rental.entity.UserController;
+import cz.rental.utils.Aplikace;
 import cz.rental.utils.Password;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.UUID;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -32,6 +38,7 @@ import org.primefaces.component.toggleswitch.ToggleSwitch;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.util.LangUtils;
 
 /**
  *
@@ -87,6 +94,7 @@ public class Users implements Serializable {
         user.setNewEntity(true);
         this.users.add(user);
         System.out.println(" getUsersForAccount():" + this.users.size());
+        filteredUsers = new ArrayList(users);
         return this.users;
     }
 
@@ -212,12 +220,49 @@ public class Users implements Serializable {
 
     }
 
+    public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
+        if (LangUtils.isValueBlank(filterText)) {
+            return true;
+        }
+        return true;
+    }
+
+    public boolean dateFilter(Object value, Object filter, Locale locale) {
+        System.out.println(" dateFilter(Object value, Object filter, Locale locale):"+value+","+filter+","+locale);
+        if (filter instanceof Date) {
+            return ((Date) value).equals(filter);
+        } else if (filter instanceof String) {
+            try {
+                Date datum = Aplikace.getSimpleDateFormat().parse((String) filter);
+                return ((Date) value).equals(datum);
+            } catch (ParseException ex) {
+                Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        } else if (filter instanceof ArrayList) {
+            try {
+                Date odData= Aplikace.getSimpleDateFormat().parse(((LocalDate)((ArrayList)filter).get(0)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
+                Date doData= Aplikace.getSimpleDateFormat().parse(((LocalDate)((ArrayList)filter).get(1)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
+
+                return (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData))  ;
+                
+            } catch (ParseException ex) {
+                Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }            
+        }
+        return true;
+    }
+
     /**
-     * Metoda predplni "passwodHelp" do formulare a zavola dynamicky formular pro editaci hesla
+     * Metoda predplni "passwodHelp" do formulare a zavola dynamicky formular
+     * pro editaci hesla
      */
-    public  void editPassword(){
+    public void editPassword() {
         password.editPassword("", "", this.selectedUser.getPasswordhelp());
     }
+
     /**
      * Getter and Setter methods
      */
