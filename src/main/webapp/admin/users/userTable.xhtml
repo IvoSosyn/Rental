@@ -9,10 +9,10 @@
       >
 
     <ui:composition>	
-        <h:form id="formUserTable">
+        <h:form id="formUsers">
             <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
-            <p:dataTable id="tableUserTable"
-                         widgetVar="tableUserTableVar"
+            <p:dataTable id="tableUsers"
+                         widgetVar="tableUsers"
                          value="#{users.users}" 
                          var="user" 
                          selectionMode="single" 
@@ -20,18 +20,17 @@
                          rowKey="#{user.id}"
                          resizableColumns="true" 
                          resizeMode="expand" 
-                         filteredValue="#{users.filteredUsers}"
-                         globalFilterFunction="#{users.globalFilterFunction}"
+                         filteredValue="#{users.filteredUsers}"              
                          >
 
-                <f:facet id="headerUserTable" name="header">
+                <f:facet name="header">
                     <div class="p-d-flex p-ai-center p-jc-between">
                         Uživatelé účtu: #{users.ucet.account.fullname}
-                        <p:inputText id="globalFilter" onkeyup="PF('tableUserTableVar').filter();return false;" style="width:10rem" placeholder="Vložte klíčové slovo." />
+                        <p:inputText id="globalFilter" onkeyup="PF('tableUsers').filter()" style="width:10rem" placeholder="Hledané slovo." />
                     </div>
                 </f:facet>
-                <p:ajax event="rowSelect" listener="#{users.onRowSelect}" update=":formUserTable:menuUserTable addUser delUser :formUserDetail" />
-                <p:ajax event="rowUnselect" listener="#{users.onRowUnselect}" update=":formUserTable:menuUserTable addUser delUser  :formUserDetail" />
+                <p:ajax event="rowSelect" listener="#{users.onRowSelect}" update=":formUsers:menuUsers addUser delUser :formUserDetail" />
+                <p:ajax event="rowUnselect" listener="#{users.onRowUnselect}" update=":formUsers:menuUsers addUser delUser  :formUserDetail" />
 
                 <p:column headerText="Název" sortBy="#{user.fullname}"  filterBy="#{user.fullname}"  filterMatchMode="contains"  >
                     <h:outputText value="#{user.fullname}" />
@@ -42,7 +41,7 @@
                 <p:column headerText="Popis" sortBy="#{user.popis}"  filterBy="#{user.popis}" filterMatchMode="contains"  >
                     <h:outputText value="#{user.newEntity?'Nový záznam.':user.popis}" />
                 </p:column>                
-                <p:column sortBy="#{user.passwordsha512}" >
+                <p:column sortBy="#{user.passwordsha512}" filterable="false" >
                     <f:facet name="header">
                         <h:panelGrid columns="1" border="0" frame="none"  >
                             <h:outputText value="Heslo je" />
@@ -51,17 +50,14 @@
                     </f:facet>
                     <p:graphicImage value="/images/OK15x15.png" rendered="#{user.passwordsha512.length()>0}" />
                 </p:column>  
-                <p:column field="platiod" headerText="Plati Od" filterMatchMode="range" filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
-                    <f:facet name="filter" >
-                        <p:datePicker selectionMode="range" onchange="PF('tableUserTableVar').filter();return false;"  locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" />
-                    </f:facet>                    
+                <p:column headerText="Plati Od" sortBy="#{user.platiod}" filterBy="#{user.platiod}" filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
                     <h:outputText value="#{user.platiod}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
                 </p:column>
                 <p:column  field="platido"  headerText="Plati Do" filterMatchMode="range"  filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
                     <f:facet name="filter" >
-                        <p:datePicker selectionMode="range" onchange="PF('tableUserTableVar').filter();return false;"  locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" />
+                        <p:datePicker selectionMode="range" onchange="PF('tableUsers').filter()"  locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" />
                     </f:facet>
                     <h:outputText value="#{user.platido}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
@@ -70,13 +66,16 @@
                 <ui:remove>
                     -------- Patička -------------
                 </ui:remove>                
-                <f:facet id="footerUserTable" name="footer">
+                <f:facet id="footerUsers" name="footer">
                     <div class="p-grid p-jc-center" align="center">                    
                         <div class="p-col-3 p-md-3 p-sm-3">
-                            <p:commandButton id="addUser" value="Nový" action="#{users.addUser()}" disabled="#{users.disabledUser('UserAdd')}" icon="pi pi-plus" ajax="false" update=":formUserTable:tableUserTable :formUserDetail" styleClass="rounded-button" title="Vytvoří nový záznam pro uživatele." />
+                            <p:commandButton id="refreshUsers" value="Refresh" onclick="PF('tableUsers').filter()" ajax="true" update=":formUsers:tableUsers :formUserDetail" styleClass="rounded-button" title="Refresh tabulky uživatelů." />
+                        </div>
+                        <div class="p-col-3 p-md-3 p-sm-3">
+                            <p:commandButton id="addUser" value="Nový" action="#{users.addUser()}" disabled="#{users.disabledUser('UserAdd')}" icon="pi pi-plus" ajax="false" update=":formUsers:tableUsers :formUserDetail" styleClass="rounded-button" title="Vytvoří nový záznam pro uživatele." />
                         </div>
                         <div class="p-col-3 p-md-3 p-sm-3 p-offset-6">
-                            <p:commandButton id="delUser" value="Smaž(#{users.selectedUser.fullname})" actionListener="#{users.delUser()}" disabled="#{users.disabledUser('UserDel')}" process="@this"  update=":formUserTable:tableUserTable :formUserDetail" partialSubmit="true" title="Smazání vybraného uživatele."  icon="pi pi-trash"  style="color: #c61e40;"  >
+                            <p:commandButton id="delUser" value="Smaž(#{users.selectedUser.fullname})" actionListener="#{users.delUser()}" disabled="#{users.disabledUser('UserDel')}" process="@this"  update=":formUsers:tableUsers :formUserDetail" partialSubmit="true" title="Smazání vybraného uživatele."  icon="pi pi-trash"  style="color: #c61e40;"  >
                                 <p:confirm  header="Potvrzení akce" message="Opravdu chcete vybraný záznam (#{users.selectedUser.fullname}) smazat ?" icon="pi pi-exclamation-triangle" />
                                 <p:confirmDialog  global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
@@ -90,10 +89,10 @@
             <ui:remove>
                 -------- Kontextové menu -------------
             </ui:remove>                
-            <p:contextMenu id="menuUserTable" for="tableUserTable" >
+            <p:contextMenu id="menuUsers" for="tableUsers" >
                 <p:autoUpdate/>
-                <p:menuitem value="Nový"  action="#{users.addUser()}" update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-plus" disabled="#{users.disabledUser('UserAdd')}"  title="Vytvoří nový záznam." />
-                <p:menuitem value="Smaž(#{users.selectedUser.fullname})" action="#{users.delUser()}"   update=":formUserTable:tableUserTable :formUserDetail"  icon="pi pi-trash" disabled="#{users.disabledUser('UserDel')}" title="Smazání vybraných položek (řádků)." >
+                <p:menuitem value="Nový"  action="#{users.addUser()}" update=":formUsers:tableUsers :formUserDetail"  icon="pi pi-plus" disabled="#{users.disabledUser('UserAdd')}"  title="Vytvoří nový záznam." />
+                <p:menuitem value="Smaž(#{users.selectedUser.fullname})" action="#{users.delUser()}"   update=":formUsers:tableUsers :formUserDetail"  icon="pi pi-trash" disabled="#{users.disabledUser('UserDel')}" title="Smazání vybraných položek (řádků)." >
                     <p:confirm header="Potvrzení akce" message="Opravdu chcete vybrané záznam (#{users.selectedUser}) smazat ?" icon="pi pi-exclamation-triangle" />
                 </p:menuitem>
             </p:contextMenu>

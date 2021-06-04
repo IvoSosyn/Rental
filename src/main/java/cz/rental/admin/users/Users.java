@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -229,30 +230,88 @@ public class Users implements Serializable {
     }
 
     public boolean dateFilter(Object value, Object filter, Locale locale) {
-        System.out.println(" dateFilter(Object value, Object filter, Locale locale):"+value+","+filter+","+locale);
-        if (filter instanceof Date) {
-            return ((Date) value).equals(filter);
+        System.out.println(" dateFilter(Object value, Object filter, Locale locale):" + value + "," + filter + "," + locale);
+        boolean lOk = true;
+
+        if (value == null || filter == null) {
+            lOk = true;
+        } else if (filter instanceof Date) {
+            lOk = ((Date) value).equals(filter);
         } else if (filter instanceof String) {
+            String datums = ((String) filter).replaceAll(" ", "").replaceAll(",", ".");
+            if (datums.length() == 0) {
+                lOk = true;
+            } else if (datums.matches("\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}[-_>;]\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}")) {
+                String[] splitOdDo = datums.split("[-_>;]");
+                try {
+                    Date odData = Aplikace.getSimpleDateFormat().parse(splitOdDo[0]);
+                    Date doData = Aplikace.getSimpleDateFormat().parse(splitOdDo[1]);
+                    if (splitOdDo.length == 1) {
+                        lOk = (((Date) value).equals(odData) || ((Date) value).after(odData));
+                    }
+                    if (splitOdDo.length == 2) {
+                        lOk = (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData));
+                    }
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                    return false;
+                }
+            } else if (datums.matches("\\d{1,2}/\\d{2,4}[-_>;]\\d{1,2}/\\d{2,4}")) {
+                String[] splitOdDo = datums.split("[-_>;]");
+                Calendar calOd = Calendar.getInstance(Aplikace.getLocaleCZ());
+                Calendar calDo = Calendar.getInstance(Aplikace.getLocaleCZ());
+                calOd.set(Calendar.HOUR_OF_DAY, 0);
+                calOd.set(Calendar.MINUTE, 0);
+                calOd.set(Calendar.SECOND, 0);
+                calOd.set(Calendar.MILLISECOND, 0);
+                calOd.set(Calendar.DAY_OF_MONTH, 1);
+                calOd.set(Calendar.MONTH, Integer.parseInt(splitOdDo[0].split("/")[0]) - 1);
+                calOd.set(Calendar.YEAR, Integer.parseInt(splitOdDo[0].split("/")[1]));
+                
+                calDo.set(Calendar.HOUR_OF_DAY, 0);
+                calDo.set(Calendar.MINUTE, 0);
+                calDo.set(Calendar.SECOND, 0);
+                calDo.set(Calendar.MILLISECOND, 0);
+                calDo.set(Calendar.DAY_OF_MONTH, 1);
+                calDo.set(Calendar.MONTH, Integer.parseInt(splitOdDo[1].split("/")[0]));
+                calDo.set(Calendar.YEAR, Integer.parseInt(splitOdDo[1].split("/")[1]));
+                calDo.add(Calendar.HOUR_OF_DAY, -1);
+                Date odData = calOd.getTime();
+                Date doData = calDo.getTime();
+                lOk = (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData));
+
+            } else if (datums.length() <= 10) {
+                String[] datumA = datums.split("\\.");
+                int[] datumI = new int[]{0, 0, 0};
+                for (int i = 0; i < Math.min(3, datumA.length); i++) {
+                    datumI[i] = Integer.parseInt(datumA[i]);
+                }
+                Calendar cal = Calendar.getInstance(Aplikace.getLocaleCZ());
+                cal.setTime(((Date) value));
+                if (datumI[0] > 0) {
+                    lOk &= cal.get(Calendar.DAY_OF_MONTH) == datumI[0];
+                }
+                if (datumI[1] > 0) {
+                    lOk &= cal.get(Calendar.MONTH) == datumI[1] - 1;
+                }
+                if (datumI[2] > 0) {
+                    lOk &= cal.get(Calendar.YEAR) == datumI[2];
+                }
+            }
+        } else if (filter instanceof ArrayList) {
             try {
-                Date datum = Aplikace.getSimpleDateFormat().parse((String) filter);
-                return ((Date) value).equals(datum);
+                Date odData = Aplikace.getSimpleDateFormat().parse(((LocalDate) ((ArrayList) filter).get(0)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
+                Date doData = Aplikace.getSimpleDateFormat().parse(((LocalDate) ((ArrayList) filter).get(1)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
+
+                lOk = (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData));
+
             } catch (ParseException ex) {
                 Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
-        } else if (filter instanceof ArrayList) {
-            try {
-                Date odData= Aplikace.getSimpleDateFormat().parse(((LocalDate)((ArrayList)filter).get(0)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
-                Date doData= Aplikace.getSimpleDateFormat().parse(((LocalDate)((ArrayList)filter).get(1)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
-
-                return (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData))  ;
-                
-            } catch (ParseException ex) {
-                Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
-            }            
         }
-        return true;
+        return lOk;
     }
 
     /**
@@ -266,7 +325,6 @@ public class Users implements Serializable {
     /**
      * Getter and Setter methods
      */
-
     /**
      * @return the uzivatel
      */
