@@ -55,14 +55,12 @@
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
                 </p:column>
-                <p:column  field="platido"  headerText="Plati Do" filterMatchMode="range"  filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
-                    <f:facet name="filter" >
-                        <p:datePicker selectionMode="range" onchange="PF('tableUsers').filter()"  locale="cs_CZ" monthNavigator="true" pattern="dd.MM.yyyy" showButtonBar="true" showIcon="true" showOnFocus="false"  immediate="true" />
-                    </f:facet>
+                <p:column headerText="Plati Do" sortBy="#{user.platido}" filterBy="#{user.platido}" filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
                     <h:outputText value="#{user.platido}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
                 </p:column>
+
                 <ui:remove>
                     -------- Patička -------------
                 </ui:remove>                
