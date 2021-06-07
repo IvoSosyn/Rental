@@ -232,86 +232,108 @@ public class Users implements Serializable {
     public boolean dateFilter(Object value, Object filter, Locale locale) {
         System.out.println(" dateFilter(Object value, Object filter, Locale locale):" + value + "," + filter + "," + locale);
         boolean lOk = true;
+        Date odData = null;
+        Date doData = null;
 
+        // Nejsou zadany spravne parametry
         if (value == null || filter == null) {
-            lOk = true;
-        } else if (filter instanceof Date) {
-            lOk = ((Date) value).equals(filter);
-        } else if (filter instanceof String) {
-            String datums = ((String) filter).replaceAll(" ", "").replaceAll(",", ".");
-            if (datums.length() == 0) {
-                lOk = true;
-            } else if (datums.matches("\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}[-_>;]\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}")) {
-                String[] splitOdDo = datums.split("[-_>;]");
-                try {
-                    Date odData = Aplikace.getSimpleDateFormat().parse(splitOdDo[0]);
-                    Date doData = Aplikace.getSimpleDateFormat().parse(splitOdDo[1]);
-                    if (splitOdDo.length == 1) {
-                        lOk = (((Date) value).equals(odData) || ((Date) value).after(odData));
-                    }
-                    if (splitOdDo.length == 2) {
-                        lOk = (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData));
-                    }
-
-                } catch (ParseException ex) {
-                    Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                    return false;
-                }
-            } else if (datums.matches("\\d{1,2}/\\d{2,4}[-_>;]\\d{1,2}/\\d{2,4}")) {
-                String[] splitOdDo = datums.split("[-_>;]");
-                Calendar calOd = Calendar.getInstance(Aplikace.getLocaleCZ());
-                Calendar calDo = Calendar.getInstance(Aplikace.getLocaleCZ());
-                calOd.set(Calendar.HOUR_OF_DAY, 0);
-                calOd.set(Calendar.MINUTE, 0);
-                calOd.set(Calendar.SECOND, 0);
-                calOd.set(Calendar.MILLISECOND, 0);
-                calOd.set(Calendar.DAY_OF_MONTH, 1);
-                calOd.set(Calendar.MONTH, Integer.parseInt(splitOdDo[0].split("/")[0]) - 1);
-                calOd.set(Calendar.YEAR, Integer.parseInt(splitOdDo[0].split("/")[1]));
-                
-                calDo.set(Calendar.HOUR_OF_DAY, 0);
-                calDo.set(Calendar.MINUTE, 0);
-                calDo.set(Calendar.SECOND, 0);
-                calDo.set(Calendar.MILLISECOND, 0);
-                calDo.set(Calendar.DAY_OF_MONTH, 1);
-                calDo.set(Calendar.MONTH, Integer.parseInt(splitOdDo[1].split("/")[0]));
-                calDo.set(Calendar.YEAR, Integer.parseInt(splitOdDo[1].split("/")[1]));
-                calDo.add(Calendar.HOUR_OF_DAY, -1);
-                Date odData = calOd.getTime();
-                Date doData = calDo.getTime();
-                lOk = (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData));
-
-            } else if (datums.length() <= 10) {
-                String[] datumA = datums.split("\\.");
-                int[] datumI = new int[]{0, 0, 0};
-                for (int i = 0; i < Math.min(3, datumA.length); i++) {
-                    datumI[i] = Integer.parseInt(datumA[i]);
-                }
-                Calendar cal = Calendar.getInstance(Aplikace.getLocaleCZ());
-                cal.setTime(((Date) value));
-                if (datumI[0] > 0) {
-                    lOk &= cal.get(Calendar.DAY_OF_MONTH) == datumI[0];
-                }
-                if (datumI[1] > 0) {
-                    lOk &= cal.get(Calendar.MONTH) == datumI[1] - 1;
-                }
-                if (datumI[2] > 0) {
-                    lOk &= cal.get(Calendar.YEAR) == datumI[2];
-                }
-            }
-        } else if (filter instanceof ArrayList) {
+            return true;
+        }
+        // Filtr je datum - otestovat na shodu
+        if (filter instanceof Date) {
+            return ((Date) value).equals(filter);
+        }
+        // Filtr je mnozina o 2 prvcich - implicitni tvar pri fitrovani pomoci vestaveneho filtru pro  <p:datePicker> a filterMatchMode="range"
+        if (filter instanceof ArrayList) {
             try {
-                Date odData = Aplikace.getSimpleDateFormat().parse(((LocalDate) ((ArrayList) filter).get(0)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
-                Date doData = Aplikace.getSimpleDateFormat().parse(((LocalDate) ((ArrayList) filter).get(1)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
+                odData = Aplikace.getSimpleDateFormat().parse(((LocalDate) ((ArrayList) filter).get(0)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
+                doData = Aplikace.getSimpleDateFormat().parse(((LocalDate) ((ArrayList) filter).get(1)).format(DateTimeFormatter.ofPattern("dd.MM.uuuu", Aplikace.getLocaleCZ())));
 
-                lOk = (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData));
+                return (((Date) value).equals(odData) || ((Date) value).after(odData)) && (((Date) value).equals(doData) || ((Date) value).before(doData));
 
             } catch (ParseException ex) {
                 Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
         }
+        // Filtr je definovany bud jako:
+        // explicitne zadane datum 1.12.2021
+        // jako rozsah 1.12.2021 - 31.12.2021
+        // jako mesic 12/2021
+        // jako rozsah mesicu  1/2021 - 12/2021
+        if (!(filter instanceof String)) {
+            return true;
+        }
+        String datums = ((String) filter).replaceAll(" ", "").replaceAll(",", ".");
+        if (datums.length() == 0) {
+            return true;
+        }
+        String[] splitOdDo = datums.split("[-_>;]");
+        if (splitOdDo.length == 1 && splitOdDo[0].matches("\\d{1,2}/\\d{2,4}")) {
+            odData = filterToDate(splitOdDo[0], 0);
+            doData = filterToDate(splitOdDo[0], 1);
+            return (odData==null || ((Date) value).equals(odData) || ((Date) value).after(odData)) && (doData==null || ((Date) value).equals(doData) || ((Date) value).before(doData));
+
+        }
+        if (splitOdDo.length == 1 && splitOdDo[0].length() < 11) {
+            String[] datumA = splitOdDo[0].split("\\.");
+            int[] datumI = new int[]{0, 0, 0};
+            for (int i = 0; i < Math.min(3, datumA.length); i++) {
+                datumI[i] = Integer.parseInt(datumA[i]);
+            }
+            Calendar cal = Calendar.getInstance(Aplikace.getLocaleCZ());
+            cal.setTime(((Date) value));
+            if (datumI[0] > 0) {
+                lOk &= cal.get(Calendar.DAY_OF_MONTH) == datumI[0];
+            }
+            if (datumI[1] > 0) {
+                lOk &= cal.get(Calendar.MONTH) == datumI[1] - 1;
+            }
+            if (datumI[2] > 0) {
+                lOk &= cal.get(Calendar.YEAR) == datumI[2];
+            }
+            return lOk;
+        }
+        if (splitOdDo.length > 1) {
+            odData = filterToDate(splitOdDo[0], 0);
+            doData = filterToDate(splitOdDo[1], 1);
+            return (odData==null || ((Date) value).equals(odData) || ((Date) value).after(odData)) && (doData==null || ((Date) value).equals(doData) || ((Date) value).before(doData));
+        }
+
         return lOk;
+    }
+
+    private Date filterToDate(String strDatum, int mode) {
+        Date datum = null;
+        Calendar cal = Calendar.getInstance(Aplikace.getLocaleCZ());
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        if (strDatum.matches("\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}")) {
+            cal.set(Calendar.YEAR, Integer.parseInt(strDatum.split("\\.")[2]));
+            cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(strDatum.split("\\.")[0]));
+            cal.set(Calendar.MONTH, Integer.parseInt(strDatum.split("\\.")[1]) - 1);
+            if (mode == 1) {
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+            }
+            datum = cal.getTime();
+        }
+        if (strDatum.matches("\\d{1,2}/\\d{2,4}")) {
+            cal.set(Calendar.YEAR, Integer.parseInt(strDatum.split("/")[1]));
+            if (mode == 0) {
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.MONTH, Integer.parseInt(strDatum.split("/")[0]) - 1);
+            } else {
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.MONTH, Integer.parseInt(strDatum.split("/")[0]));
+                cal.add(Calendar.MINUTE, -1);
+            }
+            datum = cal.getTime();
+        }
+        return datum;
     }
 
     /**
@@ -394,4 +416,5 @@ public class Users implements Serializable {
     public void setFilteredUsers(ArrayList<User> filteredUsers) {
         this.filteredUsers = filteredUsers;
     }
+
 }
