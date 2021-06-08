@@ -26,7 +26,10 @@
                 <f:facet name="header">
                     <div class="p-d-flex p-ai-center p-jc-between">
                         Uživatelé účtu: #{users.ucet.account.fullname}
-                        <p:inputText id="globalFilter" onkeyup="PF('tableUsers').filter()" style="width:10rem" placeholder="Hledané slovo." />
+                        <ui:remove>
+                            // NEFUNGUJE -docasne potlaceno
+                            <p:inputText id="globalFilter" onkeyup="PF('tableUsers').filter()" style="width:10rem" placeholder="Hledané slovo." />                            
+                        </ui:remove>                        
                     </div>
                 </f:facet>
                 <p:ajax event="rowSelect" listener="#{users.onRowSelect}" update=":formUsers:menuUsers addUser delUser :formUserDetail" />
@@ -50,12 +53,12 @@
                     </f:facet>
                     <p:graphicImage value="/images/OK15x15.png" rendered="#{user.passwordsha512.length()>0}" />
                 </p:column>  
-                <p:column headerText="Plati Od" sortBy="#{user.platiod}" filterBy="#{user.platiod}" filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
+                <p:column headerText="Plati Od" sortBy="#{user.platiod}" filterBy="#{user.platiod}" filterFunction="#{dateFilter.dateFilter}" filterable="true" sortable="true" >
                     <h:outputText value="#{user.platiod}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Plati Do" sortBy="#{user.platido}" filterBy="#{user.platido}" filterFunction="#{users.dateFilter}" filterable="true" sortable="true" >
+                <p:column headerText="Plati Do" sortBy="#{user.platido}" filterBy="#{user.platido}" filterFunction="#{dateFilter.dateFilter}" filterable="true" sortable="true" >
                     <h:outputText value="#{user.platido}"  >
                         <f:convertDateTime locale="cs_CZ" type="date" dateStyle="medium" timeZone="Europe/Prague" />
                     </h:outputText>
@@ -66,9 +69,6 @@
                 </ui:remove>                
                 <f:facet id="footerUsers" name="footer">
                     <div class="p-grid p-jc-center" align="center">                    
-                        <div class="p-col-3 p-md-3 p-sm-3">
-                            <p:commandButton id="refreshUsers" value="Refresh" onclick="PF('tableUsers').filter()" ajax="true" update=":formUsers:tableUsers :formUserDetail" styleClass="rounded-button" title="Refresh tabulky uživatelů." />
-                        </div>
                         <div class="p-col-3 p-md-3 p-sm-3">
                             <p:commandButton id="addUser" value="Nový" action="#{users.addUser()}" disabled="#{users.disabledUser('UserAdd')}" icon="pi pi-plus" ajax="false" update=":formUsers:tableUsers :formUserDetail" styleClass="rounded-button" title="Vytvoří nový záznam pro uživatele." />
                         </div>
