@@ -163,7 +163,7 @@ public class Users implements Serializable {
             System.out.println(" this.ucet.getUzivatel(): ==null");
             lDisable = true;
         } else if (this.getUcet().getUzivatel().getUser() == null) {
-            System.out.println(" this.ucet.getUzivatel(): ==null");
+            System.out.println(" this.ucet.getUzivatel().getUser(): ==null");
             lDisable = true;
         } else if (reqUserRigt.equalsIgnoreCase("UserAdd")) {
             lDisable = !(this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
@@ -174,6 +174,8 @@ public class Users implements Serializable {
         } else if (reqUserRigt.equalsIgnoreCase("UserEdit")) {
             lDisable = !(this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
         } else if (reqUserRigt.equalsIgnoreCase("UserSupervisor")) {
+            lDisable = !(this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
+        }if (reqUserRigt.equalsIgnoreCase("UserAdmin")) {
             lDisable = !(this.ucet.getUzivatel().getUser().getEmail() != null && this.ucet.getUzivatel().getUser().getEmail().equalsIgnoreCase("sosyn@seznam.cz"));
         }
         return lDisable;

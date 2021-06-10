@@ -62,10 +62,10 @@ public class Login implements Serializable {
 // Nenacitaji se aktualne vlozene hodnoty         
 //        Object loginPIN=((InputNumber)FacesContext.getCurrentInstance().getViewRoot().findComponent("formLogin:loginPIN")).getValue();
 //        Object loginEmail=((InputText)FacesContext.getCurrentInstance().getViewRoot().findComponent("formLogin:loginEmail")).getValue();                
-        Account acc = accController.getAccountForPinAndEmail(this.pin, this.email);
-        if (acc instanceof Account && acc.getPasswordhelp() != null && !acc.getPasswordhelp().isEmpty()) {
+        User user = userController.getUserForPinAndEmail(this.pin, this.email);
+        if (user instanceof User && user.getPasswordhelp() != null && !user.getPasswordhelp().isEmpty()) {
             facesMessageSummary = "Vaše pomůcka/nápověda pro heslo je: ";
-            this.passwordHelp = acc.getPasswordhelp();
+            this.passwordHelp = user.getPasswordhelp();
         }
         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(facesMessageSummary, this.passwordHelp));
         PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO,facesMessageSummary, this.passwordHelp));

@@ -39,6 +39,26 @@ public class UserController extends JpaController {
     }
 
     /**
+     * Metoda vraci 'Uzivatel' DB zaznam pro pozadovany jedinecny 'PIN' a
+     * 'Email'
+     *
+     * @param pin jednoznacny PIN vlastnika uctu
+     * @param email vstupni email vlastnika uctu, bude duplikovan v uzivateli
+     * @return ucet nebo null, kdyz ucet neexistuje
+     */
+    public User getUserForPinAndEmail(int pin, String email) {
+        User user = null;
+        this.query = getEm().createQuery("SELECT u FROM User u INNER JOIN u.idaccount a WHERE a.pin=:pin AND u.email=:email ");
+        this.query.setParameter("pin", pin);
+        this.query.setParameter("email", email);
+        ArrayList<User> users = new ArrayList<>(query.getResultList());
+        if (users.size() > 0) {
+            user = users.get(0);
+        }
+        return user;
+    }
+
+    /**
      * Metoda vraci 'Uzivatel' DB zaznam pro pozadovany jedinecny 'Account' a
      * 'Email'
      *
