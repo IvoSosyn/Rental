@@ -124,6 +124,7 @@
                     <p:commandButton id="idUserDetailSave" value="Ulož" ajax="true" actionListener="#{users.uzivatel.saveUzivatel()}" action="#{users.refreshUsers()}" disabled="#{users.disabledUser('UserEdit')}" update=":formUsers @form" icon="pi pi-save"/>
                 </div>          
             </div>
+            <p:defaultCommand  target="idUserDetailSave" />
         </h:form>
     </ui:composition>
 </html>
