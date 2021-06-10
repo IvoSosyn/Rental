@@ -153,10 +153,10 @@ public class Users implements Serializable {
      * Muze uzivatel editovat uzivatele tj.ma pravo UZIVATEL_EDIT nebo
      * SUPERVISOR - pro smazani vybrany zaznam neni 'NewEntity'=true
      *
-     * @param mod
+     * @param reqUserRigt
      * @return true|false
      */
-    public boolean disabledUser(String mod) {
+    public boolean disabledUser(String reqUserRigt) {
         boolean lDisable = false;
 
         if (this.getUcet().getUzivatel() == null) {
@@ -165,15 +165,15 @@ public class Users implements Serializable {
         } else if (this.getUcet().getUzivatel().getUser() == null) {
             System.out.println(" this.ucet.getUzivatel(): ==null");
             lDisable = true;
-        } else if (mod.equalsIgnoreCase("UserAdd")) {
+        } else if (reqUserRigt.equalsIgnoreCase("UserAdd")) {
             lDisable = !(this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
-        } else if (mod.equalsIgnoreCase("UserDel")) {
+        } else if (reqUserRigt.equalsIgnoreCase("UserDel")) {
             lDisable = !(this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false))
                     || this.selectedUser == null
                     || this.selectedUser.isNewEntity();
-        } else if (mod.equalsIgnoreCase("UserEdit")) {
+        } else if (reqUserRigt.equalsIgnoreCase("UserEdit")) {
             lDisable = !(this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.UZIVATEL_EDIT, false) || this.ucet.getUzivatel().getParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, false));
-        } else if (mod.equalsIgnoreCase("UserSupervisor")) {
+        } else if (reqUserRigt.equalsIgnoreCase("UserSupervisor")) {
             lDisable = !(this.ucet.getUzivatel().getUser().getEmail() != null && this.ucet.getUzivatel().getUser().getEmail().equalsIgnoreCase("sosyn@seznam.cz"));
         }
         return lDisable;

@@ -7,7 +7,7 @@
       >
 
     <ui:composition>	
-        <h:form  id="formUserDetail">
+        <h:form  id="formUserDetail" >
             <p:defaultCommand target="idUserDetailSave"/>
 
             <div class="p-grid">
@@ -63,47 +63,52 @@
             <div class="p-grid  p-jc-center">
                 <div class="p-col-12" align="center">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('SUPERVISOR').popis} :"  for="@next" style="vertical-align: middle;" />
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('SUPERVISOR').value}"   valueChangeListener="#{users.uzivatel.userParamChanged}" label="SUPERVISOR" disabled="#{users.disabledUser('UserSupervisor')}"  style="vertical-align: middle;"/>
+                    <ui:remove>
+                        <p:toggleSwitch value="#{users.uzivatel.getUserParam('SUPERVISOR').value}"   valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true"  label="SUPERVISOR" disabled="#{users.disabledUser('UserSupervisor')}"  style="vertical-align: middle;"/>
+                    </ui:remove>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('SUPERVISOR').value}" immediate="true"  label="SUPERVISOR" disabled="#{users.disabledUser('UserSupervisor')}"  style="vertical-align: middle;">
+                        <p:ajax event="change" listener="#{users.uzivatel.userParamChanged}" update="@form"/>
+                    </p:toggleSwitch>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('MODEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" label="MODEL" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('MODEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true"  label="MODEL" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value=" #{users.uzivatel.getUserParam('MODEL_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('MODEL_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" label="MODEL_EDIT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('MODEL_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="MODEL_EDIT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('ACCOUNT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('ACCOUNT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" label="ACCOUNT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('ACCOUNT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="ACCOUNT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value=" #{users.uzivatel.getUserParam('ACCOUNT_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('ACCOUNT_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" label="ACCOUNT_EDIT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('ACCOUNT_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="ACCOUNT_EDIT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('UZIVATEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('UZIVATEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}"  label="UZIVATEL"  disabled="#{users.disabledUser('UserEdit')}" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('UZIVATEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="UZIVATEL"  disabled="#{users.disabledUser('UserEdit')}" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('UZIVATEL_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('UZIVATEL_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" label="UZIVATEL_EDIT"  disabled="#{users.disabledUser('UserEdit')}" style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('UZIVATEL_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="UZIVATEL_EDIT"  disabled="#{users.disabledUser('UserEdit')}" style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('EVIDENCE').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EVIDENCE').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" label="EVIDENCE" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EVIDENCE').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="EVIDENCE" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('EVIDENCE_EDIT').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EVIDENCE_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}"  label="EVIDENCE_EDIT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EVIDENCE_EDIT').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="EVIDENCE_EDIT" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('IMPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('IMPORT_MODEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}"  label="IMPORT_MODEL" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('IMPORT_MODEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="IMPORT_MODEL" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('EXPORT_MODEL').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EXPORT_MODEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}"  label="EXPORT_MODEL" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EXPORT_MODEL').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="EXPORT_MODEL" disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('IMPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
@@ -111,7 +116,7 @@
                 </div>
                 <div class="p-col-6 p-md-6 p-sm-12">
                     <p:outputLabel value="#{users.uzivatel.getUserParam('EXPORT_DATA').popis} :"  for="@next" style="vertical-align: middle;"/>
-                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EXPORT_DATA').value}" valueChangeListener="#{users.uzivatel.userParamChanged}"  label="EXPORT_DATA"  disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
+                    <p:toggleSwitch value="#{users.uzivatel.getUserParam('EXPORT_DATA').value}" valueChangeListener="#{users.uzivatel.userParamChanged}" immediate="true" label="EXPORT_DATA"  disabled="#{users.disabledUser('UserEdit')}"  style="vertical-align: middle;"/>
                 </div>
             </div>
             <div class="p-grid  p-jc-center">

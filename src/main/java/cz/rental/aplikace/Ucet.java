@@ -7,7 +7,6 @@ package cz.rental.aplikace;
 
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
-import cz.rental.entity.UserController;
 import cz.rental.utils.Aplikace;
 import java.io.File;
 import java.io.Serializable;

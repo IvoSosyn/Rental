@@ -7,6 +7,7 @@ package cz.rental.aplikace.registrace;
 
 import cz.rental.aplikace.Ucet;
 import cz.rental.aplikace.Uzivatel;
+import cz.rental.aplikace.UzivatelParam;
 import cz.rental.entity.Typentity;
 import cz.rental.utils.Aplikace;
 import cz.rental.utils.Password;
@@ -292,6 +293,11 @@ public class Registrace implements Serializable {
                 this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
                 this.ucet.getUzivatel().saveUzivatel();
                 this.ucet.getUzivatel().setParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, true);
+                for (UzivatelParam userParam : this.ucet.getUzivatel().getUserParams()) {
+                    if (userParam.getValue() instanceof Boolean && userParam.getSecurityLevel() == UzivatelParam.SECURITY_LEVEL.BASIC) {
+                        userParam.setValue(true);
+                    }
+                }
             } catch (Exception ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage());

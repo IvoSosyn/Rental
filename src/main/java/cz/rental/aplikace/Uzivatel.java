@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import org.primefaces.component.toggleswitch.ToggleSwitch;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.event.SelectEvent;
 
@@ -84,7 +85,7 @@ public class Uzivatel implements Serializable, Cloneable {
         System.out.println("==End== Uzivatel.init()");
     }
 
-     /**
+    /**
      * Metoda vytvori matici parametru s default hodnotami a nasledne ji naplni
      * hodnotami pro konkretniho User z DB
      *
@@ -333,7 +334,7 @@ public class Uzivatel implements Serializable, Cloneable {
 
     private void initUserParams() {
         this.userParams = new ArrayList<>();
-        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, "Neomezená práva správce", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, "Neomezená práva správce", false, UzivatelParam.SECURITY_LEVEL.SUPERVISOR));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.ACCOUNT, "Může vidět položky účtu", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.ACCOUNT_EDIT, "Může editovat účet", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.UZIVATEL, "Může vidět seznam uživatelů", true));
@@ -342,7 +343,7 @@ public class Uzivatel implements Serializable, Cloneable {
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.MODEL_EDIT, "Může editovat model(šablonu)", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE, "Může vidět evidenci", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EVIDENCE_EDIT, "Může editovat editovat evidenci", false));
-        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.IMPORT_MODEL, "Může načítat(importovat) model(šablonu)", false));
+        this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.IMPORT_MODEL, "Může načítat(importovat) model(šablonu)", false, UzivatelParam.SECURITY_LEVEL.ADMINISTRATOR));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EXPORT_MODEL, "Může ukládat(exportovat) model(šablonu)", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.IMPORT_DATA, "Může načítat(importovat) data do evidence", false));
         this.userParams.add(new UzivatelParam(Uzivatel.USER_PARAM_NAME.EXPORT_DATA, "Může ukládat(exportovat) data z evidence", false));
@@ -391,8 +392,24 @@ public class Uzivatel implements Serializable, Cloneable {
     }
 
     public void userParamChanged(ValueChangeEvent event) {
-        Object source = event.getSource();
-        PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Není zatím implementováno", "userParamChanged()"));
+        ToggleSwitch tgs = (ToggleSwitch) event.getSource();
+        String label = tgs.getLabel();
+    }
+    public void userParamChanged(javax.faces.event.AjaxBehaviorEvent event) {
+        ToggleSwitch tgs = (ToggleSwitch) event.getSource();
+        String label = tgs.getLabel();
+        // Vsechny pripustne hodnoty nastavit na "true"
+        if (label.equalsIgnoreCase("SUPERVISOR") && ((Boolean) tgs.getValue())) {
+            for (UzivatelParam userParam : userParams) {
+                if (userParam.getValue() instanceof Boolean && userParam.getSecurityLevel() == UzivatelParam.SECURITY_LEVEL.BASIC) {
+                    userParam.setValue(true);
+                }
+            }
+        }
+        // Resetovat parametry podle DB
+        if (label.equalsIgnoreCase("SUPERVISOR") && !((Boolean) tgs.getValue())) {
+            fillUserParamsByUser();
+        }
     }
 
     /**
@@ -451,8 +468,8 @@ public class Uzivatel implements Serializable, Cloneable {
     }
 
     @Override
-    public Uzivatel clone() throws CloneNotSupportedException{
+    public Uzivatel clone() throws CloneNotSupportedException {
         return (Uzivatel) super.clone();
     }
-    
+
 }
