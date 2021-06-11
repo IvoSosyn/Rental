@@ -8,7 +8,9 @@ package cz.rental.aplikace.registrace;
 import cz.rental.aplikace.Ucet;
 import cz.rental.aplikace.Uzivatel;
 import cz.rental.aplikace.UzivatelParam;
+import cz.rental.entity.Account;
 import cz.rental.entity.Typentity;
+import cz.rental.entity.User;
 import cz.rental.utils.Aplikace;
 import cz.rental.utils.Password;
 import cz.rental.utils.SHA512;
@@ -83,6 +85,7 @@ public class Registrace implements Serializable {
 //            System.out.println(" /account: resources="+setRe);
 //            
 //        }
+        this.ucet.setAccount(new Account());
         this.ucet.getAccount().setId(UUID.randomUUID());
         this.ucet.getAccount().setPin(9020);
         this.ucet.getAccount().setFullname("Ing.Ivo Sosýn");
@@ -103,9 +106,11 @@ public class Registrace implements Serializable {
 //        Typentity typentity = new Typentity();
 //        typentity.setId(UUID.fromString("cac1b920-6b4f-4d2c-8308-86fc3fef5ec3"));
 //        this.ucet.getAccount().setIdmodel((Typentity) this.ucet.getAccController().findEntita(typentity));
-        // Nacist vsechny sablony, ktere jsou k dispozici ro vyber
+        // Nacist vsechny sablony, ktere jsou k dispozici pro vyber
         this.readModels();
         // Novy uzivatel - stejny jako registrator
+        this.ucet.getUzivatel().setUser(new User());
+        this.ucet.getUzivatel().getUser().setId(UUID.randomUUID());
         this.ucet.getUzivatel().getUser().setIdaccount(this.ucet.getAccount());
         this.ucet.getUzivatel().getUser().setFullname(this.ucet.getAccount().getFullname());
         this.ucet.getUzivatel().getUser().setEmail(this.ucet.getAccount().getEmail());
@@ -114,6 +119,11 @@ public class Registrace implements Serializable {
         this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
         this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
         this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
+    }
+
+    public String newRegistrace() {
+        this.init();
+        return "aplikace/registrace/registrace.xhtml";
     }
 
     /**
@@ -291,13 +301,16 @@ public class Registrace implements Serializable {
                 this.ucet.getUzivatel().getUser().setPasswordsha512(this.ucet.getAccount().getPasswordsha512());
                 this.ucet.getUzivatel().getUser().setPasswordhelp(this.ucet.getAccount().getPasswordhelp());
                 this.ucet.getUzivatel().getUser().setTelnumber(this.ucet.getAccount().getTelnumber());
-                this.ucet.getUzivatel().saveUzivatel();
-                this.ucet.getUzivatel().setParam(Uzivatel.USER_PARAM_NAME.SUPERVISOR, true);
                 for (UzivatelParam userParam : this.ucet.getUzivatel().getUserParams()) {
+                    if (userParam.getParamName() == Uzivatel.USER_PARAM_NAME.SUPERVISOR) {
+                        userParam.setValue(true);
+                    }
                     if (userParam.getValue() instanceof Boolean && userParam.getSecurityLevel() == UzivatelParam.SECURITY_LEVEL.BASIC) {
                         userParam.setValue(true);
                     }
                 }
+                this.ucet.getUzivatel().saveUzivatel();
+
             } catch (Exception ex) {
                 Logger.getLogger(Registrace.class.getName()).log(Level.SEVERE, null, ex);
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba při aktualizaci záznamu o uživateli. Opakujte později.", ex.getMessage());

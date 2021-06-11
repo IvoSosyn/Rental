@@ -5,6 +5,7 @@
  */
 package cz.rental.aplikace;
 
+import cz.rental.aplikace.registrace.Registrace;
 import cz.rental.entity.Account;
 import cz.rental.entity.AccountController;
 import cz.rental.entity.User;
@@ -35,6 +36,8 @@ public class Login implements Serializable {
     private UserController userController;
     @Inject
     private Ucet ucet;
+    @Inject
+    private Registrace registrace;
 
     private Integer pin = 0;
     private String email = null;
@@ -89,10 +92,6 @@ public class Login implements Serializable {
             PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage("Špatné heslo", "Nelze pokračovat, opravte stěžejní bezpečnostní údaj."));
             return null;
         }
-    }
-
-    public String actionRegistrace() {
-        return "aplikace/registrace/registrace.xhtml";
     }
 
 

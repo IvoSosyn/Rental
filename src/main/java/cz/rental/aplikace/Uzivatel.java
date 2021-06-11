@@ -13,6 +13,7 @@ import cz.rental.utils.SHA512;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -80,6 +81,7 @@ public class Uzivatel implements Serializable, Cloneable {
             }
         }
         this.user = new User();
+        this.user.setId(UUID.randomUUID());
         this.user.setNewEntity(true);
         initUserParams();
         System.out.println("==End== Uzivatel.init()");
@@ -129,7 +131,7 @@ public class Uzivatel implements Serializable, Cloneable {
                 this.saveUser();
                 boolean saveUserParams = this.saveUserParams();
                 if (!saveUserParams) {
-                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Uložení hodnot práv uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Opakujte pokus za chvíli."));
+                    PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Uložení hodnot práv uživatele: " + this.user.getFullname() + " do databáze nebylo úspěšné.", "Práva nastavte později v nabídce 'Správce' > 'Číselníky' > 'Uživatelé' ."));
                 } else {
                     PrimeFacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Uložení uživatele: " + this.user.getFullname() + " do databáze bylo úspěšné.", " "));
                 }
