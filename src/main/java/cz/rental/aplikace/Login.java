@@ -15,9 +15,12 @@ import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -71,7 +74,7 @@ public class Login implements Serializable {
             this.passwordHelp = user.getPasswordhelp();
         }
         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(facesMessageSummary, this.passwordHelp));
-        PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO,facesMessageSummary, this.passwordHelp));
+        PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, facesMessageSummary, this.passwordHelp));
     }
 
     /**
@@ -94,6 +97,11 @@ public class Login implements Serializable {
         }
     }
 
+    public void exitApp() {
+        PrimeFaces.current().dialog().showMessageDynamic(new FacesMessage(FacesMessage.SEVERITY_INFO, "Nenaprogramováno.", "Nenaprogramováno."));
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+    }
 
     /**
      * @return the pin

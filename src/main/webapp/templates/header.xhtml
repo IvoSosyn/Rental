@@ -17,6 +17,10 @@
                                 <p:submenu label="Evidence">
                                     <p:menuitem value="Nemovitostí" action="/aplikace/evidence/evidence.xhtml" icon="fa fa-user"  title="Evidence nemovitostí"/>
                                 </p:submenu>
+                                <p:submenu label="Konec">
+                                    <p:menuitem value="Log Out" action="/aplikace/login.xhtml" icon="fa fa-user"  title="Odhlášení" update="@all"/>
+                                    <p:menuitem value="Konec" action="#{login.exitApp()}" icon="fa fa-user"  title="Ukončení a uzavření okna aplikace"/>
+                                </p:submenu>
                             </p:submenu>               
                             <p:submenu label="Ekonomika" icon="fa fa-money">
                                 <p:menuitem value="Vyúčtování" title="Vyůčtování." />

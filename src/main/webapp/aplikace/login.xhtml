@@ -106,7 +106,7 @@
             <p:growl id="growlLoginReg" showDetail="true" />
             <p:panel id="panelLoginReg" header="Nemáte ještě účet ?" >
                 <p:outputLabel value="Zaregistrujte se: " for="@next" />
-                <p:commandLink ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{registrace.newRegistrace()}"  style="margin-right:20px;" />        
+                <p:commandLink ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{login.actionRegistrace()}"  style="margin-right:20px;" />        
                 <ui:remove>
                     === Vizualizace - nová registrace tlačítkem, míto odkazem ===
                     <p:commandButton ajax="true" id="loginRegistrace" value="Registrace nového účtu." action="#{registrace.newRegistrace()}"  style="margin-right:20px;" />        
