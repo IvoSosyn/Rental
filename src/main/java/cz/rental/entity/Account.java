@@ -19,8 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -28,7 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(catalog = "najem", schema = "public")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")})
 public class Account extends EntitySuperClassNajem implements Serializable {
@@ -173,7 +170,7 @@ public class Account extends EntitySuperClassNajem implements Serializable {
         this.passwordhelp = passwordhelp;
     }
 
-    @XmlTransient
+
     public Collection<Typentity> getTypentityCollection() {
         return typentityCollection;
     }
@@ -182,7 +179,6 @@ public class Account extends EntitySuperClassNajem implements Serializable {
         this.typentityCollection = typentityCollection;
     }
 
-    @XmlTransient
     public Collection<User> getUserCollection() {
         return userCollection;
     }

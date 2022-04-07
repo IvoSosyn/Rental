@@ -16,7 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 
@@ -26,7 +26,7 @@ import org.eclipse.persistence.annotations.Converter;
  */
 @Entity
 @Table(catalog = "najem", schema = "public")
-@XmlRootElement
+
 @NamedQueries({
     @NamedQuery(name = "Attruuid.findAll", query = "SELECT a FROM Attruuid a")})
 public class Attruuid extends EntitySuperClassNajem implements Serializable {

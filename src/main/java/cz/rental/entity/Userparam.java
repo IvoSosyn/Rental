@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 
@@ -27,7 +26,6 @@ import org.eclipse.persistence.annotations.Converter;
  */
 @Entity
 @Table(catalog = "najem", schema = "public")
-@XmlRootElement
 public class Userparam extends EntitySuperClassNajem implements Serializable, Cloneable  {
 
     private static final long serialVersionUID = 1L;

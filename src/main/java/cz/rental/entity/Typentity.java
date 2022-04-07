@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlTransient;
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 
@@ -165,7 +164,7 @@ public class Typentity extends EntitySuperClassNajem implements Serializable, Cl
         this.idaccount = idaccount;
     }
 
-    @XmlTransient
+
     public Collection<Account> getAccountCollection() {
         return accountCollection;
     }
