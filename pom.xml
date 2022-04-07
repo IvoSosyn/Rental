@@ -8,8 +8,7 @@
     <name>Rental</name>
     
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -84,7 +83,7 @@
             <artifactId>Rental-Fonts</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/fonts/Crimson-Rental.jar</systemPath>    
+            <systemPath> ${project.basedir}/src/main/webapp/fonts/Crimson-Rental.jar</systemPath>    
         </dependency>
    
     </dependencies>
@@ -151,7 +150,6 @@
                         <configuration>
                             <target>
                                 <echo>basedir: ${basedir}</echo>
-                                <echo>version: ${version}</echo>
                                 <echo>project.basedir: ${project.basedir}</echo>
                                 <echo>project.baseUri: ${project.baseUri}</echo>
                                 <echo>project.version: ${project.version}</echo>
