@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee>8.0</jakartaee>
+        <addFonts>${basedir}/src/main/webapp/fonts</addFonts>
     </properties>
     
     <dependencies>
@@ -83,7 +84,7 @@
             <artifactId>Rental-Fonts</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath> ${project.basedir}/src/main/webapp/fonts/Crimson-Rental.jar</systemPath>    
+            <systemPath>${addFonts}/Crimson-Rental.jar</systemPath>    
         </dependency>
    
     </dependencies>
